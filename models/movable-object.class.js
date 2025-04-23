@@ -5,6 +5,7 @@ class MovableObject {
   width = 100;
   height = 200;
   imageCache = {};
+  currentImage = 0;
 
   // loadImage('img/test.png');
   loadImage(path) {
