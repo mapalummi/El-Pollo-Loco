@@ -12,32 +12,6 @@ function init() {
 //   console.log(`Taste gedrückt: ${e.key}`);
 // });
 
-// Alte Version:
-// window.addEventListener("keydown", e => {
-//   if (e.key === "ArrowRight") {
-//     keyboard.RIGHT = true;
-//   }
-
-//   if (e.key === "ArrowLeft") {
-//     keyboard.LEFT = true;
-//   }
-
-//   if (e.key === "ArrowUp") {
-//     keyboard.UP = true;
-//   }
-
-//   if (e.key === "ArrowDown") {
-//     keyboard.DOWN = true;
-//   }
-
-//   if (e.key === " ") {
-//     keyboard.SPACE = true;
-//   }
-
-//   console.log(e);
-//   console.log(keyboard);
-// });
-
 window.addEventListener("keydown", e => {
   switch (e.key) {
     case "ArrowRight":
