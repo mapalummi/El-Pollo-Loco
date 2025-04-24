@@ -4,7 +4,7 @@ const keyboard = new Keyboard();
 
 function init() {
   canvas = document.getElementById("canvas");
-  world = new World(canvas);
+  world = new World(canvas, keyboard);
 }
 
 // Debugging
@@ -56,7 +56,7 @@ window.addEventListener("keydown", e => {
       keyboard.SPACE = true;
       break;
   }
-  console.log("KeyDown:", keyboard);
+  // console.log("KeyDown:", keyboard);
 });
 
 window.addEventListener("keyup", e => {
@@ -77,5 +77,5 @@ window.addEventListener("keyup", e => {
       keyboard.SPACE = false;
       break;
   }
-  console.log("KeyUp:", keyboard);
+  // console.log("KeyUp:", keyboard);
 });
