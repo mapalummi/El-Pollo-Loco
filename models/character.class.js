@@ -14,32 +14,28 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png");
-    this.loadImages(this.imagesWalking); // Warum hier this. ?
+    this.loadImages(this.imagesWalking);
 
     this.animate();
   }
 
   animate() {
     setInterval(() => {
-      if (this.world.keyboard.RIGHT) {
+      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.x += this.speed;
         this.otherDirection = false;
       }
 
-      if (this.world.keyboard.LEFT) {
+      if (this.world.keyboard.LEFT && this.x > 0) {
         this.x -= this.speed;
         this.otherDirection = true;
       }
-      this.world.camera_x = -this.x;
+      this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
     setInterval(() => {
       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        // Walk animation
-        let i = this.currentImage % this.imagesWalking.length; // let i = 5 % 6; => 0, Rest 5 (Modulo Operator)
-        let path = this.imagesWalking[i];
-        this.img = this.imageCache[path]; // Warum hier this. ??
-        this.currentImage++; // Warum hier this. ??
+        this.playAnimation(this.imagesWalking);
       }
     }, 50);
   }
