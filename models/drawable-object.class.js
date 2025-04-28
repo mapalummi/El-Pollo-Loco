@@ -17,6 +17,17 @@ class DrawableObject {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
+  drawFrame(ctx) {
+    if (this instanceof Character || this instanceof Chicken) {
+      //Quadrate zeichnen für collision detection:
+      ctx.beginPath();
+      ctx.lineWidth = "4";
+      ctx.strokeStyle = "red";
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.stroke();
+    }
+  }
+
   //
   // @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
   //

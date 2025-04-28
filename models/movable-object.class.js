@@ -17,17 +17,6 @@ class MovableObject extends DrawableObject {
     return this.y < 210;
   }
 
-  drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken) {
-      //Quadrate zeichnen für collision detection:
-      ctx.beginPath();
-      ctx.lineWidth = "4";
-      ctx.strokeStyle = "red";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
-    }
-  }
-
   isColliding(mo) {
     return this.x + this.width > mo.x && this.y + this.height > mo.y && this.x < mo.x && this.y < mo.y + mo.height;
   }
