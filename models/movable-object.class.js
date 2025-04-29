@@ -46,6 +46,16 @@ class MovableObject extends DrawableObject {
     return this.energy == 0;
   }
 
+  //TODO:
+  isGone() {
+    return console.log("DEAD");
+    // this.speedY = 30;
+    // this.applyGravity();
+    // setInterval(() => {
+    //   this.y -= 10;
+    // }, 25);
+  }
+
   moveRight() {
     this.x += this.speed;
   }

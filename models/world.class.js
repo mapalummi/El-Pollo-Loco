@@ -6,7 +6,6 @@ class World {
   keyboard;
   camera_x = 0;
 
-  // statusBar = new StatusBar();
   healthBar = new HealthBar();
   coinBar = new CoinBar();
   bottleBar = new BottleBar();
@@ -56,21 +55,23 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
 
+    //TODO:
+    // this.addObjectsToMap(this.level.bottles);
+
     this.ctx.translate(-this.camera_x, 0);
-    // ------ Space for fixed objects ------
-    // this.addToMap(this.statusBar);
-    this.addToMap(this.healthBar);
-    this.addToMap(this.coinBar);
-    this.addToMap(this.bottleBar);
 
     this.ctx.translate(this.camera_x, 0);
-
+    this.addObjectsToMap(this.level.clouds);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
+
+    //NOTE:Bleibt die Anzeige im Vordergrund?
+    this.addToMap(this.healthBar);
+    this.addToMap(this.coinBar);
+    this.addToMap(this.bottleBar);
 
     // Draw() wird immer wieder aufgerufen:
     let self = this;
