@@ -1,7 +1,7 @@
 const level1 = new Level(
   [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
 
-  [new Cloud()],
+  [new Cloud(), new Cloud()],
 
   [
     new BackgroundObject("img/5_background/layers/air.png", -719),
@@ -30,3 +30,6 @@ const level1 = new Level(
     new BackgroundObject("img/5_background/layers/1_first_layer/2.png", 719 * 3),
   ]
 );
+
+level1.clouds[0].x = 0;
+level1.clouds[1].x = 500;
