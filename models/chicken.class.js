@@ -25,7 +25,6 @@ class Chicken extends MovableObject {
     this.speed = 0.15 + Math.random() * 0.25; //Minimalster Wert ist 0.15
 
     this.animate();
-    this.getRealFrame();
   }
 
   getRealFrame() {
@@ -37,6 +36,7 @@ class Chicken extends MovableObject {
 
   animate() {
     setInterval(() => {
+      this.getRealFrame();
       this.moveLeft();
     }, 1000 / 60);
 

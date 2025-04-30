@@ -56,7 +56,6 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.applyGravity();
     this.animate();
-    this.getRealFrame();
   }
 
   getRealFrame() {
@@ -83,6 +82,7 @@ class Character extends MovableObject {
       }
 
       this.world.camera_x = -this.x + 100;
+      this.getRealFrame();
     }, 1000 / 60);
 
     setInterval(() => {
