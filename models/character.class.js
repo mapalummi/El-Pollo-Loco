@@ -82,7 +82,7 @@ class Character extends MovableObject {
       }
 
       this.world.camera_x = -this.x + 100;
-      this.getRealFrame();
+      this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
     }, 1000 / 60);
 
     setInterval(() => {

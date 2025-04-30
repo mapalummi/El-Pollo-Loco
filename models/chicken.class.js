@@ -36,7 +36,7 @@ class Chicken extends MovableObject {
 
   animate() {
     setInterval(() => {
-      this.getRealFrame();
+      this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
       this.moveLeft();
     }, 1000 / 60);
 
