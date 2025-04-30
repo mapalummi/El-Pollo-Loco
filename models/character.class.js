@@ -5,10 +5,11 @@ class Character extends MovableObject {
   height = 220;
   speed = 10;
 
-  rX;
-  rY;
-  rW;
-  rH;
+  // Wozu sollte das rein genommen werden??
+  // rX;
+  // rY;
+  // rW;
+  // rH;
 
   offset = {
     top: 100,
@@ -88,8 +89,6 @@ class Character extends MovableObject {
     setInterval(() => {
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
-        //TODO:
-        this.isGone();
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {

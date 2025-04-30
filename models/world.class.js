@@ -64,6 +64,15 @@ class World {
         }
       }
     });
+
+    //NOTE: Produziert Fehler:
+    // this.throwableObjects.forEach((bottle, index) => {
+    //   if (bottle.isColliding(this.level.endboss)) {
+    //     console.log("Flasche trifft den Endboss:", bottle);
+    //     bottle.splash(); // Flasche zerplatzt
+    //     this.throwableObjects.splice(index, 1); // Entfernt die Flasche aus dem Array
+    //   }
+    // });
   }
 
   draw() {

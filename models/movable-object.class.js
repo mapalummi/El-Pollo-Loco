@@ -22,10 +22,11 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  //NOTE: Kollisionen!!!!
+  // Kollisionen
   // isColliding(mo) {
   //   return this.x + this.width > mo.x && this.y + this.height > mo.y && this.x < mo.x && this.y < mo.y + mo.height;
   // }
+
   //NOTE: NEU!!!
   isColliding(mo) {
     return this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
@@ -47,18 +48,9 @@ class MovableObject extends DrawableObject {
     return timepassed < 1;
   }
 
+  //TODO:
   isDead() {
     return this.energy == 0;
-  }
-
-  //TODO:
-  isGone() {
-    return console.log("DEAD");
-    // this.speedY = 30;
-    // this.applyGravity();
-    // setInterval(() => {
-    //   this.y -= 10;
-    // }, 25);
   }
 
   moveRight() {
