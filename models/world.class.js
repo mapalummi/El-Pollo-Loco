@@ -40,11 +40,28 @@ class World {
   }
 
   //NOTE: Kollisionen
+  // checkCollisions() {
+  //   this.level.enemies.forEach(enemy => {
+  //     if (this.character.isColliding(enemy)) {
+  //       this.character.hit();
+  //       this.healthBar.setPercentage(this.character.energy);
+  //     }
+  //   });
+  // }
+
+  // NEU:
   checkCollisions() {
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
-        this.character.hit();
-        this.healthBar.setPercentage(this.character.energy);
+        if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
+          // Spieler springt auf das LittleChicken
+          enemy.die();
+          this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+        } else {
+          // Spieler wird getroffen
+          this.character.hit();
+          this.healthBar.setPercentage(this.character.energy);
+        }
       }
     });
   }

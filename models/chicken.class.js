@@ -3,6 +3,7 @@ class Chicken extends MovableObject {
   y = 350;
   width = 50;
   height = 80;
+  isDead = false;
 
   offset = {
     top: 10,
@@ -34,14 +35,45 @@ class Chicken extends MovableObject {
     this.rH = this.height - this.offset.top - this.offset.bottom;
   }
 
+  // animate() {
+  //   setInterval(() => {
+  //     this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
+  //     this.moveLeft();
+  //   }, 1000 / 60);
+
+  //   setInterval(() => {
+  //     this.playAnimation(this.IMAGES_WALKING);
+  //   }, 200);
+  // }
+
   animate() {
-    setInterval(() => {
-      this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
-      this.moveLeft();
+    this.animationInterval = setInterval(() => {
+      if (!this.isDead) {
+        this.getRealFrame();
+        this.moveLeft();
+      }
     }, 1000 / 60);
 
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
+    this.walkingAnimationInterval = setInterval(() => {
+      if (!this.isDead) {
+        this.playAnimation(this.IMAGES_WALKING);
+      }
     }, 200);
+  }
+
+  die() {
+    this.isDead = true;
+    this.loadImage("img/3_enemies_chicken/chicken_normal/2_dead/dead.png");
+    this.speed = 0;
+    clearInterval(this.animationInterval); // Stoppt die Bewegung
+    clearInterval(this.walkingAnimationInterval); // Stoppt die Animation
+
+    // Entfernt das LittleChicken nach 2 Sekunden
+    setTimeout(() => {
+      const index = world.level.enemies.indexOf(this);
+      if (index > -1) {
+        world.level.enemies.splice(index, 1); // Entfernt LittleChicken aus dem Array
+      }
+    }, 2000);
   }
 }
