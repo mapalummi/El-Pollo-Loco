@@ -15,15 +15,34 @@ class DrawableObject {
 
   draw(ctx) {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    //NOTE: Muss das hier eingesetzt sein?
+    this.drawFrame(ctx);
+    this.drawOffsetFrame(ctx);
   }
 
+  //NOTE: Kollisionsrahmen:
   drawFrame(ctx) {
     if (this instanceof Character || this instanceof Chicken) {
       //Quadrate zeichnen für collision detection:
       ctx.beginPath();
-      ctx.lineWidth = "4";
-      ctx.strokeStyle = "red";
+      ctx.lineWidth = "2";
+      ctx.strokeStyle = "blue";
       ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.stroke();
+    }
+  }
+
+  drawOffsetFrame(ctx) {
+    if (this instanceof Character || this instanceof Chicken) {
+      ctx.beginPath();
+      ctx.lineWidth = "2";
+      ctx.strokeStyle = "red";
+      ctx.rect(
+        this.x + this.offset.left,
+        this.y + this.offset.top,
+        this.width - this.offset.left - this.offset.right,
+        this.height - this.offset.top - this.offset.bottom
+      );
       ctx.stroke();
     }
   }

@@ -1,7 +1,16 @@
 class Chicken extends MovableObject {
+  x = 0;
   y = 350;
   width = 50;
   height = 80;
+
+  offset = {
+    top: 10,
+    right: 10,
+    bottom: 10,
+    left: 10,
+  };
+
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
     "img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
@@ -16,6 +25,14 @@ class Chicken extends MovableObject {
     this.speed = 0.15 + Math.random() * 0.25; //Minimalster Wert ist 0.15
 
     this.animate();
+    this.getRealFrame();
+  }
+
+  getRealFrame() {
+    this.rX = this.x + this.offset.left;
+    this.rY = this.y + this.offset.top;
+    this.rW = this.width - this.offset.left - this.offset.right;
+    this.rH = this.height - this.offset.top - this.offset.bottom;
   }
 
   animate() {

@@ -22,8 +22,13 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  //NOTE: Kollisionen!!!!
   isColliding(mo) {
     return this.x + this.width > mo.x && this.y + this.height > mo.y && this.x < mo.x && this.y < mo.y + mo.height;
+  }
+  //NOTE: NEU!!!
+  isColliding(mo) {
+    return this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
   }
 
   hit() {
