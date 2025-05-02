@@ -5,6 +5,7 @@ class ThrowableObject extends MovableObject {
   height = 60;
 
   throwDirection = 1; // Standardmäßig nach rechts
+  isSplashing = false;
 
   // NEU
   offset = {
@@ -56,7 +57,7 @@ class ThrowableObject extends MovableObject {
     this.applyGravity();
 
     // Bewegung der Flasche
-    setInterval(() => {
+    this.movementInterval = setInterval(() => {
       this.x += 10 * this.throwDirection; // Bewegt sich nach rechts oder links
       this.getRealFrame();
     }, 25);
@@ -67,19 +68,29 @@ class ThrowableObject extends MovableObject {
     }, 100);
   }
 
+  // NEU:
   splash() {
-    console.log("FLasche zerplatzt", this);
+    // console.log("Flasche zerplatzt", this);
+    this.isSplashing = true; // Flasche wird als zerplatzt markiert
     this.speedY = 0; // Stoppt die Bewegung
     this.speed = 0;
-    this.playAnimation(this.IMAGES_SPLASH); // Spielt die Zerplatzen-Animation ab
+
+    clearInterval(this.movementInterval);
+    clearInterval(this.animationInterval);
+
+    // Spielt die Zerplatzen-Animation ab
+    let splashAnimationInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_SPLASH);
+    }, 100);
 
     // Entfernt die Flasche nach der Animation
     setTimeout(() => {
+      clearInterval(splashAnimationInterval); // Stoppt die Animation
       const index = world.throwableObjects.indexOf(this);
       if (index > -1) {
-        console.log("Flasche aus Array entfernt:", this);
+        // console.log("Flasche aus Array entfernt:", this);
         world.throwableObjects.splice(index, 1);
       }
-    }, 500); // Warten, bis Animation abgeschlossen ist
+    }, this.IMAGES_SPLASH.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
   }
 }

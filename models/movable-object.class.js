@@ -8,8 +8,10 @@ class MovableObject extends DrawableObject {
 
   applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() || this.speedY > 0) this.y -= this.speedY;
-      this.speedY -= this.acceleration;
+      if ((!this.isSplashing && this.isAboveGround()) || this.speedY > 0) {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+      }
     }, 1000 / 25);
   }
 
@@ -65,10 +67,18 @@ class MovableObject extends DrawableObject {
     this.speedY = 30;
   }
 
+  // Alt:
+  // playAnimation(images) {
+  //   let i = this.currentImage % images.length; // Zyklisches Wechseln der Bilder
+  //   let path = images[i]; // Bild aus dem Cache laden
+  //   this.img = this.imageCache[path];
+  //   this.currentImage++;
+  // }
+
+  // NEU:
   playAnimation(images) {
     let i = this.currentImage % images.length; // Zyklisches Wechseln der Bilder
-    let path = images[i]; // Bild aus dem Cache laden
-    this.img = this.imageCache[path];
+    this.img = this.imageCache[images[i]]; // Bild aus dem Cache laden
     this.currentImage++;
   }
 }

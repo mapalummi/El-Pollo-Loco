@@ -42,7 +42,7 @@ class World {
 
   checkThrowObjects() {
     if (this.keyboard.D) {
-      let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links und Abstand der Flasche auf X-Achse
+      let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links werfen und Abstand der Flasche auf X-Achse
       let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
       bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
       this.throwableObjects.push(bottle);
@@ -64,14 +64,33 @@ class World {
     let bottlesToRemove = [];
     let enemiesToRemove = [];
 
+    // Alte Version:
+    // this.level.enemies.forEach(enemy => {
+    //   if (this.character.isColliding(enemy)) {
+    //     if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
+    //       // Spieler springt auf das Chicken
+    //       enemy.die();
+    //       this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+    //     } else {
+    //       // Spieler wird getroffen
+    //       this.character.hit();
+    //       this.healthBar.setPercentage(this.character.energy);
+    //     }
+    //   }
+    // });
+
+    // Prüfe Kollisionen zwischen Charakter und Gegnern
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
-        if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
-          // Spieler springt auf das LittleChicken
+        // Prüfen, ob der Charakter von oben kommt
+        if (this.character.speedY > 0 && this.character.y + this.character.height <= enemy.y + enemy.height / 2) {
+          // Spieler springt auf das Chicken
+          console.log("Charakter springt auf Gegner:", enemy); // Debugging-Log
           enemy.die();
           this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
           // Spieler wird getroffen
+          console.log("Charakter wird getroffen von Gegner:", enemy); // Debugging-Log
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
         }
@@ -80,27 +99,14 @@ class World {
 
     //TODO:
     // Prüfe Kollisionen zwischen Flaschen und Gegnern
-    this.throwableObjects.forEach((bottle, bottleIndex) => {
-      this.level.enemies.forEach((enemy, enemyIndex) => {
+    this.throwableObjects.forEach(bottle => {
+      this.level.enemies.forEach(enemy => {
         if (bottle.isColliding(enemy)) {
-          console.log("Flasche trifft Gegner:", bottle, enemy); // Debugging-Log
+          // console.log("Flasche trifft Gegner:", bottle, enemy); // Debugging-Log
           bottle.splash(); // Flasche zerplatzt
-          bottlesToRemove.push(bottleIndex); // Markiere Flasche zum Entfernen
-          enemiesToRemove.push(enemyIndex); // Markiere Gegner zum Entfernen
         }
       });
     });
-
-    // Entferne Flaschen und Gegner nach der Iteration
-    bottlesToRemove.forEach(index => {
-      console.log("Zu entfernende Flaschen:", bottlesToRemove);
-      this.throwableObjects.splice(index, 1);
-    });
-
-    // enemiesToRemove.forEach(index => {
-    //   console.log("Zu entfernende Gegner:", enemiesToRemove);
-    //   this.level.enemies.splice(index, 1);
-    // });
   }
 
   draw() {

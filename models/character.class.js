@@ -105,12 +105,12 @@ class Character extends MovableObject {
   moveRight() {
     this.x += this.speed;
     this.facingRight = true; // Blickrichtung nach rechts
-    console.log(this.facingRight);
+    // console.log(this.facingRight);
   }
 
   moveLeft() {
     this.x -= this.speed;
     this.facingRight = false; // Blickrichtung nach links
-    console.log(this.facingRight);
+    // console.log(this.facingRight);
   }
 }
