@@ -1,16 +1,16 @@
 class ThrowableObject extends MovableObject {
-  // x;
-  // y;
-  // width = 50;
-  // height = 60;
+  x;
+  y;
+  width = 50;
+  height = 60;
 
   // NEU
-  // offset = {
-  //   top: 5,
-  //   right: 5,
-  //   bottom: 5,
-  //   left: 5,
-  // };
+  offset = {
+    top: 10,
+    right: 20,
+    bottom: 10,
+    left: 20,
+  };
 
   IMAGES_THROW = [
     "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -37,17 +37,17 @@ class ThrowableObject extends MovableObject {
 
     this.height = 60;
     this.width = 50;
-
+    this.getRealFrame();
     this.throw();
   }
 
   // NEU
-  // getRealFrame() {
-  //   this.rX = this.x + this.offset.left;
-  //   this.rY = this.y + this.offset.top;
-  //   this.rW = this.width - this.offset.left - this.offset.right;
-  //   this.rH = this.height - this.offset.top - this.offset.bottom;
-  // }
+  getRealFrame() {
+    this.rX = this.x + this.offset.left;
+    this.rY = this.y + this.offset.top;
+    this.rW = this.width - this.offset.left - this.offset.right;
+    this.rH = this.height - this.offset.top - this.offset.bottom;
+  }
 
   throw() {
     this.speedY = 30;
@@ -56,7 +56,6 @@ class ThrowableObject extends MovableObject {
     // Bewegung der Flasche
     setInterval(() => {
       this.x += 10;
-      // this.getRealFrame();
     }, 25);
 
     // Animation der Flasche
