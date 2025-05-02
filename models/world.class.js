@@ -32,14 +32,6 @@ class World {
     }, 200);
   }
 
-  // ALT:
-  // checkThrowObjects() {
-  //   if (this.keyboard.D) {
-  //     let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-  //     this.throwableObjects.push(bottle);
-  //   }
-  // }
-
   checkThrowObjects() {
     if (this.keyboard.D) {
       let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links werfen und Abstand der Flasche auf X-Achse
@@ -50,47 +42,20 @@ class World {
   }
 
   //NOTE: Kollisionen
-  // checkCollisions() {
-  //   this.level.enemies.forEach(enemy => {
-  //     if (this.character.isColliding(enemy)) {
-  //       this.character.hit();
-  //       this.healthBar.setPercentage(this.character.energy);
-  //     }
-  //   });
-  // }
 
-  // TODO: NEU
   checkCollisions() {
     let bottlesToRemove = [];
     let enemiesToRemove = [];
 
-    // Alte Version:
-    // this.level.enemies.forEach(enemy => {
-    //   if (this.character.isColliding(enemy)) {
-    //     if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
-    //       // Spieler springt auf das Chicken
-    //       enemy.die();
-    //       this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
-    //     } else {
-    //       // Spieler wird getroffen
-    //       this.character.hit();
-    //       this.healthBar.setPercentage(this.character.energy);
-    //     }
-    //   }
-    // });
-
-    // Prüfe Kollisionen zwischen Charakter und Gegnern
+    // Funktioniert:
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
-        // Prüfen, ob der Charakter von oben kommt
-        if (this.character.speedY > 0 && this.character.y + this.character.height <= enemy.y + enemy.height / 2) {
+        if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
           // Spieler springt auf das Chicken
-          console.log("Charakter springt auf Gegner:", enemy); // Debugging-Log
           enemy.die();
           this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
           // Spieler wird getroffen
-          console.log("Charakter wird getroffen von Gegner:", enemy); // Debugging-Log
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
         }
@@ -129,7 +94,6 @@ class World {
 
     this.ctx.translate(-this.camera_x, 0);
 
-    //NOTE:Bleibt die Anzeige im Vordergrund?
     this.addToMap(this.healthBar);
     this.addToMap(this.coinBar);
     this.addToMap(this.bottleBar);
