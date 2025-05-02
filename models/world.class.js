@@ -43,14 +43,50 @@ class World {
 
   //NOTE: Kollisionen
 
-  checkCollisions() {
-    let bottlesToRemove = [];
-    let enemiesToRemove = [];
+  // checkCollisions() {
+  //   let bottlesToRemove = [];
+  //   let enemiesToRemove = [];
 
-    // Funktioniert:
+  //   // Funktioniert:
+  //   this.level.enemies.forEach(enemy => {
+  //     if (this.character.isColliding(enemy)) {
+  //       if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
+  //         // Spieler springt auf das Chicken
+  //         enemy.die();
+  //         this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+  //       } else {
+  //         // Spieler wird getroffen
+  //         this.character.hit();
+  //         this.healthBar.setPercentage(this.character.energy);
+  //       }
+  //     }
+  //   });
+
+  //   // Prüfe Kollisionen zwischen Flaschen und Gegnern
+  //   this.throwableObjects.forEach(bottle => {
+  //     this.level.enemies.forEach(enemy => {
+  //       if (bottle.isColliding(enemy)) {
+  //         // console.log("Flasche trifft Gegner:", bottle, enemy); // Debugging-Log
+  //         bottle.splash(); // Flasche zerplatzt
+  //       }
+  //     });
+  //   });
+  // }
+
+  // NEU:
+  checkCollisions() {
+    // Die beiden Variablen könnte ich später noch gebrauchen!!!
+    // let bottlesToRemove = [];
+    // let enemiesToRemove = [];
+
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
-        if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
+        if (
+          enemy instanceof LittleChicken ||
+          (enemy instanceof Chicken &&
+            this.character.speedY < 0 &&
+            this.character.y + this.character.height <= enemy.y + enemy.height * 0.75)
+        ) {
           // Spieler springt auf das Chicken
           enemy.die();
           this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
@@ -62,12 +98,11 @@ class World {
       }
     });
 
-    //TODO:
     // Prüfe Kollisionen zwischen Flaschen und Gegnern
     this.throwableObjects.forEach(bottle => {
       this.level.enemies.forEach(enemy => {
         if (bottle.isColliding(enemy)) {
-          // console.log("Flasche trifft Gegner:", bottle, enemy); // Debugging-Log
+          // Flasche trifft Gegner
           bottle.splash(); // Flasche zerplatzt
         }
       });
