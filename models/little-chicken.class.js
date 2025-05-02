@@ -29,10 +29,10 @@ class LittleChicken extends MovableObject {
   }
 
   getRealFrame() {
-    this.rX = this.x + this.offset.left;
-    this.rY = this.y + this.offset.top;
-    this.rW = this.width - this.offset.left - this.offset.right;
-    this.rH = this.height - this.offset.top - this.offset.bottom;
+    this.rX = this.x + (this.offset?.left || 0);
+    this.rY = this.y + (this.offset?.top || 0);
+    this.rW = this.width - (this.offset?.left || 0) - (this.offset?.right || 0);
+    this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
   // NEU:
