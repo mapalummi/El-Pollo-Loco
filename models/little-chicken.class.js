@@ -35,17 +35,6 @@ class LittleChicken extends MovableObject {
     this.rH = this.height - this.offset.top - this.offset.bottom;
   }
 
-  //   animate() {
-  //     setInterval(() => {
-  //       this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
-  //       this.moveLeft();
-  //     }, 1000 / 60);
-
-  //     setInterval(() => {
-  //       this.playAnimation(this.IMAGES_WALKING);
-  //     }, 200);
-  //   }
-
   // NEU:
   animate() {
     this.animationInterval = setInterval(() => {

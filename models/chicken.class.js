@@ -35,17 +35,6 @@ class Chicken extends MovableObject {
     this.rH = this.height - this.offset.top - this.offset.bottom;
   }
 
-  // animate() {
-  //   setInterval(() => {
-  //     this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
-  //     this.moveLeft();
-  //   }, 1000 / 60);
-
-  //   setInterval(() => {
-  //     this.playAnimation(this.IMAGES_WALKING);
-  //   }, 200);
-  // }
-
   animate() {
     this.animationInterval = setInterval(() => {
       if (!this.isDead) {
@@ -68,7 +57,7 @@ class Chicken extends MovableObject {
     clearInterval(this.animationInterval); // Stoppt die Bewegung
     clearInterval(this.walkingAnimationInterval); // Stoppt die Animation
 
-    // Entfernt das LittleChicken nach 2 Sekunden
+    // Entfernt das Chicken nach 2 Sekunden
     setTimeout(() => {
       const index = world.level.enemies.indexOf(this);
       if (index > -1) {

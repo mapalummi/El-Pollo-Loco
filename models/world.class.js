@@ -49,8 +49,11 @@ class World {
   //   });
   // }
 
-  // NEU:
+  // TODO: NEU
   checkCollisions() {
+    let bottlesToRemove = [];
+    let enemiesToRemove = [];
+
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
         if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
@@ -65,14 +68,29 @@ class World {
       }
     });
 
-    //NOTE: Produziert Fehler:
-    // this.throwableObjects.forEach((bottle, index) => {
-    //   if (bottle.isColliding(this.level.endboss)) {
-    //     console.log("Flasche trifft den Endboss:", bottle);
-    //     bottle.splash(); // Flasche zerplatzt
-    //     this.throwableObjects.splice(index, 1); // Entfernt die Flasche aus dem Array
-    //   }
-    // });
+    //TODO:
+    // Prüfe Kollisionen zwischen Flaschen und Gegnern
+    this.throwableObjects.forEach((bottle, bottleIndex) => {
+      this.level.enemies.forEach((enemy, enemyIndex) => {
+        if (bottle.isColliding(enemy)) {
+          console.log("Flasche trifft Gegner:", bottle, enemy); // Debugging-Log
+          bottle.splash(); // Flasche zerplatzt
+          bottlesToRemove.push(bottleIndex); // Markiere Flasche zum Entfernen
+          enemiesToRemove.push(enemyIndex); // Markiere Gegner zum Entfernen
+        }
+      });
+    });
+
+    // Entferne Flaschen und Gegner nach der Iteration
+    bottlesToRemove.forEach(index => {
+      console.log("Zu entfernende Flaschen:", bottlesToRemove);
+      this.throwableObjects.splice(index, 1);
+    });
+
+    enemiesToRemove.forEach(index => {
+      console.log("Zu entfernende Gegner:", enemiesToRemove);
+      this.level.enemies.splice(index, 1);
+    });
   }
 
   draw() {
