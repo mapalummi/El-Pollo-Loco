@@ -52,7 +52,7 @@ class ThrowableObject extends MovableObject {
   }
 
   throw() {
-    this.speedY = 30;
+    this.speedY = 30; // Wurfhöhe
     this.applyGravity();
 
     // Bewegung der Flasche

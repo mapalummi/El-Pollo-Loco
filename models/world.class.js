@@ -42,8 +42,8 @@ class World {
 
   checkThrowObjects() {
     if (this.keyboard.D) {
-      let offsetX = this.character.facingRight ? 100 : -50; // Nach rechts oder links
-      let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + 100);
+      let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links und Abstand der Flasche auf X-Achse
+      let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
       bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
       this.throwableObjects.push(bottle);
     }
