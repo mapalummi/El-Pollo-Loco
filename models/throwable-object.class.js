@@ -93,6 +93,6 @@ class ThrowableObject extends MovableObject {
         // console.log("Flasche aus Array entfernt:", this);
         world.throwableObjects.splice(index, 1);
       }
-    }, this.IMAGES_SPLASH.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
+    }, this.IMAGES_SPLASH.length * 50); // Wartezeit basierend auf der Anzahl der Bilder
   }
 }
