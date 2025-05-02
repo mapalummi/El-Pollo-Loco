@@ -32,9 +32,19 @@ class World {
     }, 200);
   }
 
+  // ALT:
+  // checkThrowObjects() {
+  //   if (this.keyboard.D) {
+  //     let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+  //     this.throwableObjects.push(bottle);
+  //   }
+  // }
+
   checkThrowObjects() {
     if (this.keyboard.D) {
-      let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+      let offsetX = this.character.facingRight ? 100 : -50; // Nach rechts oder links
+      let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + 100);
+      bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
       this.throwableObjects.push(bottle);
     }
   }
@@ -87,10 +97,10 @@ class World {
       this.throwableObjects.splice(index, 1);
     });
 
-    enemiesToRemove.forEach(index => {
-      console.log("Zu entfernende Gegner:", enemiesToRemove);
-      this.level.enemies.splice(index, 1);
-    });
+    // enemiesToRemove.forEach(index => {
+    //   console.log("Zu entfernende Gegner:", enemiesToRemove);
+    //   this.level.enemies.splice(index, 1);
+    // });
   }
 
   draw() {

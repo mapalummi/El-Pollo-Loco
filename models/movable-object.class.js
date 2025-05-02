@@ -66,8 +66,8 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimation(images) {
-    let i = this.currentImage % images.length;
-    let path = images[i];
+    let i = this.currentImage % images.length; // Zyklisches Wechseln der Bilder
+    let path = images[i]; // Bild aus dem Cache laden
     this.img = this.imageCache[path];
     this.currentImage++;
   }

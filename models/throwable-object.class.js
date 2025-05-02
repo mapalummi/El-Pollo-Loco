@@ -4,6 +4,8 @@ class ThrowableObject extends MovableObject {
   width = 50;
   height = 60;
 
+  throwDirection = 1; // Standardmäßig nach rechts
+
   // NEU
   offset = {
     top: 10,
@@ -55,7 +57,7 @@ class ThrowableObject extends MovableObject {
 
     // Bewegung der Flasche
     setInterval(() => {
-      this.x += 10;
+      this.x += 10 * this.throwDirection; // Bewegt sich nach rechts oder links
       this.getRealFrame();
     }, 25);
 

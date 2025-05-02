@@ -4,6 +4,7 @@ class Character extends MovableObject {
   width = 100;
   height = 220;
   speed = 10;
+  facingRight = true;
 
   // Wozu sollte das rein genommen werden??
   // rX;
@@ -99,5 +100,17 @@ class Character extends MovableObject {
         }
       }
     }, 50);
+  }
+
+  moveRight() {
+    this.x += this.speed;
+    this.facingRight = true; // Blickrichtung nach rechts
+    console.log(this.facingRight);
+  }
+
+  moveLeft() {
+    this.x -= this.speed;
+    this.facingRight = false; // Blickrichtung nach links
+    console.log(this.facingRight);
   }
 }
