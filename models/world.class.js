@@ -89,7 +89,7 @@ class World {
         ) {
           // Spieler springt auf das Chicken
           enemy.die();
-          this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+          // this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
           // Spieler wird getroffen
           this.character.hit();
