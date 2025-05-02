@@ -70,8 +70,10 @@ class ThrowableObject extends MovableObject {
 
   // NEU:
   splash() {
+    if (this.isSplashing) return; // Verhindert mehrfaches Aufrufen
+    this.isSplashing = true;
     // console.log("Flasche zerplatzt", this);
-    this.isSplashing = true; // Flasche wird als zerplatzt markiert
+
     this.speedY = 0; // Stoppt die Bewegung
     this.speed = 0;
 
