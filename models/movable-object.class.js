@@ -25,9 +25,21 @@ class MovableObject extends DrawableObject {
   }
 
   // Kollisionen
-  //NOTE: NEU!!!
+  // isColliding(mo) {
+  //   return this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
+  // }
+
   isColliding(mo) {
-    return this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
+    const collision = this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
+
+    // Debugging-Logs
+    // console.log("Kollision geprüft:", {
+    //   this: { rX: this.rX, rY: this.rY, rW: this.rW, rH: this.rH },
+    //   mo: { rX: mo.rX, rY: mo.rY, rW: mo.rW, rH: mo.rH },
+    //   collision,
+    // });
+
+    return collision;
   }
 
   hit() {
@@ -48,7 +60,6 @@ class MovableObject extends DrawableObject {
     return timepassed < 1000;
   }
 
-  //TODO:
   isDead() {
     return this.energy == 0;
   }

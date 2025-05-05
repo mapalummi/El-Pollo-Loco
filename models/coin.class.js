@@ -5,10 +5,10 @@ class Coin extends MovableObject {
   height = 100;
 
   offset = {
-    top: 40,
-    right: 40,
-    bottom: 40,
-    left: 40,
+    top: 35,
+    right: 35,
+    bottom: 35,
+    left: 35,
   };
 
   IMAGES_COIN = ["img/8_coin/coin_1.png", "img/8_coin/coin_2.png", "img/8_coin/coin_1.png", "img/8_coin/coin_2.png"];
@@ -18,8 +18,8 @@ class Coin extends MovableObject {
     this.loadImages(this.IMAGES_COIN); // Alle Animationsbilder laden
     this.x = x;
     this.y = y;
-    this.width;
-    this.height;
+    this.width = 100;
+    this.height = 100;
     this.animate();
   }
 
@@ -28,12 +28,21 @@ class Coin extends MovableObject {
     this.rY = this.y + (this.offset?.top || 0);
     this.rW = this.width - (this.offset?.left || 0) - (this.offset?.right || 0);
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
+
+    // Debugging-Logs
+    // console.log("Coin Kollisionsrahmen:", {
+    //   rX: this.rX,
+    //   rY: this.rY,
+    //   rW: this.rW,
+    //   rH: this.rH,
+    // });
   }
 
   animate() {
     setInterval(() => {
-      this.playAnimation(this.IMAGES_COIN);
       this.getRealFrame();
+      this.playAnimation(this.IMAGES_COIN);
+      // this.getRealFrame();
     }, 400);
   }
 }

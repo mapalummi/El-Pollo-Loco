@@ -87,6 +87,22 @@ class World {
         }
       });
     });
+
+    //Coins-Kollision
+    // this.level.coins.forEach(coin => {
+    //   if (this.character.isColliding(coin)) {
+    //     console.log("Coin eingesackt:", coin);
+    //   }
+    // });
+
+    //NOTE:
+    this.level.coins = this.level.coins.filter(coin => {
+      if (this.character.isColliding(coin)) {
+        console.log("Coin eingesackt:", coin);
+        return false; // Entferne den Coin
+      }
+      return true; // Behalte den Coin
+    });
   }
 
   draw() {
@@ -95,6 +111,7 @@ class World {
 
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
+    //NOTE: COINS
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles); // Flaschen hinzufügen
 
@@ -103,6 +120,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.clouds);
     this.addToMap(this.character);
+
     this.addObjectsToMap(this.level.enemies);
 
     this.addObjectsToMap(this.throwableObjects);
@@ -135,13 +153,24 @@ class World {
     }
 
     mo.draw(this.ctx);
-    // Wird in drawable-object-class aufgerufen:
-    // mo.drawFrame(this.ctx);
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
   }
+
+  // addToMap(mo) {
+  //   console.log("Zeichne MovableObject:", mo.constructor.name); // Debugging-Log
+  //   if (mo.otherDirection) {
+  //     this.flipImage(mo);
+  //   }
+
+  //   mo.draw(this.ctx);
+
+  //   if (mo.otherDirection) {
+  //     this.flipImageBack(mo);
+  //   }
+  // }
 
   flipImage(mo) {
     this.ctx.save();
