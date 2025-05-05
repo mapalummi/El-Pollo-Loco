@@ -82,7 +82,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
 
     this.crossImage = new Image();
-    this.crossImage.src = "img/2_character_pepe/4_hurt/H-43.png";
+    this.crossImage.src = "img/random_pics/skull-147188_640.png";
 
     this.applyGravity();
     this.animate();
@@ -218,6 +218,9 @@ class Character extends MovableObject {
           this.playAnimation(this.IMAGES_DEAD);
           setTimeout(() => {
             this.img = this.crossImage; // Bild setzen
+            this.width = 50; //Maße des Bildes
+            this.height = 50; //Maße des Bildes
+            this.y = 370; //Höhe des Bildes auf Y-Achse
             this.isDeadAnimationComplete = true; // Animation abgeschlossen
           }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
         }

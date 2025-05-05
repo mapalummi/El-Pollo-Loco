@@ -48,6 +48,8 @@ class World {
     // let bottlesToRemove = [];
     // let enemiesToRemove = [];
 
+    if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
+
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
         if (
