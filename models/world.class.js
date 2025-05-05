@@ -25,11 +25,12 @@ class World {
     this.character.world = this;
   }
 
+  //Startet einen Timer um Aktionen auszuführen:
   run() {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
-    }, 200); //Interval hier evtl. verkleinern!
+    }, 200); //Interval hier evtl. auf 50 verkleinern!
   }
 
   checkThrowObjects() {
@@ -104,6 +105,8 @@ class World {
         if (bottle.isColliding(enemy)) {
           // Flasche trifft Gegner
           bottle.splash(); // Flasche zerplatzt
+          //TODO: Endboss soll nicht sterben!
+          enemy.die();
         }
       });
     });
