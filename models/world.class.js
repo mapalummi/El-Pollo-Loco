@@ -6,9 +6,9 @@ class World {
   keyboard;
   camera_x = 0;
 
+  bottleBar = new BottleBar();
   healthBar = new HealthBar();
   coinBar = new CoinBar();
-  bottleBar = new BottleBar();
 
   throwableObjects = [];
 
@@ -109,9 +109,9 @@ class World {
 
     this.ctx.translate(-this.camera_x, 0);
 
-    this.addToMap(this.healthBar);
-    this.addToMap(this.coinBar);
     this.addToMap(this.bottleBar);
+    this.addToMap(this.coinBar);
+    this.addToMap(this.healthBar);
 
     //Kollisionen prüfen
     this.checkCollisions();

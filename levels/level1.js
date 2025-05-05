@@ -39,10 +39,10 @@ const level1 = new Level(
   ],
   [
     new Coin("img/8_coin/coin_1.png", 400, 130),
-    new Coin("img/8_coin/coin_2.png", 420, 140),
-    new Coin("img/8_coin/coin_1.png", 440, 130),
-    new Coin("img/8_coin/coin_2.png", 460, 140),
-    new Coin("img/8_coin/coin_1.png", 480, 130),
+    new Coin("img/8_coin/coin_2.png", 430, 140),
+    new Coin("img/8_coin/coin_1.png", 460, 130),
+    new Coin("img/8_coin/coin_2.png", 490, 140),
+    new Coin("img/8_coin/coin_1.png", 520, 130),
   ]
 );
 
