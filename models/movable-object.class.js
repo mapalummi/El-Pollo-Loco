@@ -63,8 +63,17 @@ class MovableObject extends DrawableObject {
     this.x -= this.speed;
   }
 
+  //ALT:
+  // jump() {
+  //   this.speedY = 30;
+  // }
+
+  //NEU:
   jump() {
-    this.speedY = 30;
+    if (this.isDead()) return; // Springen verhindern, wenn der Charakter tot ist
+    if (!this.isAboveGround()) {
+      this.speedY = 30; // Sprunggeschwindigkeit
+    }
   }
 
   // Alt:

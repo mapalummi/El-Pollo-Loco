@@ -189,6 +189,9 @@ class Character extends MovableObject {
   animate() {
     // Bewegung und Kamera-Logik
     setInterval(() => {
+      //NEU:
+      if (this.isDead()) return; // Steuerung deaktivieren, wenn der Charakter tot ist
+
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
         this.otherDirection = false;
@@ -239,17 +242,33 @@ class Character extends MovableObject {
     }, 100);
   }
 
+  //ALT:
+  // moveRight() {
+  //   this.x += this.speed;
+  //   this.facingRight = true; // Blickrichtung nach rechts
+  //   // console.log(this.facingRight);
+  //   this.lastMoveTime = Date.now(); //Timer zurücksetzen
+  // }
+
+  // moveLeft() {
+  //   this.x -= this.speed;
+  //   this.facingRight = false; // Blickrichtung nach links
+  //   // console.log(this.facingRight);
+  //   this.lastMoveTime = Date.now(); //Timer zurücksetzen
+  // }
+
+  //NEU:
   moveRight() {
+    if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist
     this.x += this.speed;
     this.facingRight = true; // Blickrichtung nach rechts
-    // console.log(this.facingRight);
-    this.lastMoveTime = Date.now(); //Timer zurücksetzen
+    this.lastMoveTime = Date.now(); // Timer zurücksetzen
   }
 
   moveLeft() {
+    if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist
     this.x -= this.speed;
     this.facingRight = false; // Blickrichtung nach links
-    // console.log(this.facingRight);
-    this.lastMoveTime = Date.now(); //Timer zurücksetzen
+    this.lastMoveTime = Date.now(); // Timer zurücksetzen
   }
 }
