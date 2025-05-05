@@ -14,10 +14,12 @@ class DrawableObject {
   }
 
   draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    //NOTE: Muss das hier eingesetzt sein?
-    // this.drawFrame(ctx);
-    this.drawOffsetFrame(ctx);
+    if (this.img) {
+      // Überprüfen, ob ein Bild vorhanden ist
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    this.drawOffsetFrame(ctx); // Kollisionsrahmen zeichnen (optional)
   }
 
   //NOTE: Kollisionsrahmen:

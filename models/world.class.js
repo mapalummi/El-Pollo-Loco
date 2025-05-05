@@ -43,38 +43,6 @@ class World {
   }
 
   //NOTE: Kollisionen
-
-  // checkCollisions() {
-  //   let bottlesToRemove = [];
-  //   let enemiesToRemove = [];
-
-  //   // Funktioniert:
-  //   this.level.enemies.forEach(enemy => {
-  //     if (this.character.isColliding(enemy)) {
-  //       if (enemy instanceof LittleChicken || (enemy instanceof Chicken && this.character.speedY < 0)) {
-  //         // Spieler springt auf das Chicken
-  //         enemy.die();
-  //         this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
-  //       } else {
-  //         // Spieler wird getroffen
-  //         this.character.hit();
-  //         this.healthBar.setPercentage(this.character.energy);
-  //       }
-  //     }
-  //   });
-
-  //   // Prüfe Kollisionen zwischen Flaschen und Gegnern
-  //   this.throwableObjects.forEach(bottle => {
-  //     this.level.enemies.forEach(enemy => {
-  //       if (bottle.isColliding(enemy)) {
-  //         // console.log("Flasche trifft Gegner:", bottle, enemy); // Debugging-Log
-  //         bottle.splash(); // Flasche zerplatzt
-  //       }
-  //     });
-  //   });
-  // }
-
-  // NEU:
   checkCollisions() {
     // Die beiden Variablen könnte ich später noch gebrauchen!!!
     // let bottlesToRemove = [];
@@ -90,7 +58,7 @@ class World {
         ) {
           // Spieler springt auf das Chicken
           enemy.die();
-          // this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+          this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
           // Spieler wird getroffen
           this.character.hit();
@@ -105,8 +73,14 @@ class World {
         if (bottle.isColliding(enemy)) {
           // Flasche trifft Gegner
           bottle.splash(); // Flasche zerplatzt
-          //TODO: Endboss soll nicht sterben!
-          enemy.die();
+          // Nur Chicken und LittleChicken sterben, Endboss bleibt unberührt
+          if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
+            enemy.die();
+          } else if (enemy instanceof Endboss) {
+            console.log("Endboss getroffen");
+            //TODO:
+            // enemy.takeDamage(); //Schaden zufügen
+          }
         }
       });
     });

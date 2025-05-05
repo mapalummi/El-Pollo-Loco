@@ -5,6 +5,9 @@ class Character extends MovableObject {
   height = 220;
   speed = 10;
   facingRight = true;
+  lastMoveTime = Date.now(); //Zeitstempel der letzten Bewegung
+  idleTimeout = 3000; // 3 Sekunden
+  sleepTimeout = 9000; // 15 Sekunden
 
   offset = {
     top: 100,
@@ -13,6 +16,30 @@ class Character extends MovableObject {
     left: 30,
   };
 
+  IMAGES_IDLE = [
+    "img/2_character_pepe/1_idle/idle/I-1.png",
+    "img/2_character_pepe/1_idle/idle/I-2.png",
+    "img/2_character_pepe/1_idle/idle/I-3.png",
+    "img/2_character_pepe/1_idle/idle/I-4.png",
+    "img/2_character_pepe/1_idle/idle/I-5.png",
+    "img/2_character_pepe/1_idle/idle/I-6.png",
+    "img/2_character_pepe/1_idle/idle/I-7.png",
+    "img/2_character_pepe/1_idle/idle/I-8.png",
+    "img/2_character_pepe/1_idle/idle/I-9.png",
+    "img/2_character_pepe/1_idle/idle/I-10.png",
+  ];
+  IMAGES_SLEEP = [
+    "img/2_character_pepe/1_idle/long_idle/I-11.png",
+    "img/2_character_pepe/1_idle/long_idle/I-12.png",
+    "img/2_character_pepe/1_idle/long_idle/I-13.png",
+    "img/2_character_pepe/1_idle/long_idle/I-14.png",
+    "img/2_character_pepe/1_idle/long_idle/I-15.png",
+    "img/2_character_pepe/1_idle/long_idle/I-16.png",
+    "img/2_character_pepe/1_idle/long_idle/I-17.png",
+    "img/2_character_pepe/1_idle/long_idle/I-18.png",
+    "img/2_character_pepe/1_idle/long_idle/I-19.png",
+    "img/2_character_pepe/1_idle/long_idle/I-20.png",
+  ];
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -45,11 +72,13 @@ class Character extends MovableObject {
   world;
 
   constructor() {
-    super().loadImage("img/2_character_pepe/2_walk/W-21.png");
+    super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
+    this.loadImages(this.IMAGES_IDLE);
+    this.loadImages(this.IMAGES_SLEEP);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
-    this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DEAD);
     this.applyGravity();
     this.animate();
   }
@@ -61,7 +90,51 @@ class Character extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
+  //ORIGINAL:
+  // animate() {
+  //   setInterval(() => {
+  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+  //       this.moveRight();
+  //       this.otherDirection = false;
+  //     }
+
+  //     if (this.world.keyboard.LEFT && this.x > 0) {
+  //       this.moveLeft();
+  //       this.otherDirection = true;
+  //     }
+
+  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+  //       this.jump();
+  //     }
+
+  //     this.world.camera_x = -this.x + 100;
+  //     this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
+  //   }, 1000 / 60);
+
+  //   setInterval(() => {
+  //     if (this.isDead()) {
+  //       this.playAnimation(this.IMAGES_DEAD);
+  //     } else if (this.isHurt()) {
+  //       this.playAnimation(this.IMAGES_HURT);
+  //     } else if (this.isAboveGround()) {
+  //       this.playAnimation(this.IMAGES_JUMPING);
+  //       // Character länger im Leerlauf
+  //     } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+  //       this.playAnimation(this.IMAGES_SLEEP);
+  //       // Character im Leerlauf
+  //     } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+  //       this.playAnimation(this.IMAGES_IDLE);
+  //     } else {
+  //       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+  //         this.playAnimation(this.IMAGES_WALKING);
+  //       }
+  //     }
+  //   }, 100);
+  // }
+
+  //NOTE: NEU
   animate() {
+    // Bewegung und Kamera-Logik
     setInterval(() => {
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
@@ -77,34 +150,46 @@ class Character extends MovableObject {
         this.jump();
       }
 
-      this.world.camera_x = -this.x + 100;
-      this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
+      this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
+      this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
     }, 1000 / 60);
 
+    // Animationen basierend auf dem Zustand
     setInterval(() => {
       if (this.isDead()) {
+        // Animation für "dead" einmal abspielen und dann ausblenden
         this.playAnimation(this.IMAGES_DEAD);
+        setTimeout(() => {
+          this.img = null; // Charakter ausblenden/entfernen
+        }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
+        return; // Beende weitere Animationen
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);
+      } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+        this.playAnimation(this.IMAGES_SLEEP); // Charakter schläft
+      } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+        this.playAnimation(this.IMAGES_IDLE); // Charakter ist im Leerlauf
       } else {
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          this.playAnimation(this.IMAGES_WALKING);
+          this.playAnimation(this.IMAGES_WALKING); // Charakter läuft
         }
       }
-    }, 50);
+    }, 100);
   }
 
   moveRight() {
     this.x += this.speed;
     this.facingRight = true; // Blickrichtung nach rechts
     // console.log(this.facingRight);
+    this.lastMoveTime = Date.now(); //Timer zurücksetzen
   }
 
   moveLeft() {
     this.x -= this.speed;
     this.facingRight = false; // Blickrichtung nach links
     // console.log(this.facingRight);
+    this.lastMoveTime = Date.now(); //Timer zurücksetzen
   }
 }

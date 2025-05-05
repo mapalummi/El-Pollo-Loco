@@ -77,6 +77,7 @@ class MovableObject extends DrawableObject {
 
   // NEU:
   playAnimation(images) {
+    if (!this.img) return; // Animation stoppen, wenn kein Bild vorhanden ist
     let i = this.currentImage % images.length; // Zyklisches Wechseln der Bilder
     this.img = this.imageCache[images[i]]; // Bild aus dem Cache laden
     this.currentImage++;
