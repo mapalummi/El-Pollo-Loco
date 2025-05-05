@@ -1,26 +1,26 @@
 body {
-  margin: 0; /* Entfernt Standardabstände */
-  background-image: url("img/random_pics/4323926.jpg"); /* Pfad zum Bild */
-  background-size: cover; /* Bild skaliert, um den gesamten Bildschirm zu füllen */
-  background-position: center; /* Bild wird zentriert */
-  background-repeat: no-repeat; /* Verhindert Wiederholung des Bildes */
-  display: flex; /* Aktiviert Flexbox */
-  flex-direction: column; /* Elemente werden vertikal angeordnet */
-  justify-content: center; /* Zentriert den Inhalt vertikal */
-  align-items: center; /* Zentriert den Inhalt horizontal */
-  height: 100vh; /* Höhe des Viewports */
-  background-color: #000; /* Optional: Hintergrundfarbe */
+  margin: 0;
+  background-image: url("img/random_pics/bgpic.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
 }
 
 h1 {
-  color: white; /* Textfarbe */
-  margin: 0; /* Entfernt Standardabstände */
-  padding: 10px; /* Optional: Abstand um den Text */
-  font-size: 2rem; /* Schriftgröße */
-  text-align: center; /* Zentriert den Text */
+  color: #a0220a;
+  margin: 0;
+  padding: 10px;
+  font-size: 2rem;
+  text-align: center;
 }
 
 canvas {
-  border: 1px solid #fff; /* Optional: Rahmen um das Canvas */
+  border: 1px solid #a0220a;
   background-color: black;
 }
