@@ -29,7 +29,7 @@ class World {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
-    }, 200);
+    }, 200); //Interval hier evtl. verkleinern!
   }
 
   checkThrowObjects() {
@@ -132,6 +132,9 @@ class World {
     this.addToMap(this.healthBar);
     this.addToMap(this.coinBar);
     this.addToMap(this.bottleBar);
+
+    //Kollisionen prüfen
+    this.checkCollisions();
 
     // Draw() wird immer wieder aufgerufen:
     let self = this;
