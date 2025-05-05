@@ -62,8 +62,9 @@ class ThrowableObject extends MovableObject {
       this.getRealFrame();
     }, 25);
 
-    // Animation der Flasche
-    setInterval(() => {
+    // Animation der Flasche!
+    // Timer in Variable gespeichert:
+    this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_THROW);
     }, 100);
   }
@@ -77,13 +78,13 @@ class ThrowableObject extends MovableObject {
     this.speedY = 0; // Stoppt die Bewegung
     this.speed = 0;
 
-    clearInterval(this.movementInterval);
-    clearInterval(this.animationInterval);
+    clearInterval(this.movementInterval); // Stoppt die Bewegung
+    clearInterval(this.animationInterval); // Stoppt die Rotationsanimation
 
     // Spielt die Zerplatzen-Animation ab
     let splashAnimationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_SPLASH);
-    }, 100);
+    }, 50);
 
     // Entfernt die Flasche nach der Animation
     setTimeout(() => {

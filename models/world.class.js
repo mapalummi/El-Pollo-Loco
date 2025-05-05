@@ -60,6 +60,7 @@ class World {
         ) {
           // Spieler springt auf das Chicken
           enemy.die();
+          //TODO:
           this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
           // Spieler wird getroffen
@@ -81,7 +82,7 @@ class World {
           } else if (enemy instanceof Endboss) {
             console.log("Endboss getroffen");
             //TODO:
-            // enemy.takeDamage(); //Schaden zufügen
+            // enemy.takeDamage(20); // 20 Schadenspunkte zufügen
           }
         }
       });
