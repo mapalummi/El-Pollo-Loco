@@ -37,13 +37,14 @@ const level1 = new Level(
     new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 520, 380),
     new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 540, 380),
   ],
-  [
-    new Coin("img/8_coin/coin_1.png", 400, 130),
-    new Coin("img/8_coin/coin_2.png", 430, 140),
-    new Coin("img/8_coin/coin_1.png", 460, 130),
-    new Coin("img/8_coin/coin_2.png", 490, 140),
-    new Coin("img/8_coin/coin_1.png", 520, 130),
-  ]
+  // [
+  //   new Coin("img/8_coin/coin_1.png", 400, 130),
+  //   new Coin("img/8_coin/coin_2.png", 430, 140),
+  //   new Coin("img/8_coin/coin_1.png", 460, 130),
+  //   new Coin("img/8_coin/coin_2.png", 490, 140),
+  //   new Coin("img/8_coin/coin_1.png", 520, 130),
+  // ]
+  [new Coin(400, 130), new Coin(430, 140), new Coin(460, 130), new Coin(490, 140), new Coin(520, 130)]
 );
 
 level1.clouds[0].x = 50;

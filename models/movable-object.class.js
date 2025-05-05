@@ -25,29 +25,27 @@ class MovableObject extends DrawableObject {
   }
 
   // Kollisionen
-  // isColliding(mo) {
-  //   return this.x + this.width > mo.x && this.y + this.height > mo.y && this.x < mo.x && this.y < mo.y + mo.height;
-  // }
-
   //NOTE: NEU!!!
   isColliding(mo) {
     return this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
   }
 
   hit() {
+    let now = new Date().getTime();
+    if (now - this.lastHit < 1000) return; // Verhindert mehrfaches Aufrufen innerhalb 1 Sekunde
+
     this.energy -= 5;
     if (this.energy < 0) {
       this.energy = 0;
     } else {
-      this.lastHit = new Date().getTime();
+      this.lastHit = now; //Zeitpunkt des letzten Treffers aktualisieren
     }
+    console.log(this.energy);
   }
 
   isHurt() {
-    let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
-    timepassed = timepassed / 1000; // Difference in s
-    // console.log(timepassed);
-    return timepassed < 1;
+    let timepassed = new Date().getTime() - this.lastHit; // Unterschied in ms
+    return timepassed < 1000;
   }
 
   //TODO:
@@ -63,11 +61,6 @@ class MovableObject extends DrawableObject {
     this.x -= this.speed;
   }
 
-  //ALT:
-  // jump() {
-  //   this.speedY = 30;
-  // }
-
   //NEU:
   jump() {
     if (this.isDead()) return; // Springen verhindern, wenn der Charakter tot ist
@@ -75,14 +68,6 @@ class MovableObject extends DrawableObject {
       this.speedY = 30; // Sprunggeschwindigkeit
     }
   }
-
-  // Alt:
-  // playAnimation(images) {
-  //   let i = this.currentImage % images.length; // Zyklisches Wechseln der Bilder
-  //   let path = images[i]; // Bild aus dem Cache laden
-  //   this.img = this.imageCache[path];
-  //   this.currentImage++;
-  // }
 
   // NEU:
   playAnimation(images) {

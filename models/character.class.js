@@ -95,97 +95,7 @@ class Character extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
-  //ORIGINAL:
-  // animate() {
-  //   setInterval(() => {
-  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-  //       this.moveRight();
-  //       this.otherDirection = false;
-  //     }
-
-  //     if (this.world.keyboard.LEFT && this.x > 0) {
-  //       this.moveLeft();
-  //       this.otherDirection = true;
-  //     }
-
-  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-  //       this.jump();
-  //     }
-
-  //     this.world.camera_x = -this.x + 100;
-  //     this.getRealFrame(); //Kollisionsbox wird ständig aktualisiert
-  //   }, 1000 / 60);
-
-  //   setInterval(() => {
-  //     if (this.isDead()) {
-  //       this.playAnimation(this.IMAGES_DEAD);
-  //     } else if (this.isHurt()) {
-  //       this.playAnimation(this.IMAGES_HURT);
-  //     } else if (this.isAboveGround()) {
-  //       this.playAnimation(this.IMAGES_JUMPING);
-  //       // Character länger im Leerlauf
-  //     } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
-  //       this.playAnimation(this.IMAGES_SLEEP);
-  //       // Character im Leerlauf
-  //     } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
-  //       this.playAnimation(this.IMAGES_IDLE);
-  //     } else {
-  //       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-  //         this.playAnimation(this.IMAGES_WALKING);
-  //       }
-  //     }
-  //   }, 100);
-  // }
-
-  // NEU
-  // animate() {
-  //   // Bewegung und Kamera-Logik
-  //   setInterval(() => {
-  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-  //       this.moveRight();
-  //       this.otherDirection = false;
-  //     }
-
-  //     if (this.world.keyboard.LEFT && this.x > 0) {
-  //       this.moveLeft();
-  //       this.otherDirection = true;
-  //     }
-
-  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-  //       this.jump();
-  //     }
-
-  //     this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
-  //     this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
-  //   }, 1000 / 60);
-
-  //   // Animationen basierend auf dem Zustand
-  //   setInterval(() => {
-  //     if (this.isDead()) {
-  //       // Animation für "dead" einmal abspielen und dann ausblenden
-  //       this.playAnimation(this.IMAGES_DEAD);
-  //       setTimeout(() => {
-  //         // this.img = null; // Charakter ausblenden
-  //         this.img = this.crossImage; //Bild setzen
-  //       }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
-  //       return; // Beende weitere Animationen
-  //     } else if (this.isHurt()) {
-  //       this.playAnimation(this.IMAGES_HURT);
-  //     } else if (this.isAboveGround()) {
-  //       this.playAnimation(this.IMAGES_JUMPING);
-  //     } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
-  //       this.playAnimation(this.IMAGES_SLEEP); // Charakter schläft
-  //     } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
-  //       this.playAnimation(this.IMAGES_IDLE); // Charakter ist im Leerlauf
-  //     } else {
-  //       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-  //         this.playAnimation(this.IMAGES_WALKING); // Charakter läuft
-  //       }
-  //     }
-  //   }, 100);
-  // }
-
-  //NEUER:
+  //NEU
   animate() {
     // Bewegung und Kamera-Logik
     setInterval(() => {
@@ -245,22 +155,6 @@ class Character extends MovableObject {
     }, 100);
   }
 
-  //ALT:
-  // moveRight() {
-  //   this.x += this.speed;
-  //   this.facingRight = true; // Blickrichtung nach rechts
-  //   // console.log(this.facingRight);
-  //   this.lastMoveTime = Date.now(); //Timer zurücksetzen
-  // }
-
-  // moveLeft() {
-  //   this.x -= this.speed;
-  //   this.facingRight = false; // Blickrichtung nach links
-  //   // console.log(this.facingRight);
-  //   this.lastMoveTime = Date.now(); //Timer zurücksetzen
-  // }
-
-  //NEU:
   moveRight() {
     if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist
     this.x += this.speed;

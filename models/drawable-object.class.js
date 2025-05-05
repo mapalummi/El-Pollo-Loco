@@ -11,6 +11,9 @@ class DrawableObject {
   loadImage(path) {
     this.img = new Image(); // this.img = document.getElementById('image') <img id="image" src>
     this.img.src = path;
+    this.img.onerror = () => {
+      console.error(`Bild konnte nicht geladen werden: ${path}`);
+    };
   }
 
   draw(ctx) {
@@ -22,7 +25,7 @@ class DrawableObject {
     this.drawOffsetFrame(ctx); // Kollisionsrahmen zeichnen (optional)
   }
 
-  //NOTE: Kollisionsrahmen:
+  //NOTE: Kollisionsrahmen blau:
   // drawFrame(ctx) {
   //   if (this instanceof Character || this instanceof Chicken) {
   //     //Quadrate zeichnen für collision detection:
@@ -62,7 +65,9 @@ class DrawableObject {
     arr.forEach(path => {
       let img = new Image();
       img.src = path;
-      this.imageCache[path] = img;
+      // img.onload = () => console.log(`Bild geladen: ${path}`);
+      // img.onerror = () => console.error(`Fehler beim Laden des Bildes: ${path}`);
+      this.imageCache[path] = img; // Bild im Cache speichern
     });
   }
 }

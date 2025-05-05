@@ -62,7 +62,7 @@ class Chicken extends MovableObject {
     setTimeout(() => {
       const index = world.level.enemies.indexOf(this);
       if (index > -1) {
-        world.level.enemies.splice(index, 1); // Entfernt LittleChicken aus dem Array
+        world.level.enemies.splice(index, 1); // Entfernt Chicken aus dem Array
       }
     }, 2000);
   }
