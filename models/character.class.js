@@ -8,6 +8,7 @@ class Character extends MovableObject {
   lastMoveTime = Date.now(); //Zeitstempel der letzten Bewegung
   idleTimeout = 3000; // 3 Sekunden
   sleepTimeout = 9000; // 15 Sekunden
+  isDeadAnimationComplete = false;
 
   offset = {
     top: 100,
@@ -79,6 +80,10 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
+
+    this.crossImage = new Image();
+    this.crossImage.src = "img/2_character_pepe/4_hurt/H-43.png";
+
     this.applyGravity();
     this.animate();
   }
@@ -132,7 +137,55 @@ class Character extends MovableObject {
   //   }, 100);
   // }
 
-  //NOTE: NEU
+  // NEU
+  // animate() {
+  //   // Bewegung und Kamera-Logik
+  //   setInterval(() => {
+  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+  //       this.moveRight();
+  //       this.otherDirection = false;
+  //     }
+
+  //     if (this.world.keyboard.LEFT && this.x > 0) {
+  //       this.moveLeft();
+  //       this.otherDirection = true;
+  //     }
+
+  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+  //       this.jump();
+  //     }
+
+  //     this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
+  //     this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
+  //   }, 1000 / 60);
+
+  //   // Animationen basierend auf dem Zustand
+  //   setInterval(() => {
+  //     if (this.isDead()) {
+  //       // Animation für "dead" einmal abspielen und dann ausblenden
+  //       this.playAnimation(this.IMAGES_DEAD);
+  //       setTimeout(() => {
+  //         // this.img = null; // Charakter ausblenden
+  //         this.img = this.crossImage; //Bild setzen
+  //       }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
+  //       return; // Beende weitere Animationen
+  //     } else if (this.isHurt()) {
+  //       this.playAnimation(this.IMAGES_HURT);
+  //     } else if (this.isAboveGround()) {
+  //       this.playAnimation(this.IMAGES_JUMPING);
+  //     } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+  //       this.playAnimation(this.IMAGES_SLEEP); // Charakter schläft
+  //     } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+  //       this.playAnimation(this.IMAGES_IDLE); // Charakter ist im Leerlauf
+  //     } else {
+  //       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+  //         this.playAnimation(this.IMAGES_WALKING); // Charakter läuft
+  //       }
+  //     }
+  //   }, 100);
+  // }
+
+  //NEUER:
   animate() {
     // Bewegung und Kamera-Logik
     setInterval(() => {
@@ -157,13 +210,20 @@ class Character extends MovableObject {
     // Animationen basierend auf dem Zustand
     setInterval(() => {
       if (this.isDead()) {
-        // Animation für "dead" einmal abspielen und dann ausblenden
-        this.playAnimation(this.IMAGES_DEAD);
-        setTimeout(() => {
-          this.img = null; // Charakter ausblenden/entfernen
-        }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
+        if (!this.isDeadAnimationComplete) {
+          // Animation für "dead" einmal abspielen und dann das Kreuz setzen
+          this.playAnimation(this.IMAGES_DEAD);
+          setTimeout(() => {
+            this.img = this.crossImage; // Bild setzen
+            this.isDeadAnimationComplete = true; // Animation abgeschlossen
+          }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
+        }
         return; // Beende weitere Animationen
-      } else if (this.isHurt()) {
+      }
+
+      if (this.isDeadAnimationComplete) return; // Keine weiteren Animationen ausführen
+
+      if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);
