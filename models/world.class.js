@@ -159,19 +159,6 @@ class World {
     }
   }
 
-  // addToMap(mo) {
-  //   console.log("Zeichne MovableObject:", mo.constructor.name); // Debugging-Log
-  //   if (mo.otherDirection) {
-  //     this.flipImage(mo);
-  //   }
-
-  //   mo.draw(this.ctx);
-
-  //   if (mo.otherDirection) {
-  //     this.flipImageBack(mo);
-  //   }
-  // }
-
   flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
