@@ -7,6 +7,9 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
+  totalCoins = 5;
+  collectedCoins;
+  percentageCoins;
 
   bottleBar = new BottleBar();
   healthBar = new HealthBar();
@@ -18,6 +21,8 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.totalCoins = this.level.coins.length; //Gesamtzahl Coins aus dem Level übernehmen
+    this.collectedCoins = 0; //Zähler eingesammelte Coins
     this.draw();
 
     //Alt:
@@ -99,23 +104,43 @@ class World {
       });
     });
 
-    //NOTE:
+    //NOTE: Coins und Flaschen
+
+    this.collectedCoins = this.collectedCoins || 0; //Sicherstellem, dass Zähler existiert.
+
     this.level.coins = this.level.coins.filter(coin => {
       if (this.character.isColliding(coin)) {
         console.log("Coin eingesackt:", coin);
+
+        this.collectedCoins++;
+        this.updateCoinBar();
+
+        //Soundeffekt (später)
+        // this.playCoinSound();
+
         return false; // Entferne den Coin
       }
       return true; // Behalte den Coin
     });
 
+    // console.log(`Eingesammelte Coins ${this.collectedCoins}`);
+
     this.level.bottles = this.level.bottles.filter(bottle => {
       if (this.character.isColliding(bottle)) {
         console.log("Bottle eingesackt:", bottle);
+
         return false; // Entferne Bottle
       }
       // console.log("Keine Kollision mit Bottle:", bottle);
       return true; // Behalte Bottle
     });
+  }
+
+  //TODO:
+  updateCoinBar() {
+    this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100; //Prozentualer Fortschritt
+    this.coinBar.setPercentage(this.percentageCoins); //Fortschritt an die Coinbar übergeben
+    console.log(`Aktueller Fortschritt: ${this.percentageCoins}%`);
   }
 
   draw() {

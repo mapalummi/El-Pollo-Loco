@@ -45,6 +45,8 @@ level1.clouds[1].x = 1000;
 level1.clouds[2].x = 1500;
 level1.clouds[3].x = 2000;
 
+level1.totalCoins = level1.coins.length; // Gesamtzahl Coins berechnen!
+
 // console.log("Level Coins:", level1.coins);
 // console.log("Level Bottles:", level1.bottles);
 
