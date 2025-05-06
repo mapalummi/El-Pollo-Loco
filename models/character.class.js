@@ -6,8 +6,8 @@ class Character extends MovableObject {
   speed = 10;
   facingRight = true;
   lastMoveTime = Date.now(); //Zeitstempel der letzten Bewegung
-  idleTimeout = 3000; // 3 Sekunden
-  sleepTimeout = 9000; // 15 Sekunden
+  idleTimeout = 1000; // 3 Sekunden
+  sleepTimeout = 15000; // 15 Sekunden
   isDeadAnimationComplete = false;
 
   offset = {
@@ -156,7 +156,7 @@ class Character extends MovableObject {
           this.playAnimation(this.IMAGES_WALKING); // Charakter läuft
         }
       }
-    }, 100);
+    }, 200);
   }
 
   moveRight() {

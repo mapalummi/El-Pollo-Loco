@@ -1,3 +1,5 @@
+// import { getAnimationSpeed } from "../js/config.js";
+
 class World {
   // character = new Character();
   //NEU:
