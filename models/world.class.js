@@ -26,6 +26,7 @@ class World {
     // console.log("Coins === Bottles:", this.level.coins === this.level.bottles); // Sollte `false` sein
   }
 
+  //TODO: Erklären lassen wie die Zusammenhänge sind!
   setWorld() {
     this.character.world = this;
   }

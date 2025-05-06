@@ -7,6 +7,12 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+//TODO: Später anlegen:
+// function startGame() {
+//   canvas = document.getElementById("canvas");
+//   world = new World(canvas, keyboard);
+// }
+
 // Debugging
 // window.addEventListener("keydown", e => {
 //   console.log(`Taste gedrückt: ${e.key}`);
