@@ -13,7 +13,7 @@ class World {
   percentageCoins;
 
   totalBottles;
-  collectedBottles;
+  collectedBottles; //auch als Limit für das Werfen!
   percentageBottles;
 
   bottleBar = new BottleBar();
@@ -38,11 +38,6 @@ class World {
     // this.setWorld();
 
     this.run();
-
-    // Debugging: Überprüfe die Inhalte der Arrays
-    // console.log("Coins beim Start:", this.level.coins);
-    // console.log("Bottles beim Start:", this.level.bottles);
-    // console.log("Coins === Bottles:", this.level.coins === this.level.bottles); // Sollte `false` sein
   }
 
   //ALT:
@@ -58,16 +53,47 @@ class World {
     }, 200); //Interval hier evtl. auf 50 verkleinern!
   }
 
+  //Original
+  // checkThrowObjects() {
+  //   if (this.keyboard.B) {
+  //     let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links werfen und Abstand der Flasche auf X-Achse
+  //     let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
+  //     bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
+  //     this.throwableObjects.push(bottle);
+  //   }
+  // }
+
+  //NEU:
+  // checkThrowObjects() {
+  //   if (this.keyboard.B && this.collectedBottles > 0) {
+  //     let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links werfen und Abstand der Flasche auf X-Achse
+  //     let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
+  //     bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
+  //     this.throwableObjects.push(bottle);
+
+  //     this.collectedBottles--;
+  //     this.updateBottleBar();
+  //   }
+  // }
+
+  //NEU mit Feedback für Spieler (evtl. Sound)
   checkThrowObjects() {
     if (this.keyboard.B) {
-      let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links werfen und Abstand der Flasche auf X-Achse
-      let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
-      bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
-      this.throwableObjects.push(bottle);
+      if (this.collectedBottles > 0) {
+        let offsetX = this.character.facingRight ? 50 : -10;
+        let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
+        bottle.throwDirection = this.character.facingRight ? 1 : -1;
+        this.throwableObjects.push(bottle);
+
+        this.collectedBottles--;
+        this.updateBottleBar();
+      } else {
+        console.log("Keine Flaschen mehr verfügbar!");
+        // Optional: Visuelles Feedback für den Spieler
+      }
     }
   }
 
-  //NOTE: Kollisionen
   checkCollisions() {
     // Die beiden Variablen könnte ich später noch gebrauchen!!!
     // let bottlesToRemove = [];
@@ -114,7 +140,6 @@ class World {
     });
 
     //NOTE: Coins und Flaschen
-
     this.collectedCoins = this.collectedCoins || 0; //Sicherstellem, dass Zähler existiert.
 
     this.level.coins = this.level.coins.filter(coin => {
@@ -124,6 +149,7 @@ class World {
         this.collectedCoins++;
         this.updateCoinBar();
 
+        //TODO:
         //Soundeffekt (später)
         // this.playCoinSound();
 
@@ -143,6 +169,10 @@ class World {
         this.collectedBottles++;
         this.updateBottleBar();
 
+        //TODO:
+        //Soundeffekt (später)
+        // this.playBottleSound();
+
         return false; // Entferne Bottle
       }
       // console.log("Keine Kollision mit Bottle:", bottle);
@@ -150,7 +180,6 @@ class World {
     });
   }
 
-  //TODO:
   updateCoinBar() {
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100; //Prozentualer Fortschritt
     this.coinBar.setPercentage(this.percentageCoins); //Fortschritt an die Coinbar übergeben
@@ -164,18 +193,6 @@ class World {
   }
 
   draw() {
-    // Debugging: Überprüfe die Inhalte der Arrays
-    // console.log("Coins vor dem Zeichnen:", this.level.coins);
-    // console.log("Bottles vor dem Zeichnen:", this.level.bottles);
-
-    // this.level.coins.forEach((coin, index) => {
-    //   console.log(`Coin ${index} ist Coin:`, coin instanceof Coin);
-    // });
-
-    // this.level.bottles.forEach((bottle, index) => {
-    //   console.log(`Bottle ${index} ist Bottle:`, bottle instanceof Bottle);
-    // });
-
     // Löscht das verherige Canvas:
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
