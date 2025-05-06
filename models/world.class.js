@@ -52,6 +52,7 @@ class World {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
+      this.checkEndbossVisibility();
     }, 200); //Interval hier evtl. auf 50 verkleinern!
   }
 
@@ -214,7 +215,9 @@ class World {
     this.addToMap(this.coinBar);
     this.addToMap(this.healthBar);
     //TODO:
-    this.addToMap(this.endbossBar);
+    if (this.endbossBar.isVisible) {
+      this.addToMap(this.endbossBar);
+    }
 
     //Kollisionen prüfen
     this.checkCollisions();
@@ -255,5 +258,14 @@ class World {
   flipImageBack(mo) {
     mo.x = mo.x * -1;
     this.ctx.restore();
+  }
+
+  checkEndbossVisibility() {
+    const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    if (endboss && Math.abs(this.character.x - endboss.x) < 500) {
+      this.endbossBar.isVisible = true;
+    } else {
+      this.endbossBar.isVisible = false;
+    }
   }
 }
