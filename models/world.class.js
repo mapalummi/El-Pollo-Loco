@@ -19,6 +19,8 @@ class World {
   bottleBar = new BottleBar();
   healthBar = new HealthBar();
   coinBar = new CoinBar();
+  //TODO:
+  endbossBar = new EndbossBar();
 
   throwableObjects = [];
 
@@ -95,10 +97,6 @@ class World {
   }
 
   checkCollisions() {
-    // Die beiden Variablen könnte ich später noch gebrauchen!!!
-    // let bottlesToRemove = [];
-    // let enemiesToRemove = [];
-
     if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
 
     this.level.enemies.forEach(enemy => {
@@ -144,7 +142,7 @@ class World {
 
     this.level.coins = this.level.coins.filter(coin => {
       if (this.character.isColliding(coin)) {
-        console.log("Coin eingesackt:", coin);
+        // console.log("Coin eingesackt:", coin);
 
         this.collectedCoins++;
         this.updateCoinBar();
@@ -164,7 +162,7 @@ class World {
 
     this.level.bottles = this.level.bottles.filter(bottle => {
       if (this.character.isColliding(bottle)) {
-        console.log("Bottle eingesackt:", bottle);
+        // console.log("Bottle eingesackt:", bottle);
 
         this.collectedBottles++;
         this.updateBottleBar();
@@ -183,13 +181,13 @@ class World {
   updateCoinBar() {
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100; //Prozentualer Fortschritt
     this.coinBar.setPercentage(this.percentageCoins); //Fortschritt an die Coinbar übergeben
-    console.log(`Aktueller Fortschritt: ${this.percentageCoins}%`);
+    console.log(`Aktueller Fortschritt Coins: ${this.percentageCoins}%`);
   }
 
   updateBottleBar() {
     this.percentageBottles = (this.collectedBottles / this.totalBottles) * 100;
     this.bottleBar.setPercentage(this.percentageBottles);
-    console.log(`Aktueller Fortschritt: ${this.percentageBottles}%`);
+    console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
   draw() {
@@ -215,6 +213,8 @@ class World {
     this.addToMap(this.bottleBar);
     this.addToMap(this.coinBar);
     this.addToMap(this.healthBar);
+    //TODO:
+    this.addToMap(this.endbossBar);
 
     //Kollisionen prüfen
     this.checkCollisions();
