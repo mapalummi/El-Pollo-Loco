@@ -73,6 +73,27 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  //NEU
+  // takeDamage(amount) {
+  //   this.energy -= amount;
+  //   if (this.energy < 0) {
+  //     this.energy = 0; //Energie kann nicht negativ sein
+  //   }
+  //   console.log(`Endboss Energie: ${this.energy}`);
+  //   world.endbossBar.setPercentage(this.energy);
+  // }
+
+  takeDamage(amount) {
+    this.energy -= amount;
+    if (this.energy < 0) {
+      this.energy = 0; // Energie kann nicht negativ sein
+    }
+    console.log(`${this.constructor.name} Energie: ${this.energy}`);
+    if (this instanceof Endboss) {
+      world.endbossBar.setPercentage(this.energy); // Endboss-Bar aktualisieren
+    }
+  }
+
   // NEU:
   playAnimation(images) {
     if (!this.img) return; // Animation stoppen, wenn kein Bild vorhanden ist

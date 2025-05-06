@@ -150,6 +150,7 @@ class World {
             console.log("Endboss getroffen");
             //TODO:
             enemy.takeDamage(10); // Schadenspunkte
+            enemy.playAnimation(enemy.IMAGES_HURT);
             if (enemy.isDead()) {
               console.log("Endboss besiegt!");
               // Optional: Logik für das Besiegen des Endbosses
@@ -283,6 +284,7 @@ class World {
     this.ctx.restore();
   }
 
+  //NOTE: Erklären lassen!
   checkEndbossVisibility() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (endboss && Math.abs(this.character.x - endboss.x) < 500) {
