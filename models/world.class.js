@@ -23,7 +23,7 @@ class World {
     // Debugging: Überprüfe die Inhalte der Arrays
     // console.log("Coins beim Start:", this.level.coins);
     // console.log("Bottles beim Start:", this.level.bottles);
-    console.log("Coins === Bottles:", this.level.coins === this.level.bottles); // Sollte `false` sein
+    // console.log("Coins === Bottles:", this.level.coins === this.level.bottles); // Sollte `false` sein
   }
 
   setWorld() {
@@ -52,10 +52,6 @@ class World {
     // Die beiden Variablen könnte ich später noch gebrauchen!!!
     // let bottlesToRemove = [];
     // let enemiesToRemove = [];
-
-    // Debugging: Überprüfe die Inhalte der Arrays
-    // console.log("Coins während der Kollisionserkennung:", this.level.coins);
-    // console.log("Bottles während der Kollisionserkennung:", this.level.bottles);
 
     if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
 
@@ -97,13 +93,6 @@ class World {
       });
     });
 
-    //Coins-Kollision
-    // this.level.coins.forEach(coin => {
-    //   if (this.character.isColliding(coin)) {
-    //     console.log("Coin eingesackt:", coin);
-    //   }
-    // });
-
     //NOTE:
     this.level.coins = this.level.coins.filter(coin => {
       if (this.character.isColliding(coin)) {
@@ -113,7 +102,14 @@ class World {
       return true; // Behalte den Coin
     });
 
-    // console.log("Verbleibende Coins:", this.level.coins);
+    this.level.bottles = this.level.bottles.filter(bottle => {
+      if (this.character.isColliding(bottle)) {
+        console.log("Bottle eingesackt:", bottle);
+        return false; // Entferne Bottle
+      }
+      // console.log("Keine Kollision mit Bottle:", bottle);
+      return true; // Behalte Bottle
+    });
   }
 
   draw() {
@@ -135,7 +131,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
 
-    //NOTE: COINS
+    //NOTE:
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
 

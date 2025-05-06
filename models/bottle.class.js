@@ -18,6 +18,7 @@ class Bottle extends MovableObject {
     this.y = y; // Standard-Y-Position
     this.width = 50; // Breite der Flasche
     this.height = 50; // Höhe der Flasche
+    this.getRealFrame(); // Kollisionsrahmen setzen
   }
 
   getRealFrame() {
