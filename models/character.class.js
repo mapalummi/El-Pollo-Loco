@@ -72,7 +72,8 @@ class Character extends MovableObject {
   ];
   world;
 
-  constructor() {
+  //world aus world-Klasse übergeben:
+  constructor(world) {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_SLEEP);
@@ -80,6 +81,9 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
+
+    //NEU
+    this.world = world;
 
     this.crossImage = new Image();
     this.crossImage.src = "img/random_pics/skull-147188_640.png";

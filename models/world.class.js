@@ -1,5 +1,7 @@
 class World {
-  character = new Character();
+  // character = new Character();
+  //NEU:
+  character = new Character(this);
   level = level1;
   canvas;
   ctx;
@@ -17,7 +19,10 @@ class World {
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.draw();
-    this.setWorld();
+
+    //Alt:
+    // this.setWorld();
+
     this.run();
 
     // Debugging: Überprüfe die Inhalte der Arrays
@@ -26,10 +31,10 @@ class World {
     // console.log("Coins === Bottles:", this.level.coins === this.level.bottles); // Sollte `false` sein
   }
 
-  //TODO: Erklären lassen wie die Zusammenhänge sind!
-  setWorld() {
-    this.character.world = this;
-  }
+  //ALT:
+  // setWorld() {
+  //   this.character.world = this;
+  // }
 
   //Startet einen Timer um Aktionen auszuführen:
   run() {
