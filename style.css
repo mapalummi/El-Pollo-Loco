@@ -24,3 +24,58 @@ canvas {
   border: 1px solid #a0220a;
   background-color: black;
 }
+
+#keyboard-controls {
+  margin-top: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #fff; /* Weißer Text für besseren Kontrast */
+  background-color: rgba(0, 0, 0, 0.7); /* Halbtransparenter Hintergrund */
+  padding: 15px;
+  border-radius: 10px; /* Abgerundete Ecken */
+  width: 80%; /* Breite der Steuerung */
+  max-width: 600px; /* Maximale Breite */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#keyboard-controls h2 {
+  font-size: 1.8rem;
+  color: #ffcc00; /* Goldene Farbe für den Titel */
+  margin-bottom: 15px;
+}
+
+#keyboard-controls ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#keyboard-controls li {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#keyboard-controls li strong {
+  margin-right: 10px;
+  color: #ffcc00; /* Goldene Farbe für die Symbole */
+}
+
+#keyboard-controls li:hover {
+  color: #ffcc00; /* Goldene Farbe beim Hover */
+  transform: scale(1.05); /* Leichte Vergrößerung */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  #keyboard-controls {
+    font-size: 0.9rem;
+  }
+
+  #keyboard-controls h2 {
+    font-size: 1.2rem;
+  }
+}
