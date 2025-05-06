@@ -19,6 +19,11 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+
+    // Debugging: Überprüfe die Inhalte der Arrays
+    // console.log("Coins beim Start:", this.level.coins);
+    // console.log("Bottles beim Start:", this.level.bottles);
+    console.log("Coins === Bottles:", this.level.coins === this.level.bottles); // Sollte `false` sein
   }
 
   setWorld() {
@@ -47,6 +52,10 @@ class World {
     // Die beiden Variablen könnte ich später noch gebrauchen!!!
     // let bottlesToRemove = [];
     // let enemiesToRemove = [];
+
+    // Debugging: Überprüfe die Inhalte der Arrays
+    // console.log("Coins während der Kollisionserkennung:", this.level.coins);
+    // console.log("Bottles während der Kollisionserkennung:", this.level.bottles);
 
     if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
 
@@ -103,17 +112,33 @@ class World {
       }
       return true; // Behalte den Coin
     });
+
+    // console.log("Verbleibende Coins:", this.level.coins);
   }
 
   draw() {
+    // Debugging: Überprüfe die Inhalte der Arrays
+    // console.log("Coins vor dem Zeichnen:", this.level.coins);
+    // console.log("Bottles vor dem Zeichnen:", this.level.bottles);
+
+    // this.level.coins.forEach((coin, index) => {
+    //   console.log(`Coin ${index} ist Coin:`, coin instanceof Coin);
+    // });
+
+    // this.level.bottles.forEach((bottle, index) => {
+    //   console.log(`Bottle ${index} ist Bottle:`, bottle instanceof Bottle);
+    // });
+
     // Löscht das verherige Canvas:
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
+
     //NOTE: COINS
     this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.bottles); // Flaschen hinzufügen
+    this.addObjectsToMap(this.level.bottles);
+
     this.ctx.translate(-this.camera_x, 0);
 
     this.ctx.translate(this.camera_x, 0);
@@ -138,6 +163,7 @@ class World {
   }
 
   addObjectsToMap(objects) {
+    // console.log("Zeichne Objekte:", objects); // Debugging-Log
     objects.forEach(o => {
       this.addToMap(o);
     });

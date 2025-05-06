@@ -44,3 +44,28 @@ level1.clouds[0].x = 50;
 level1.clouds[1].x = 1000;
 level1.clouds[2].x = 1500;
 level1.clouds[3].x = 2000;
+
+// console.log("Level Coins:", level1.coins);
+// console.log("Level Bottles:", level1.bottles);
+
+// Teste die Klasse Coin
+// const coin = new Coin();
+// console.log(coin instanceof Coin); // Sollte `true` sein
+
+// level1.coins.forEach((coin, index) => {
+//   console.log(`Coin ${index} ist Coin:`, coin instanceof Coin);
+// });
+
+// console.log(Coin); // Überprüfe, ob die Klasse korrekt definiert ist
+
+// level1.coins.forEach((coin, index) => {
+//   console.log(`Coin ${index} Konstruktor:`, coin.constructor.name);
+// });
+
+// level1.coins.forEach((coin, index) => {
+//   console.log(`Coin ${index} Typ:`, typeof coin);
+// });
+
+// level1.coins.forEach((coin, index) => {
+//   console.log(`Coin ${index} ist gleiche Klasse:`, coin instanceof Coin, coin.constructor === Coin);
+// });
