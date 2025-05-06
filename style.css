@@ -30,11 +30,11 @@ canvas {
   text-align: center;
   font-family: Arial, sans-serif;
   color: #fff; /* Weißer Text für besseren Kontrast */
-  background-color: rgba(0, 0, 0, 0.7); /* Halbtransparenter Hintergrund */
+  background-color: rgba(0, 0, 0, 0.5); /* Halbtransparenter Hintergrund */
   padding: 15px;
   border-radius: 10px; /* Abgerundete Ecken */
   width: 80%; /* Breite der Steuerung */
-  max-width: 600px; /* Maximale Breite */
+  max-width: 300px; /* Maximale Breite */
   margin-left: auto;
   margin-right: auto;
 }
