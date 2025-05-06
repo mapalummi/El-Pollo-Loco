@@ -7,9 +7,14 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
-  totalCoins = 5;
+
+  totalCoins;
   collectedCoins;
   percentageCoins;
+
+  totalBottles;
+  collectedBottles;
+  percentageBottles;
 
   bottleBar = new BottleBar();
   healthBar = new HealthBar();
@@ -23,6 +28,10 @@ class World {
     this.keyboard = keyboard;
     this.totalCoins = this.level.coins.length; //Gesamtzahl Coins aus dem Level übernehmen
     this.collectedCoins = 0; //Zähler eingesammelte Coins
+
+    this.totalBottles = this.level.bottles.length;
+    this.collectedBottles = 0;
+
     this.draw();
 
     //Alt:
@@ -125,9 +134,14 @@ class World {
 
     // console.log(`Eingesammelte Coins ${this.collectedCoins}`);
 
+    this.collectedBottles = this.collectedBottles || 0;
+
     this.level.bottles = this.level.bottles.filter(bottle => {
       if (this.character.isColliding(bottle)) {
         console.log("Bottle eingesackt:", bottle);
+
+        this.collectedBottles++;
+        this.updateBottleBar();
 
         return false; // Entferne Bottle
       }
@@ -141,6 +155,12 @@ class World {
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100; //Prozentualer Fortschritt
     this.coinBar.setPercentage(this.percentageCoins); //Fortschritt an die Coinbar übergeben
     console.log(`Aktueller Fortschritt: ${this.percentageCoins}%`);
+  }
+
+  updateBottleBar() {
+    this.percentageBottles = (this.collectedBottles / this.totalBottles) * 100;
+    this.bottleBar.setPercentage(this.percentageBottles);
+    console.log(`Aktueller Fortschritt: ${this.percentageBottles}%`);
   }
 
   draw() {

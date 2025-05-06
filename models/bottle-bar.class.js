@@ -1,4 +1,5 @@
 class BottleBar extends StatusBar {
+  percentage = 0;
   constructor() {
     super(
       [
