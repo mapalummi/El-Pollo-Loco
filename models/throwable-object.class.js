@@ -6,6 +6,8 @@ class ThrowableObject extends MovableObject {
 
   throwDirection = 1; // Standardmäßig nach rechts
   isSplashing = false;
+  //NEU
+  hasHit = false;
 
   // NEU
   offset = {
@@ -74,6 +76,9 @@ class ThrowableObject extends MovableObject {
     if (this.isSplashing) return; // Verhindert mehrfaches Aufrufen
     this.isSplashing = true;
     // console.log("Flasche zerplatzt", this);
+
+    //NEU
+    this.hasHit = true; //Flasche als getroffen markiert
 
     this.speedY = 0; // Stoppt die Bewegung
     this.speed = 0;

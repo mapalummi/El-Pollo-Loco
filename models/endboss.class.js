@@ -3,6 +3,7 @@ class Endboss extends MovableObject {
   y = -40;
   width = 300;
   height = 500;
+  energy = 100;
 
   offset = {
     top: 190,
@@ -42,4 +43,19 @@ class Endboss extends MovableObject {
       this.playAnimation(this.IMAGES_WALKING);
     }, 200);
   }
+
+  //NEU
+  takeDamage(amount) {
+    this.energy -= amount;
+    if (this.energy < 0) {
+      this.energy = 0; //Energie kann nicht negativ sein
+    }
+    console.log(`Endboss Energie: ${this.energy}`);
+    world.endbossBar.setPercentage(this.energy);
+  }
+
+  //NEU
+  // isDead() {
+  //   return this.energy <= 0;
+  // }
 }

@@ -28,6 +28,7 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+
     this.totalCoins = this.level.coins.length; //Gesamtzahl Coins aus dem Level übernehmen
     this.collectedCoins = 0; //Zähler eingesammelte Coins
 
@@ -113,7 +114,7 @@ class World {
           //TODO:
           this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
-          // Spieler wird getroffen
+          //NOTE: Spieler wird getroffen
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
         }
@@ -121,18 +122,40 @@ class World {
     });
 
     // Prüfe Kollisionen zwischen Flaschen und Gegnern
+    // this.throwableObjects.forEach(bottle => {
+    //   this.level.enemies.forEach(enemy => {
+    //     if (bottle.isColliding(enemy)) {
+    //       // Flasche trifft Gegner
+    //       bottle.splash(); // Flasche zerplatzt
+    //       // Nur Chicken und LittleChicken sterben, Endboss bleibt unberührt
+    //       if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
+    //         enemy.die();
+    //       } else if (enemy instanceof Endboss) {
+    //         console.log("Endboss getroffen");
+    //         //TODO:
+    //         enemy.takeDamage(20); // 20 Schadenspunkte zufügen
+    //       }
+    //     }
+    //   });
+    // });
+
+    //NEU
     this.throwableObjects.forEach(bottle => {
+      if (bottle.hasHit) return; //Flaschen, die bereits getroffen haben überspringen
+
       this.level.enemies.forEach(enemy => {
         if (bottle.isColliding(enemy)) {
-          // Flasche trifft Gegner
           bottle.splash(); // Flasche zerplatzt
-          // Nur Chicken und LittleChicken sterben, Endboss bleibt unberührt
-          if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
-            enemy.die();
-          } else if (enemy instanceof Endboss) {
+          if (enemy instanceof Endboss) {
             console.log("Endboss getroffen");
             //TODO:
-            // enemy.takeDamage(20); // 20 Schadenspunkte zufügen
+            enemy.takeDamage(10); // Schadenspunkte
+            if (enemy.isDead()) {
+              console.log("Endboss besiegt!");
+              // Optional: Logik für das Besiegen des Endbosses
+            }
+          } else if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
+            enemy.die();
           }
         }
       });
