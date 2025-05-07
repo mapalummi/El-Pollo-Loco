@@ -1,16 +1,13 @@
 class World {
-  // character = new Character();
   character = new Character(this);
   level = level1;
   canvas;
   ctx;
   keyboard;
   camera_x = 0;
-
   totalCoins;
   collectedCoins;
   percentageCoins;
-
   totalBottles;
   collectedBottles; //auch als Limit für das Werfen!
   percentageBottles;
@@ -23,7 +20,6 @@ class World {
   throwableObjects = [];
 
   constructor(canvas, keyboard) {
-    //NEU
     this.levelWidth = 4314;
     this.clouds = this.createClouds();
 
@@ -33,16 +29,12 @@ class World {
 
     this.totalCoins = this.level.coins.length; //Gesamtzahl Coins aus dem Level übernehmen
     this.collectedCoins = 0; //Zähler eingesammelte Coins
-
     this.totalBottles = this.level.bottles.length;
     this.collectedBottles = 0;
-
     this.endbossTriggered = false;
 
     this.draw();
     this.run();
-    //Alt:
-    // this.setWorld();
 
     // Initialisiere den Endboss-Zustand
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -53,11 +45,6 @@ class World {
       this.endbossBar.isVisible = false; // Hide the bar initially
     }
   }
-
-  //ALT:
-  // setWorld() {
-  //   this.character.world = this;
-  // }
 
   //NEU
   createClouds() {
@@ -348,11 +335,11 @@ class World {
       }
     }
     // Laufen, wenn der Spieler in mittlerer Distanz ist
-    else if (distance < 500) {
+    else if (distance < 700) {
       if (!endboss.isWalking) {
         endboss.startWalking();
         // Den Endboss zum Spieler bewegen
-        // this.moveEndbossTowardsPlayer(endboss);
+        this.moveEndbossTowardsPlayer(endboss);
       }
     }
     // Alert-Zustand, wenn der Spieler weiter weg ist, aber noch sichtbar

@@ -56,7 +56,7 @@ class Endboss extends MovableObject {
   isWalking = false;
   isAlert = false;
 
-  constructor() {
+  constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ALERT);
@@ -64,6 +64,7 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
 
+    this.world = world;
     this.x = 4500;
     this.animate();
   }
@@ -91,21 +92,8 @@ class Endboss extends MovableObject {
   }
 
   endbossAttackAnimation() {
-    if (!this.isAttacking) {
-      this.isAttacking = true;
-      // Stop other animations
-      this.isAlert = false;
-      this.isWalking = false;
-
-      this.playAnimation(this.IMAGES_ATTACK);
-      this.getRealFrame();
-
-      // Return to alert state after attack animation
-      setTimeout(() => {
-        this.isAttacking = false;
-        this.isAlert = true;
-      }, this.IMAGES_ATTACK.length * 100);
-    }
+    this.playAnimation(this.IMAGES_ATTACK);
+    this.getRealFrame();
   }
 
   animate() {
@@ -168,22 +156,29 @@ class Endboss extends MovableObject {
         this.energy = 0;
         this.die();
       } else {
-        // Clear any existing hurt timeout
+        // Bestehende Timeouts löschen
         if (this.hurtTimeout) {
           clearTimeout(this.hurtTimeout);
         }
 
-        // Set up the hurt state
+        // Hurt-Zustand setzen
         this.isHurt = true;
         this.isAttacking = false;
         this.isWalking = false;
         this.isAlert = false;
 
-        // Set timeout to go back to alert state
+        // Nach der Animation den Zustand neu evaluieren lassen
         this.hurtTimeout = setTimeout(() => {
           if (!this.isDead) {
             this.isHurt = false;
-            this.isAlert = true;
+            // Wenn eine World-Referenz existiert, Verhalten neu evaluieren
+            if (this.world) {
+              const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+              this.world.updateEndbossBehavior(this, distanceToPlayer);
+            } else {
+              // Fallback, wenn keine World-Referenz existiert
+              this.isAlert = true;
+            }
           }
         }, this.IMAGES_HURT.length * 100);
       }
