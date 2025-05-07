@@ -6,7 +6,7 @@ class Character extends MovableObject {
   speed = 10;
   facingRight = true;
   lastMoveTime = Date.now(); //Zeitstempel der letzten Bewegung
-  idleTimeout = 1000; // 3 Sekunden
+  idleTimeout = 100;
   sleepTimeout = 15000; // 15 Sekunden
   isDeadAnimationComplete = false;
 
