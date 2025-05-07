@@ -68,6 +68,6 @@ class Endboss extends MovableObject {
     setInterval(() => {
       this.getRealFrame();
       this.playAnimation(this.IMAGES_ALERT);
-    }, 200);
+    }, 500);
   }
 }
