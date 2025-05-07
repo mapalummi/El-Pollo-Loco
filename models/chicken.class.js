@@ -23,7 +23,7 @@ class Chicken extends MovableObject {
     this.loadImages(this.IMAGES_WALKING);
 
     //Wo erscheinen die enemies und wie schnell bewegen sie sich:
-    this.x = 500 + Math.random() * 1500; //Zahl zwischen 200 und 700
+    this.x = 900 + Math.random() * 3300; //Zahl zwischen 500 und ...
     this.speed = 0.15 + Math.random() * 0.25; //Minimalster Wert ist 0.15
 
     this.animate();
