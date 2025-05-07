@@ -342,12 +342,6 @@ class World {
         this.moveEndbossTowardsPlayer(endboss);
       }
     }
-    // Alert-Zustand, wenn der Spieler weiter weg ist, aber noch sichtbar
-    // else if (distance < 500) {
-    //   if (!endboss.isAlert) {
-    //     endboss.startAlert();
-    //   }
-    // }
 
     // Alert-Zustand nur bei größerer Distanz
     else {
@@ -362,15 +356,14 @@ class World {
 
     // If endboss is entering from right side of level
     if (this.endbossTriggered && endboss.x > this.levelWidth - 200) {
-      // Move left at constant speed for entrance
-      endboss.x -= 10;
+      endboss.x -= 10; // Speed beim rein kommen
       endboss.otherDirection = false;
       return;
     }
 
     // Regular behavior when near the player
     const direction = this.character.x < endboss.x ? -1 : 1;
-    const speed = 3;
+    const speed = 5; //Speed im Spiel
 
     // Set appropriate direction for rendering
     endboss.otherDirection = direction > 0;

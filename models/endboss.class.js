@@ -55,6 +55,7 @@ class Endboss extends MovableObject {
   isAttacking = false;
   isWalking = false;
   isAlert = false;
+  isDeathAnimationComplete = false;
 
   constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
@@ -65,7 +66,14 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
 
     this.world = world;
-    this.x = 4500;
+
+    // Positioniere den Endboss am rechten Rand des Levels
+    if (world && world.level && world.level.level_end_x) {
+      this.x = world.level.level_end_x - 200; // 200px vor Level-Ende
+    } else {
+      this.x = 4500; // Fallback
+    }
+
     this.animate();
   }
 
@@ -78,22 +86,22 @@ class Endboss extends MovableObject {
 
   endbossWalkAnimation() {
     this.playAnimation(this.IMAGES_WALKING);
-    this.getRealFrame();
+    // this.getRealFrame();
   }
 
   endbossHurtAnimation() {
     this.playAnimation(this.IMAGES_HURT);
-    this.getRealFrame();
+    // this.getRealFrame();
   }
 
   endbossAlertAnimation() {
     this.playAnimation(this.IMAGES_ALERT);
-    this.getRealFrame();
+    // this.getRealFrame();
   }
 
   endbossAttackAnimation() {
     this.playAnimation(this.IMAGES_ATTACK);
-    this.getRealFrame();
+    // this.getRealFrame();
   }
 
   animate() {
@@ -141,7 +149,13 @@ class Endboss extends MovableObject {
       setTimeout(() => {
         if (!this.isDead && !this.isHurt) {
           this.isAttacking = false;
-          this.isAlert = true;
+          // Verhalten basierend auf Distanz neu evaluieren
+          if (this.world) {
+            const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+            this.world.updateEndbossBehavior(this, distanceToPlayer);
+          } else {
+            this.isAlert = true; // Fallback
+          }
         }
       }, this.IMAGES_ATTACK.length * 100);
     }
