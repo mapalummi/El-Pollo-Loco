@@ -68,23 +68,37 @@ class Endboss extends MovableObject {
   }
 
   //NEU
+  // playHurtAnimation() {
+  //   if (!this.isHurt) {
+  //     this.isHurt = true; // Set the flag to true
+  //     this.playAnimation(this.IMAGES_HURT);
+
+  //     setTimeout(() => {
+  //       this.isHurt = false; // Reset the flag
+  //     }, this.IMAGES_HURT.length * 50);
+  //   }
+  // }
+
+  //TEST
   playHurtAnimation() {
     if (!this.isHurt) {
       this.isHurt = true; // Set the flag to true
       this.playAnimation(this.IMAGES_HURT);
+      this.getRealFrame(); // Update collision box during hurt animation
 
-      setTimeout(() => {
+      // Store the timeout ID to potentially clear it
+      this.hurtTimeout = setTimeout(() => {
         this.isHurt = false; // Reset the flag
       }, this.IMAGES_HURT.length * 50);
     }
   }
 
-  // animate() {
-  //   setInterval(() => {
-  //     this.getRealFrame();
-  //     this.playAnimation(this.IMAGES_ALERT);
-  //   }, 500);
-  // }
+  animate() {
+    setInterval(() => {
+      this.getRealFrame();
+      this.playAnimation(this.IMAGES_ALERT);
+    }, 500);
+  }
 
   //NEU
   animate() {

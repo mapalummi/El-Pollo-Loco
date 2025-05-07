@@ -11,6 +11,7 @@ class Character extends MovableObject {
   isDeadAnimationComplete = false;
   //NEU
   isWalking = false;
+  currentAnimation = null; // Trackt die aktuell aktive Animation
 
   offset = {
     top: 100,
@@ -101,10 +102,72 @@ class Character extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
-  //NEU
+  //Original
+  // animate() {
+  //   setInterval(() => {
+  //     if (this.isDead()) return; // Steuerung deaktivieren, wenn der Charakter tot ist
+
+  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+  //       this.moveRight();
+  //       this.otherDirection = false;
+  //     }
+
+  //     if (this.world.keyboard.LEFT && this.x > 0) {
+  //       this.moveLeft();
+  //       this.otherDirection = true;
+  //     }
+
+  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+  //       this.jump();
+  //     }
+
+  //     this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
+  //     this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
+  //   }, 1000 / 60); //1000/60
+
+  //   // Animationen basierend auf dem Zustand
+  //   setInterval(() => {
+  //     if (this.isDead()) {
+  //       if (!this.isDeadAnimationComplete) {
+  //         // Animation für "dead" einmal abspielen und dann das Kreuz setzen
+  //         this.playAnimation(this.IMAGES_DEAD);
+  //         setTimeout(() => {
+  //           this.img = this.crossImage; // Bild setzen
+  //           this.width = 50; //Maße des Bildes
+  //           this.height = 50; //Maße des Bildes
+  //           this.y = 370; //Höhe des Bildes auf Y-Achse
+  //           this.isDeadAnimationComplete = true; // Animation abgeschlossen
+  //         }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
+  //       }
+  //       return; // Beende weitere Animationen
+  //     }
+
+  //     if (this.isDeadAnimationComplete) return; // Keine weiteren Animationen ausführen
+
+  //     if (this.isHurt()) {
+  //       this.playAnimation(this.IMAGES_HURT);
+  //     } else if (this.isAboveGround()) {
+  //       this.playAnimation(this.IMAGES_JUMPING);
+  //     } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+  //       this.playAnimation(this.IMAGES_SLEEP); // Charakter schläft
+  //     } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+  //       this.playAnimation(this.IMAGES_IDLE); // Charakter ist im Leerlauf
+  //     } else {
+  //       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+  //         this.playAnimation(this.IMAGES_WALKING); // Charakter läuft
+  //       }
+  //     }
+  //   }, 200);
+  // }
+
+  //NEU TEST
   animate() {
+    // Movement logic
     setInterval(() => {
       if (this.isDead()) return; // Steuerung deaktivieren, wenn der Charakter tot ist
+
+      // Reset walking state at the beginning of each frame
+      this.isWalking = false;
 
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
@@ -122,77 +185,131 @@ class Character extends MovableObject {
 
       this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
       this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
-    }, 1000 / 60); //1000/60
+    }, 1000 / 60);
 
-    // Animationen basierend auf dem Zustand
+    // Animation state management
     setInterval(() => {
       if (this.isDead()) {
         if (!this.isDeadAnimationComplete) {
-          // Animation für "dead" einmal abspielen und dann das Kreuz setzen
-          this.playAnimation(this.IMAGES_DEAD);
-          setTimeout(() => {
-            this.img = this.crossImage; // Bild setzen
-            this.width = 50; //Maße des Bildes
-            this.height = 50; //Maße des Bildes
-            this.y = 370; //Höhe des Bildes auf Y-Achse
-            this.isDeadAnimationComplete = true; // Animation abgeschlossen
-          }, this.IMAGES_DEAD.length * 100); // Wartezeit basierend auf der Anzahl der Bilder
+          this.startAnimation("dead");
         }
-        return; // Beende weitere Animationen
+        return;
       }
 
-      if (this.isDeadAnimationComplete) return; // Keine weiteren Animationen ausführen
+      if (this.isDeadAnimationComplete) return;
 
       if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
+        this.startAnimation("hurt");
       } else if (this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_JUMPING);
+        this.startAnimation("jumping");
       } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
-        this.playAnimation(this.IMAGES_SLEEP); // Charakter schläft
+        this.startAnimation("sleep");
       } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
-        this.playAnimation(this.IMAGES_IDLE); // Charakter ist im Leerlauf
-      } else {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          this.playAnimation(this.IMAGES_WALKING); // Charakter läuft
-        }
+        this.startAnimation("idle");
+      } else if (this.isWalking) {
+        this.startAnimation("walking");
       }
     }, 200);
   }
 
-  //NEU
+  //NEU TEST
+  startAnimation(animationType) {
+    // If already running this animation, don't restart it
+    if (this.currentAnimation === animationType) return;
+
+    // Clear any existing animation interval
+    if (this.animationInterval) {
+      clearInterval(this.animationInterval);
+    }
+
+    // Set current animation type
+    this.currentAnimation = animationType;
+
+    // Start the appropriate animation
+    switch (animationType) {
+      case "walking":
+        this.walkingAnimation();
+        break;
+      case "jumping":
+        this.jumpingAnimation();
+        break;
+      case "hurt":
+        this.hurtAnimation();
+        break;
+      case "idle":
+        this.idleAnimation();
+        break;
+      case "sleep":
+        this.sleepAnimation();
+        break;
+      case "dead":
+        this.deadAnimation();
+        break;
+    }
+  }
+
+  //NEU TEST
   walkingAnimation() {
-    this.walkInterval = setInterval(() => {
-      if (!this.isAboveGround() && this.isWalking) {
-        this.playAnimation(this.IMAGES_WALKING);
-      } else {
-        clearInterval(this.walkInterval);
-      }
+    this.animationInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_WALKING);
     }, 1000 / 15);
   }
 
-  //NEU
-  jumpingAnimation() {}
+  jumpingAnimation() {
+    this.animationInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_JUMPING);
+    }, 1000 / 15);
+  }
 
-  //NEU
-  hurtAnimation() {}
+  hurtAnimation() {
+    this.animationInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_HURT);
+    }, 1000 / 15);
+  }
 
-  //NEU
-  idleAnimation() {}
+  idleAnimation() {
+    this.animationInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_IDLE);
+    }, 1000 / 10);
+  }
 
-  //NEU
-  sleepAnimation() {}
+  sleepAnimation() {
+    this.animationInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_SLEEP);
+    }, 1000 / 5);
+  }
+
+  deadAnimation() {
+    this.animationInterval = setInterval(() => {
+      this.playAnimation(this.IMAGES_DEAD);
+
+      // One-time handling for dead animation completion
+      setTimeout(() => {
+        clearInterval(this.animationInterval);
+        this.img = this.crossImage; // Bild setzen
+        this.width = 50; //Maße des Bildes
+        this.height = 50; //Maße des Bildes
+        this.y = 370; //Höhe des Bildes auf Y-Achse
+        this.isDeadAnimationComplete = true; // Animation abgeschlossen
+      }, this.IMAGES_DEAD.length * 100);
+    }, 1000 / 10);
+  }
 
   moveRight() {
     if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist
     this.x += this.speed;
     this.facingRight = true; // Blickrichtung nach rechts
+    this.otherDirection = false;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
+    this.isWalking = true;
   }
 
   moveLeft() {
     if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist
     this.x -= this.speed;
     this.facingRight = false; // Blickrichtung nach links
+    this.otherDirection = true;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
+    this.isWalking = true;
   }
 }
