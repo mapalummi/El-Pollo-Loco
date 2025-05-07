@@ -129,14 +129,8 @@ class World {
           bottle.splash(); // Flasche zerplatzt
           if (enemy instanceof Endboss) {
             console.log("Endboss getroffen");
-            //NOTE: NEU
-            // enemy.takeDamage(20); // Schadenspunkte
-            enemy.hit(20);
+            enemy.hit(50);
             this.endbossBar.setPercentage(enemy.energy);
-
-            if (enemy.energy <= 0) {
-              console.log("Endboss besiegt!");
-            }
           } else if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
             enemy.die();
           }
@@ -276,6 +270,7 @@ class World {
   //   }
   // }
 
+  //NOTE:
   checkEndbossVisibility() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (!endboss) return;

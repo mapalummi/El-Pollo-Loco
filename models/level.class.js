@@ -11,7 +11,7 @@ class Level {
     this.enemies = enemies;
     this.clouds = clouds;
     this.backgroundObjects = backgroundObjects;
-    this.bottles = bottles; // initialisierung Flaschen
+    this.bottles = bottles;
     this.coins = coins;
   }
 }

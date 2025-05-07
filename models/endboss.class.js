@@ -79,10 +79,9 @@ class Endboss extends MovableObject {
     this.getRealFrame();
   }
 
-  //TEST
   endbossHurtAnimation() {
     this.playAnimation(this.IMAGES_HURT);
-    this.getRealFrame(); // Update collision box during hurt
+    this.getRealFrame();
   }
 
   endbossAlertAnimation() {
@@ -97,7 +96,7 @@ class Endboss extends MovableObject {
       this.isAlert = false;
       this.isWalking = false;
 
-      this.playAnimation(this.IMAGES_ATTACK); // Fixed typo in variable name
+      this.playAnimation(this.IMAGES_ATTACK);
       this.getRealFrame();
 
       // Return to alert state after attack animation
@@ -106,19 +105,6 @@ class Endboss extends MovableObject {
         this.isAlert = true;
       }, this.IMAGES_ATTACK.length * 100);
     }
-  }
-
-  endbossDeadAnimation() {
-    this.isDead = true;
-    // Stop all other animations
-    this.isHurt = false;
-    this.isAlert = false;
-    this.isWalking = false;
-    this.isAttacking = false;
-
-    console.log("Endboss DEAD Animation started");
-    this.playAnimation(this.IMAGES_DEAD);
-    this.getRealFrame();
   }
 
   animate() {
@@ -142,7 +128,6 @@ class Endboss extends MovableObject {
     }, 100);
   }
 
-  //TEST - NEU
   startWalking() {
     if (!this.isDead && !this.isHurt) {
       this.isWalking = true;
@@ -211,14 +196,10 @@ class Endboss extends MovableObject {
     this.isWalking = false;
     this.isAlert = false;
 
-    // Spiele die Todesanimation einmal ab
-    console.log("Endboss death sequence started");
-
     // Die Animation wird durch animate() einmal gestartet
     // Nach der Dauer der Animation setzen wir isDeathAnimationComplete
     setTimeout(() => {
       this.isDeathAnimationComplete = true;
-      console.log("Endboss death animation complete - showing final frame");
 
       // Setze das letzte Bild manuell
       this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
