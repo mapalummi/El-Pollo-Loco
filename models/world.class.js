@@ -119,7 +119,8 @@ class World {
             console.log("Endboss getroffen");
             //TODO:
             enemy.takeDamage(10); // Schadenspunkte
-            enemy.playAnimation(enemy.IMAGES_HURT);
+            enemy.playHurtAnimation();
+            // enemy.playAnimation(enemy.IMAGES_HURT);
             if (enemy.isDead()) {
               console.log("Endboss besiegt!");
               // Optional: Logik für das Besiegen des Endbosses

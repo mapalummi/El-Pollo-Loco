@@ -9,6 +9,8 @@ class Character extends MovableObject {
   idleTimeout = 100;
   sleepTimeout = 15000; // 15 Sekunden
   isDeadAnimationComplete = false;
+  //NEU
+  isWalking = false;
 
   offset = {
     top: 100,
@@ -101,9 +103,7 @@ class Character extends MovableObject {
 
   //NEU
   animate() {
-    // Bewegung und Kamera-Logik
     setInterval(() => {
-      //NEU:
       if (this.isDead()) return; // Steuerung deaktivieren, wenn der Charakter tot ist
 
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -122,7 +122,7 @@ class Character extends MovableObject {
 
       this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
       this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
-    }, 1000 / 60);
+    }, 1000 / 60); //1000/60
 
     // Animationen basierend auf dem Zustand
     setInterval(() => {
@@ -158,6 +158,29 @@ class Character extends MovableObject {
       }
     }, 200);
   }
+
+  //NEU
+  walkingAnimation() {
+    this.walkInterval = setInterval(() => {
+      if (!this.isAboveGround() && this.isWalking) {
+        this.playAnimation(this.IMAGES_WALKING);
+      } else {
+        clearInterval(this.walkInterval);
+      }
+    }, 1000 / 15);
+  }
+
+  //NEU
+  jumpingAnimation() {}
+
+  //NEU
+  hurtAnimation() {}
+
+  //NEU
+  idleAnimation() {}
+
+  //NEU
+  sleepAnimation() {}
 
   moveRight() {
     if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist

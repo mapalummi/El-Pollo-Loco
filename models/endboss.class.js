@@ -49,6 +49,9 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
+  //NEU
+  isHurt = false; // Prüft ob die Hurt Animation abgespielt wird
+
   constructor() {
     super().loadImage(this.IMAGES_ALERT[0]);
     this.loadImages(this.IMAGES_ALERT);
@@ -64,10 +67,33 @@ class Endboss extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
+  //NEU
+  playHurtAnimation() {
+    if (!this.isHurt) {
+      this.isHurt = true; // Set the flag to true
+      this.playAnimation(this.IMAGES_HURT);
+
+      setTimeout(() => {
+        this.isHurt = false; // Reset the flag
+      }, this.IMAGES_HURT.length * 50);
+    }
+  }
+
+  // animate() {
+  //   setInterval(() => {
+  //     this.getRealFrame();
+  //     this.playAnimation(this.IMAGES_ALERT);
+  //   }, 500);
+  // }
+
+  //NEU
   animate() {
     setInterval(() => {
-      this.getRealFrame();
-      this.playAnimation(this.IMAGES_ALERT);
+      if (!this.isHurt) {
+        // Only play alert animation if not hurt
+        this.getRealFrame();
+        this.playAnimation(this.IMAGES_ALERT);
+      }
     }, 500);
   }
 }
