@@ -98,8 +98,6 @@ class World {
     });
 
     // Prüfe Kollisionen zwischen Flaschen und Gegnern
-
-    //NEU
     this.throwableObjects.forEach(bottle => {
       if (bottle.hasHit) return; //Flaschen, die bereits getroffen haben überspringen
 
@@ -214,7 +212,6 @@ class World {
   }
 
   addObjectsToMap(objects) {
-    // console.log("Zeichne Objekte:", objects); // Debugging-Log
     objects.forEach(o => {
       this.addToMap(o);
     });
