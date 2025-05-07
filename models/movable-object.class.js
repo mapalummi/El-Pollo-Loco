@@ -85,19 +85,6 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  //TEST
-  // takeDamage(amount) {
-  //   this.energy -= amount;
-  //   if (this.energy < 0) {
-  //     this.energy = 0; // Energie kann nicht negativ sein
-  //   }
-  //   console.log(`${this.constructor.name} Energie: ${this.energy}`);
-  //   if (this instanceof Endboss) {
-  //     world.endbossBar.setPercentage(this.energy); // Endboss-Bar aktualisieren
-  //     this.playAnimation(this.IMAGES_HURT, 300); // Animation mit 300ms Verzögerung abspielen
-  //   }
-  // }
-
   // NEU:
   playAnimation(images) {
     if (!this.img) return; // Animation stoppen, wenn kein Bild vorhanden ist
@@ -105,30 +92,4 @@ class MovableObject extends DrawableObject {
     this.img = this.imageCache[images[i]]; // Bild aus dem Cache laden
     this.currentImage++;
   }
-
-  //TEST
-  // playAnimation(images, animationDelay = 100) {
-  //   if (!this.img) return; // Animation stoppen, wenn kein Bild vorhanden ist
-
-  //   let now = new Date().getTime();
-
-  //   // Spezifische Zeitsteuerung für IMAGES_HURT
-  //   if (images === this.IMAGES_HURT) {
-  //     if (!this.lastHurtAnimationTime) this.lastHurtAnimationTime = now; // Initialisieren
-  //     if (now - this.lastHurtAnimationTime < animationDelay) {
-  //       return; // Warte, bis die Verzögerung abgelaufen ist
-  //     }
-  //     this.lastHurtAnimationTime = now; // Zeitpunkt aktualisieren
-  //   }
-
-  //   // Zyklisches Wechseln der Bilder
-  //   let i = this.currentImage % images.length;
-  //   this.img = this.imageCache[images[i]]; // Bild aus dem Cache laden
-  //   this.currentImage++;
-
-  //   // Zurücksetzen, wenn die Animation beendet ist
-  //   if (this.currentImage >= images.length) {
-  //     this.currentImage = 0;
-  //   }
-  // }
 }
