@@ -37,6 +37,8 @@ class World {
     this.totalBottles = this.level.bottles.length;
     this.collectedBottles = 0;
 
+    this.endbossTriggered = false;
+
     this.draw();
     this.run();
     //Alt:
@@ -45,8 +47,10 @@ class World {
     // Initialisiere den Endboss-Zustand
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (endboss) {
-      endboss.startAlert(); // Setze den Anfangszustand auf "Alert"
-      this.endbossBar.setPercentage(endboss.energy); // Initialisiere die Healthbar
+      // Don't set alert initially if we want the endboss to be hidden
+      // Just initialize the health bar
+      this.endbossBar.setPercentage(endboss.energy);
+      this.endbossBar.isVisible = false; // Hide the bar initially
     }
   }
 
@@ -71,13 +75,14 @@ class World {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkEndbossVisibility();
+      this.checkLevelEndReached();
 
       // Bewege den Endboss, wenn er im Walking-Modus ist
       const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
       if (endboss && endboss.isWalking) {
         this.moveEndbossTowardsPlayer(endboss);
       }
-    }, 200); //Interval hier evtl. auf 50 verkleinern!?
+    }, 100); //Interval hier evtl. auf 50 verkleinern!?
   }
 
   //NEU mit Feedback für Spieler (evtl. Sound)
@@ -129,7 +134,7 @@ class World {
           bottle.splash(); // Flasche zerplatzt
           if (enemy instanceof Endboss) {
             console.log("Endboss getroffen");
-            enemy.hit(50);
+            enemy.hit(25);
             this.endbossBar.setPercentage(enemy.energy);
           } else if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
             enemy.die();
@@ -260,25 +265,53 @@ class World {
     this.ctx.restore();
   }
 
-  //NOTE: Erklären lassen!
-  // checkEndbossVisibility() {
-  //   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-  //   if (endboss && Math.abs(this.character.x - endboss.x) < 500) {
-  //     this.endbossBar.isVisible = true;
-  //   } else {
-  //     this.endbossBar.isVisible = false;
-  //   }
-  // }
+  //NOTE:
+  checkLevelEndReached() {
+    const endRegion = this.levelWidth - 800; // Define end region (800px from level end)
+    const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+
+    if (this.character.x > endRegion && endboss && !this.endbossTriggered) {
+      this.triggerEndbossEntrance(endboss);
+      this.endbossTriggered = true; // Flag to prevent repeated triggering
+    }
+  }
+
+  triggerEndbossEntrance(endboss) {
+    // Position the endboss just off-screen to the right
+    endboss.x = this.levelWidth + 200;
+
+    // Make the endboss visible if it wasn't before
+    // endboss.isVisible = true;
+    endboss.otherDirection = false;
+
+    // Start walking mode
+    endboss.startWalking();
+
+    // Show the endboss health bar
+    this.endbossBar.isVisible = true;
+
+    console.log("Endboss entrance triggered!");
+  }
 
   //NOTE:
   checkEndbossVisibility() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (!endboss) return;
 
+    // Nach dem Triggern immer die Healthbar anzeigen
+    if (this.endbossTriggered) {
+      this.endbossBar.isVisible = true;
+
+      // Wenn der Endboss noch weit weg ist und läuft, keine weiteren Aktionen
+      if (endboss.x > this.levelWidth - 500) {
+        return;
+      }
+    }
+
     const distanceToEndboss = Math.abs(this.character.x - endboss.x);
 
-    // Zeige die Endboss-Healthbar, wenn der Charakter in der Nähe ist
-    if (distanceToEndboss < 500) {
+    // Standard-Verhalten basierend auf Distanz
+    if (distanceToEndboss < 500 || this.endbossTriggered) {
       this.endbossBar.isVisible = true;
 
       // Löse Alert-Animation aus, wenn der Endboss den Spieler zum ersten Mal sieht
@@ -289,7 +322,10 @@ class World {
       // Aktualisiere das Endboss-Verhalten basierend auf der Distanz
       this.updateEndbossBehavior(endboss, distanceToEndboss);
     } else {
-      this.endbossBar.isVisible = false;
+      // Nur verstecken wenn nicht getriggert
+      if (!this.endbossTriggered) {
+        this.endbossBar.isVisible = false;
+      }
     }
   }
 
@@ -297,22 +333,37 @@ class World {
     // Überspringe, wenn der Endboss bereits tot ist oder gerade getroffen wurde
     if (endboss.isDead || endboss.isHurt) return;
 
+    // Wenn der Endboss gerade ins Level läuft, immer im Walking-Modus bleiben
+    if (this.endbossTriggered && endboss.x > this.levelWidth - 500) {
+      if (!endboss.isWalking) {
+        endboss.startWalking();
+      }
+      return;
+    }
+
     // Angriff, wenn der Spieler sehr nah ist
-    if (distance < 150) {
+    if (distance < 200) {
       if (!endboss.isAttacking) {
         endboss.startAttacking();
       }
     }
     // Laufen, wenn der Spieler in mittlerer Distanz ist
-    else if (distance < 300) {
+    else if (distance < 500) {
       if (!endboss.isWalking) {
         endboss.startWalking();
         // Den Endboss zum Spieler bewegen
-        this.moveEndbossTowardsPlayer(endboss);
+        // this.moveEndbossTowardsPlayer(endboss);
       }
     }
     // Alert-Zustand, wenn der Spieler weiter weg ist, aber noch sichtbar
-    else if (distance < 500) {
+    // else if (distance < 500) {
+    //   if (!endboss.isAlert) {
+    //     endboss.startAlert();
+    //   }
+    // }
+
+    // Alert-Zustand nur bei größerer Distanz
+    else {
       if (!endboss.isAlert) {
         endboss.startAlert();
       }
@@ -320,15 +371,22 @@ class World {
   }
 
   moveEndbossTowardsPlayer(endboss) {
-    // Diese Methode wird regelmäßig aufgerufen, wenn der Endboss im Walking-Modus ist
-    // Bewege den Endboss in Richtung des Spielers
     if (!endboss.isWalking) return;
 
-    // Bestimme die Richtung zum Spieler
-    const direction = this.character.x < endboss.x ? -1 : 1;
+    // If endboss is entering from right side of level
+    if (this.endbossTriggered && endboss.x > this.levelWidth - 200) {
+      // Move left at constant speed for entrance
+      endboss.x -= 10;
+      endboss.otherDirection = false;
+      return;
+    }
 
-    // Setze die Geschwindigkeit des Endboss
-    const speed = 2; // Kann angepasst werden
+    // Regular behavior when near the player
+    const direction = this.character.x < endboss.x ? -1 : 1;
+    const speed = 3;
+
+    // Set appropriate direction for rendering
+    endboss.otherDirection = direction > 0;
 
     // Bewege den Endboss
     endboss.x += direction * speed;
