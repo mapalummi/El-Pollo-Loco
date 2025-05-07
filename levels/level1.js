@@ -56,14 +56,14 @@ const level1 = new Level(
     new BackgroundObject("img/5_background/layers/1_first_layer/2.png", 719 * 5),
   ],
   [
-    new Bottle("img/6_salsa_bottle/2_salsa_bottle_on_ground.png", 300, 370),
-    new Bottle("img/6_salsa_bottle/2_salsa_bottle_on_ground.png", 320, 370),
-    new Bottle("img/6_salsa_bottle/2_salsa_bottle_on_ground.png", 340, 370),
-    new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 500, 380),
-    new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 520, 380),
-    new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 540, 380),
+    new Bottle("img/6_salsa_bottle/2_salsa_bottle_on_ground.png", 300, 350),
+    new Bottle("img/6_salsa_bottle/2_salsa_bottle_on_ground.png", 330, 350),
+    new Bottle("img/6_salsa_bottle/2_salsa_bottle_on_ground.png", 360, 350),
+    new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 500, 390),
+    new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 530, 390),
+    new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 560, 390),
   ],
-  [new Coin(400, 130), new Coin(430, 140), new Coin(460, 130), new Coin(490, 140), new Coin(520, 130)]
+  [new Coin(390, 160), new Coin(430, 140), new Coin(470, 130), new Coin(510, 140), new Coin(550, 160)]
 );
 
 level1.clouds[0].x = 50;

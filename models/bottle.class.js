@@ -1,14 +1,14 @@
 class Bottle extends MovableObject {
   x;
   y;
-  width = 50;
-  height = 50;
+  width;
+  height;
 
   offset = {
-    top: 10,
-    right: 20,
-    bottom: 5,
-    left: 20,
+    top: 15,
+    right: 30,
+    bottom: 10,
+    left: 30,
   };
 
   constructor(imagePath, x, y) {
@@ -16,8 +16,8 @@ class Bottle extends MovableObject {
     this.loadImage(imagePath); // Bild laden
     this.x = x; // X-Position
     this.y = y; // Standard-Y-Position
-    this.width = 50; // Breite der Flasche
-    this.height = 50; // Höhe der Flasche
+    this.width = 70; // Breite der Flasche
+    this.height = 70; // Höhe der Flasche
     this.getRealFrame(); // Kollisionsrahmen setzen
   }
 

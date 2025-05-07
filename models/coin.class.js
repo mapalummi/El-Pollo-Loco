@@ -1,14 +1,14 @@
 class Coin extends MovableObject {
   x;
   y;
-  width = 100;
-  height = 100;
+  width;
+  height;
 
   offset = {
-    top: 35,
-    right: 35,
-    bottom: 35,
-    left: 35,
+    top: 45,
+    right: 45,
+    bottom: 45,
+    left: 45,
   };
 
   IMAGES_COIN = ["img/8_coin/coin_1.png", "img/8_coin/coin_2.png", "img/8_coin/coin_1.png", "img/8_coin/coin_2.png"];
@@ -18,8 +18,8 @@ class Coin extends MovableObject {
     this.loadImages(this.IMAGES_COIN); // Alle Animationsbilder laden
     this.x = x;
     this.y = y;
-    this.width = 100;
-    this.height = 100;
+    this.width = 120;
+    this.height = 120;
     this.animate();
   }
 
