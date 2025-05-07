@@ -1,5 +1,3 @@
-// import { World } from "../models/world.class.js";
-
 let canvas;
 let world;
 const keyboard = new Keyboard();

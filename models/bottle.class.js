@@ -26,13 +26,5 @@ class Bottle extends MovableObject {
     this.rY = this.y + (this.offset?.top || 0);
     this.rW = this.width - (this.offset?.left || 0) - (this.offset?.right || 0);
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
-
-    // Debugging-Logs
-    // console.log("Coin Kollisionsrahmen:", {
-    //   rX: this.rX,
-    //   rY: this.rY,
-    //   rW: this.rW,
-    //   rH: this.rH,
-    // });
   }
 }

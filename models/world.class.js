@@ -1,8 +1,5 @@
-// import { getAnimationSpeed } from "../js/config.js";
-
 class World {
   // character = new Character();
-  //NEU:
   character = new Character(this);
   level = level1;
   canvas;
@@ -59,29 +56,6 @@ class World {
     }, 200); //Interval hier evtl. auf 50 verkleinern!
   }
 
-  //Original
-  // checkThrowObjects() {
-  //   if (this.keyboard.B) {
-  //     let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links werfen und Abstand der Flasche auf X-Achse
-  //     let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
-  //     bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
-  //     this.throwableObjects.push(bottle);
-  //   }
-  // }
-
-  //NEU:
-  // checkThrowObjects() {
-  //   if (this.keyboard.B && this.collectedBottles > 0) {
-  //     let offsetX = this.character.facingRight ? 50 : -10; // Nach rechts oder links werfen und Abstand der Flasche auf X-Achse
-  //     let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
-  //     bottle.throwDirection = this.character.facingRight ? 1 : -1; // 1 = rechts, -1 = links
-  //     this.throwableObjects.push(bottle);
-
-  //     this.collectedBottles--;
-  //     this.updateBottleBar();
-  //   }
-  // }
-
   //NEU mit Feedback für Spieler (evtl. Sound)
   checkThrowObjects() {
     if (this.keyboard.B) {
@@ -124,22 +98,6 @@ class World {
     });
 
     // Prüfe Kollisionen zwischen Flaschen und Gegnern
-    // this.throwableObjects.forEach(bottle => {
-    //   this.level.enemies.forEach(enemy => {
-    //     if (bottle.isColliding(enemy)) {
-    //       // Flasche trifft Gegner
-    //       bottle.splash(); // Flasche zerplatzt
-    //       // Nur Chicken und LittleChicken sterben, Endboss bleibt unberührt
-    //       if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
-    //         enemy.die();
-    //       } else if (enemy instanceof Endboss) {
-    //         console.log("Endboss getroffen");
-    //         //TODO:
-    //         enemy.takeDamage(20); // 20 Schadenspunkte zufügen
-    //       }
-    //     }
-    //   });
-    // });
 
     //NEU
     this.throwableObjects.forEach(bottle => {
