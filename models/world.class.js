@@ -18,12 +18,15 @@ class World {
   bottleBar = new BottleBar();
   healthBar = new HealthBar();
   coinBar = new CoinBar();
-  //TODO:
   endbossBar = new EndbossBar();
 
   throwableObjects = [];
 
   constructor(canvas, keyboard) {
+    //NEU
+    this.levelWidth = 4314;
+    this.clouds = this.createClouds();
+
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
@@ -35,17 +38,25 @@ class World {
     this.collectedBottles = 0;
 
     this.draw();
-
+    this.run();
     //Alt:
     // this.setWorld();
-
-    this.run();
   }
 
   //ALT:
   // setWorld() {
   //   this.character.world = this;
   // }
+
+  //NEU
+  createClouds() {
+    const clouds = [];
+    for (let i = 0; i < 10; i++) {
+      //Erstellt 10 Wolken
+      clouds.push(new Cloud(this.levelWidth));
+    }
+    return clouds;
+  }
 
   //Startet einen Timer um Aktionen auszuführen:
   run() {
@@ -174,6 +185,7 @@ class World {
   }
 
   draw() {
+    this.clouds.forEach(cloud => cloud.draw(this.ctx));
     // Löscht das verherige Canvas:
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -187,7 +199,8 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
 
     this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.level.clouds);
+    // this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.clouds);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
@@ -196,7 +209,6 @@ class World {
     this.addToMap(this.bottleBar);
     this.addToMap(this.coinBar);
     this.addToMap(this.healthBar);
-    //TODO:
     if (this.endbossBar.isVisible) {
       this.addToMap(this.endbossBar);
     }
