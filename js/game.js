@@ -1,9 +1,8 @@
 let canvas;
-
 let ctx; // NEU
-
 let world;
 let gameMusic;
+let gameOver = false; // Spielstatus
 const keyboard = new Keyboard();
 
 function init() {

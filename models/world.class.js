@@ -191,7 +191,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
 
-    //NOTE:
+    //CHECK:
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
 
@@ -252,7 +252,6 @@ class World {
     this.ctx.restore();
   }
 
-  //NOTE:
   checkLevelEndReached() {
     const endRegion = this.levelWidth - 800; // Define end region (800px from level end)
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -280,7 +279,6 @@ class World {
     console.log("Endboss entrance triggered!");
   }
 
-  //NOTE:
   checkEndbossVisibility() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (!endboss) return;
@@ -363,7 +361,6 @@ class World {
     }
   }
 
-  //NOTE: NEU TEST
   moveEndbossTowardsPlayer(endboss) {
     // Don't move if not in walking state
     if (!endboss.isWalking) return;
