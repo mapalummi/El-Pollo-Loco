@@ -31,7 +31,8 @@ function drawStartText() {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.textAlign = "center";
-  ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, canvas.height - 50);
+  const textYPosition = canvas.height - 25; // Abstand von der unteren Kante (25px)
+  ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, textYPosition);
 }
 
 function startGame() {
