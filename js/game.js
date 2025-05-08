@@ -4,18 +4,20 @@ let gameMusic;
 const keyboard = new Keyboard();
 
 function init() {
-  initLevel(); // Wird dann später mit dem Start-Button verknüpft!
+  initLevel(); // Wird dann später mit dem Start-Button verknüpft!?
   canvas = document.getElementById("canvas");
-  world = new World(canvas, keyboard);
   gameMusic = new sound("audio/fast-rocky-loop-1.mp3");
-  gameMusic.play();
+  gameMusic.enableLoop();
+  console.log("Audio geladen", gameMusic.sound.src);
 }
 
-//TODO: Später anlegen:
-// function startGame() {
-//   canvas = document.getElementById("canvas");
-//   world = new World(canvas, keyboard);
-// }
+function startGame() {
+  world = new World(canvas, keyboard);
+  gameMusic.play();
+  console.log("Audio geladen", gameMusic.sound.src);
+
+  document.getElementById("startButton").style.display = "none";
+}
 
 // Debugging
 // window.addEventListener("keydown", e => {
@@ -29,19 +31,22 @@ function sound(src) {
   this.sound.setAttribute("controls", "none");
   this.sound.style.display = "none";
   document.body.appendChild(this.sound);
+
+  //Methode zum Abspielen
   this.play = function () {
     this.sound.play();
   };
+
+  //Methode zum Stoppen
   this.stop = function () {
     this.sound.pause();
   };
-}
 
-//CHECK:
-// function enableLoop() {
-//   gameMusic.loop = true;
-//   gameMusic.load();
-// }
+  this.enableLoop = function () {
+    this.sound.loop = true;
+    this.sound.load();
+  };
+}
 
 window.addEventListener("keydown", e => {
   switch (e.key) {
