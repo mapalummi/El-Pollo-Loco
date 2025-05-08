@@ -3,6 +3,7 @@ let world;
 const keyboard = new Keyboard();
 
 function init() {
+  initLevel(); // Wird dann später mit dem Start-Button verknüpft!
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
 }

@@ -49,13 +49,17 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
-  //NEU
   isHurt = false; // Prüft ob die Hurt Animation abgespielt wird
   isDead = false;
   isAttacking = false;
   isWalking = false;
   isAlert = false;
   isDeathAnimationComplete = false;
+
+  //NOTE: NEU TEST
+  wasHitRecently = false;
+  hitCooldownTimer = null;
+  hitAlertDuration = 2000;
 
   constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
@@ -104,17 +108,45 @@ class Endboss extends MovableObject {
     // this.getRealFrame();
   }
 
+  // animate() {
+  //   setInterval(() => {
+  //     this.getRealFrame();
+
+  //     if (this.isDead) {
+  //       if (!this.isDeathAnimationComplete) {
+  //         this.playAnimation(this.IMAGES_DEAD);
+  //       }
+  //       // When animation is complete, do nothing - last frame stays
+  //     } else if (this.isHurt) {
+  //       this.endbossHurtAnimation();
+  //     } else if (this.isAttacking) {
+  //       this.endbossAttackAnimation();
+  //     } else if (this.isWalking) {
+  //       this.endbossWalkAnimation();
+  //     } else if (this.isAlert) {
+  //       this.endbossAlertAnimation();
+  //     }
+  //   }, 100);
+  // }
+
+  //NOTE: NEU TEST
   animate() {
     setInterval(() => {
       this.getRealFrame();
 
+      // STATE PRIORITY HIERARCHY (most important first)
       if (this.isDead) {
         if (!this.isDeathAnimationComplete) {
           this.playAnimation(this.IMAGES_DEAD);
         }
-        // When animation is complete, do nothing - last frame stays
       } else if (this.isHurt) {
         this.endbossHurtAnimation();
+      } else if (this.wasHitRecently) {
+        // Ensure alert animation plays when recently hit, regardless of other states
+        this.isAlert = true;
+        this.isAttacking = false;
+        this.isWalking = false;
+        this.endbossAlertAnimation();
       } else if (this.isAttacking) {
         this.endbossAttackAnimation();
       } else if (this.isWalking) {
@@ -125,7 +157,23 @@ class Endboss extends MovableObject {
     }, 100);
   }
 
+  // startWalking() {
+  //   if (!this.isDead && !this.isHurt) {
+  //     this.isWalking = true;
+  //     this.isAlert = false;
+  //     this.isAttacking = false;
+  //   }
+  // }
+
+  //NOTE: NEU TEST
   startWalking() {
+    // Don't change state if recently hit - this is the key fix!
+    if (this.wasHitRecently) {
+      console.log("Blocking walking mode because wasHitRecently=true");
+      return;
+    }
+    console.log("Starting walking mode");
+
     if (!this.isDead && !this.isHurt) {
       this.isWalking = true;
       this.isAlert = false;
@@ -133,11 +181,20 @@ class Endboss extends MovableObject {
     }
   }
 
+  // startAlert() {
+  //   if (!this.isDead && !this.isHurt && !this.isAttacking) {
+  //     this.isAlert = true;
+  //     this.isWalking = false;
+  //   }
+  // }
+
+  //NOTE: NEU TEST
   startAlert() {
-    if (!this.isDead && !this.isHurt && !this.isAttacking) {
-      this.isAlert = true;
-      this.isWalking = false;
-    }
+    this.isAlert = true;
+    this.isAttacking = false;
+    this.isWalking = false;
+    // Set the correct animation images
+    this.playAnimation(this.IMAGES_ALERT);
   }
 
   startAttacking() {
@@ -161,41 +218,96 @@ class Endboss extends MovableObject {
     }
   }
 
-  hit(damage = 20) {
-    // Only proceed if the boss isn't already dead
-    if (!this.isDead) {
-      this.energy -= damage;
+  // hit(damage = 20) {
+  //   // Only proceed if the boss isn't already dead
+  //   if (!this.isDead) {
+  //     this.energy -= damage;
 
-      if (this.energy <= 0) {
-        this.energy = 0;
-        this.die();
-      } else {
-        // Bestehende Timeouts löschen
-        if (this.hurtTimeout) {
-          clearTimeout(this.hurtTimeout);
-        }
+  //     if (this.energy <= 0) {
+  //       this.energy = 0;
+  //       this.die();
+  //     } else {
+  //       // Bestehende Timeouts löschen
+  //       if (this.hurtTimeout) {
+  //         clearTimeout(this.hurtTimeout);
+  //       }
 
-        // Hurt-Zustand setzen
-        this.isHurt = true;
-        this.isAttacking = false;
-        this.isWalking = false;
-        this.isAlert = false;
+  //       // Hurt-Zustand setzen
+  //       this.isHurt = true;
+  //       this.isAttacking = false;
+  //       this.isWalking = false;
+  //       this.isAlert = false;
 
-        // Nach der Animation den Zustand neu evaluieren lassen
-        this.hurtTimeout = setTimeout(() => {
-          if (!this.isDead) {
-            this.isHurt = false;
-            // Wenn eine World-Referenz existiert, Verhalten neu evaluieren
-            if (this.world) {
-              const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-              this.world.updateEndbossBehavior(this, distanceToPlayer);
-            } else {
-              // Fallback, wenn keine World-Referenz existiert
-              this.isAlert = true;
-            }
-          }
-        }, this.IMAGES_HURT.length * 100);
+  //       // Nach der Animation den Zustand neu evaluieren lassen
+  //       this.hurtTimeout = setTimeout(() => {
+  //         if (!this.isDead) {
+  //           this.isHurt = false;
+  //           // Wenn eine World-Referenz existiert, Verhalten neu evaluieren
+  //           if (this.world) {
+  //             const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+  //             this.world.updateEndbossBehavior(this, distanceToPlayer);
+  //           } else {
+  //             // Fallback, wenn keine World-Referenz existiert
+  //             this.isAlert = true;
+  //           }
+  //         }
+  //       }, this.IMAGES_HURT.length * 100);
+  //     }
+  //   }
+  // }
+
+  //NOTE: NEU TEST
+  hit(damage) {
+    console.log("Endboss hit at position:", this.x);
+    // Existing hit code
+    this.energy -= damage;
+    if (this.energy < 0) {
+      this.energy = 0;
+    }
+
+    this.lastHit = new Date().getTime();
+
+    // Set hurt state
+    this.isHurt = true;
+    this.isAttacking = false;
+    this.isWalking = false;
+
+    // New code for maintaining alert mode after hit
+    this.wasHitRecently = true;
+    console.log("wasHitRecently set to true");
+
+    // Clear existing timer if there is one
+    if (this.hitCooldownTimer) {
+      clearTimeout(this.hitCooldownTimer);
+    }
+
+    // Create a timer to reset the hurt state after animation completes
+    setTimeout(() => {
+      this.isHurt = false;
+      console.log("Hurt animation complete, setting isAlert=true");
+
+      // When hurt animation completes, go to alert state
+      if (!this.isDead) {
+        this.startAlert();
       }
+    }, this.IMAGES_HURT.length * 100); // Duration based on number of hurt animation frames
+
+    // Set timer to reset wasHitRecently after specified duration
+    this.hitCooldownTimer = setTimeout(() => {
+      console.log("wasHitRecently expired, setting to false");
+      this.wasHitRecently = false;
+
+      // Re-evaluate behavior based on current position and distance
+      if (this.world && !this.isDead) {
+        const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+        console.log("Re-evaluating endboss behavior after timer, distance:", distanceToPlayer);
+        this.world.updateEndbossBehavior(this, distanceToPlayer);
+      }
+    }, this.hitAlertDuration);
+
+    // Additional code for death check
+    if (this.energy === 0) {
+      this.die();
     }
   }
 
