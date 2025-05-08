@@ -25,7 +25,7 @@ function init() {
   };
 }
 
-// NEU - Starttext
+// Starttext
 function drawStartText() {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
@@ -43,12 +43,7 @@ function startGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
-// Debugging
-// window.addEventListener("keydown", e => {
-//   console.log(`Taste gedrückt: ${e.key}`);
-// });
-
-// Pause/Resume Audio when leave or return tab
+// Pause/Resume Audio wenn anderer Tab
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     gameMusic.stop();
