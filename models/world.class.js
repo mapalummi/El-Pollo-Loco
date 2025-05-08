@@ -363,27 +363,6 @@ class World {
     }
   }
 
-  // moveEndbossTowardsPlayer(endboss) {
-  //   if (!endboss.isWalking) return;
-
-  //   // If endboss is entering from right side of level
-  //   if (this.endbossTriggered && endboss.x > this.levelWidth - 200) {
-  //     endboss.x -= 10; // Speed beim rein kommen
-  //     endboss.otherDirection = false;
-  //     return;
-  //   }
-
-  //   // Regular behavior when near the player
-  //   const direction = this.character.x < endboss.x ? -1 : 1;
-  //   const speed = 5; //Speed im Spiel
-
-  //   // Set appropriate direction for rendering
-  //   endboss.otherDirection = direction > 0;
-
-  //   // Bewege den Endboss
-  //   endboss.x += direction * speed;
-  // }
-
   //NOTE: NEU TEST
   moveEndbossTowardsPlayer(endboss) {
     // Don't move if not in walking state
