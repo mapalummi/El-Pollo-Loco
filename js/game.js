@@ -53,7 +53,7 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-//NOTE:
+//NOTE: FUNKTIONIERT NOCH NICHT !!!
 function showGameOverScreen(hasWon) {
   console.log("Game over screen called, hasWon:", hasWon); // Debug-Info
 
@@ -94,6 +94,7 @@ function showGameOverScreen(hasWon) {
   document.getElementById("restartButton").style.display = "block";
 }
 
+// Funktioniert aktuell!
 function restartGame() {
   // Hide the restart button
   document.getElementById("restartButton").style.display = "none";
