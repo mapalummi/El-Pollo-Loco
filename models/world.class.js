@@ -33,6 +33,10 @@ class World {
     this.collectedBottles = 0;
     this.endbossTriggered = false;
 
+    // TEST NEU
+    this.gameEnded = false;
+    this.paused = false;
+
     this.draw();
     this.run();
 
@@ -56,13 +60,14 @@ class World {
     return clouds;
   }
 
-  //Startet einen Timer um Aktionen auszuführen:
+  //Startet Timer um Aktionen auszuführen:
   run() {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkEndbossVisibility();
       this.checkLevelEndReached();
+      this.checkGameStatus(); // NEU !!!
 
       // Bewege den Endboss, wenn er im Walking-Modus ist
       const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -105,7 +110,7 @@ class World {
           enemy.die();
           this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
-          //NOTE: Spieler wird getroffen
+          // Spieler wird getroffen
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
         }
@@ -130,8 +135,8 @@ class World {
       });
     });
 
-    //NOTE: Coins und Flaschen
-    this.collectedCoins = this.collectedCoins || 0; //Sicherstellem, dass Zähler existiert.
+    // Coins und Flaschen
+    this.collectedCoins = this.collectedCoins || 0; //Sicherstellen, dass Zähler existiert.
 
     this.level.coins = this.level.coins.filter(coin => {
       if (this.character.isColliding(coin)) {
@@ -169,6 +174,8 @@ class World {
       // console.log("Keine Kollision mit Bottle:", bottle);
       return true; // Behalte Bottle
     });
+
+    this.checkGameStatus(); // NEU !!!
   }
 
   updateCoinBar() {
@@ -183,6 +190,28 @@ class World {
     console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
+  //CHECK: NEU
+  checkGameStatus() {
+    if (this.character.isDead()) {
+      showGameOverScreen(false); // Spieler hat verloren
+      return;
+    }
+
+    // //NOTE: Endboss-Tod prüfen
+    const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+
+    // // Prüfe zuerst, ob der Endboss existiert
+    if (!endboss) return;
+
+    // Überprüfe die Gesundheit des Endbosses statt isDead aufzurufen
+    if (endboss.energy <= 0 && !this.gameEnded) {
+      console.log("Endboss wurde besiegt!", endboss);
+      this.gameEnded = true;
+      showGameOverScreen(true);
+    }
+  }
+
+  // ORIGINAL:
   draw() {
     this.clouds.forEach(cloud => cloud.draw(this.ctx));
     // Löscht das verherige Canvas:
@@ -198,7 +227,6 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
 
     this.ctx.translate(this.camera_x, 0);
-    // this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.clouds);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
@@ -381,8 +409,22 @@ class World {
 
     // Set appropriate direction for rendering
     endboss.otherDirection = direction > 0;
-
     // Bewege den Endboss
     endboss.x += direction * speed;
+  }
+
+  clearAllObjects() {
+    // Leere alle Arrays/Objekte
+    this.level.enemies = [];
+    this.level.clouds = [];
+    this.level.coins = [];
+    this.level.bottles = [];
+
+    //CHECK:
+    this.level.endboss = null;
+
+    if (this.character) {
+      this.character.x = -1000; // Außerhalb des sichtbaren bereichs platzieren
+    }
   }
 }

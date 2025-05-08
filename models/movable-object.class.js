@@ -39,7 +39,7 @@ class MovableObject extends DrawableObject {
     let now = new Date().getTime();
     if (now - this.lastHit < 1000) return; // Verhindert mehrfaches Aufrufen innerhalb 1 Sekunde
 
-    this.energy -= 5;
+    this.energy -= 15;
     if (this.energy < 0) {
       this.energy = 0;
     } else {

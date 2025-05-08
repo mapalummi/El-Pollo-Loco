@@ -8,7 +8,6 @@ const keyboard = new Keyboard();
 function init() {
   initLevel();
   canvas = document.getElementById("canvas");
-
   ctx = canvas.getContext("2d"); // NEU
 
   gameMusic = new Sound("audio/fast-rocky-loop-1.mp3");
@@ -34,9 +33,11 @@ function drawStartText() {
   ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, textYPosition);
 }
 
+// Geändert:
 function startGame() {
   world = new World(canvas, keyboard);
   gameMusic.play(); // Musik abspielen
+  gameOver = false; // Gameover zurücksetzen
 
   // Startscreen löschen (Geht auch ohne !?)
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -51,3 +52,86 @@ document.addEventListener("visibilitychange", () => {
     gameMusic.play().catch(e => console.log("Auto-resume prevented:", e));
   }
 });
+
+//NOTE:
+function showGameOverScreen(hasWon) {
+  console.log("Game over screen called, hasWon:", hasWon); // Debug-Info
+
+  if (gameOver) return;
+  gameOver = true;
+  gameMusic.stop();
+
+  // Behalte nur den Hintergrund, entferne alle anderen Objekte
+  if (world) {
+    // Alle beweglichen Objekte entfernen
+    world.level.enemies = [];
+    world.level.clouds = [];
+    world.level.coins = [];
+    world.level.bottles = [];
+
+    // Spieler-Objekt unsichtbar machen (falls vorhanden)
+    if (world.character) {
+      world.character.y = -1000; // Außerhalb des sichtbaren Bereichs verschieben
+    }
+
+    // Statusleisten ausblenden
+    if (world.statusBars) {
+      world.statusBars.forEach(bar => {
+        if (bar && typeof bar.hide === "function") {
+          bar.hide();
+        }
+      });
+    }
+
+    // Alternative: Falls keine direkte hide-Methode existiert
+    // Über DOM-Elemente ausblenden
+    document.querySelectorAll(".statusbar").forEach(bar => {
+      bar.style.display = "none";
+    });
+  }
+
+  // Restart-Button anzeigen
+  document.getElementById("restartButton").style.display = "block";
+}
+
+function restartGame() {
+  // Hide the restart button
+  document.getElementById("restartButton").style.display = "none";
+
+  // Reset game state - set this FIRST to prevent any new game over triggers
+  gameOver = false;
+
+  // Clear ALL intervals in the page, not just ones we know about
+  // This ensures any lingering timers are cleaned up
+  const highestTimeoutId = setTimeout(() => {}, 0);
+  for (let i = 0; i <= highestTimeoutId; i++) {
+    clearTimeout(i);
+  }
+
+  // Stop all intervals too
+  const highestIntervalId = setInterval(() => {}, 0);
+  for (let i = 1; i <= highestIntervalId; i++) {
+    clearInterval(i);
+  }
+
+  // Stop audio to prevent the AbortError
+  if (gameMusic) {
+    gameMusic.stop();
+  }
+
+  // Complete reset: destroy current world
+  world = null;
+
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Re-initialize level data explicitly
+  initLevel();
+
+  // Start fresh game after a brief pause
+  setTimeout(() => {
+    world = new World(canvas, keyboard);
+    gameMusic.play();
+    document.getElementById("startButton").style.display = "none";
+  }, 200); // Slightly longer timeout for stability
+}
