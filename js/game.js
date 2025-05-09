@@ -53,7 +53,7 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-//NOTE: FUNKTIONIERT NOCH NICHT !!!
+//NOTE: Muss evtl. noch ausgebessert werden !!!
 function showGameOverScreen(hasWon) {
   console.log("Game over screen called, hasWon:", hasWon); // Debug-Info
 
@@ -67,6 +67,10 @@ function showGameOverScreen(hasWon) {
     world.level.clouds = [];
     world.level.coins = [];
     world.level.bottles = [];
+
+    //CHECK:
+    // Wolken-Rendering explizit deaktivieren
+    world.stopDrawingClouds = true;
 
     // Spieler-Objekt unsichtbar machen (falls vorhanden)
     if (world.character) {
@@ -122,10 +126,19 @@ function restartGame() {
   // Re-initialize level data explicitly
   initLevel();
 
+  //ALT:
   // Start fresh game after a brief pause
-  setTimeout(() => {
+  // setTimeout(() => {
+  //   world = new World(canvas, keyboard);
+  //   gameMusic.play();
+  //   document.getElementById("startButton").style.display = "none";
+  // }, 200); // Slightly longer timeout for stability
+
+  // Start fresh game after a brief pause
+  CHECK: setTimeout(() => {
     world = new World(canvas, keyboard);
+    world.stopDrawingClouds = false; // Flag zurücksetzen
     gameMusic.play();
     document.getElementById("startButton").style.display = "none";
-  }, 200); // Slightly longer timeout for stability
+  }, 200);
 }

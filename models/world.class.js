@@ -213,7 +213,8 @@ class World {
 
   // ORIGINAL:
   draw() {
-    this.clouds.forEach(cloud => cloud.draw(this.ctx));
+    // this.clouds.forEach(cloud => cloud.draw(this.ctx)); //Kann das weg!?
+
     // Löscht das verherige Canvas:
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -227,7 +228,23 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
 
     this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.clouds);
+    // this.addObjectsToMap(this.clouds); //Kann das raus!?
+    //CHECK:
+    // Wolken nur zeichnen, wenn nicht gestoppt
+    if (!this.stopDrawingClouds) {
+      // Verwende BEIDE Wolkenarten
+      if (this.clouds && this.clouds.length) {
+        this.clouds.forEach(cloud => {
+          this.addToMap(cloud);
+        });
+      }
+
+      if (this.level.clouds && this.level.clouds.length) {
+        this.level.clouds.forEach(cloud => {
+          this.addToMap(cloud);
+        });
+      }
+    }
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
