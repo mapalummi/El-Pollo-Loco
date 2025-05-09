@@ -154,7 +154,6 @@ class Character extends MovableObject {
     }, 200);
   }
 
-  //NEU TEST
   startAnimation(animationType) {
     // If already running this animation, don't restart it
     if (this.currentAnimation === animationType) return;
@@ -176,6 +175,7 @@ class Character extends MovableObject {
         this.jumpingAnimation();
         break;
       case "hurt":
+        AudioHub.playOne(AudioHub.HURT);
         this.hurtAnimation();
         break;
       case "idle":
@@ -190,7 +190,6 @@ class Character extends MovableObject {
     }
   }
 
-  //NEU TEST
   walkingAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
@@ -244,14 +243,18 @@ class Character extends MovableObject {
     this.otherDirection = false;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
     this.isWalking = true;
+
+    AudioHub.playOne(AudioHub.WALK);
   }
 
   moveLeft() {
-    if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist
+    if (this.isDead()) return;
     this.x -= this.speed;
     this.facingRight = false; // Blickrichtung nach links
     this.otherDirection = true;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
     this.isWalking = true;
+
+    AudioHub.playOne(AudioHub.WALK);
   }
 }

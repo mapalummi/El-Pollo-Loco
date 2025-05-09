@@ -1,11 +1,33 @@
 class AudioHub {
   static GAMEAUDIO = new Audio("audio/game-music-loop-1.mp3");
+  static WALK = new Audio("audio/steps-2.mp3");
   static JUMP = new Audio("audio/jump-1.mp3");
+  static HURT = new Audio("audio/hurt-1.mp3");
+  static THROW = new Audio("audio/throw-1.mp3");
+  static SPLASH = new Audio("audio/splash-1.mp3");
+  static COINS = new Audio("audio/coin-1.mp3");
+  static BOTTLES = new Audio("audio/bottle-1.mp3");
+  static CHICKEN = new Audio("");
+  static ENDBOSS = new Audio("");
   static WIN = new Audio("audio/bonus-1.mp3");
   static LOST = new Audio("audio/lose-funny-1.mp3");
   static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
 
-  static allSounds = [AudioHub.GAMEAUDIO, AudioHub.JUMP];
+  static allSounds = [
+    AudioHub.GAMEAUDIO,
+    AudioHub.JUMP,
+    AudioHub.WALK,
+    AudioHub.HURT,
+    AudioHub.THROW,
+    AudioHub.SPLASH,
+    AudioHub.COINS,
+    AudioHub.BOTTLES,
+    AudioHub.CHICKEN,
+    AudioHub.ENDBOSS,
+    AudioHub.WIN,
+    AudioHub.LOST,
+    AudioHub.GAMEOVER,
+  ];
 
   // Spielt eine einzelne Audiodatei ab
   //   static playOne(sound) {
@@ -17,12 +39,9 @@ class AudioHub {
   // Spielt eine einzelne Audiodatei ab, - wenn sie bereit ist -
   static playOne(sound) {
     if (sound.readyState == 4) {
-      console.log("Sound ready");
       sound.volume = 0.2;
       sound.currentTime = 0;
       sound.play();
-    } else {
-      console.log("Sound not ready");
     }
   }
 

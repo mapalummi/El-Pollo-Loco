@@ -38,7 +38,7 @@ function startGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
-// NEU
+//TODO: Nur für einzelne Sounds möglich?
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     AudioHub.stopOne(AudioHub.GAMEAUDIO);

@@ -58,6 +58,8 @@ class ThrowableObject extends MovableObject {
     this.speedY = 30; // Wurfhöhe
     this.applyGravity();
 
+    AudioHub.playOne(AudioHub.THROW);
+
     // Bewegung der Flasche
     this.movementInterval = setInterval(() => {
       this.x += 10 * this.throwDirection; // Bewegt sich nach rechts oder links
@@ -82,6 +84,8 @@ class ThrowableObject extends MovableObject {
 
     this.speedY = 0; // Stoppt die Bewegung
     this.speed = 0;
+
+    AudioHub.playOne(AudioHub.SPLASH);
 
     clearInterval(this.movementInterval); // Stoppt die Bewegung
     clearInterval(this.animationInterval); // Stoppt die Rotationsanimation

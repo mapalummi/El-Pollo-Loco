@@ -70,6 +70,7 @@ class MovableObject extends DrawableObject {
     if (this.isDead()) return; // Springen verhindern, wenn der Charakter tot ist
     if (!this.isAboveGround()) {
       this.speedY = 30; // Sprunggeschwindigkeit
+      AudioHub.playOne(AudioHub.JUMP);
     }
   }
 

@@ -144,7 +144,7 @@ class World {
         this.updateCoinBar();
 
         //TODO:
-        //Soundeffekt (später)
+        AudioHub.playOne(AudioHub.COINS);
 
         return false; // Entferne den Coin
       }
@@ -163,7 +163,7 @@ class World {
         this.updateBottleBar();
 
         //TODO:
-        //Soundeffekt (später)
+        AudioHub.playOne(AudioHub.BOTTLES);
 
         return false; // Entferne Bottle
       }
@@ -186,41 +186,12 @@ class World {
     // console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
-  // ALT:
-  // checkGameStatus() {
-  //   if (this.character.isDead()) {
-  //     showGameOverScreen(false); // Spieler hat verloren
-  //     return;
-  //   }
-
-  //   // //NOTE: Endboss-Tod prüfen
-  //   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-
-  //   // // Prüfe zuerst, ob der Endboss existiert
-  //   if (!endboss) return;
-
-  //   // Überprüfe die Gesundheit des Endbosses statt isDead aufzurufen
-  //   if (endboss.energy <= 0 && !this.gameEnded) {
-  //     console.log("Endboss wurde besiegt!", endboss);
-  //     this.gameEnded = true;
-  //     showGameOverScreen(true);
-  //   }
-  // }
-
-  // NEU!
   checkGameStatus() {
     // Verlust-Bedingung: Character ist tot
     if (this.character.energy <= 0) {
       showGameOverScreen(false); // Verloren
       return;
     }
-
-    //Hierbei wird die "DIE-Animation" abgespielt aber Musik läft weiter...
-    // Gewinn-Bedingung: Endboss besiegt
-    // if (this.level.endboss && this.level.endboss.isDead()) {
-    //   showGameOverScreen(true); // Gewonnen
-    //   return;
-    // }
 
     // Gewinn-Bedingung: Endboss besiegt
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -288,12 +259,7 @@ class World {
     //Kollisionen prüfen
     this.checkCollisions();
 
-    //NEU !!!
     // Prüfen des Spielstatus, wenn das Spiel noch läuft
-    // if (!gameOver) {
-    //   this.checkGameStatus();
-    // }
-    //NOTE: Ist der Befehl besser!?
     if (!this.gameEnded) {
       this.checkGameStatus();
     }
@@ -349,8 +315,6 @@ class World {
     // Position the endboss just off-screen to the right
     endboss.x = this.levelWidth + 200;
 
-    // Make the endboss visible if it wasn't before
-    // endboss.isVisible = true;
     endboss.otherDirection = false;
 
     // Start walking mode
@@ -462,19 +426,4 @@ class World {
     // Bewege den Endboss
     endboss.x += direction * speed;
   }
-
-  //TODO: Wo wird diese Funktion benötigt?
-  // clearAllObjects() {
-  //   // Leere alle Arrays/Objekte
-  //   this.level.enemies = [];
-  //   this.level.clouds = [];
-  //   this.level.coins = [];
-  //   this.level.bottles = [];
-
-  //   this.level.endboss = null;
-
-  //   if (this.character) {
-  //     this.character.x = -1000; // Außerhalb des sichtbaren bereichs platzieren
-  //   }
-  // }
 }
