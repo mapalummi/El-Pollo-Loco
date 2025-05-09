@@ -29,7 +29,6 @@ class MovableObject extends DrawableObject {
   //   return this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
   // }
 
-  //NOTE:
   isColliding(mo) {
     const collision = this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
     return collision;
@@ -70,7 +69,6 @@ class MovableObject extends DrawableObject {
     if (this.isDead()) return; // Springen verhindern, wenn der Charakter tot ist
     if (!this.isAboveGround()) {
       this.speedY = 30; // Sprunggeschwindigkeit
-      AudioHub.playOne(AudioHub.JUMP);
     }
   }
 

@@ -169,9 +169,11 @@ class Character extends MovableObject {
     // Start the appropriate animation
     switch (animationType) {
       case "walking":
+        AudioHub.playOne(AudioHub.WALK);
         this.walkingAnimation();
         break;
       case "jumping":
+        AudioHub.playOne(AudioHub.JUMP);
         this.jumpingAnimation();
         break;
       case "hurt":
@@ -243,8 +245,6 @@ class Character extends MovableObject {
     this.otherDirection = false;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
     this.isWalking = true;
-
-    AudioHub.playOne(AudioHub.WALK);
   }
 
   moveLeft() {
@@ -254,7 +254,5 @@ class Character extends MovableObject {
     this.otherDirection = true;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
     this.isWalking = true;
-
-    AudioHub.playOne(AudioHub.WALK);
   }
 }
