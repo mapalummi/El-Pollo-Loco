@@ -29,23 +29,24 @@ class AudioHub {
   }
 
   // Spielt eine Audiodatei in einer Endlosschleife ab
-  //   static playLoop(sound) {
-  //     sound.loop = true; // Aktiviert die Loop-Funktion
-  //     sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
-  //     sound.currentTime = 0; // Startet vom Anfang
-  //     sound.play(); // Spielt das Audio ab
-  //   }
-
   static playLoop(sound) {
-    setInterval(() => {
-      if (sound.readyState == 4) {
-        sound.loop = true; // Aktiviert die Loop-Funktion
-        sound.volume = 0.2;
-        // sound.currentTime = 0; //Funktioniert nicht!
-        sound.play();
-      }
-    }, 200);
+    sound.loop = true; // Aktiviert die Loop-Funktion
+    sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
+    sound.currentTime = 0; // Startet vom Anfang
+    sound.play(); // Spielt das Audio ab
   }
+
+  //Problematisch!
+  //   static playLoop(sound) {
+  //     setInterval(() => {
+  //       if (sound.readyState == 4) {
+  //         sound.loop = true; // Aktiviert die Loop-Funktion
+  //         sound.volume = 0.2;
+  //         // sound.currentTime = 0; //Funktioniert nicht!
+  //         sound.play();
+  //       }
+  //     }, 200);
+  //   }
 
   // Stoppt das Abspielen aller Audiodateien
   static stopAll() {

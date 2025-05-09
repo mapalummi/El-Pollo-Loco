@@ -58,7 +58,7 @@ function startGame() {
 //   }
 // });
 
-//NEU:
+//NOTE: NEU
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     AudioHub.stopOne(AudioHub.GAMEAUDIO);
@@ -151,7 +151,7 @@ function restartGame() {
     world.stopDrawingClouds = false; // Flag zurücksetzen
     //NOTE:
     // gameMusic.play();
-    Audio.playOne(Audio.GAMEAUDIO);
+    // Audio.playOne(Audio.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
 }
