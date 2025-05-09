@@ -33,13 +33,13 @@ function drawStartText() {
   ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, textYPosition);
 }
 
-// Geändert:
 function startGame() {
   world = new World(canvas, keyboard);
-  gameMusic.play(); // Musik abspielen
-  gameOver = false; // Gameover zurücksetzen
 
-  // Startscreen löschen (Geht auch ohne !?)
+  gameMusic.play(); // Musik abspielen
+  gameMusic.setVolume(0.2); // Lautstärke auf 50% setzen
+
+  gameOver = false; // Gameover zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("startButton").style.display = "none";
 }

@@ -22,7 +22,8 @@ class Sound {
   }
 
   //TODO: Wird später benötigt!
-  // setVolume(volume) {  // volume zwischen 0.0 und 1.0
-  //     this.sound.volume = volume;
-  // }
+  setVolume(volume) {
+    // volume zwischen 0.0 und 1.0
+    this.sound.volume = volume;
+  }
 }
