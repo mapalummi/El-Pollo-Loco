@@ -86,7 +86,7 @@ class AudioHub {
     sound.play().catch(e => console.log("Auto-resume prevented:", e));
   }
 
-  //NOTE: Testfunktionen
+  //NOTE: NEU
 
   // Spielt einen Sound ab, solange eine Taste gedrückt wird
   static playWhileKeyPressed(sound) {
