@@ -13,40 +13,33 @@ class AudioHub {
 
   // Spielt eine einzelne Audiodatei ab, - wenn sie bereit ist -
   static playOne(sound) {
-    setInterval(() => {
-      // Wiederholt die Überprüfung alle 200ms
-      //hier sound wird gestoppt
-      if (sound.readyState == 4) {
-        // Überprüft, ob die Audiodatei vollständig geladen ist, wenn man die if abfrage rausnehmen würde, würde es bei start & drücken auf den stopp Knopf einen Fehler werfen. (am besten low-tier throttling nutzen!)
-        console.log("Sound ready");
-        sound.volume = 0.2;
-        sound.currentTime = 0;
-        sound.play();
-      } else {
-        console.log("Sound not ready");
-      }
-    }, 200);
+    if (sound.readyState == 4) {
+      console.log("Sound ready");
+      sound.volume = 0.2;
+      sound.currentTime = 0;
+      sound.play();
+    } else {
+      console.log("Sound not ready");
+    }
   }
 
   // Spielt eine Audiodatei in einer Endlosschleife ab
-  static playLoop(sound) {
-    sound.loop = true; // Aktiviert die Loop-Funktion
-    sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
-    sound.currentTime = 0; // Startet vom Anfang
-    sound.play(); // Spielt das Audio ab
-  }
+  // static playLoop(sound) {
+  //   sound.loop = true; // Aktiviert die Loop-Funktion
+  //   sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
+  //   sound.currentTime = 0; // Startet vom Anfang
+  //   sound.play(); // Spielt das Audio ab
+  // }
 
-  //Problematisch!
-  //   static playLoop(sound) {
-  //     setInterval(() => {
-  //       if (sound.readyState == 4) {
-  //         sound.loop = true; // Aktiviert die Loop-Funktion
-  //         sound.volume = 0.2;
-  //         // sound.currentTime = 0; //Funktioniert nicht!
-  //         sound.play();
-  //       }
-  //     }, 200);
-  //   }
+  //NEU
+  static playLoop(sound) {
+    if (sound.readyState == 4) {
+      sound.loop = true; // Aktiviert die Loop-Funktion
+      sound.volume = 0.2;
+      // sound.currentTime = 0; //Funktioniert nicht!
+      sound.play();
+    }
+  }
 
   // Stoppt das Abspielen aller Audiodateien
   static stopAll() {
