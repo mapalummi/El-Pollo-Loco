@@ -47,16 +47,18 @@ document.addEventListener("visibilitychange", () => {
 });
 
 //NOTE: Muss evtl. noch ausgebessert werden !!!
-function showGameOverScreen() {
+function showGameOverScreen(hasWon) {
   gameOver = true;
   AudioHub.stopOne(AudioHub.GAMEAUDIO);
 
   //TODO: Unterschiedliche Audio Effekte je nach Spielausgang
-  // if (hasWon) {
-  //   AudioHub.playOnce(AudioHub.VICTORY_SOUND);
-  // } else {
-  //   AudioHub.playOnce(AudioHub.GAMEOVER_SOUND);
-  // }
+  if (hasWon) {
+    // AudioHub.playOnce(AudioHub.VICTORY_SOUND);
+    console.log("Victory sound played");
+  } else {
+    // AudioHub.playOnce(AudioHub.GAMEOVER_SOUND);
+    console.log("Gameover sound played");
+  }
 
   // Behalte nur den Hintergrund, entferne alle anderen Objekte
   if (world) {

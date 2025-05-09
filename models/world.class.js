@@ -186,24 +186,52 @@ class World {
     console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
-  //CHECK: NEU
+  // ALT:
+  // checkGameStatus() {
+  //   if (this.character.isDead()) {
+  //     showGameOverScreen(false); // Spieler hat verloren
+  //     return;
+  //   }
+
+  //   // //NOTE: Endboss-Tod prüfen
+  //   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+
+  //   // // Prüfe zuerst, ob der Endboss existiert
+  //   if (!endboss) return;
+
+  //   // Überprüfe die Gesundheit des Endbosses statt isDead aufzurufen
+  //   if (endboss.energy <= 0 && !this.gameEnded) {
+  //     console.log("Endboss wurde besiegt!", endboss);
+  //     this.gameEnded = true;
+  //     showGameOverScreen(true);
+  //   }
+  // }
+
+  // NEU!
   checkGameStatus() {
-    if (this.character.isDead()) {
-      showGameOverScreen(false); // Spieler hat verloren
+    // Verlust-Bedingung: Character ist tot
+    if (this.character.energy <= 0) {
+      showGameOverScreen(false); // Verloren
       return;
     }
 
-    // //NOTE: Endboss-Tod prüfen
+    //Hierbei wird die "DIE-Animation" abgespielt aber Musik läft weiter...
+    // Gewinn-Bedingung: Endboss besiegt
+    // if (this.level.endboss && this.level.endboss.isDead()) {
+    //   showGameOverScreen(true); // Gewonnen
+    //   return;
+    // }
+
+    // Gewinn-Bedingung: Endboss besiegt
+    // Erst den Endboss in der Feindeliste suchen
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
 
-    // // Prüfe zuerst, ob der Endboss existiert
-    if (!endboss) return;
-
-    // Überprüfe die Gesundheit des Endbosses statt isDead aufzurufen
-    if (endboss.energy <= 0 && !this.gameEnded) {
+    // Wenn Endboss existiert und seine Energie aufgebraucht ist
+    if (endboss && endboss.energy <= 0 && !this.gameEnded) {
       console.log("Endboss wurde besiegt!", endboss);
-      this.gameEnded = true;
-      showGameOverScreen(true);
+      this.gameEnded = true; // Verhindert mehrfaches Auslösen
+      showGameOverScreen(true); // Gewonnen
+      return;
     }
   }
 
@@ -217,7 +245,6 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
 
-    //CHECK:
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
 
@@ -255,6 +282,12 @@ class World {
 
     //Kollisionen prüfen
     this.checkCollisions();
+
+    //NEU !!!
+    // Prüfen des Spielstatus, wenn das Spiel noch läuft
+    if (!gameOver) {
+      this.checkGameStatus();
+    }
 
     // Draw() wird immer wieder aufgerufen:
     let self = this;
