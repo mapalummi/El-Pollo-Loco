@@ -177,13 +177,13 @@ class World {
   updateCoinBar() {
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100; //Prozentualer Fortschritt
     this.coinBar.setPercentage(this.percentageCoins); //Fortschritt an die Coinbar übergeben
-    console.log(`Aktueller Fortschritt Coins: ${this.percentageCoins}%`);
+    // console.log(`Aktueller Fortschritt Coins: ${this.percentageCoins}%`);
   }
 
   updateBottleBar() {
     this.percentageBottles = (this.collectedBottles / this.totalBottles) * 100;
     this.bottleBar.setPercentage(this.percentageBottles);
-    console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
+    // console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
   // ALT:
@@ -223,14 +223,19 @@ class World {
     // }
 
     // Gewinn-Bedingung: Endboss besiegt
-    // Erst den Endboss in der Feindeliste suchen
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
 
     // Wenn Endboss existiert und seine Energie aufgebraucht ist
     if (endboss && endboss.energy <= 0 && !this.gameEnded) {
       console.log("Endboss wurde besiegt!", endboss);
       this.gameEnded = true; // Verhindert mehrfaches Auslösen
-      showGameOverScreen(true); // Gewonnen
+
+      // Warten auf Abschluss der Todesanimation, bevor GameOver gezeigt wird
+      const animationDuration = endboss.IMAGES_DEAD.length * 200; // Gleiche Zeit wie in die()
+      setTimeout(() => {
+        showGameOverScreen(true); // Gewonnen
+      }, animationDuration);
+
       return;
     }
   }
@@ -285,7 +290,11 @@ class World {
 
     //NEU !!!
     // Prüfen des Spielstatus, wenn das Spiel noch läuft
-    if (!gameOver) {
+    // if (!gameOver) {
+    //   this.checkGameStatus();
+    // }
+    //NOTE: Ist der Befehl besser!?
+    if (!this.gameEnded) {
       this.checkGameStatus();
     }
 
@@ -357,7 +366,6 @@ class World {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (!endboss) return;
 
-    //CHECK: Ensure the endboss has a reference to the world
     if (!endboss.world) {
       endboss.world = this;
     }
@@ -396,7 +404,6 @@ class World {
     // Überspringe, wenn der Endboss bereits tot ist oder gerade getroffen wurde
     if (endboss.isDead || endboss.isHurt) return;
 
-    // FIRST CHECK: Recently hit should always have highest priority
     if (endboss.wasHitRecently) {
       console.log("Endboss recently hit, forcing alert mode");
       if (!endboss.isAlert) {
@@ -405,7 +412,6 @@ class World {
       return; // Don't proceed with other behavior checks
     }
 
-    // SECOND CHECK: Level entrance behavior (only if not recently hit)
     if (this.endbossTriggered && endboss.x > this.levelWidth - 500) {
       console.log("Endboss in entrance zone, walking");
       if (!endboss.isWalking) {
@@ -457,18 +463,18 @@ class World {
     endboss.x += direction * speed;
   }
 
-  clearAllObjects() {
-    // Leere alle Arrays/Objekte
-    this.level.enemies = [];
-    this.level.clouds = [];
-    this.level.coins = [];
-    this.level.bottles = [];
+  //TODO: Wo wird diese Funktion benötigt?
+  // clearAllObjects() {
+  //   // Leere alle Arrays/Objekte
+  //   this.level.enemies = [];
+  //   this.level.clouds = [];
+  //   this.level.coins = [];
+  //   this.level.bottles = [];
 
-    //CHECK:
-    this.level.endboss = null;
+  //   this.level.endboss = null;
 
-    if (this.character) {
-      this.character.x = -1000; // Außerhalb des sichtbaren bereichs platzieren
-    }
-  }
+  //   if (this.character) {
+  //     this.character.x = -1000; // Außerhalb des sichtbaren bereichs platzieren
+  //   }
+  // }
 }

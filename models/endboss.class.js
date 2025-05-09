@@ -108,20 +108,51 @@ class Endboss extends MovableObject {
     // this.getRealFrame();
   }
 
-  //NOTE: NEU TEST
+  //NOTE:
+  // animate() {
+  //   setInterval(() => {
+  //     this.getRealFrame();
+
+  //     // STATE PRIORITY HIERARCHY (most important first)
+  //     if (this.isDead) {
+  //       // Wenn Todesanimation noch nicht abgeschlossen, spiele sie ab
+  //       if (!this.isDeathAnimationComplete) {
+  //         this.playAnimation(this.IMAGES_DEAD);
+  //       }
+  //     } else if (this.isHurt) {
+  //       this.endbossHurtAnimation();
+  //     } else if (this.wasHitRecently) {
+  //       // Ensure alert animation plays when recently hit, regardless of other states
+  //       this.isAlert = true;
+  //       this.isAttacking = false;
+  //       this.isWalking = false;
+  //       this.endbossAlertAnimation();
+  //     } else if (this.isAttacking) {
+  //       this.endbossAttackAnimation();
+  //     } else if (this.isWalking) {
+  //       this.endbossWalkAnimation();
+  //     } else if (this.isAlert) {
+  //       this.endbossAlertAnimation();
+  //     }
+  //   }, 100);
+  // }
+
   animate() {
-    setInterval(() => {
+    // Animation-Intervall speichern, damit es nicht gelöscht werden kann
+    this.animationInterval = setInterval(() => {
       this.getRealFrame();
 
       // STATE PRIORITY HIERARCHY (most important first)
       if (this.isDead) {
         if (!this.isDeathAnimationComplete) {
+          // Animation noch läuft
           this.playAnimation(this.IMAGES_DEAD);
         }
+        // Wenn Animation abgeschlossen ist, wird kein weiterer
+        // Frame geladen - das Bild wurde bereits in die() gesetzt
       } else if (this.isHurt) {
         this.endbossHurtAnimation();
       } else if (this.wasHitRecently) {
-        // Ensure alert animation plays when recently hit, regardless of other states
         this.isAlert = true;
         this.isAttacking = false;
         this.isWalking = false;
@@ -136,9 +167,7 @@ class Endboss extends MovableObject {
     }, 100);
   }
 
-  //NOTE: NEU TEST
   startWalking() {
-    // Don't change state if recently hit - this is the key fix!
     if (this.wasHitRecently) {
       console.log("Blocking walking mode because wasHitRecently=true");
       return;
@@ -152,7 +181,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  //NOTE: NEU TEST
   startAlert() {
     this.isAlert = true;
     this.isAttacking = false;
@@ -182,9 +210,8 @@ class Endboss extends MovableObject {
     }
   }
 
-  //NOTE: NEU TEST
   hit(damage) {
-    console.log("Endboss hit at position:", this.x);
+    // console.log("Endboss hit at position:", this.x);
     // Existing hit code
     this.energy -= damage;
     if (this.energy < 0) {
@@ -200,7 +227,7 @@ class Endboss extends MovableObject {
 
     // New code for maintaining alert mode after hit
     this.wasHitRecently = true;
-    console.log("wasHitRecently set to true");
+    // console.log("wasHitRecently set to true");
 
     // Clear existing timer if there is one
     if (this.hitCooldownTimer) {
@@ -210,17 +237,17 @@ class Endboss extends MovableObject {
     // Create a timer to reset the hurt state after animation completes
     setTimeout(() => {
       this.isHurt = false;
-      console.log("Hurt animation complete, setting isAlert=true");
+      // console.log("Hurt animation complete, setting isAlert=true");
 
       // When hurt animation completes, go to alert state
       if (!this.isDead) {
         this.startAlert();
       }
-    }, this.IMAGES_HURT.length * 100); // Duration based on number of hurt animation frames
+    }, this.IMAGES_HURT.length * 100);
 
     // Set timer to reset wasHitRecently after specified duration
     this.hitCooldownTimer = setTimeout(() => {
-      console.log("wasHitRecently expired, setting to false");
+      // console.log("wasHitRecently expired, setting to false");
       this.wasHitRecently = false;
 
       // Re-evaluate behavior based on current position and distance
@@ -237,20 +264,54 @@ class Endboss extends MovableObject {
     }
   }
 
+  //NOTE:
+  // die() {
+  //   this.isDead = true;
+  //   this.isHurt = false;
+  //   this.isAttacking = false;
+  //   this.isWalking = false;
+  //   this.isAlert = false;
+  //   this.isDeathAnimationComplete = false; // Reset to ensure animation plays
+
+  //   // Die Animation wird durch animate() einmal gestartet
+  //   // Nach der Dauer der Animation setzen wir isDeathAnimationComplete
+  //   setTimeout(() => {
+  //     this.isDeathAnimationComplete = true;
+
+  //     // Setze das letzte Bild manuell
+  //     this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
+  //   }, this.IMAGES_DEAD.length * 200); // Etwas mehr Zeit für ein deutlicheres Abspielen
+  // }
+
   die() {
     this.isDead = true;
     this.isHurt = false;
     this.isAttacking = false;
     this.isWalking = false;
     this.isAlert = false;
+    this.isDeathAnimationComplete = false;
+
+    console.log("Endboss stirbt - Animation wird gestartet"); // Debug
 
     // Die Animation wird durch animate() einmal gestartet
-    // Nach der Dauer der Animation setzen wir isDeathAnimationComplete
     setTimeout(() => {
       this.isDeathAnimationComplete = true;
 
-      // Setze das letzte Bild manuell
-      this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
-    }, this.IMAGES_DEAD.length * 200); // Etwas mehr Zeit für ein deutlicheres Abspielen
+      // Setze das letzte Bild EXPLIZIT
+      const lastDeathImage = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
+
+      console.log("Setze letztes Bild:", lastDeathImage); // Debug
+
+      // Doppelte Sicherheit: Explizit das Bild neu laden und setzen
+      this.loadImage(lastDeathImage); //Alt
+
+      // Zusätzlicher Check für den imageCache
+      //Alt
+      if (this.imageCache && this.imageCache[lastDeathImage]) {
+        this.img = this.imageCache[lastDeathImage];
+      }
+
+      console.log("Endboss-Animation abgeschlossen"); // Debug
+    }, this.IMAGES_DEAD.length * 200);
   }
 }

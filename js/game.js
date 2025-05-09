@@ -62,7 +62,12 @@ function showGameOverScreen(hasWon) {
 
   // Behalte nur den Hintergrund, entferne alle anderen Objekte
   if (world) {
-    world.level.enemies = [];
+    // NEU - Speichere toten Endboss, falls vorhanden
+    const deadEndboss = world.level.enemies.find(enemy => enemy instanceof Endboss && enemy.isDead);
+
+    // world.level.enemies = [];
+    world.level.enemies = deadEndboss ? [deadEndboss] : [];
+
     world.level.clouds = [];
     world.level.coins = [];
     world.level.bottles = [];
