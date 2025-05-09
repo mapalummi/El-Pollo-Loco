@@ -21,7 +21,6 @@ class Sound {
     this.sound.load(); //lädt Audio neu, damit Schleife korrekt startet
   }
 
-  //TODO: Wird später benötigt!
   setVolume(volume) {
     // volume zwischen 0.0 und 1.0
     this.sound.volume = volume;

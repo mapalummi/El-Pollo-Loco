@@ -8,11 +8,12 @@ const keyboard = new Keyboard();
 function init() {
   initLevel();
   canvas = document.getElementById("canvas");
-  ctx = canvas.getContext("2d"); // NEU
+  ctx = canvas.getContext("2d");
 
-  gameMusic = new Sound("audio/fast-rocky-loop-1.mp3");
-  gameMusic.enableLoop(); // Schleifenwiedergabe aktivieren
-  console.log("Audio geladen", gameMusic.sound.src);
+  //NOTE: Alte Audiofunktion
+  // gameMusic = new Sound("audio/fast-rocky-loop-1.mp3");
+  // gameMusic.enableLoop(); // Schleifenwiedergabe aktivieren
+  // console.log("Audio geladen", gameMusic.sound.src);
 
   // Lade und zeige den Startscreen
   const startScreenImage = new Image();
@@ -36,20 +37,33 @@ function drawStartText() {
 function startGame() {
   world = new World(canvas, keyboard);
 
-  gameMusic.play();
-  gameMusic.setVolume(0.1);
+  //NOTE: Alte Audiofunktion
+  // gameMusic.play();
+  // gameMusic.setVolume(0.1);
+
+  AudioHub.playOne(AudioHub.GAMEAUDIO);
 
   gameOver = false; // Gameover zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("startButton").style.display = "none";
 }
 
+//NOTE: Erst mal rausgenommen!
 // Pause/Resume Audio wenn anderer Tab
+// document.addEventListener("visibilitychange", () => {
+//   if (document.hidden) {
+//     gameMusic.stop();
+//   } else {
+//     gameMusic.play().catch(e => console.log("Auto-resume prevented:", e));
+//   }
+// });
+
+//NEU:
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
-    gameMusic.stop();
+    AudioHub.stopOne(AudioHub.GAMEAUDIO);
   } else {
-    gameMusic.play().catch(e => console.log("Auto-resume prevented:", e));
+    AudioHub.resume(AudioHub.GAMEAUDIO).catch(e => console.log("Auto-resume prevented:", e));
   }
 });
 
@@ -57,9 +71,13 @@ document.addEventListener("visibilitychange", () => {
 function showGameOverScreen(hasWon) {
   console.log("Game over screen called, hasWon:", hasWon); // Debug-Info
 
-  if (gameOver) return;
+  //NOTE: Alte Audiofunktion
+  // if (gameOver) return;
+  // gameOver = true;
+  // gameMusic.stop();
+
   gameOver = true;
-  gameMusic.stop();
+  AudioHub.stopOne(AudioHub.GAMEAUDIO);
 
   // Behalte nur den Hintergrund, entferne alle anderen Objekte
   if (world) {
@@ -112,10 +130,11 @@ function restartGame() {
     clearInterval(i);
   }
 
+  //NOTE:
   // Stop audio to prevent the AbortError
-  if (gameMusic) {
-    gameMusic.stop();
-  }
+  // if (gameMusic) {
+  //   gameMusic.stop();
+  // }
 
   // Complete reset: destroy current world
   world = null;
@@ -126,19 +145,13 @@ function restartGame() {
   // Re-initialize level data explicitly
   initLevel();
 
-  //ALT:
-  // Start fresh game after a brief pause
-  // setTimeout(() => {
-  //   world = new World(canvas, keyboard);
-  //   gameMusic.play();
-  //   document.getElementById("startButton").style.display = "none";
-  // }, 200); // Slightly longer timeout for stability
-
   // Start fresh game after a brief pause
   CHECK: setTimeout(() => {
     world = new World(canvas, keyboard);
     world.stopDrawingClouds = false; // Flag zurücksetzen
-    gameMusic.play();
+    //NOTE:
+    // gameMusic.play();
+    Audio.playOne(Audio.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
 }
