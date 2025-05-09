@@ -5,10 +5,46 @@ class AudioHub {
   static allSounds = [AudioHub.GAMEAUDIO, AudioHub.JUMP];
 
   // Spielt eine einzelne Audiodatei ab
+  //   static playOne(sound) {
+  //     sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20% / 1 = 100%
+  //     sound.currentTime = 0; // Startet ab einer bestimmten stelle (0=Anfang/ 5 = 5 sec.)
+  //     sound.play(); // Spielt das übergebene Sound-Objekt ab
+  //   }
+
+  // Spielt eine einzelne Audiodatei ab, - wenn sie bereit ist -
   static playOne(sound) {
-    sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20% / 1 = 100%
-    sound.currentTime = 0; // Startet ab einer bestimmten stelle (0=Anfang/ 5 = 5 sec.)
-    sound.play(); // Spielt das übergebene Sound-Objekt ab
+    setInterval(() => {
+      // Wiederholt die Überprüfung alle 200ms
+      //hier sound wird gestoppt
+      if (sound.readyState == 4) {
+        // Überprüft, ob die Audiodatei vollständig geladen ist, wenn man die if abfrage rausnehmen würde, würde es bei start & drücken auf den stopp Knopf einen Fehler werfen. (am besten low-tier throttling nutzen!)
+        console.log("Sound ready");
+        sound.volume = 0.2;
+        sound.currentTime = 0;
+        sound.play();
+      } else {
+        console.log("Sound not ready");
+      }
+    }, 200);
+  }
+
+  // Spielt eine Audiodatei in einer Endlosschleife ab
+  //   static playLoop(sound) {
+  //     sound.loop = true; // Aktiviert die Loop-Funktion
+  //     sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
+  //     sound.currentTime = 0; // Startet vom Anfang
+  //     sound.play(); // Spielt das Audio ab
+  //   }
+
+  static playLoop(sound) {
+    setInterval(() => {
+      if (sound.readyState == 4) {
+        sound.loop = true; // Aktiviert die Loop-Funktion
+        sound.volume = 0.2;
+        // sound.currentTime = 0; //Funktioniert nicht!
+        sound.play();
+      }
+    }, 200);
   }
 
   // Stoppt das Abspielen aller Audiodateien
@@ -22,16 +58,6 @@ class AudioHub {
   // Stoppt das Abspielen einer einzelnen Audiodatei
   static stopOne(sound) {
     sound.pause(); // Pausiert das übergebene Audio
-  }
-
-  //CHECK:
-
-  // Spielt eine Audiodatei in einer Endlosschleife ab
-  static playLoop(sound) {
-    sound.loop = true; // Aktiviert die Loop-Funktion
-    sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
-    sound.currentTime = 0; // Startet vom Anfang
-    sound.play(); // Spielt das Audio ab
   }
 
   static resume(sound) {
