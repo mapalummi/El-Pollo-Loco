@@ -1,8 +1,10 @@
 class AudioHub {
   static GAMEAUDIO = new Audio("audio/game-music-loop-1.mp3");
+  static SLEEP = new Audio("audio/sleep-1.mp3");
   static WALK = new Audio("audio/steps-2.mp3");
   static JUMP = new Audio("audio/jump-1.mp3");
   static HURT = new Audio("audio/hurt-1.mp3");
+  static DEAD = new Audio("audio/death-1.mp3");
   static THROW = new Audio("audio/throw-1.mp3");
   static SPLASH = new Audio("audio/splash-1.mp3");
   static COINS = new Audio("audio/coin-1.mp3");
@@ -79,4 +81,30 @@ class AudioHub {
   static resume(sound) {
     sound.play().catch(e => console.log("Auto-resume prevented:", e));
   }
+
+  //NOTE: Testfunktionen
+
+  // Spielt einen Sound ab, solange eine Taste gedrückt wird
+  static playWhileKeyPressed(sound) {
+    if (sound.readyState == 4) {
+      sound.volume = 0.2;
+      sound.currentTime = 0;
+      sound.play();
+
+      // Speichern Sie den Sound, damit er beim Loslassen der Taste gestoppt werden kann
+      AudioHub.currentKeySound = sound;
+    }
+  }
+
+  // Stoppt den aktuell durch Tastendruck gespielten Sound
+  static stopKeySound() {
+    if (AudioHub.currentKeySound) {
+      AudioHub.currentKeySound.pause();
+      AudioHub.currentKeySound.currentTime = 0;
+      AudioHub.currentKeySound = null;
+    }
+  }
+
+  // Statische Variable für den aktuell abgespielten Tasten-Sound
+  static currentKeySound = null;
 }

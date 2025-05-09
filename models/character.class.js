@@ -169,7 +169,6 @@ class Character extends MovableObject {
     // Start the appropriate animation
     switch (animationType) {
       case "walking":
-        AudioHub.playOne(AudioHub.WALK);
         this.walkingAnimation();
         break;
       case "jumping":
@@ -184,9 +183,11 @@ class Character extends MovableObject {
         this.idleAnimation();
         break;
       case "sleep":
+        AudioHub.playOne(AudioHub.SLEEP);
         this.sleepAnimation();
         break;
       case "dead":
+        AudioHub.playOne(AudioHub.DEAD);
         this.deadAnimation();
         break;
     }

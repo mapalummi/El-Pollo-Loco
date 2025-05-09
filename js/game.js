@@ -1,5 +1,5 @@
 let canvas;
-let ctx; // NEU
+let ctx;
 let world;
 let gameOver = false; // Spielstatus
 let gameOverSoundPlayed = false;
@@ -12,12 +12,28 @@ function init() {
 
   // Lade und zeige den Startscreen
   const startScreenImage = new Image();
-  startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png"; // Pfad zum Startscreen-Bild
+  startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
   startScreenImage.onload = () => {
     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
-    drawStartText(); // Text über dem Bild zeichnen
-    document.getElementById("startButton").style.display = "block"; // Button anzeigen
+    drawStartText();
+    document.getElementById("startButton").style.display = "block";
   };
+
+  //NOTE: NEU
+  // Event-Listener nur einmal einrichten
+  document.addEventListener("keydown", e => {
+    if (e.repeat) return;
+
+    if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+      AudioHub.playWhileKeyPressed(AudioHub.WALK);
+    }
+  });
+
+  document.addEventListener("keyup", e => {
+    if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+      AudioHub.stopKeySound();
+    }
+  });
 }
 
 function drawStartText() {
