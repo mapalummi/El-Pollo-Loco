@@ -36,8 +36,8 @@ function drawStartText() {
 function startGame() {
   world = new World(canvas, keyboard);
 
-  gameMusic.play(); // Musik abspielen
-  gameMusic.setVolume(0.2); // Lautstärke auf 50% setzen
+  gameMusic.play();
+  gameMusic.setVolume(0.1);
 
   gameOver = false; // Gameover zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);

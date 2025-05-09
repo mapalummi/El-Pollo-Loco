@@ -1,8 +1,8 @@
 class LittleChicken extends MovableObject {
   x = 0;
   y = 390;
-  width = 30;
-  height = 40;
+  width = 50;
+  height = 60;
   isDead = false;
 
   offset = {
