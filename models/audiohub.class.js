@@ -1,6 +1,9 @@
 class AudioHub {
   static GAMEAUDIO = new Audio("audio/game-music-loop-1.mp3");
   static JUMP = new Audio("audio/jump-1.mp3");
+  static WIN = new Audio("audio/bonus-1.mp3");
+  static LOST = new Audio("audio/lose-funny-1.mp3");
+  static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
 
   static allSounds = [AudioHub.GAMEAUDIO, AudioHub.JUMP];
 

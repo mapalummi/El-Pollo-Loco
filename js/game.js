@@ -2,6 +2,7 @@ let canvas;
 let ctx; // NEU
 let world;
 let gameOver = false; // Spielstatus
+let gameOverSoundPlayed = false;
 const keyboard = new Keyboard();
 
 function init() {
@@ -46,17 +47,22 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-//NOTE: Muss evtl. noch ausgebessert werden !!!
+//NOTE: Muss ausgebessert werden !!!
 function showGameOverScreen(hasWon) {
+  if (gameOver) return; // Prevent multiple game over screens
+
   gameOver = true;
   AudioHub.stopOne(AudioHub.GAMEAUDIO);
 
-  //TODO: Unterschiedliche Audio Effekte je nach Spielausgang
+  if (!gameOverSoundPlayed) {
+    gameOverSoundPlayed = true;
+  }
+
   if (hasWon) {
-    // AudioHub.playOnce(AudioHub.VICTORY_SOUND);
+    AudioHub.playOne(AudioHub.WIN);
     console.log("Victory sound played");
   } else {
-    // AudioHub.playOnce(AudioHub.GAMEOVER_SOUND);
+    AudioHub.playOne(AudioHub.GAMEOVER);
     console.log("Gameover sound played");
   }
 
@@ -90,9 +96,9 @@ function showGameOverScreen(hasWon) {
   document.getElementById("restartButton").style.display = "block";
 }
 
-// Funktioniert aktuell!
 function restartGame() {
-  // Hide the restart button
+  gameOverSoundPlayed = false;
+
   document.getElementById("restartButton").style.display = "none";
 
   // Reset game state - set this FIRST to prevent any new game over triggers
@@ -124,8 +130,7 @@ function restartGame() {
   setTimeout(() => {
     world = new World(canvas, keyboard);
     world.stopDrawingClouds = false; // Flag zurücksetzen
-    //TODO:
-    AudioHub.playLoop(Audio.GAMEAUDIO);
+    AudioHub.playLoop(AudioHub.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
 }
