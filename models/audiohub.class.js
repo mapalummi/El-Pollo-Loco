@@ -9,23 +9,27 @@ class AudioHub {
   static SPLASH = new Audio("audio/splash-1.mp3");
   static COINS = new Audio("audio/coin-1.mp3");
   static BOTTLES = new Audio("audio/bottle-1.mp3");
-  static CHICKEN = new Audio("");
-  static ENDBOSS = new Audio("");
+  static CHICKEN = new Audio("audio/chicken-1.mp3");
+  static ENDBOSS = new Audio("audio/monster-1.mp3");
+  static ENDBOSS_ATTACK = new Audio("audio/monster-2.mp3");
   static WIN = new Audio("audio/bonus-1.mp3");
   static LOST = new Audio("audio/lose-funny-1.mp3");
   static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
 
   static allSounds = [
     AudioHub.GAMEAUDIO,
-    AudioHub.JUMP,
+    AudioHub.SLEEP,
     AudioHub.WALK,
+    AudioHub.JUMP,
     AudioHub.HURT,
+    AudioHub.DEAD,
     AudioHub.THROW,
     AudioHub.SPLASH,
     AudioHub.COINS,
     AudioHub.BOTTLES,
     AudioHub.CHICKEN,
     AudioHub.ENDBOSS,
+    AudioHub.ENDBOSS_ATTACK,
     AudioHub.WIN,
     AudioHub.LOST,
     AudioHub.GAMEOVER,

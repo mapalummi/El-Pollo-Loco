@@ -187,6 +187,7 @@ class Endboss extends MovableObject {
     this.isWalking = false;
     // Set the correct animation images
     this.playAnimation(this.IMAGES_ALERT);
+    AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
   startAttacking() {
@@ -194,6 +195,7 @@ class Endboss extends MovableObject {
       this.isAttacking = true;
       this.isWalking = false;
       this.isAlert = false;
+      AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
 
       setTimeout(() => {
         if (!this.isDead && !this.isHurt) {

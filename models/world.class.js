@@ -106,6 +106,7 @@ class World {
         ) {
           // Spieler springt auf das Chicken
           enemy.die();
+          AudioHub.playOne(AudioHub.CHICKEN);
           this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
         } else {
           // Spieler wird getroffen
@@ -128,6 +129,7 @@ class World {
             this.endbossBar.setPercentage(enemy.energy);
           } else if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
             enemy.die();
+            AudioHub.playOne(AudioHub.CHICKEN);
           }
         }
       });

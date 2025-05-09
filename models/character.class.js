@@ -183,7 +183,8 @@ class Character extends MovableObject {
         this.idleAnimation();
         break;
       case "sleep":
-        AudioHub.playOne(AudioHub.SLEEP);
+        //CHECK: Soll nur schnarchen, wenn er schläft !!!!
+        // AudioHub.playOne(AudioHub.SLEEP);
         this.sleepAnimation();
         break;
       case "dead":
