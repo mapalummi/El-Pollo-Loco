@@ -37,18 +37,18 @@ function drawStartText() {
 function startGame() {
   world = new World(canvas, keyboard);
 
-  //NOTE: Alte Audiofunktion
+  // Alte Audiofunktion
   // gameMusic.play();
   // gameMusic.setVolume(0.1);
 
-  AudioHub.playOne(AudioHub.GAMEAUDIO);
+  AudioHub.playLoop(AudioHub.GAMEAUDIO);
 
   gameOver = false; // Gameover zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("startButton").style.display = "none";
 }
 
-//NOTE: Erst mal rausgenommen!
+// Erst mal rausgenommen!
 // Pause/Resume Audio wenn anderer Tab
 // document.addEventListener("visibilitychange", () => {
 //   if (document.hidden) {

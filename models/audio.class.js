@@ -25,6 +25,15 @@ class AudioHub {
   }
 
   //CHECK:
+
+  // Spielt eine Audiodatei in einer Endlosschleife ab
+  static playLoop(sound) {
+    sound.loop = true; // Aktiviert die Loop-Funktion
+    sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
+    sound.currentTime = 0; // Startet vom Anfang
+    sound.play(); // Spielt das Audio ab
+  }
+
   static resume(sound) {
     sound.play().catch(e => console.log("Auto-resume prevented:", e));
   }
