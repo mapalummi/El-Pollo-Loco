@@ -16,6 +16,26 @@ class AudioHub {
   static LOST = new Audio("audio/lose-funny-1.mp3");
   static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
 
+  static soundVolumes = {
+    GAMEAUDIO: 0.5,
+    SLEEP: 0.1,
+    WALK: 0.15,
+    JUMP: 0.3,
+    HURT: 0.25,
+    DEAD: 0.3,
+    THROW: 0.2,
+    SPLASH: 0.2,
+    COINS: 1,
+    BOTTLES: 0.2,
+    CHICKEN: 0.2,
+    ENDBOSS: 0.5,
+    ENDBOSS_ATTACK: 0.2,
+    WIN: 0.2,
+    LOST: 0.2,
+    GAMEOVER: 0.2,
+    // Weitere Sounds hier definieren...
+  };
+
   static allSounds = [
     AudioHub.GAMEAUDIO,
     AudioHub.SLEEP,
@@ -42,10 +62,23 @@ class AudioHub {
   //     sound.play(); // Spielt das übergebene Sound-Objekt ab
   //   }
 
+  //NEU
   // Spielt eine einzelne Audiodatei ab, - wenn sie bereit ist -
+  // static playOne(sound) {
+  //   if (sound.readyState == 4) {
+  //     sound.volume = 0.2;
+  //     sound.currentTime = 0;
+  //     sound.play();
+  //   }
+  // }
+
+  // Modifiziertes playOne
   static playOne(sound) {
     if (sound.readyState == 4) {
-      sound.volume = 0.2;
+      // Finde den Namen des Sounds
+      const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+      // Verwende die spezifische Lautstärke oder 0.2 als Standard
+      sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       sound.currentTime = 0;
       sound.play();
     }
@@ -60,11 +93,23 @@ class AudioHub {
   // }
 
   //NEU
+  // static playLoop(sound) {
+  //   if (sound.readyState == 4) {
+  //     sound.loop = true; // Aktiviert die Loop-Funktion
+  //     sound.volume = 0.2;
+  //     // sound.currentTime = 0; //Funktioniert nicht!
+  //     sound.play();
+  //   }
+  // }
+
+  // Modifiziertes playLoop
   static playLoop(sound) {
     if (sound.readyState == 4) {
-      sound.loop = true; // Aktiviert die Loop-Funktion
-      sound.volume = 0.2;
-      // sound.currentTime = 0; //Funktioniert nicht!
+      // Finde den Namen des Sounds
+      const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+      // Verwende die spezifische Lautstärke oder 0.2 als Standard
+      sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+      sound.currentTime = 0;
       sound.play();
     }
   }
