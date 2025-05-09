@@ -63,7 +63,6 @@ function showGameOverScreen(hasWon) {
 
   // Behalte nur den Hintergrund, entferne alle anderen Objekte
   if (world) {
-    // Alle beweglichen Objekte entfernen
     world.level.enemies = [];
     world.level.clouds = [];
     world.level.coins = [];
@@ -71,7 +70,7 @@ function showGameOverScreen(hasWon) {
 
     // Spieler-Objekt unsichtbar machen (falls vorhanden)
     if (world.character) {
-      world.character.y = -1000; // Außerhalb des sichtbaren Bereichs verschieben
+      world.character.y = 800; // Außerhalb des sichtbaren Bereichs verschieben
     }
 
     // Statusleisten ausblenden
@@ -82,12 +81,6 @@ function showGameOverScreen(hasWon) {
         }
       });
     }
-
-    // Alternative: Falls keine direkte hide-Methode existiert
-    // Über DOM-Elemente ausblenden
-    document.querySelectorAll(".statusbar").forEach(bar => {
-      bar.style.display = "none";
-    });
   }
 
   // Restart-Button anzeigen
