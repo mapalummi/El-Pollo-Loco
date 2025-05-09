@@ -1,7 +1,6 @@
 let canvas;
 let ctx; // NEU
 let world;
-let gameMusic;
 let gameOver = false; // Spielstatus
 const keyboard = new Keyboard();
 
@@ -9,11 +8,6 @@ function init() {
   initLevel();
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
-
-  //NOTE: Alte Audiofunktion
-  // gameMusic = new Sound("audio/fast-rocky-loop-1.mp3");
-  // gameMusic.enableLoop(); // Schleifenwiedergabe aktivieren
-  // console.log("Audio geladen", gameMusic.sound.src);
 
   // Lade und zeige den Startscreen
   const startScreenImage = new Image();
@@ -25,7 +19,6 @@ function init() {
   };
 }
 
-// Starttext
 function drawStartText() {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
@@ -37,10 +30,6 @@ function drawStartText() {
 function startGame() {
   world = new World(canvas, keyboard);
 
-  // Alte Audiofunktion
-  // gameMusic.play();
-  // gameMusic.setVolume(0.1);
-
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
 
   gameOver = false; // Gameover zurücksetzen
@@ -48,17 +37,7 @@ function startGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
-// Erst mal rausgenommen!
-// Pause/Resume Audio wenn anderer Tab
-// document.addEventListener("visibilitychange", () => {
-//   if (document.hidden) {
-//     gameMusic.stop();
-//   } else {
-//     gameMusic.play().catch(e => console.log("Auto-resume prevented:", e));
-//   }
-// });
-
-//NOTE: NEU
+// NEU
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     AudioHub.stopOne(AudioHub.GAMEAUDIO);
@@ -68,16 +47,16 @@ document.addEventListener("visibilitychange", () => {
 });
 
 //NOTE: Muss evtl. noch ausgebessert werden !!!
-function showGameOverScreen(hasWon) {
-  console.log("Game over screen called, hasWon:", hasWon); // Debug-Info
-
-  //NOTE: Alte Audiofunktion
-  // if (gameOver) return;
-  // gameOver = true;
-  // gameMusic.stop();
-
+function showGameOverScreen() {
   gameOver = true;
   AudioHub.stopOne(AudioHub.GAMEAUDIO);
+
+  //TODO: Unterschiedliche Audio Effekte je nach Spielausgang
+  // if (hasWon) {
+  //   AudioHub.playOnce(AudioHub.VICTORY_SOUND);
+  // } else {
+  //   AudioHub.playOnce(AudioHub.GAMEOVER_SOUND);
+  // }
 
   // Behalte nur den Hintergrund, entferne alle anderen Objekte
   if (world) {
@@ -86,15 +65,10 @@ function showGameOverScreen(hasWon) {
     world.level.coins = [];
     world.level.bottles = [];
 
-    //CHECK:
     // Wolken-Rendering explizit deaktivieren
     world.stopDrawingClouds = true;
 
-    // Spieler-Objekt unsichtbar machen (falls vorhanden)
-    if (world.character) {
-      world.character.y = 800; // Außerhalb des sichtbaren Bereichs verschieben
-    }
-
+    //TODO: Funktioniert nicht!
     // Statusleisten ausblenden
     if (world.statusBars) {
       world.statusBars.forEach(bar => {
@@ -130,12 +104,6 @@ function restartGame() {
     clearInterval(i);
   }
 
-  //NOTE:
-  // Stop audio to prevent the AbortError
-  // if (gameMusic) {
-  //   gameMusic.stop();
-  // }
-
   // Complete reset: destroy current world
   world = null;
 
@@ -146,12 +114,11 @@ function restartGame() {
   initLevel();
 
   // Start fresh game after a brief pause
-  CHECK: setTimeout(() => {
+  setTimeout(() => {
     world = new World(canvas, keyboard);
     world.stopDrawingClouds = false; // Flag zurücksetzen
-    //NOTE:
-    // gameMusic.play();
-    // Audio.playOne(Audio.GAMEAUDIO);
+    //TODO:
+    AudioHub.playLoop(Audio.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
 }

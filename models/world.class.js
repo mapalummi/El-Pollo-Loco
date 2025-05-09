@@ -43,8 +43,6 @@ class World {
     // Initialisiere den Endboss-Zustand
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (endboss) {
-      // Don't set alert initially if we want the endboss to be hidden
-      // Just initialize the health bar
       this.endbossBar.setPercentage(endboss.energy);
       this.endbossBar.isVisible = false; // Hide the bar initially
     }
@@ -147,7 +145,6 @@ class World {
 
         //TODO:
         //Soundeffekt (später)
-        // this.playCoinSound();
 
         return false; // Entferne den Coin
       }
@@ -167,7 +164,6 @@ class World {
 
         //TODO:
         //Soundeffekt (später)
-        // this.playBottleSound();
 
         return false; // Entferne Bottle
       }
@@ -337,8 +333,6 @@ class World {
     if (this.endbossTriggered) {
       this.endbossBar.isVisible = true;
 
-      // REMOVED THE EARLY RETURN HERE
-      // Only skip behavior update if endboss is not hurt and not recently hit
       if (endboss.x > this.levelWidth - 500 && !endboss.isHurt && !endboss.wasHitRecently) {
         return;
       }
