@@ -66,14 +66,11 @@ function startGame() {
 // });
 
 //NEU:
-// Add this in your main script file or where you initialize your game
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
-    // User switched to another tab
-    AudioHub.stopAll();
+    AudioHub.muteAll();
   } else {
-    // User returned to this tab
-    AudioHub.resumeAll();
+    AudioHub.unmuteAll();
   }
 });
 
@@ -90,10 +87,10 @@ function showGameOverScreen(hasWon) {
 
   if (hasWon) {
     AudioHub.playOne(AudioHub.WIN);
-    console.log("Victory sound played");
+    // console.log("Victory sound played");
   } else {
     AudioHub.playOne(AudioHub.GAMEOVER);
-    console.log("Gameover sound played");
+    // console.log("Gameover sound played");
   }
 
   // Behalte nur den Hintergrund, entferne alle anderen Objekte

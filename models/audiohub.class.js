@@ -33,7 +33,6 @@ class AudioHub {
     WIN: 0.2,
     LOST: 0.2,
     GAMEOVER: 0.2,
-    // Weitere Sounds hier definieren...
   };
 
   static allSounds = [
@@ -55,7 +54,8 @@ class AudioHub {
     AudioHub.GAMEOVER,
   ];
 
-  static activeSounds = new Set();
+  // Statische Variable für den aktuell abgespielten Tasten-Sound
+  static currentKeySound = null;
 
   // Spielt eine einzelne Audiodatei ab
   //   static playOne(sound) {
@@ -83,13 +83,6 @@ class AudioHub {
       sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       sound.currentTime = 0;
       sound.play();
-      //NEU:
-      AudioHub.activeSounds.add(sound); // Füge den Sound zur aktiven Liste hinzu
-
-      //NEU:
-      sound.onended = () => {
-        if (!sound.loop) AudioHub.activeSounds.delete(sound);
-      };
     }
   }
 
@@ -98,21 +91,16 @@ class AudioHub {
     if (sound.readyState == 4) {
       // Finde den Namen des Sounds
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
-      // Verwende die spezifische Lautstärke oder 0.2 als Standard
       sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       sound.loop = true; // Aktiviert die Loop-Funktion
       sound.currentTime = 0;
       sound.play();
-      //NEU:
-      AudioHub.activeSounds.add(sound);
     }
   }
 
   // Stoppt das Abspielen einer einzelnen Audiodatei
   static stopOne(sound) {
     sound.pause(); // Pausiert das übergebene Audio
-    //NEU:
-    AudioHub.activeSounds.delete(sound);
   }
 
   // Stoppt das Abspielen ALLER Audiodateien
@@ -123,11 +111,11 @@ class AudioHub {
   }
 
   //TEST
-  static resumeAll() {
-    AudioHub.activeSounds.forEach(sound => {
-      sound.play().catch(e => console.log("Auto-resume prevented:", e));
-    });
-  }
+  // static resumeAll() {
+  //   AudioHub.allSounds.forEach(sound => {
+  //     sound.play().catch(e => console.log("Auto-resume prevented:", e));
+  //   });
+  // }
 
   static resume(sound) {
     sound.play().catch(e => console.log("Auto-resume prevented:", e));
@@ -137,7 +125,7 @@ class AudioHub {
   // Spielt einen Sound ab, solange eine Taste gedrückt wird
   static playWhileKeyPressed(sound) {
     if (sound.readyState == 4) {
-      sound.volume = 0.2;
+      // sound.volume = 0.2;
       sound.currentTime = 0;
       sound.play();
 
@@ -155,6 +143,30 @@ class AudioHub {
     }
   }
 
-  // Statische Variable für den aktuell abgespielten Tasten-Sound
-  static currentKeySound = null;
+  // NEU:
+  static muteAll() {
+    // Mute all sounds without stopping them
+    AudioHub.allSounds.forEach(sound => {
+      // Save the original volume first (if not already saved)
+      if (sound._originalVolume === undefined) {
+        sound._originalVolume = sound.volume;
+      }
+      // Set volume to 0 (mute)
+      sound.volume = 0;
+    });
+  }
+
+  static unmuteAll() {
+    // Restore original volumes
+    AudioHub.allSounds.forEach(sound => {
+      if (sound._originalVolume !== undefined) {
+        // Get the sound name for volume settings
+        const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+        // Restore original volume
+        sound.volume = sound._originalVolume;
+        // Clear stored original volume
+        delete sound._originalVolume;
+      }
+    });
+  }
 }

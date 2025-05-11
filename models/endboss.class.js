@@ -61,6 +61,9 @@ class Endboss extends MovableObject {
   hitCooldownTimer = null;
   hitAlertDuration = 2000;
 
+  isAttackCooldown = false;
+  attackCooldownDuration = 3000;
+
   constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
@@ -190,13 +193,41 @@ class Endboss extends MovableObject {
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
+  // startAttacking() {
+  //   if (!this.isDead && !this.isHurt) {
+  //     this.isAttacking = true;
+  //     this.isWalking = false;
+  //     this.isAlert = false;
+  //     AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
+
+  //     setTimeout(() => {
+  //       if (!this.isDead && !this.isHurt) {
+  //         this.isAttacking = false;
+  //         // Verhalten basierend auf Distanz neu evaluieren
+  //         if (this.world) {
+  //           const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+  //           this.world.updateEndbossBehavior(this, distanceToPlayer);
+  //         } else {
+  //           this.isAlert = true; // Fallback
+  //         }
+  //       }
+  //     }, this.IMAGES_ATTACK.length * 100);
+  //   }
+  // }
+
+  //NEU:
   startAttacking() {
-    if (!this.isDead && !this.isHurt) {
+    // Only allow attack if not dead, not hurt, and not on cooldown
+    if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
       this.isAttacking = true;
       this.isWalking = false;
       this.isAlert = false;
       AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
 
+      // Set attack on cooldown immediately
+      this.isAttackOnCooldown = true;
+
+      // Animation duration timer
       setTimeout(() => {
         if (!this.isDead && !this.isHurt) {
           this.isAttacking = false;
@@ -209,6 +240,11 @@ class Endboss extends MovableObject {
           }
         }
       }, this.IMAGES_ATTACK.length * 100);
+
+      // Reset cooldown after the specified duration
+      setTimeout(() => {
+        this.isAttackOnCooldown = false;
+      }, this.attackCooldownDuration);
     }
   }
 
