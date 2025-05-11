@@ -188,10 +188,43 @@ class World {
     // console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
+  // Original:
+  // checkGameStatus() {
+  //   // Verlust-Bedingung: Character ist tot
+  //   if (this.character.energy <= 0) {
+  //     showGameOverScreen(false); // Verloren
+  //     return;
+  //   }
+
+  //   // Gewinn-Bedingung: Endboss besiegt
+  //   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+
+  //   // Wenn Endboss existiert und seine Energie aufgebraucht ist
+  //   if (endboss && endboss.energy <= 0 && !this.gameEnded) {
+  //     console.log("Endboss wurde besiegt!", endboss);
+  //     this.gameEnded = true; // Verhindert mehrfaches Auslösen
+
+  //     // Warten auf Abschluss der Todesanimation, bevor GameOver gezeigt wird
+  //     const animationDuration = endboss.IMAGES_DEAD.length * 200; // Gleiche Zeit wie in die()
+  //     setTimeout(() => {
+  //       showGameOverScreen(true); // Gewonnen
+  //     }, animationDuration);
+
+  //     return;
+  //   }
+  // }
+
+  // Neuere Version:
   checkGameStatus() {
     // Verlust-Bedingung: Character ist tot
-    if (this.character.energy <= 0) {
-      showGameOverScreen(false); // Verloren
+    if (this.character.energy <= 0 && !this.gameEnded) {
+      this.gameEnded = true; // Prevent multiple triggers
+
+      // Wait for death animation to complete
+      const animationDuration = this.character.IMAGES_DEAD.length * 100;
+      setTimeout(() => {
+        showGameOverScreen(false); // Verloren
+      }, animationDuration);
       return;
     }
 
@@ -213,7 +246,6 @@ class World {
     }
   }
 
-  // ORIGINAL:
   draw() {
     // this.clouds.forEach(cloud => cloud.draw(this.ctx)); //Kann das weg!?
 

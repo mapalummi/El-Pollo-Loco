@@ -20,9 +20,12 @@ function init() {
   };
 
   //NOTE:
-  // Event-Listener (nur einmal einrichten)
   document.addEventListener("keydown", e => {
     if (e.repeat) return;
+
+    //NEU
+    // Skip keyboard input if game is over with victory
+    if (gameOver && world && world.ignoreControls) return;
 
     if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
       AudioHub.playWhileKeyPressed(AudioHub.WALK);
@@ -30,6 +33,10 @@ function init() {
   });
 
   document.addEventListener("keyup", e => {
+    //NEU
+    // Skip keyboard input if game is over with victory
+    if (gameOver && world && world.ignoreControls) return;
+
     if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
       AudioHub.stopKeySound();
     }
@@ -87,29 +94,37 @@ function showGameOverScreen(hasWon) {
 
   if (hasWon) {
     AudioHub.playOne(AudioHub.WIN);
-    // console.log("Victory sound played");
+    //NEU:
+    // Freeze the character when the boss is defeated
+    if (world && world.character) {
+      world.character.isFrozen = true;
+
+      // Disable keyboard controls
+      keyboard.RIGHT = false;
+      keyboard.LEFT = false;
+      keyboard.UP = false;
+      keyboard.DOWN = false;
+      keyboard.SPACE = false;
+      keyboard.D = false;
+
+      // Additional flag to ignore new keyboard inputs
+      world.ignoreControls = true;
+    }
   } else {
     AudioHub.playOne(AudioHub.GAMEOVER);
-    // console.log("Gameover sound played");
   }
 
   // Behalte nur den Hintergrund, entferne alle anderen Objekte
   if (world) {
-    // NEU - Speichere toten Endboss, falls vorhanden
-    const deadEndboss = world.level.enemies.find(enemy => enemy instanceof Endboss && enemy.isDead);
-
-    // world.level.enemies = [];
-    world.level.enemies = deadEndboss ? [deadEndboss] : [];
-
     world.level.clouds = [];
     world.level.coins = [];
     world.level.bottles = [];
+    world.level.enemies = [];
 
     // Wolken-Rendering explizit deaktivieren
     world.stopDrawingClouds = true;
 
-    //TODO: Funktioniert nicht!
-    // Statusleisten ausblenden
+    //TODO: Statusleisten ausblenden - funktioniert nicht!
     if (world.statusBars) {
       world.statusBars.forEach(bar => {
         if (bar && typeof bar.hide === "function") {

@@ -56,13 +56,17 @@ class Endboss extends MovableObject {
   isAlert = false;
   isDeathAnimationComplete = false;
 
-  //NOTE: NEU TEST
+  //NOTE: NEU
   wasHitRecently = false;
   hitCooldownTimer = null;
   hitAlertDuration = 2000;
 
   isAttackCooldown = false;
   attackCooldownDuration = 3000;
+
+  JUMP_HEIGHT = 150;
+  JUMP_DURATION = 1000;
+  JUMP_SPEED = 15;
 
   constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
@@ -110,35 +114,6 @@ class Endboss extends MovableObject {
     this.playAnimation(this.IMAGES_ATTACK);
     // this.getRealFrame();
   }
-
-  //NOTE:
-  // animate() {
-  //   setInterval(() => {
-  //     this.getRealFrame();
-
-  //     // STATE PRIORITY HIERARCHY (most important first)
-  //     if (this.isDead) {
-  //       // Wenn Todesanimation noch nicht abgeschlossen, spiele sie ab
-  //       if (!this.isDeathAnimationComplete) {
-  //         this.playAnimation(this.IMAGES_DEAD);
-  //       }
-  //     } else if (this.isHurt) {
-  //       this.endbossHurtAnimation();
-  //     } else if (this.wasHitRecently) {
-  //       // Ensure alert animation plays when recently hit, regardless of other states
-  //       this.isAlert = true;
-  //       this.isAttacking = false;
-  //       this.isWalking = false;
-  //       this.endbossAlertAnimation();
-  //     } else if (this.isAttacking) {
-  //       this.endbossAttackAnimation();
-  //     } else if (this.isWalking) {
-  //       this.endbossWalkAnimation();
-  //     } else if (this.isAlert) {
-  //       this.endbossAlertAnimation();
-  //     }
-  //   }, 100);
-  // }
 
   animate() {
     // Animation-Intervall speichern, damit es nicht gelöscht werden kann
@@ -193,6 +168,7 @@ class Endboss extends MovableObject {
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
+  // ALT:
   // startAttacking() {
   //   if (!this.isDead && !this.isHurt) {
   //     this.isAttacking = true;
@@ -217,7 +193,6 @@ class Endboss extends MovableObject {
 
   //NEU:
   startAttacking() {
-    // Only allow attack if not dead, not hurt, and not on cooldown
     if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
       this.isAttacking = true;
       this.isWalking = false;
@@ -227,8 +202,45 @@ class Endboss extends MovableObject {
       // Set attack on cooldown immediately
       this.isAttackOnCooldown = true;
 
+      // Store original position and calculate jump trajectory
+      const originalY = this.y;
+      const originalX = this.x;
+      const jumpStartTime = new Date().getTime();
+
+      // Determine direction to jump (toward character)
+      let direction = 1; // Default: right
+      if (this.world && this.world.character) {
+        direction = this.world.character.x > this.x ? 1 : -1;
+        this.otherDirection = direction < 0;
+      }
+
+      // Create jump interval
+      const jumpInterval = setInterval(() => {
+        const currentTime = new Date().getTime();
+        const elapsedTime = currentTime - jumpStartTime;
+
+        // Calculate vertical position (parabolic trajectory)
+        const jumpProgress = elapsedTime / this.JUMP_DURATION;
+
+        if (jumpProgress <= 1) {
+          // Parabola: y = 4h * (x - x²) where h is jump height
+          const verticalOffset = 4 * this.JUMP_HEIGHT * (jumpProgress - jumpProgress * jumpProgress);
+          this.y = originalY - verticalOffset;
+
+          // Move horizontally toward character
+          this.x += direction * this.JUMP_SPEED * (1 - Math.abs(jumpProgress - 0.5) * 2);
+        } else {
+          // Jump complete, clear interval and reset position
+          clearInterval(jumpInterval);
+          this.y = originalY;
+        }
+      }, 16); // ~60fps update
+
       // Animation duration timer
       setTimeout(() => {
+        clearInterval(jumpInterval); // Ensure jump interval is cleared
+        this.y = originalY; // Reset vertical position
+
         if (!this.isDead && !this.isHurt) {
           this.isAttacking = false;
           // Verhalten basierend auf Distanz neu evaluieren

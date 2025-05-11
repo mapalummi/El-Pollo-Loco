@@ -12,6 +12,7 @@ class Character extends MovableObject {
   //NEU
   isWalking = false;
   currentAnimation = null; // Trackt die aktuell aktive Animation
+  isFrozen = false; // Trackt den Frozen Zustand.
 
   offset = {
     top: 100,
@@ -102,11 +103,62 @@ class Character extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
-  //NEU TEST
+  //ALT:
+  // animate() {
+  //   setInterval(() => {
+  //     if (this.isDead()) return; // Steuerung deaktivieren, wenn der Charakter tot ist
+
+  //     // Reset walking state at the beginning of each frame
+  //     this.isWalking = false;
+
+  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+  //       this.moveRight();
+  //       this.otherDirection = false;
+  //     }
+
+  //     if (this.world.keyboard.LEFT && this.x > 0) {
+  //       this.moveLeft();
+  //       this.otherDirection = true;
+  //     }
+
+  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+  //       this.jump();
+  //     }
+
+  //     this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
+  //     this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
+  //   }, 1000 / 60);
+
+  //   // Animation state management
+  //   setInterval(() => {
+  //     if (this.isDead()) {
+  //       if (!this.isDeadAnimationComplete) {
+  //         this.startAnimation("dead");
+  //       }
+  //       return;
+  //     }
+
+  //     if (this.isDeadAnimationComplete) return;
+
+  //     if (this.isHurt()) {
+  //       this.startAnimation("hurt");
+  //     } else if (this.isAboveGround()) {
+  //       this.startAnimation("jumping");
+  //     } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+  //       this.startAnimation("sleep");
+  //     } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+  //       this.startAnimation("idle");
+  //     } else if (this.isWalking) {
+  //       this.startAnimation("walking");
+  //     }
+  //   }, 200);
+  // }
+
+  // NEU:
   animate() {
-    // Movement logic
     setInterval(() => {
-      if (this.isDead()) return; // Steuerung deaktivieren, wenn der Charakter tot ist
+      // Add check for frozen state along with death check
+      if (this.isDead() || this.isFrozen) return; // Skip movement if frozen or dead
 
       // Reset walking state at the beginning of each frame
       this.isWalking = false;
@@ -131,12 +183,16 @@ class Character extends MovableObject {
 
     // Animation state management
     setInterval(() => {
+      // Check for death first
       if (this.isDead()) {
         if (!this.isDeadAnimationComplete) {
           this.startAnimation("dead");
         }
         return;
       }
+
+      // If frozen, keep current animation frame but don't switch animations
+      if (this.isFrozen) return;
 
       if (this.isDeadAnimationComplete) return;
 

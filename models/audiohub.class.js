@@ -19,7 +19,7 @@ class AudioHub {
   static soundVolumes = {
     GAMEAUDIO: 0.5,
     SLEEP: 0.1,
-    WALK: 0.15,
+    WALK: 0.1,
     JUMP: 0.3,
     HURT: 0.25,
     DEAD: 0.3,
@@ -64,7 +64,6 @@ class AudioHub {
   //     sound.play(); // Spielt das übergebene Sound-Objekt ab
   //   }
 
-  //NEU
   // Spielt eine einzelne Audiodatei ab, - wenn sie bereit ist -
   // static playOne(sound) {
   //   if (sound.readyState == 4) {
@@ -125,7 +124,7 @@ class AudioHub {
   // Spielt einen Sound ab, solange eine Taste gedrückt wird
   static playWhileKeyPressed(sound) {
     if (sound.readyState == 4) {
-      // sound.volume = 0.2;
+      sound.volume = 0.2;
       sound.currentTime = 0;
       sound.play();
 
