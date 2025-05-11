@@ -19,8 +19,8 @@ function init() {
     document.getElementById("startButton").style.display = "block";
   };
 
-  //NOTE: NEU
-  // Event-Listener nur einmal einrichten
+  //NOTE:
+  // Event-Listener (nur einmal einrichten)
   document.addEventListener("keydown", e => {
     if (e.repeat) return;
 
@@ -54,12 +54,26 @@ function startGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
-//TODO: Nur für einzelne Sounds möglich?
+//TODO: Soll alle Sounds pausieren!!!
+// document.addEventListener("visibilitychange", () => {
+//   if (document.hidden) {
+//     // AudioHub.stopOne(AudioHub.GAMEAUDIO);
+//     AudioHub.stopAll();
+//   } else {
+//     // AudioHub.resume(AudioHub.GAMEAUDIO).catch(e => console.log("Auto-resume prevented:", e));
+//     AudioHub.resumeAll().catch(e => console.log("Auto-resume prevented:", e));
+//   }
+// });
+
+//NEU:
+// Add this in your main script file or where you initialize your game
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
-    AudioHub.stopOne(AudioHub.GAMEAUDIO);
+    // User switched to another tab
+    AudioHub.stopAll();
   } else {
-    AudioHub.resume(AudioHub.GAMEAUDIO).catch(e => console.log("Auto-resume prevented:", e));
+    // User returned to this tab
+    AudioHub.resumeAll();
   }
 });
 

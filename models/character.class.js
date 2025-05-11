@@ -158,6 +158,12 @@ class Character extends MovableObject {
     // If already running this animation, don't restart it
     if (this.currentAnimation === animationType) return;
 
+    //NEU:
+    // Check if we need to stop sleep sound when changing animations
+    if (this.currentAnimation === "sleep") {
+      AudioHub.stopOne(AudioHub.SLEEP);
+    }
+
     // Clear any existing animation interval
     if (this.animationInterval) {
       clearInterval(this.animationInterval);
@@ -183,8 +189,7 @@ class Character extends MovableObject {
         this.idleAnimation();
         break;
       case "sleep":
-        //CHECK: Soll nur schnarchen, wenn er schläft !!!!
-        // AudioHub.playOne(AudioHub.SLEEP);
+        AudioHub.playLoop(AudioHub.SLEEP);
         this.sleepAnimation();
         break;
       case "dead":

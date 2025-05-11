@@ -55,6 +55,8 @@ class AudioHub {
     AudioHub.GAMEOVER,
   ];
 
+  static activeSounds = new Set();
+
   // Spielt eine einzelne Audiodatei ab
   //   static playOne(sound) {
   //     sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20% / 1 = 100%
@@ -81,26 +83,15 @@ class AudioHub {
       sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       sound.currentTime = 0;
       sound.play();
+      //NEU:
+      AudioHub.activeSounds.add(sound); // Füge den Sound zur aktiven Liste hinzu
+
+      //NEU:
+      sound.onended = () => {
+        if (!sound.loop) AudioHub.activeSounds.delete(sound);
+      };
     }
   }
-
-  // Spielt eine Audiodatei in einer Endlosschleife ab
-  // static playLoop(sound) {
-  //   sound.loop = true; // Aktiviert die Loop-Funktion
-  //   sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20%
-  //   sound.currentTime = 0; // Startet vom Anfang
-  //   sound.play(); // Spielt das Audio ab
-  // }
-
-  //NEU
-  // static playLoop(sound) {
-  //   if (sound.readyState == 4) {
-  //     sound.loop = true; // Aktiviert die Loop-Funktion
-  //     sound.volume = 0.2;
-  //     // sound.currentTime = 0; //Funktioniert nicht!
-  //     sound.play();
-  //   }
-  // }
 
   // Modifiziertes playLoop
   static playLoop(sound) {
@@ -109,30 +100,40 @@ class AudioHub {
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
       // Verwende die spezifische Lautstärke oder 0.2 als Standard
       sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+      sound.loop = true; // Aktiviert die Loop-Funktion
       sound.currentTime = 0;
       sound.play();
+      //NEU:
+      AudioHub.activeSounds.add(sound);
     }
-  }
-
-  // Stoppt das Abspielen aller Audiodateien
-  static stopAll() {
-    AudioHub.allSounds.forEach(sound => {
-      sound.pause(); // Pausiert jedes Audio in der Liste
-    });
-    document.getElementById("volume").value = 0.2; // Setzt den Sound-Slider wieder auf 0.2
   }
 
   // Stoppt das Abspielen einer einzelnen Audiodatei
   static stopOne(sound) {
     sound.pause(); // Pausiert das übergebene Audio
+    //NEU:
+    AudioHub.activeSounds.delete(sound);
+  }
+
+  // Stoppt das Abspielen ALLER Audiodateien
+  static stopAll() {
+    AudioHub.allSounds.forEach(sound => {
+      sound.pause(); // Pausiert jedes Audio in der Liste
+    });
+  }
+
+  //TEST
+  static resumeAll() {
+    AudioHub.activeSounds.forEach(sound => {
+      sound.play().catch(e => console.log("Auto-resume prevented:", e));
+    });
   }
 
   static resume(sound) {
     sound.play().catch(e => console.log("Auto-resume prevented:", e));
   }
 
-  //NOTE: NEU
-
+  // NEU:
   // Spielt einen Sound ab, solange eine Taste gedrückt wird
   static playWhileKeyPressed(sound) {
     if (sound.readyState == 4) {
@@ -140,7 +141,7 @@ class AudioHub {
       sound.currentTime = 0;
       sound.play();
 
-      // Speichern Sie den Sound, damit er beim Loslassen der Taste gestoppt werden kann
+      // Speichert den Sound, damit er beim Loslassen der Taste gestoppt werden kann
       AudioHub.currentKeySound = sound;
     }
   }
