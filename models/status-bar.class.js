@@ -1,6 +1,7 @@
 class StatusBar extends DrawableObject {
   IMAGES = [];
   percentage = 100;
+  isVisible = true;
 
   //NEU
   constructor(images, x, y) {
@@ -35,5 +36,9 @@ class StatusBar extends DrawableObject {
     } else {
       return 0;
     }
+  }
+
+  hide() {
+    this.isVisible = false;
   }
 }

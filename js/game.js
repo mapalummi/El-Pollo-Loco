@@ -124,13 +124,18 @@ function showGameOverScreen(hasWon) {
     // Wolken-Rendering explizit deaktivieren
     world.stopDrawingClouds = true;
 
-    //TODO: Statusleisten ausblenden - funktioniert nicht!
-    if (world.statusBars) {
-      world.statusBars.forEach(bar => {
-        if (bar && typeof bar.hide === "function") {
-          bar.hide();
-        }
-      });
+    // NEU - Hide each status bar individually
+    if (world.healthBar && typeof world.healthBar.hide === "function") {
+      world.healthBar.hide();
+    }
+    if (world.bottleBar && typeof world.bottleBar.hide === "function") {
+      world.bottleBar.hide();
+    }
+    if (world.coinBar && typeof world.coinBar.hide === "function") {
+      world.coinBar.hide();
+    }
+    if (world.endbossBar && typeof world.endbossBar.hide === "function") {
+      world.endbossBar.hide();
     }
   }
 

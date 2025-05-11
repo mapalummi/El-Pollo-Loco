@@ -283,9 +283,23 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
 
-    this.addToMap(this.bottleBar);
-    this.addToMap(this.coinBar);
-    this.addToMap(this.healthBar);
+    // this.addToMap(this.bottleBar);
+    // this.addToMap(this.coinBar);
+    // this.addToMap(this.healthBar);
+    // if (this.endbossBar.isVisible) {
+    //   this.addToMap(this.endbossBar);
+    // }
+
+    // NEU - Only draw status bars if they're visible
+    if (this.bottleBar.isVisible) {
+      this.addToMap(this.bottleBar);
+    }
+    if (this.coinBar.isVisible) {
+      this.addToMap(this.coinBar);
+    }
+    if (this.healthBar.isVisible) {
+      this.addToMap(this.healthBar);
+    }
     if (this.endbossBar.isVisible) {
       this.addToMap(this.endbossBar);
     }
