@@ -64,7 +64,6 @@ class MovableObject extends DrawableObject {
     this.x -= this.speed;
   }
 
-  //NEU:
   jump() {
     if (this.isDead()) return; // Springen verhindern, wenn der Charakter tot ist
     if (!this.isAboveGround()) {
@@ -72,7 +71,6 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  //NEU
   takeDamage(amount) {
     this.energy -= amount;
     if (this.energy < 0) {
@@ -84,7 +82,6 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  // NEU:
   playAnimation(images) {
     if (!this.img) return; // Animation stoppen, wenn kein Bild vorhanden ist
     let i = this.currentImage % images.length; // Zyklisches Wechseln der Bilder

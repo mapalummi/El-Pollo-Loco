@@ -48,7 +48,6 @@ class World {
     }
   }
 
-  //NEU
   createClouds() {
     const clouds = [];
     for (let i = 0; i < 10; i++) {
@@ -188,32 +187,6 @@ class World {
     // console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
-  // Original:
-  // checkGameStatus() {
-  //   // Verlust-Bedingung: Character ist tot
-  //   if (this.character.energy <= 0) {
-  //     showGameOverScreen(false); // Verloren
-  //     return;
-  //   }
-
-  //   // Gewinn-Bedingung: Endboss besiegt
-  //   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-
-  //   // Wenn Endboss existiert und seine Energie aufgebraucht ist
-  //   if (endboss && endboss.energy <= 0 && !this.gameEnded) {
-  //     console.log("Endboss wurde besiegt!", endboss);
-  //     this.gameEnded = true; // Verhindert mehrfaches Auslösen
-
-  //     // Warten auf Abschluss der Todesanimation, bevor GameOver gezeigt wird
-  //     const animationDuration = endboss.IMAGES_DEAD.length * 200; // Gleiche Zeit wie in die()
-  //     setTimeout(() => {
-  //       showGameOverScreen(true); // Gewonnen
-  //     }, animationDuration);
-
-  //     return;
-  //   }
-  // }
-
   // Neuere Version:
   checkGameStatus() {
     // Verlust-Bedingung: Character ist tot
@@ -247,8 +220,6 @@ class World {
   }
 
   draw() {
-    // this.clouds.forEach(cloud => cloud.draw(this.ctx)); //Kann das weg!?
-
     // Löscht das verherige Canvas:
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -261,8 +232,6 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
 
     this.ctx.translate(this.camera_x, 0);
-    // this.addObjectsToMap(this.clouds); //Kann das raus!?
-    //CHECK:
     // Wolken nur zeichnen, wenn nicht gestoppt
     if (!this.stopDrawingClouds) {
       // Verwende BEIDE Wolkenarten

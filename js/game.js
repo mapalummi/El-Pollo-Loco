@@ -84,7 +84,6 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-//NOTE: Muss ausgebessert werden !!!
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
 
