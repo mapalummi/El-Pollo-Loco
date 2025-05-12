@@ -66,7 +66,14 @@ class World {
       this.checkThrowObjects();
       this.checkEndbossVisibility();
       this.checkLevelEndReached();
-      this.checkGameStatus(); // NEU !!!
+      this.checkGameStatus();
+
+      //NEU:
+      this.level.enemies.forEach(enemy => {
+        if ((enemy instanceof Chicken || enemy instanceof LittleChicken) && !enemy.isDead && typeof enemy.update === "function") {
+          enemy.update();
+        }
+      });
 
       // Bewege den Endboss, wenn er im Walking-Modus ist
       const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);

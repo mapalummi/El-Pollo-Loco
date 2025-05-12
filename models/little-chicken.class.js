@@ -5,6 +5,12 @@ class LittleChicken extends MovableObject {
   height = 60;
   isDead = false;
 
+  //NEU
+  jumpProbability = 0.02; // 2% chance (more jumpy than regular chickens)
+  isJumping = false;
+  initialY = 390; // Adjust based on little chicken's height
+  speedY = 0;
+
   offset = {
     top: 5,
     right: 5,
@@ -65,5 +71,33 @@ class LittleChicken extends MovableObject {
         world.level.enemies.splice(index, 1); // Entfernt LittleChicken aus dem Array
       }
     }, 2000);
+  }
+
+  //NEU
+  update() {
+    if (!this.isJumping && !this.isDead && Math.random() < this.jumpProbability) {
+      this.jump();
+    }
+
+    if (this.isJumping) {
+      this.speedY -= 1;
+      this.y -= this.speedY;
+
+      if (this.y >= this.initialY) {
+        this.y = this.initialY;
+        this.speedY = 0;
+        this.isJumping = false;
+      }
+    }
+  }
+
+  // Add the jump method
+  jump() {
+    this.isJumping = true;
+    this.speedY = 12; // Smaller jump for little chickens
+
+    if (!this.initialY || this.initialY > this.y) {
+      this.initialY = this.y;
+    }
   }
 }

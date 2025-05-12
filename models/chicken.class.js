@@ -5,6 +5,12 @@ class Chicken extends MovableObject {
   height = 80;
   isDead = false;
 
+  //NEU:
+  jumpProbability = 0.01; // 1% Chance update jump
+  isJumping = false;
+  initialY = 370;
+  speedY = 0;
+
   offset = {
     top: 20,
     right: 5,
@@ -65,5 +71,52 @@ class Chicken extends MovableObject {
         world.level.enemies.splice(index, 1); // Entfernt Chicken aus dem Array
       }
     }, 2000);
+  }
+
+  //NEU:
+  update() {
+    if (!this.isJumping && !this.isDead && Math.random() < this.jumpProbability) {
+      this.jump();
+    }
+
+    if (this.isJumping) {
+      this.speedY -= 1;
+    }
+
+    this.y -= this.speedY;
+
+    if (this.y >= this.initialY) {
+      this.y = this.initialY;
+      this.speedY = 0;
+      this.isJumping = false;
+    }
+  }
+
+  jump() {
+    this.isJumping = true;
+    this.speedY = 15;
+
+    if (!this.initialY || this.initialY > this.y) {
+      this.initialY = this.y;
+    }
+
+    // setTimeout(() => {
+    //   this.isJumping = false;
+    // }, 1000);
+  }
+
+  move() {
+    super.move(); // ?
+
+    // if (this.isJumping) {
+    //   this.y -= this.SpeedY;
+    //   this.speedY -= 1;
+
+    //   if (this.y >= this.initialY) {
+    //     this.y = this.initialY;
+    //     this.speedy = 0;
+    //     this.isJumping = false;
+    //   }
+    // }
   }
 }
