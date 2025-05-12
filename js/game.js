@@ -86,6 +86,7 @@ function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
 
   gameOver = true;
+  showDialog(); // NEU
   AudioHub.stopOne(AudioHub.GAMEAUDIO);
 
   if (!gameOverSoundPlayed) {
@@ -145,7 +146,7 @@ function showGameOverScreen(hasWon) {
 
 function restartGame() {
   gameOverSoundPlayed = false;
-
+  hideDialog(); // NEU
   document.getElementById("restartButton").style.display = "none";
 
   // Reset game state - set this FIRST to prevent any new game over triggers
@@ -180,4 +181,14 @@ function restartGame() {
     AudioHub.playLoop(AudioHub.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
+}
+
+function showDialog() {
+  document.getElementById("win_overlay").classList.remove("d_none");
+  document.body.style.overflow = "hidden"; // Prevent background scrolling
+}
+
+function hideDialog() {
+  document.getElementById("win_overlay").classList.add("d_none");
+  document.body.style.overflow = "auto"; // Re-enable scrolling
 }

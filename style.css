@@ -12,6 +12,10 @@ body {
   background-color: #000;
 }
 
+.d_none {
+  display: none !important;
+}
+
 h1 {
   color: #a0220a;
   margin: 0;
@@ -67,6 +71,16 @@ canvas {
   color: #ffcc00; /* Goldene Farbe beim Hover */
   transform: scale(1.05); /* Leichte Vergrößerung */
   transition: all 0.2s ease-in-out;
+}
+
+#win_overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.762);
+  transition: opacity 300ms ease-in-out;
 }
 
 button {
