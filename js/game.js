@@ -301,20 +301,22 @@ function hideDialog() {
  */
 function toggleSound() {
   const soundIcon = document.getElementById("soundIcon");
-  const isMuted = soundIcon.src.includes("sound-on.png");
+
+  // Keep track of mute state with a data attribute instead of trying to parse the image source
+  let isMuted = soundIcon.getAttribute("data-muted") === "true";
 
   if (isMuted) {
-    soundIcon.src = "icons/icons8-stumm.png";
-    // Code to mute the game audio
-    if (typeof world !== "undefined" && world.audioHub) {
-      world.audioHub.muteAll();
-    }
+    // Currently muted, so unmute
+    soundIcon.src = "icons/icons8-stumm.png"; // Change to sound-on icon
+    soundIcon.setAttribute("data-muted", "false");
+    AudioHub.unmuteAll();
+    console.log("Sound unmuted");
   } else {
-    soundIcon.src = "icons/icons8-stumm.png";
-    // Code to unmute the game audio
-    if (typeof world !== "undefined" && world.audioHub) {
-      world.audioHub.unmuteAll();
-    }
+    // Currently unmuted, so mute
+    soundIcon.src = "icons/icons8-stumm.png"; // Change to muted icon
+    soundIcon.setAttribute("data-muted", "true");
+    AudioHub.muteAll();
+    console.log("Sound muted");
   }
 }
 

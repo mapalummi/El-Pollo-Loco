@@ -60,6 +60,9 @@ class AudioHub {
   // Statische Variable für den aktuell abgespielten Tasten-Sound
   static currentKeySound = null;
 
+  // Add a static property to track mute state
+  static isMuted = false;
+
   // Spielt eine einzelne Audiodatei ab
   //   static playOne(sound) {
   //     sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20% / 1 = 100%
@@ -81,8 +84,17 @@ class AudioHub {
     if (sound.readyState == 4) {
       // Finde den Namen des Sounds
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+
+      //NEU
+      if (!AudioHub.isMuted) {
+        sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+      } else {
+        sound.volume = 0; // Keep it muted
+      }
+
       // Verwende die spezifische Lautstärke oder 0.2 als Standard
-      sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+      // sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+
       sound.currentTime = 0;
       sound.play();
     }
@@ -93,7 +105,17 @@ class AudioHub {
     if (sound.readyState == 4) {
       // Finde den Namen des Sounds
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
-      sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+
+      //NEU
+      // Only set volume if not muted
+      if (!AudioHub.isMuted) {
+        sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+      } else {
+        sound.volume = 0; // Keep it muted
+      }
+
+      // sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+
       sound.loop = true; // Aktiviert die Loop-Funktion
       sound.currentTime = 0;
       sound.play();
@@ -145,8 +167,35 @@ class AudioHub {
     }
   }
 
-  // NEU:
+  // static muteAll() {
+  //   // Mute all sounds without stopping them
+  //   AudioHub.allSounds.forEach(sound => {
+  //     // Save the original volume first (if not already saved)
+  //     if (sound._originalVolume === undefined) {
+  //       sound._originalVolume = sound.volume;
+  //     }
+  //     // Set volume to 0 (mute)
+  //     sound.volume = 0;
+  //   });
+  // }
+
+  // static unmuteAll() {
+  //   // Restore original volumes
+  //   AudioHub.allSounds.forEach(sound => {
+  //     if (sound._originalVolume !== undefined) {
+  //       // Get the sound name for volume settings
+  //       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+  //       // Restore original volume
+  //       sound.volume = sound._originalVolume;
+  //       // Clear stored original volume
+  //       delete sound._originalVolume;
+  //     }
+  //   });
+  // }
+
+  // Update the muteAll method
   static muteAll() {
+    AudioHub.isMuted = true;
     // Mute all sounds without stopping them
     AudioHub.allSounds.forEach(sound => {
       // Save the original volume first (if not already saved)
@@ -158,7 +207,9 @@ class AudioHub {
     });
   }
 
+  // Update the unmuteAll method
   static unmuteAll() {
+    AudioHub.isMuted = false;
     // Restore original volumes
     AudioHub.allSounds.forEach(sound => {
       if (sound._originalVolume !== undefined) {
