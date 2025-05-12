@@ -10,6 +10,10 @@ body {
   align-items: center;
   height: 100vh;
   background-color: #000;
+  /* NEU */
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
 }
 
 .d_none {
@@ -19,33 +23,39 @@ body {
 h1 {
   color: #a0220a;
   margin: 0;
-  padding: 10px;
-  font-size: 2rem;
+  padding: 18px;
+  font-size: 3rem;
   text-align: center;
 }
+
+/* canvas {
+  border: 1px solid #a0220a;
+  background-color: black;
+} */
 
 canvas {
   border: 1px solid #a0220a;
   background-color: black;
+  order: 1; /* Ensures it appears above keyboard controls */
 }
 
-#keyboard-controls {
+/* #keyboard-controls {
   margin-top: 20px;
   text-align: center;
   font-family: Arial, sans-serif;
-  color: #fff; /* Weißer Text für besseren Kontrast */
-  background-color: rgba(0, 0, 0, 0.5); /* Halbtransparenter Hintergrund */
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 15px;
-  border-radius: 10px; /* Abgerundete Ecken */
-  width: 80%; /* Breite der Steuerung */
-  max-width: 300px; /* Maximale Breite */
+  border-radius: 10px;
+  width: 80%;
+  max-width: 300px;
   margin-left: auto;
   margin-right: auto;
 }
 
 #keyboard-controls h2 {
   font-size: 1.8rem;
-  color: #ffcc00; /* Goldene Farbe für den Titel */
+  color: #ffcc00;
   margin-bottom: 15px;
 }
 
@@ -64,30 +74,89 @@ canvas {
 
 #keyboard-controls li strong {
   margin-right: 10px;
-  color: #ffcc00; /* Goldene Farbe für die Symbole */
+  color: #ffcc00;
 }
 
 #keyboard-controls li:hover {
-  color: #ffcc00; /* Goldene Farbe beim Hover */
-  transform: scale(1.05); /* Leichte Vergrößerung */
+  color: #ffcc00;
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+} */
+
+/* NEU */
+#keyboard-controls {
+  margin-top: 12px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 4px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px; /* Match canvas width */
+  margin-left: auto;
+  margin-right: auto;
+  order: 2; /* Ensures it appears below canvas when using flex */
+  border: 1px solid rgba(160, 34, 10, 0.5); /* Subtle border matching game theme */
+}
+
+#keyboard-controls h2 {
+  font-size: 1.4rem;
+  color: #ffcc00;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#keyboard-controls ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px; /* Space between control items */
+}
+
+#keyboard-controls li {
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 8px 8px;
+  border-radius: 6px;
+  min-width: 90px;
   transition: all 0.2s ease-in-out;
 }
 
-/* #win_overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.762);
-  transition: opacity 300ms ease-in-out;
-} */
+#keyboard-controls li strong {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  color: #ffcc00;
+  display: block;
+}
+
+#keyboard-controls li:hover {
+  color: #ffcc00;
+  transform: scale(1.05);
+  background-color: rgba(160, 34, 10, 0.3);
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+}
+/* NEU */
 
 .game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+}
+
+/* .game-container {
   position: relative;
   width: 720px;
   height: 480px;
-}
+} */
 
 #win_overlay {
   position: absolute;
@@ -131,10 +200,25 @@ button:hover {
 /* Responsiveness */
 @media (max-width: 768px) {
   #keyboard-controls {
-    font-size: 0.9rem;
+    padding: 15px;
   }
 
   #keyboard-controls h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  #keyboard-controls ul {
+    gap: 10px;
+  }
+
+  #keyboard-controls li {
+    min-width: 90px;
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  #keyboard-controls li strong {
     font-size: 1.2rem;
   }
 }
