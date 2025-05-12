@@ -6,10 +6,9 @@ class ThrowableObject extends MovableObject {
 
   throwDirection = 1; // Standardmäßig nach rechts
   isSplashing = false;
-  //NEU
+
   hasHit = false;
 
-  // NEU
   offset = {
     top: 10,
     right: 20,
@@ -73,7 +72,6 @@ class ThrowableObject extends MovableObject {
     }, 100);
   }
 
-  // NEU:
   splash() {
     if (this.isSplashing) return; // Verhindert mehrfaches Aufrufen
     this.isSplashing = true;

@@ -33,7 +33,6 @@ function init() {
   });
 
   document.addEventListener("keyup", e => {
-    //NEU
     // Skip keyboard input if game is over with victory
     if (gameOver && world && world.ignoreControls) return;
 
@@ -53,7 +52,6 @@ function drawStartText() {
 
 function startGame() {
   world = new World(canvas, keyboard);
-
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
 
   // Show keyboard controls

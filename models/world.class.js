@@ -12,6 +12,9 @@ class World {
   collectedBottles; //auch als Limit für das Werfen!
   percentageBottles;
 
+  bottleThrowCooldown = false;
+  bottleThrowCooldownDuration = 500;
+
   bottleBar = new BottleBar();
   healthBar = new HealthBar();
   coinBar = new CoinBar();
@@ -33,7 +36,6 @@ class World {
     this.collectedBottles = 0;
     this.endbossTriggered = false;
 
-    // TEST NEU
     this.gameEnded = false;
     this.paused = false;
 
@@ -74,10 +76,12 @@ class World {
     }, 100); //Interval hier evtl. auf 50 verkleinern!?
   }
 
-  //NEU mit Feedback für Spieler (evtl. Sound)
+  //BottleThrow - Feedback für Spieler (evtl. Sound)?
   checkThrowObjects() {
-    if (this.keyboard.B) {
+    if (this.keyboard.B && !this.bottleThrowCooldown) {
       if (this.collectedBottles > 0) {
+        this.bottleThrowCooldown = true;
+
         let offsetX = this.character.facingRight ? 50 : -10;
         let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
         bottle.throwDirection = this.character.facingRight ? 1 : -1;
@@ -85,6 +89,10 @@ class World {
 
         this.collectedBottles--;
         this.updateBottleBar();
+
+        setTimeout(() => {
+          this.bottleThrowCooldown = false;
+        }, this.bottleThrowCooldownDuration);
       } else {
         console.log("Keine Flaschen mehr verfügbar!");
         // Optional: Visuelles Feedback für den Spieler
@@ -162,8 +170,6 @@ class World {
 
         this.collectedBottles++;
         this.updateBottleBar();
-
-        //TODO:
         AudioHub.playOne(AudioHub.BOTTLES);
 
         return false; // Entferne Bottle
@@ -187,7 +193,6 @@ class World {
     // console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
-  // Neuere Version:
   checkGameStatus() {
     // Verlust-Bedingung: Character ist tot
     if (this.character.energy <= 0 && !this.gameEnded) {
@@ -220,7 +225,6 @@ class World {
   }
 
   draw() {
-    // Löscht das verherige Canvas:
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
