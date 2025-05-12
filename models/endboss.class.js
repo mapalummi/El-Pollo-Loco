@@ -168,29 +168,6 @@ class Endboss extends MovableObject {
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
-  // ALT:
-  // startAttacking() {
-  //   if (!this.isDead && !this.isHurt) {
-  //     this.isAttacking = true;
-  //     this.isWalking = false;
-  //     this.isAlert = false;
-  //     AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
-
-  //     setTimeout(() => {
-  //       if (!this.isDead && !this.isHurt) {
-  //         this.isAttacking = false;
-  //         // Verhalten basierend auf Distanz neu evaluieren
-  //         if (this.world) {
-  //           const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-  //           this.world.updateEndbossBehavior(this, distanceToPlayer);
-  //         } else {
-  //           this.isAlert = true; // Fallback
-  //         }
-  //       }
-  //     }, this.IMAGES_ATTACK.length * 100);
-  //   }
-  // }
-
   //NEU:
   startAttacking() {
     if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
@@ -261,7 +238,6 @@ class Endboss extends MovableObject {
   }
 
   hit(damage) {
-    // console.log("Endboss hit at position:", this.x);
     // Existing hit code
     this.energy -= damage;
     if (this.energy < 0) {
@@ -277,7 +253,6 @@ class Endboss extends MovableObject {
 
     // New code for maintaining alert mode after hit
     this.wasHitRecently = true;
-    // console.log("wasHitRecently set to true");
 
     // Clear existing timer if there is one
     if (this.hitCooldownTimer) {
@@ -313,25 +288,6 @@ class Endboss extends MovableObject {
       this.die();
     }
   }
-
-  //NOTE:
-  // die() {
-  //   this.isDead = true;
-  //   this.isHurt = false;
-  //   this.isAttacking = false;
-  //   this.isWalking = false;
-  //   this.isAlert = false;
-  //   this.isDeathAnimationComplete = false; // Reset to ensure animation plays
-
-  //   // Die Animation wird durch animate() einmal gestartet
-  //   // Nach der Dauer der Animation setzen wir isDeathAnimationComplete
-  //   setTimeout(() => {
-  //     this.isDeathAnimationComplete = true;
-
-  //     // Setze das letzte Bild manuell
-  //     this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
-  //   }, this.IMAGES_DEAD.length * 200); // Etwas mehr Zeit für ein deutlicheres Abspielen
-  // }
 
   die() {
     this.isDead = true;

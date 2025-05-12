@@ -88,6 +88,9 @@ class Character extends MovableObject {
 
     this.world = world;
 
+    //NEU
+    this.isLocked = false;
+
     this.crossImage = new Image();
     this.crossImage.src = "img/random_pics/skull-147188_640.png";
 
@@ -111,16 +114,26 @@ class Character extends MovableObject {
       this.isWalking = false;
 
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        if (this.isLocked) {
+          return; // Skip movement if locked
+        }
         this.moveRight();
         this.otherDirection = false;
       }
 
       if (this.world.keyboard.LEFT && this.x > 0) {
+        if (this.isLocked) {
+          return; // Skip movement if locked
+        }
         this.moveLeft();
         this.otherDirection = true;
       }
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+        // Check if character is locked before jumping
+        if (this.isLocked) {
+          return; // Skip jump if locked
+        }
         this.jump();
       }
 

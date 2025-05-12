@@ -12,6 +12,7 @@ class AudioHub {
   static CHICKEN = new Audio("audio/chicken-1.mp3");
   static ENDBOSS = new Audio("audio/monster-1.mp3");
   static ENDBOSS_ATTACK = new Audio("audio/monster-2.mp3");
+  static ENDBOSS_SOUND = new Audio("audio/endboss-sound-2.mp3");
   static WIN = new Audio("audio/bonus-1.mp3");
   static LOST = new Audio("audio/lose-funny-1.mp3");
   static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
@@ -30,6 +31,7 @@ class AudioHub {
     CHICKEN: 0.2,
     ENDBOSS: 0.5,
     ENDBOSS_ATTACK: 0.2,
+    ENDBOSS_SOUND: 0.5,
     WIN: 0.2,
     LOST: 0.2,
     GAMEOVER: 0.2,
@@ -49,6 +51,7 @@ class AudioHub {
     AudioHub.CHICKEN,
     AudioHub.ENDBOSS,
     AudioHub.ENDBOSS_ATTACK,
+    AudioHub.ENDBOSS_SOUND,
     AudioHub.WIN,
     AudioHub.LOST,
     AudioHub.GAMEOVER,

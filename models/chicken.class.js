@@ -99,24 +99,9 @@ class Chicken extends MovableObject {
     if (!this.initialY || this.initialY > this.y) {
       this.initialY = this.y;
     }
-
-    // setTimeout(() => {
-    //   this.isJumping = false;
-    // }, 1000);
   }
 
   move() {
     super.move(); // ?
-
-    // if (this.isJumping) {
-    //   this.y -= this.SpeedY;
-    //   this.speedY -= 1;
-
-    //   if (this.y >= this.initialY) {
-    //     this.y = this.initialY;
-    //     this.speedy = 0;
-    //     this.isJumping = false;
-    //   }
-    // }
   }
 }

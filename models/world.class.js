@@ -71,6 +71,7 @@ class World {
       //NEU:
       this.level.enemies.forEach(enemy => {
         if ((enemy instanceof Chicken || enemy instanceof LittleChicken) && !enemy.isDead && typeof enemy.update === "function") {
+          //Checkt ob updates existieren
           enemy.update();
         }
       });
@@ -165,7 +166,6 @@ class World {
         this.collectedCoins++;
         this.updateCoinBar();
 
-        //TODO:
         AudioHub.playOne(AudioHub.COINS);
 
         return false; // Entferne den Coin
@@ -351,13 +351,26 @@ class World {
 
     endboss.otherDirection = false;
 
+    //NEU
+    this.character.isLocked = true;
+    this.character.currentImage = 0;
+
     // Start walking mode
     endboss.startWalking();
 
     // Show the endboss health bar
     this.endbossBar.isVisible = true;
 
+    AudioHub.playOne(AudioHub.ENDBOSS_SOUND);
+
     console.log("Endboss entrance triggered!");
+
+    //TODO: NEU
+    // Unlock the character after a delay (e.g., 3 seconds)
+    setTimeout(() => {
+      this.character.isLocked = false;
+      console.log("Character unlocked!");
+    }, 5000); // Adjust time as needed
   }
 
   checkEndbossVisibility() {
