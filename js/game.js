@@ -86,7 +86,7 @@ function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
 
   gameOver = true;
-  showDialog(); // NEU
+  showDialog(hasWon); // NEU
   AudioHub.stopOne(AudioHub.GAMEAUDIO);
 
   if (!gameOverSoundPlayed) {
@@ -183,9 +183,24 @@ function restartGame() {
   }, 200);
 }
 
-function showDialog() {
-  document.getElementById("win_overlay").classList.remove("d_none");
-  document.body.style.overflow = "hidden"; // Prevent background scrolling
+// function showDialog() {
+//   document.getElementById("win_overlay").classList.remove("d_none");
+//   document.body.style.overflow = "hidden"; // Prevent background scrolling
+// }
+
+function showDialog(hasWon) {
+  const overlay = document.getElementById("win_overlay");
+  const gameOverImage = document.getElementById("game_over_image");
+
+  // Set image based on game outcome
+  if (hasWon) {
+    gameOverImage.src = "img/You won, you lost/You Win A.png";
+  } else {
+    gameOverImage.src = "img/You won, you lost/Game Over.png";
+  }
+
+  overlay.classList.remove("d_none");
+  document.body.style.overflow = "hidden";
 }
 
 function hideDialog() {
