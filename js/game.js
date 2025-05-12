@@ -295,3 +295,45 @@ function hideDialog() {
   document.getElementById("win_overlay").classList.add("d_none");
   document.body.style.overflow = "auto"; // Re-enable scrolling
 }
+
+/**
+ * Toggles sound on/off
+ */
+function toggleSound() {
+  const soundIcon = document.getElementById("soundIcon");
+  const isMuted = soundIcon.src.includes("sound-on.png");
+
+  if (isMuted) {
+    soundIcon.src = "icons/icons8-stumm.png";
+    // Code to mute the game audio
+    if (typeof world !== "undefined" && world.audioHub) {
+      world.audioHub.muteAll();
+    }
+  } else {
+    soundIcon.src = "icons/icons8-stumm.png";
+    // Code to unmute the game audio
+    if (typeof world !== "undefined" && world.audioHub) {
+      world.audioHub.unmuteAll();
+    }
+  }
+}
+
+/**
+ * Toggles fullscreen mode
+ */
+function toggleFullscreen() {
+  const gameContainer = document.querySelector(".game-container");
+  const fullscreenIcon = document.getElementById("fullscreenIcon");
+
+  if (!document.fullscreenElement) {
+    if (gameContainer.requestFullscreen) {
+      gameContainer.requestFullscreen();
+      fullscreenIcon.src = "icons/icons8-vollbild.png";
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+      fullscreenIcon.src = "icons/icons8-vollbild.png";
+    }
+  }
+}

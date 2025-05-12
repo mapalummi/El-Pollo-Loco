@@ -183,6 +183,38 @@ canvas {
   object-fit: contain;
 }
 
+#corner-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+}
+
+.icon-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.icon-button:hover {
+  transform: scale(1.1);
+}
+
+.icon-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 button {
   padding: 10px 20px;
   margin-top: 8px;

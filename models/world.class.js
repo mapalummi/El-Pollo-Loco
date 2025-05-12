@@ -355,10 +355,8 @@ class World {
     this.character.isLocked = true;
     this.character.currentImage = 0;
 
-    // Start walking mode
     endboss.startWalking();
 
-    // Show the endboss health bar
     this.endbossBar.isVisible = true;
 
     AudioHub.playOne(AudioHub.ENDBOSS_SOUND);
