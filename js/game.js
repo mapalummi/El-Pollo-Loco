@@ -56,6 +56,9 @@ function startGame() {
 
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
 
+  // Show keyboard controls
+  document.getElementById("keyboard-controls").classList.remove("d_none");
+
   gameOver = false; // Gameover zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("startButton").style.display = "none";
@@ -88,6 +91,9 @@ function showGameOverScreen(hasWon) {
   gameOver = true;
   showDialog(hasWon); // NEU
   AudioHub.stopOne(AudioHub.GAMEAUDIO);
+
+  // Hide keyboard controls
+  document.getElementById("keyboard-controls").classList.add("d_none");
 
   if (!gameOverSoundPlayed) {
     gameOverSoundPlayed = true;
@@ -151,6 +157,9 @@ function restartGame() {
 
   // Reset game state - set this FIRST to prevent any new game over triggers
   gameOver = false;
+
+  // Show keyboard controls again if they should be visible during gameplay
+  document.getElementById("keyboard-controls").classList.remove("d_none");
 
   // Clear ALL intervals in the page, not just ones we know about
   // This ensures any lingering timers are cleaned up

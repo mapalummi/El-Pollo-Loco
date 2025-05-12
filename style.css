@@ -150,6 +150,7 @@ canvas {
   align-items: center;
   width: 100%;
   max-width: 720px;
+  position: relative; /* Add this to make absolute positioning work properly */
 }
 
 /* .game-container {
@@ -162,8 +163,8 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 720px;
+  height: 480px;
   background-color: rgba(0, 0, 0, 0.5);
   transition: opacity 300ms ease-in-out;
   z-index: 10;
@@ -172,7 +173,7 @@ canvas {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -186,15 +187,21 @@ button {
   padding: 10px 20px;
   margin-top: 8px;
   font-size: 16px;
-  background-color: #3498db;
-  color: white;
+  background-color: #a0220a;
+  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 button:hover {
-  background-color: #2980b9;
+  background-color: #c02a0c;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+  color: #ffcc00;
 }
 
 /* Responsiveness */
