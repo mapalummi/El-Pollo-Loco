@@ -17,6 +17,8 @@ function init() {
     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
     drawStartText();
     document.getElementById("startButton").style.display = "block";
+    document.getElementById("homeButton").style.display = "none";
+    document.getElementById("restartButton").style.display = "none";
   };
 
   //NOTE:
@@ -143,16 +145,102 @@ function showGameOverScreen(hasWon) {
     }
   }
 
-  // Restart-Button anzeigen
+  // Buttons wieder anzeigen
+  document.getElementById("homeButton").style.display = "block";
   document.getElementById("restartButton").style.display = "block";
+}
+
+//CHECK: - CODE viel zu lang! Kürzen!
+function mainWindow() {
+  console.log("Resetting to start screen with full reset...");
+
+  // Stop all sounds immediately
+  AudioHub.stopAll();
+
+  // Hide dialog overlay
+  hideDialog();
+
+  //NOTE: Erklären lassen:
+  // Clear ALL intervals and timeouts
+  const highestTimeoutId = setTimeout(() => {}, 0);
+  for (let i = 0; i <= highestTimeoutId; i++) {
+    clearTimeout(i);
+  }
+
+  const highestIntervalId = setInterval(() => {}, 0);
+  for (let i = 1; i <= highestIntervalId; i++) {
+    clearInterval(i);
+  }
+
+  // Cancel ALL animation frames
+  if (window.requestAnimationFrame) {
+    const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
+    // If world has an animation ID, cancel it
+    if (cancelAnim && world && world.animationId) {
+      cancelAnim(world.animationId);
+    }
+    // Also try to cancel any other potential animation frames
+    for (let i = 0; i < 100; i++) {
+      cancelAnim(i);
+    }
+  }
+
+  // Destroy world completely
+  world = null;
+
+  // RECREATE THE CANVAS - this is the key change
+  const canvasContainer = document.getElementById("canvas").parentElement;
+  const oldCanvas = document.getElementById("canvas");
+  const newCanvas = document.createElement("canvas");
+  newCanvas.id = "canvas";
+  newCanvas.width = oldCanvas.width;
+  newCanvas.height = oldCanvas.height;
+  canvasContainer.removeChild(oldCanvas);
+  canvasContainer.appendChild(newCanvas);
+
+  // Get the new canvas context
+  canvas = newCanvas;
+  ctx = canvas.getContext("2d");
+
+  // Reset all game state
+  gameOver = false;
+  gameOverSoundPlayed = false;
+
+  // Reset keyboard state
+  if (keyboard) {
+    keyboard.RIGHT = false;
+    keyboard.LEFT = false;
+    keyboard.UP = false;
+    keyboard.DOWN = false;
+    keyboard.SPACE = false;
+    keyboard.D = false;
+  }
+
+  // Hide all game UI elements
+  document.getElementById("keyboard-controls").classList.add("d_none");
+  document.getElementById("restartButton").style.display = "none";
+  document.getElementById("homeButton").style.display = "none";
+
+  // Re-initialize level data
+  initLevel();
+
+  // Draw the start screen on the fresh canvas
+  const startScreenImage = new Image();
+  startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
+  startScreenImage.onload = () => {
+    ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
+    drawStartText();
+    document.getElementById("startButton").style.display = "block";
+  };
 }
 
 function restartGame() {
   gameOverSoundPlayed = false;
   hideDialog(); // NEU
   document.getElementById("restartButton").style.display = "none";
+  document.getElementById("homeButton").style.display = "none";
 
-  // Reset game state - set this FIRST to prevent any new game over triggers
+  // Reset game state - to prevent any new game over triggers
   gameOver = false;
 
   // Show keyboard controls again if they should be visible during gameplay
