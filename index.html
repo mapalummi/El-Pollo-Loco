@@ -41,7 +41,15 @@
   <body onload="init()">
     <h1>El Pollo Loco</h1>
 
-    <canvas id="canvas" width="720" height="480"></canvas>
+    <!-- <canvas id="canvas" width="720" height="480"></canvas> -->
+
+    <!-- NEU -->
+    <div class="game-container">
+      <!-- Add this wrapper -->
+      <canvas id="canvas" width="720" height="480"></canvas>
+      <div id="win_overlay" class="d_none"></div>
+    </div>
+    <!-- NEU -->
 
     <button id="startButton" style="display: none" onclick="startGame()">Start Game</button>
     <button id="restartButton" style="display: none" onclick="restartGame()">Neustart</button>
@@ -56,6 +64,6 @@
     </div>
 
     <!-- Overlay -->
-    <div id="win_overlay" class="d_none"></div>
+    <!-- <div id="win_overlay" class="d_none"></div> -->
   </body>
 </html>
