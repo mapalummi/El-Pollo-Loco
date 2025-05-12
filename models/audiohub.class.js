@@ -145,11 +145,31 @@ class AudioHub {
     sound.play().catch(e => console.log("Auto-resume prevented:", e));
   }
 
+  // Spielt einen Sound ab, solange eine Taste gedrückt wird
+  // static playWhileKeyPressed(sound) {
+  //   if (sound.readyState == 4) {
+  //     sound.volume = 0.2;
+  //     sound.currentTime = 0;
+  //     sound.play();
+
+  //     // Speichert den Sound, damit er beim Loslassen der Taste gestoppt werden kann
+  //     AudioHub.currentKeySound = sound;
+  //   }
+  // }
+
   // NEU:
   // Spielt einen Sound ab, solange eine Taste gedrückt wird
   static playWhileKeyPressed(sound) {
     if (sound.readyState == 4) {
-      sound.volume = 0.2;
+      // Check if sound should be muted
+      if (!AudioHub.isMuted) {
+        // Find the sound name for volume settings
+        const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+        sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+      } else {
+        sound.volume = 0; // Keep it muted
+      }
+
       sound.currentTime = 0;
       sound.play();
 
