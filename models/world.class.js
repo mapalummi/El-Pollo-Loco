@@ -140,6 +140,12 @@ class World {
           }
         }
       });
+
+      // Bodenkollision
+      const groundLevel = 380;
+      if (bottle.y >= groundLevel) {
+        bottle.splash();
+      }
     });
 
     // Coins und Flaschen
