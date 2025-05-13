@@ -42,6 +42,9 @@ function init() {
       AudioHub.stopKeySound();
     }
   });
+
+  //NEU
+  addFullscreenListeners();
 }
 
 function drawStartText() {
@@ -320,13 +323,87 @@ function toggleFullscreen() {
   if (!document.fullscreenElement) {
     if (gameContainer.requestFullscreen) {
       gameContainer.requestFullscreen();
-      fullscreenIcon.src = "icons/icons8-vollbild.png";
+      fullscreenIcon.src = "icons/icons8-vollbild.png"; //Icon Fullscreen verlassen
     }
   } else {
     if (document.exitFullscreen) {
       document.exitFullscreen();
-      fullscreenIcon.src = "icons/icons8-vollbild.png";
+      fullscreenIcon.src = "";
     }
+  }
+}
+
+//NEU
+/**
+ * Adds event listeners for fullscreen changes
+ */
+function addFullscreenListeners() {
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+  document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+  document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+}
+//NEU
+/**
+ * Handles fullscreen change events
+ */
+function handleFullscreenChange() {
+  const canvas = document.getElementById("canvas");
+  const gameContainer = document.querySelector(".game-container");
+
+  if (document.fullscreenElement) {
+    // Save original dimensions if not already saved
+    if (!canvas.dataset.originalWidth) {
+      canvas.dataset.originalWidth = canvas.width;
+      canvas.dataset.originalHeight = canvas.height;
+      canvas.dataset.originalStyleWidth = canvas.style.width || "";
+      canvas.dataset.originalStyleHeight = canvas.style.height || "";
+    }
+
+    // Don't change the canvas width/height (keeps game logic the same)
+    // Instead only adjust the display size with CSS
+    canvas.style.width = "80vw"; // Fast die gesamte Bildschirmbreite
+    canvas.style.height = "80vh"; // Fast die gesamte Bildschirmhöhe
+    canvas.style.display = "block";
+    canvas.style.margin = "auto";
+
+    // Center the canvas in fullscreen mode
+    gameContainer.style.display = "flex";
+    gameContainer.style.justifyContent = "center";
+    gameContainer.style.alignItems = "center";
+
+    // Update fullscreen icon
+    const fullscreenIcon = document.getElementById("fullscreenIcon");
+    fullscreenIcon.src = "icons/icons8-vollbild.png";
+  } else {
+    // Restore original styles
+    canvas.style.width = canvas.dataset.originalStyleWidth;
+    canvas.style.height = canvas.dataset.originalStyleHeight;
+    canvas.style.margin = "";
+
+    // Reset container styles
+    gameContainer.style.display = "";
+    gameContainer.style.justifyContent = "";
+    gameContainer.style.alignItems = "";
+
+    // Reset fullscreen icon
+    const fullscreenIcon = document.getElementById("fullscreenIcon");
+    fullscreenIcon.src = "icons/icons8-vollbild.png";
+  }
+
+  // If world exists, redraw to adjust to new display size
+  if (world) {
+    world.draw();
+  }
+}
+//NEU
+/**
+ * Adjusts world elements to the new canvas size
+ */
+function adjustWorldToResize() {
+  // Redraw the current frame
+  if (world) {
+    world.draw();
   }
 }
 
