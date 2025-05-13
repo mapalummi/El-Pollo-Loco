@@ -119,7 +119,7 @@ function showGameOverScreen(hasWon) {
     // Wolken-Rendering explizit deaktivieren
     world.stopDrawingClouds = true;
 
-    // NEU - Hide each status bar individually
+    // Hide each status bar individually
     if (world.healthBar && typeof world.healthBar.hide === "function") {
       world.healthBar.hide();
     }

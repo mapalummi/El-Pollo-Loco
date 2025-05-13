@@ -56,10 +56,9 @@ class Endboss extends MovableObject {
   isAlert = false;
   isDeathAnimationComplete = false;
 
-  //NOTE: NEU
   wasHitRecently = false;
   hitCooldownTimer = null;
-  hitAlertDuration = 2000;
+  hitAlertDuration = 3000;
 
   isAttackCooldown = false;
   attackCooldownDuration = 3000;
@@ -80,7 +79,7 @@ class Endboss extends MovableObject {
 
     // Positioniere den Endboss am rechten Rand des Levels
     if (world && world.level && world.level.level_end_x) {
-      this.x = world.level.level_end_x - 200; // 200px vor Level-Ende
+      this.x = world.level.level_end_x - 100; // 200px vor Level-Ende
     } else {
       this.x = 4500; // Fallback
     }
@@ -123,11 +122,8 @@ class Endboss extends MovableObject {
       // STATE PRIORITY HIERARCHY (most important first)
       if (this.isDead) {
         if (!this.isDeathAnimationComplete) {
-          // Animation noch läuft
           this.playAnimation(this.IMAGES_DEAD);
         }
-        // Wenn Animation abgeschlossen ist, wird kein weiterer
-        // Frame geladen - das Bild wurde bereits in die() gesetzt
       } else if (this.isHurt) {
         this.endbossHurtAnimation();
       } else if (this.wasHitRecently) {
@@ -186,7 +182,6 @@ class Endboss extends MovableObject {
       // Determine direction to jump (toward character)
       let direction = 1; // Default: right
       if (this.world && this.world.character) {
-        //CHECK:
         // Direction und otherDirection werden gesetzt
         direction = this.world.character.x > this.x ? 1 : -1;
         this.otherDirection = direction > 0;

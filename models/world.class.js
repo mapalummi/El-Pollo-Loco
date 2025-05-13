@@ -490,7 +490,7 @@ class World {
     if (endboss.wasHitRecently) return;
 
     // If endboss is entering from right side of level
-    if (this.endbossTriggered && endboss.x > this.levelWidth - 200) {
+    if (this.endbossTriggered && endboss.x > this.levelWidth - 100) {
       endboss.x -= 10; // Speed beim rein kommen.
       endboss.otherDirection = false;
       return;
