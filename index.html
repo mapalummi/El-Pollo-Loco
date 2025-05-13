@@ -43,14 +43,33 @@
 
     <!-- <canvas id="canvas" width="720" height="480"></canvas> -->
 
-    <!-- NEU -->
     <div class="game-container">
       <canvas id="canvas" width="720" height="480"></canvas>
       <div id="win_overlay" class="d_none">
         <img id="game_over_image" src="" alt="Game Over" />
       </div>
     </div>
-    <!-- NEU -->
+
+    <!-- Mobile-Buttons -->
+    <div id="mobile-buttons">
+      <div class="button-group left-buttons">
+        <button id="moveLeftButton" class="mobile-button" onclick="handleMoveLeft()">
+          <img src="icons/rechts-links-icon.png" alt="" id="" />
+        </button>
+        <button id="moveRightButton" class="mobile-button" onclick="handleMoveRight()">
+          <img src="icons/rechts-links-icon.png" alt="" id="" />
+        </button>
+      </div>
+      <div class="button-group right-buttons">
+        <button id="jumpButton" class="mobile-button" onclick="handleJumpUp()">
+          <img src="icons/jump-1.png" alt="" id="" />
+        </button>
+        <button id="throwButton" class="mobile-button" onclick="handleThrowBottle()">
+          <img src="icons/throw-1.png" alt="" id="" />
+        </button>
+      </div>
+    </div>
+    <!-- Mobile-Buttons -->
 
     <!-- Control buttons in top-right corner -->
     <div id="corner-buttons">

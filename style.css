@@ -28,62 +28,12 @@ h1 {
   text-align: center;
 }
 
-/* canvas {
-  border: 1px solid #a0220a;
-  background-color: black;
-} */
-
 canvas {
   border: 1px solid #a0220a;
   background-color: black;
   order: 1; /* Ensures it appears above keyboard controls */
 }
 
-/* #keyboard-controls {
-  margin-top: 20px;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 15px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 300px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#keyboard-controls h2 {
-  font-size: 1.8rem;
-  color: #ffcc00;
-  margin-bottom: 15px;
-}
-
-#keyboard-controls ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-#keyboard-controls li {
-  font-size: 1.2rem;
-  margin: 10px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#keyboard-controls li strong {
-  margin-right: 10px;
-  color: #ffcc00;
-}
-
-#keyboard-controls li:hover {
-  color: #ffcc00;
-  transform: scale(1.05);
-  transition: all 0.2s ease-in-out;
-} */
-
-/* NEU */
 #keyboard-controls {
   margin-top: 12px;
   text-align: center;
@@ -142,22 +92,23 @@ canvas {
   background-color: rgba(160, 34, 10, 0.3);
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
 }
-/* NEU */
 
-.game-container {
+/* .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 720px;
-  position: relative; /* Add this to make absolute positioning work properly */
-}
+  position: relative; 
+} */
 
-/* .game-container {
+/* Game container positioning */
+.game-container {
   position: relative;
   width: 720px;
   height: 480px;
-} */
+  margin: 0 auto;
+}
 
 #win_overlay {
   position: absolute;
@@ -213,6 +164,81 @@ canvas {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* Mobile control buttons positioning */
+#mobile-buttons {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  pointer-events: none; /* Allows clicks to pass through to canvas where no buttons exist */
+  z-index: 10;
+}
+
+.button-group {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  gap: 10px;
+  pointer-events: auto; /* Re-enable pointer events for buttons */
+}
+
+.left-buttons {
+  left: 20px;
+}
+
+.right-buttons {
+  right: 20px;
+}
+
+.mobile-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #8b4513;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-button img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Flip the right arrow icon to point right */
+#moveRightButton img {
+  transform: scaleX(-1);
+}
+
+/* Media query for responsive behavior */
+@media (min-width: 768px) {
+  #mobile-buttons {
+    display: none; /* Hide on larger screens */
+  }
+}
+
+@media (max-width: 767px) {
+  .game-container {
+    width: 100%;
+    height: auto;
+  }
+
+  canvas {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Ensure mobile buttons are properly positioned relative to the canvas */
+  #mobile-buttons {
+    bottom: 20px;
+  }
 }
 
 button {
