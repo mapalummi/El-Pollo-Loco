@@ -307,13 +307,13 @@ function toggleSound() {
 
   if (isMuted) {
     // Currently muted, so unmute
-    soundIcon.src = "icons/icons8-stumm.png"; // Change to sound-on icon
+    soundIcon.src = "icons/unmuted-1.png"; // Change to sound-on icon
     soundIcon.setAttribute("data-muted", "false");
     AudioHub.unmuteAll();
     console.log("Sound unmuted");
   } else {
     // Currently unmuted, so mute
-    soundIcon.src = "icons/icons8-stumm.png"; // Change to muted icon
+    soundIcon.src = "icons/muted-1.png"; // Change to muted icon
     soundIcon.setAttribute("data-muted", "true");
     AudioHub.muteAll();
     console.log("Sound muted");
