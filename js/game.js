@@ -77,8 +77,9 @@ function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
 
   gameOver = true;
-  showDialog(hasWon); // NEU
-  AudioHub.stopOne(AudioHub.GAMEAUDIO);
+  showDialog(hasWon);
+
+  AudioHub.stopAll();
 
   // Hide keyboard controls
   document.getElementById("keyboard-controls").classList.add("d_none");
@@ -89,7 +90,7 @@ function showGameOverScreen(hasWon) {
 
   if (hasWon) {
     AudioHub.playOne(AudioHub.WIN);
-    //NEU:
+    //TODO:
     // Freeze the character when the boss is defeated
     if (world && world.character) {
       world.character.isFrozen = true;
