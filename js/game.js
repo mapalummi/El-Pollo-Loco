@@ -22,7 +22,6 @@ function init() {
     document.getElementById("restartButton").style.display = "none";
   };
 
-  //NOTE:
   document.addEventListener("keydown", e => {
     if (e.repeat) return;
 
@@ -65,18 +64,7 @@ function startGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
-//TODO: Soll alle Sounds pausieren!!!
-// document.addEventListener("visibilitychange", () => {
-//   if (document.hidden) {
-//     // AudioHub.stopOne(AudioHub.GAMEAUDIO);
-//     AudioHub.stopAll();
-//   } else {
-//     // AudioHub.resume(AudioHub.GAMEAUDIO).catch(e => console.log("Auto-resume prevented:", e));
-//     AudioHub.resumeAll().catch(e => console.log("Auto-resume prevented:", e));
-//   }
-// });
-
-//NEU:
+//NEU
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     AudioHub.muteAll();
