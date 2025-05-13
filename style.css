@@ -213,7 +213,7 @@ canvas {
 }
 
 /* Flip the right arrow icon to point right */
-#moveRightButton img {
+#moveLeftButton img {
   transform: scaleX(-1);
 }
 
