@@ -7,12 +7,15 @@ class Character extends MovableObject {
   facingRight = true;
   lastMoveTime = Date.now(); //Zeitstempel der letzten Bewegung
   idleTimeout = 100;
-  sleepTimeout = 15000; // 15 Sekunden
+  sleepTimeout = 15000; //15 Sekunden
   isDeadAnimationComplete = false;
 
   isWalking = false;
-  currentAnimation = null; // Trackt die aktuell aktive Animation
-  isFrozen = false; // Trackt den Frozen Zustand.
+  currentAnimation = null; //Trackt aktuell aktive Animation
+  isFrozen = false; //Trackt den Frozen Zustand.
+
+  jumpAnimationPlayed = false; //Neue Flag hinzufügen
+  animationTimeout = null; //NEU
 
   offset = {
     top: 100,
@@ -76,7 +79,6 @@ class Character extends MovableObject {
   ];
   world;
 
-  //world aus world-Klasse übergeben:
   constructor(world) {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadImages(this.IMAGES_IDLE);
@@ -88,7 +90,6 @@ class Character extends MovableObject {
 
     this.world = world;
 
-    //NEU
     this.isLocked = false;
 
     this.crossImage = new Image();
@@ -156,16 +157,36 @@ class Character extends MovableObject {
 
       if (this.isDeadAnimationComplete) return;
 
+      // if (this.isHurt()) {
+      //   this.startAnimation("hurt");
+      // } else if (this.isAboveGround()) {
+      //   this.startAnimation("jumping");
+      // } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+      //   this.startAnimation("sleep");
+      // } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+      //   this.startAnimation("idle");
+      // } else if (this.isWalking) {
+      //   this.startAnimation("walking");
+      // }
+
       if (this.isHurt()) {
         this.startAnimation("hurt");
       } else if (this.isAboveGround()) {
-        this.startAnimation("jumping");
-      } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
-        this.startAnimation("sleep");
-      } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
-        this.startAnimation("idle");
-      } else if (this.isWalking) {
-        this.startAnimation("walking");
+        if (!this.jumpAnimationPlayed) {
+          // Nur einmal pro Sprung abspielen
+          this.startAnimation("jumping");
+          this.jumpAnimationPlayed = true;
+        }
+      } else {
+        this.jumpAnimationPlayed = false; // Reset wenn auf dem Boden
+
+        if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+          this.startAnimation("sleep");
+        } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+          this.startAnimation("idle");
+        } else if (this.isWalking) {
+          this.startAnimation("walking");
+        }
       }
     }, 200);
   }
@@ -183,6 +204,10 @@ class Character extends MovableObject {
     // Clear any existing animation interval
     if (this.animationInterval) {
       clearInterval(this.animationInterval);
+    }
+    //NEU
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
     }
 
     // Set current animation type
@@ -221,10 +246,33 @@ class Character extends MovableObject {
     }, 1000 / 15);
   }
 
+  // jumpingAnimation() {
+  //   this.animationInterval = setInterval(() => {
+  //     this.playAnimation(this.IMAGES_JUMPING);
+  //   }, 1000 / 15);
+  // }
+
+  //NEU
   jumpingAnimation() {
-    this.animationInterval = setInterval(() => {
-      this.playAnimation(this.IMAGES_JUMPING);
-    }, 1000 / 15);
+    // Entferne das bestehende Intervall
+    clearInterval(this.animationInterval);
+
+    // Manueller, einmaliger Durchlauf der Sprungbilder
+    let currentIndex = 0;
+
+    // Funktion, die jedes Bild mit kurzer Verzögerung zeigt
+    const playNextFrame = () => {
+      if (currentIndex < this.IMAGES_JUMPING.length) {
+        this.img = this.imageCache[this.IMAGES_JUMPING[currentIndex]];
+        currentIndex++;
+
+        // Nächstes Bild mit Verzögerung zeigen (66ms entspricht etwa 15fps)
+        this.animationTimeout = setTimeout(playNextFrame, 66);
+      }
+    };
+
+    // Animation starten
+    playNextFrame();
   }
 
   hurtAnimation() {
@@ -277,5 +325,11 @@ class Character extends MovableObject {
     this.otherDirection = true;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
     this.isWalking = true;
+  }
+
+  //NEU
+  jump() {
+    super.jump();
+    this.jumpAnimationPlayed = false; //Reset beim Start eines Sprungs
   }
 }
