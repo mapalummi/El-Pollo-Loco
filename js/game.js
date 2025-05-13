@@ -339,3 +339,10 @@ function toggleFullscreen() {
     }
   }
 }
+
+/**
+ * Toggles pause/play
+ */
+function togglePausePlay() {
+  const pausePlayIcon = document.getElementById("pausePlayIcon");
+}
