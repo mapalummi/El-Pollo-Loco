@@ -42,7 +42,7 @@ class World {
     this.draw();
     this.run();
 
-    // Initialisiere den Endboss-Zustand
+    // Initialisierung Endboss-Zustand:
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (endboss) {
       this.endbossBar.setPercentage(endboss.energy);
@@ -59,7 +59,7 @@ class World {
     return clouds;
   }
 
-  //Startet Timer um Aktionen auszuführen:
+  // Timer um Aktionen auszuführen:
   run() {
     // NEU:
     if (this._gameLoopInterval) {
@@ -373,10 +373,8 @@ class World {
   triggerEndbossEntrance(endboss) {
     // Position the endboss just off-screen to the right
     endboss.x = this.levelWidth + 200;
-
     endboss.otherDirection = false;
 
-    //NEU
     this.character.isLocked = true;
     this.character.currentImage = 0;
 
@@ -388,7 +386,6 @@ class World {
 
     console.log("Endboss entrance triggered!");
 
-    //TODO: NEU
     // Unlock the character after a delay (e.g., 3 seconds)
     setTimeout(() => {
       this.character.isLocked = false;
@@ -419,7 +416,7 @@ class World {
     if (distanceToEndboss < 500 || this.endbossTriggered) {
       this.endbossBar.isVisible = true;
 
-      // Löse Alert-Animation aus, wenn der Endboss den Spieler zum ersten Mal sieht
+      // Alert-Animation, wenn der Endboss den Spieler zum ersten Mal sieht
       if (!endboss.isAlert && !endboss.isAttacking && !endboss.isWalking && !endboss.isDead) {
         endboss.startAlert();
       }
@@ -434,42 +431,54 @@ class World {
     }
   }
 
+  //ALT (kann evtl. raus):
+  // updateEndbossBehavior(endboss, distance) {
+  //   // Überspringe, wenn Endboss bereits tot ist oder gerade getroffen wurde
+  //   if (endboss.isDead || endboss.isHurt) return;
+
+  //   if (endboss.wasHitRecently) {
+  //     console.log("Endboss recently hit, forcing alert mode");
+  //     if (!endboss.isAlert) {
+  //       endboss.startAlert();
+  //     }
+  //     return; // Don't proceed with other behavior checks
+  //   }
+
+  //   if (this.endbossTriggered && endboss.x > this.levelWidth - 500) {
+  //     console.log("Endboss in entrance zone, walking");
+  //     if (!endboss.isWalking) {
+  //       endboss.startWalking();
+  //     }
+  //     return;
+  //   }
+
+  //   console.log(`Distance-based behavior: ${distance}`);
+
+  //   // Distance-based behavior (only if not in entrance zone and not recently hit)
+  //   if (distance < 300) {
+  //     if (!endboss.isAttacking) {
+  //       endboss.startAttacking();
+  //     }
+  //   } else if (distance < 900) {
+  //     if (!endboss.isWalking) {
+  //       endboss.startWalking();
+  //       this.moveEndbossTowardsPlayer(endboss);
+  //     }
+  //   } else {
+  //     if (!endboss.isAlert) {
+  //       endboss.startAlert();
+  //     }
+  //   }
+  // }
+
+  //NEU (kompakter als vorher))
   updateEndbossBehavior(endboss, distance) {
-    // Überspringe, wenn der Endboss bereits tot ist oder gerade getroffen wurde
-    if (endboss.isDead || endboss.isHurt) return;
-
-    if (endboss.wasHitRecently) {
-      console.log("Endboss recently hit, forcing alert mode");
-      if (!endboss.isAlert) {
-        endboss.startAlert();
-      }
-      return; // Don't proceed with other behavior checks
-    }
-
-    if (this.endbossTriggered && endboss.x > this.levelWidth - 500) {
-      console.log("Endboss in entrance zone, walking");
-      if (!endboss.isWalking) {
-        endboss.startWalking();
-      }
-      return;
-    }
-
-    console.log(`Distance-based behavior: ${distance}`);
-
-    // Distance-based behavior (only if not in entrance zone and not recently hit)
-    if (distance < 100) {
-      if (!endboss.isAttacking) {
-        endboss.startAttacking();
-      }
-    } else if (distance < 700) {
-      if (!endboss.isWalking) {
-        endboss.startWalking();
-        this.moveEndbossTowardsPlayer(endboss);
-      }
+    if (distance < 300) {
+      endboss.startAttacking();
+    } else if (distance < 800) {
+      endboss.startWalking();
     } else {
-      if (!endboss.isAlert) {
-        endboss.startAlert();
-      }
+      endboss.startAlert();
     }
   }
 
@@ -482,19 +491,25 @@ class World {
 
     // If endboss is entering from right side of level
     if (this.endbossTriggered && endboss.x > this.levelWidth - 200) {
-      endboss.x -= 10; // Speed beim rein kommen
+      endboss.x -= 10; // Speed beim rein kommen.
       endboss.otherDirection = false;
       return;
     }
 
     // Regular behavior when near the player
     const direction = this.character.x < endboss.x ? -1 : 1;
-    const speed = 5; //Speed im Spiel
+    const speed = 20; //Speed Endboss im Spiel.
 
     // Set appropriate direction for rendering
     endboss.otherDirection = direction > 0;
     // Bewege den Endboss
     endboss.x += direction * speed;
+
+    //NEU
+    if (this.world) {
+      const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+      this.world.updateEndbossBehavior(this, distanceToPlayer);
+    }
   }
 
   // NEU:

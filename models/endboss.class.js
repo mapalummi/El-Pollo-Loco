@@ -168,7 +168,6 @@ class Endboss extends MovableObject {
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
-  //NEU:
   startAttacking() {
     if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
       this.isAttacking = true;
