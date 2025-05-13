@@ -61,14 +61,28 @@ class World {
 
   //Startet Timer um Aktionen auszuführen:
   run() {
-    setInterval(() => {
+    // NEU:
+    if (this._gameLoopInterval) {
+      clearInterval(this._gameLoopInterval);
+    }
+
+    // setInterval(() => {
+    //   this.checkCollisions();
+    //   this.checkThrowObjects();
+    //   this.checkEndbossVisibility();
+    //   this.checkLevelEndReached();
+    //   this.checkGameStatus();
+
+    // NEU:
+    this._gameLoopInterval = setInterval(() => {
+      if (this.paused) return;
+
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkEndbossVisibility();
       this.checkLevelEndReached();
       this.checkGameStatus();
 
-      //NEU:
       this.level.enemies.forEach(enemy => {
         if ((enemy instanceof Chicken || enemy instanceof LittleChicken) && !enemy.isDead && typeof enemy.update === "function") {
           //Checkt ob updates existieren
@@ -238,6 +252,10 @@ class World {
   }
 
   draw() {
+    // NEU:
+    // Only proceed if not paused
+    if (this.paused) return;
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
@@ -299,8 +317,15 @@ class World {
     }
 
     // Draw() wird immer wieder aufgerufen:
+    // let self = this;
+    // requestAnimationFrame(function () {
+    //   self.draw();
+    // });
+
+    // NEU:
+    // Store the animation ID
     let self = this;
-    requestAnimationFrame(function () {
+    this.animationId = requestAnimationFrame(function () {
       self.draw();
     });
   }
@@ -470,5 +495,102 @@ class World {
     endboss.otherDirection = direction > 0;
     // Bewege den Endboss
     endboss.x += direction * speed;
+  }
+
+  // NEU:
+  pauseGame() {
+    this.paused = true;
+
+    // Store the current animation frame ID so we can cancel it
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+
+    // Pause all intervals
+    this.pauseIntervals();
+  }
+
+  resumeGame() {
+    this.paused = false;
+
+    // Resume the animation loop
+    this.draw();
+
+    // Resume all intervals
+    this.resumeIntervals();
+  }
+
+  pauseIntervals() {
+    // Store all active intervals
+    if (!this._storedIntervals) {
+      this._storedIntervals = [];
+
+      // Handle character animations
+      if (this.character && this.character.animationInterval) {
+        clearInterval(this.character.animationInterval);
+        this._storedIntervals.push({
+          type: "character",
+          animation: this.character.currentAnimation,
+        });
+      }
+
+      // Handle enemy animations and movement
+      this.level.enemies.forEach((enemy, index) => {
+        if (enemy.animationInterval) {
+          clearInterval(enemy.animationInterval);
+        }
+        if (enemy.walkingAnimationInterval) {
+          clearInterval(enemy.walkingAnimationInterval);
+        }
+        this._storedIntervals.push({
+          type: "enemy",
+          index: index,
+          object: enemy,
+        });
+      });
+
+      // Handle cloud animations
+      this.clouds.forEach((cloud, index) => {
+        // Store cloud state
+        this._storedIntervals.push({
+          type: "cloud",
+          index: index,
+          x: cloud.x,
+          y: cloud.y,
+        });
+      });
+
+      // Pause the main game loop interval
+      if (this._gameLoopInterval) {
+        clearInterval(this._gameLoopInterval);
+      }
+    }
+  }
+
+  resumeIntervals() {
+    // Restore all active intervals
+    if (this._storedIntervals) {
+      this._storedIntervals.forEach(item => {
+        if (item.type === "character") {
+          // Restart character animation
+          if (this.character) {
+            this.character.startAnimation(item.animation);
+          }
+        } else if (item.type === "enemy") {
+          // Restart enemy animations
+          const enemy = this.level.enemies[item.index];
+          if (enemy && typeof enemy.animate === "function") {
+            enemy.animate();
+          }
+        }
+      });
+
+      // Start the main game loop again
+      this.run();
+
+      // Clear stored intervals
+      this._storedIntervals = null;
+    }
   }
 }

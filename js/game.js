@@ -3,6 +3,7 @@ let ctx;
 let world;
 let gameOver = false; // Spielstatus
 let gameOverSoundPlayed = false;
+let gamePaused = false; // NEU !
 const keyboard = new Keyboard();
 
 function init() {
@@ -345,4 +346,32 @@ function toggleFullscreen() {
  */
 function togglePausePlay() {
   const pausePlayIcon = document.getElementById("pausePlayIcon");
+
+  if (!window.gamePaused) {
+    // Pause the game
+    window.gamePaused = true;
+    pausePlayIcon.src = "icons/play-1.png"; // Change to play icon
+
+    // Pause all audio
+    AudioHub.pauseAll();
+
+    // Pause world and animations
+    if (world) {
+      world.pauseGame();
+    }
+  } else {
+    // Resume the game
+    window.gamePaused = false;
+    pausePlayIcon.src = "icons/pause-1.png"; // Change to pause icon
+
+    // Resume audio if it wasn't muted
+    if (!AudioHub.isMuted) {
+      AudioHub.resumeAll();
+    }
+
+    // Resume world and animations
+    if (world) {
+      world.resumeGame();
+    }
+  }
 }
