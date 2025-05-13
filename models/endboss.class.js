@@ -186,8 +186,10 @@ class Endboss extends MovableObject {
       // Determine direction to jump (toward character)
       let direction = 1; // Default: right
       if (this.world && this.world.character) {
+        //CHECK:
+        // Direction und otherDirection werden gesetzt
         direction = this.world.character.x > this.x ? 1 : -1;
-        this.otherDirection = direction < 0;
+        this.otherDirection = direction > 0;
       }
 
       // Create jump interval
