@@ -16,6 +16,8 @@ class Keyboard {
   }
 
   handleKeyDown(e) {
+    if (window.gamePaused) return;
+
     switch (e.key) {
       case "ArrowRight":
         this.RIGHT = true;
@@ -39,6 +41,8 @@ class Keyboard {
   }
 
   handleKeyUp(e) {
+    if (window.gamePaused) return;
+
     switch (e.key) {
       case "ArrowRight":
         this.RIGHT = false;

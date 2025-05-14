@@ -183,7 +183,6 @@ class Character extends MovableObject {
     // If already running this animation, don't restart it
     if (this.currentAnimation === animationType) return;
 
-    //NEU:
     // Check if we need to stop sleep sound when changing animations
     if (this.currentAnimation === "sleep") {
       AudioHub.stopOne(AudioHub.SLEEP);
@@ -193,7 +192,7 @@ class Character extends MovableObject {
     if (this.animationInterval) {
       clearInterval(this.animationInterval);
     }
-    //NEU
+
     if (this.animationTimeout) {
       clearTimeout(this.animationTimeout);
     }
@@ -234,13 +233,6 @@ class Character extends MovableObject {
     }, 1000 / 15);
   }
 
-  // jumpingAnimation() {
-  //   this.animationInterval = setInterval(() => {
-  //     this.playAnimation(this.IMAGES_JUMPING);
-  //   }, 1000 / 15);
-  // }
-
-  //NEU
   jumpingAnimation() {
     // Entferne das bestehende Intervall
     clearInterval(this.animationInterval);
@@ -315,7 +307,6 @@ class Character extends MovableObject {
     this.isWalking = true;
   }
 
-  //NEU
   jump() {
     super.jump();
     this.jumpAnimationPlayed = false; //Reset beim Start eines Sprungs

@@ -16,22 +16,22 @@ function init() {
 
   //NEU (kann später raus)
   // Debug info for mobile detection
-  if (window.innerWidth < 768 || "ontouchstart" in window) {
-    console.log("Mobile device detected, width:", window.innerWidth);
+  // if (window.innerWidth < 768 || "ontouchstart" in window) {
+  //   console.log("Mobile device detected, width:", window.innerWidth);
 
-    // Create a small debug element
-    const debugEl = document.createElement("div");
-    debugEl.style.position = "fixed";
-    debugEl.style.bottom = "5px";
-    debugEl.style.left = "5px";
-    debugEl.style.background = "rgba(0,0,0,0.5)";
-    debugEl.style.color = "white";
-    debugEl.style.padding = "5px";
-    debugEl.style.fontSize = "10px";
-    debugEl.style.zIndex = "9999";
-    debugEl.textContent = "Mobile: " + window.innerWidth + "px";
-    document.body.appendChild(debugEl);
-  }
+  //   // Create a small debug element
+  //   const debugEl = document.createElement("div");
+  //   debugEl.style.position = "fixed";
+  //   debugEl.style.bottom = "5px";
+  //   debugEl.style.left = "5px";
+  //   debugEl.style.background = "rgba(0,0,0,0.5)";
+  //   debugEl.style.color = "white";
+  //   debugEl.style.padding = "5px";
+  //   debugEl.style.fontSize = "10px";
+  //   debugEl.style.zIndex = "9999";
+  //   debugEl.textContent = "Mobile: " + window.innerWidth + "px";
+  //   document.body.appendChild(debugEl);
+  // }
 
   //NEU Local Storage
   // Synchronize sound icon with AudioHub muted state
@@ -58,8 +58,8 @@ function init() {
   document.addEventListener("keydown", e => {
     if (e.repeat) return;
 
-    // Skip keyboard input if game is over with victory
-    if (gameOver && world && world.ignoreControls) return;
+    // Skip keyboard input if game is paused, game is over or controls should be ignored
+    if (window.gamePaused || (gameOver && world && world.ignoreControls)) return;
 
     if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
       AudioHub.playWhileKeyPressed(AudioHub.WALK);
