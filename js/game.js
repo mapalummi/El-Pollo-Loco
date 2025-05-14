@@ -44,8 +44,6 @@ function init() {
 
   //NEU
   addFullscreenListeners();
-
-  // keyboard.initMobileButtons();
 }
 
 function drawStartText() {
@@ -60,7 +58,6 @@ function startGame() {
   world = new World(canvas, keyboard);
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
 
-  //Alternativ hier rein:
   keyboard.initMobileButtons();
 
   // Show keyboard controls
