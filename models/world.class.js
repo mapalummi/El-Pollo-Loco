@@ -50,17 +50,6 @@ class World {
     }
   }
 
-  //ALT
-  // createClouds() {
-  //   const clouds = [];
-  //   for (let i = 0; i < 10; i++) {
-  //     //Erstellt 10 Wolken
-  //     clouds.push(new Cloud(this.levelWidth));
-  //   }
-  //   return clouds;
-  // }
-
-  //NEU
   createClouds() {
     const clouds = [];
     for (let i = 0; i < 10; i++) {
@@ -463,6 +452,9 @@ class World {
   pauseGame() {
     this.paused = true;
 
+    // NEW: Record the time when the game was paused
+    this._pauseStartTime = Date.now();
+
     // Store the current animation frame ID so we can cancel it
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
@@ -474,6 +466,14 @@ class World {
   }
 
   resumeGame() {
+    // NEW: Calculate how long the game was paused
+    const pauseDuration = Date.now() - this._pauseStartTime;
+
+    // NEW: Adjust character's lastMoveTime to account for pause duration
+    if (this.character && pauseDuration) {
+      this.character.lastMoveTime += pauseDuration;
+    }
+
     this.paused = false;
 
     // Only restart animation loop if it's not already running

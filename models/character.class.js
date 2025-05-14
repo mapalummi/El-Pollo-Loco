@@ -152,8 +152,8 @@ class Character extends MovableObject {
         return;
       }
 
-      // If frozen, keep current animation frame but don't switch animations
-      if (this.isFrozen) return;
+      // If frozen or world is paused, don't change animations
+      if (this.isFrozen || (this.world && this.world.paused)) return;
 
       if (this.isDeadAnimationComplete) return;
 
