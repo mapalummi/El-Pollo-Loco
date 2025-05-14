@@ -156,20 +156,78 @@ function checkOrientation() {
 /**
  * Initialize mobile controls if device is mobile
  */
-function initMobileControls() {
-  // Check if device is likely a mobile device
-  if (window.innerWidth < 768 || "ontouchstart" in window) {
-    console.log("Mobile device detected, initializing mobile controls");
+// function initMobileControls() {
+//   // Check if device is likely a mobile device
+//   if (window.innerWidth < 768 || "ontouchstart" in window) {
+//     console.log("Mobile device detected, initializing mobile controls");
 
-    // Remove d_none class to make buttons visible
+//     // Remove d_none class to make buttons visible
+//     document.getElementById("mobile-buttons").classList.remove("d_none");
+
+//     // Initialize touch event handlers if keyboard exists
+//     if (keyboard) {
+//       keyboard.initMobileButtons();
+//     } else {
+//       console.error("Keyboard not initialized yet");
+//     }
+//   }
+// }
+
+//NEU
+function initMobileControls() {
+  // Better mobile detection that combines screen size AND touch as primary input
+  const isMobileDevice =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.innerWidth < 992 && "ontouchstart" in window);
+
+  if (isMobileDevice) {
+    console.log("True mobile device detected, initializing mobile controls");
     document.getElementById("mobile-buttons").classList.remove("d_none");
 
-    // Initialize touch event handlers if keyboard exists
     if (keyboard) {
       keyboard.initMobileButtons();
     } else {
       console.error("Keyboard not initialized yet");
     }
+  } else {
+    // Hide controls on desktop/larger devices
+    document.getElementById("mobile-buttons").classList.add("d_none");
+    console.log("Desktop device detected, hiding mobile controls");
+  }
+}
+
+// Also update this function
+// function toggleMobileControls(show) {
+//   const mobileButtons = document.getElementById("mobile-buttons");
+
+//   // Increased threshold to 992px to include tablets
+//   if (window.innerWidth < 992) {
+//     if (show) {
+//       mobileButtons.classList.remove("d_none");
+//     } else {
+//       mobileButtons.classList.add("d_none");
+//     }
+//   }
+// }
+
+//NEU
+function toggleMobileControls(show) {
+  const mobileButtons = document.getElementById("mobile-buttons");
+
+  // Better mobile detection that combines screen size AND touch as primary input
+  const isMobileDevice =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.innerWidth < 992 && "ontouchstart" in window);
+
+  if (isMobileDevice) {
+    if (show) {
+      mobileButtons.classList.remove("d_none");
+    } else {
+      mobileButtons.classList.add("d_none");
+    }
+  } else {
+    // Always hide on desktop
+    mobileButtons.classList.add("d_none");
   }
 }
 

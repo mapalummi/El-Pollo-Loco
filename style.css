@@ -97,15 +97,6 @@ canvas {
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
 }
 
-/* .game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 720px;
-  position: relative; 
-} */
-
 /* Game container positioning */
 .game-container {
   position: relative;
@@ -188,7 +179,7 @@ canvas {
   pointer-events: auto; /* Re-enable pointer events for buttons */
 }
 
-.left-buttons {
+/* .left-buttons {
   left: 20px;
 }
 
@@ -208,6 +199,29 @@ canvas {
   cursor: pointer;
   padding: 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+} */
+
+/* NEU */
+.mobile-button {
+  width: 12vmin; /* Responsive to viewport size */
+  height: 12vmin; /* Responsive to viewport size */
+  min-width: 50px; /* Minimum size */
+  min-height: 50px; /* Minimum size */
+  max-width: 120px; /* Maximum size */
+  max-height: 120px; /* Maximum size */
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 3px solid #a0220a;
+}
+
+.left-buttons {
+  left: 4vw;
+  bottom: 4vh;
+}
+
+.right-buttons {
+  right: 4vw;
+  bottom: 4vh;
 }
 
 .mobile-button img {
@@ -236,13 +250,28 @@ canvas {
   font-size: 1.5rem;
 }
 
-/* Media query for responsive behavior */
-@media (min-width: 768px) {
-  #mobile-buttons {
-    display: none !important; /* Hide on larger screens */
-  }
+button {
+  padding: 10px 20px;
+  margin-top: 8px;
+  font-size: 16px;
+  background-color: #a0220a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
+button:hover {
+  background-color: #c02a0c;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+  color: #ffcc00;
+}
+
+/* Small phones (under 576px) */
 @media (max-width: 767px) {
   .game-container {
     width: 100%;
@@ -278,28 +307,25 @@ canvas {
   }
 }
 
-button {
-  padding: 10px 20px;
-  margin-top: 8px;
-  font-size: 16px;
-  background-color: #a0220a;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+/* Larger phones (576px-767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .mobile-button {
+    width: 80px;
+    height: 80px;
+  }
+
+  .left-buttons {
+    left: 20px;
+    bottom: 20px;
+  }
+
+  .right-buttons {
+    right: 20px;
+    bottom: 20px;
+  }
 }
 
-button:hover {
-  background-color: #c02a0c;
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
-  color: #ffcc00;
-}
-
-/* Responsiveness */
+/* Media query for responsive behavior */
 @media (max-width: 768px) {
   #keyboard-controls {
     padding: 15px;
@@ -322,5 +348,32 @@ button:hover {
 
   #keyboard-controls li strong {
     font-size: 1.2rem;
+  }
+
+  #mobile-buttons {
+    display: none !important; /* Hide on larger screens */
+  }
+}
+
+/* Tablets (768px-991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  /* Show mobile controls on tablets too */
+  #mobile-buttons:not(.d_none) {
+    display: flex !important;
+  }
+
+  .mobile-button {
+    width: 100px;
+    height: 100px;
+  }
+
+  .left-buttons {
+    left: 30px;
+    bottom: 30px;
+  }
+
+  .right-buttons {
+    right: 30px;
+    bottom: 30px;
   }
 }
