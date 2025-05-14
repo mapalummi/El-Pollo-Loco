@@ -8,7 +8,6 @@ class Keyboard {
     this.B = false;
 
     this.initEventListeners();
-    // this.initMobileButtons();
   }
 
   initEventListeners() {

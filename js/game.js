@@ -445,3 +445,37 @@ function togglePausePlay() {
     }
   }
 }
+//NEU:
+function checkOrientation() {
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const message = document.getElementById("rotate-message");
+
+  if (isLandscape) {
+    message.style.display = "none";
+    //Optional Spiel starten
+    if (window.pausedDueToOrientation && world) {
+      window.pausedDueToOrientation = false;
+      if (!window.gamePaused) {
+        // Only resume if not manually paused
+        world.resumeGame();
+        if (!AudioHub.isMuted) {
+          AudioHub.resumeAll();
+        }
+      }
+    }
+  } else {
+    message.style.display = "flex";
+    //Optional Spiel pausieren
+    if (world && !window.gamePaused) {
+      window.pausedDueToOrientation = true;
+      world.pauseGame();
+      AudioHub.pauseAll();
+    }
+  }
+}
+
+//Bei Laden der Seite prüfen
+window.addEventListener("load", checkOrientation);
+//Bei Drehung des Gerätes prüfen
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
