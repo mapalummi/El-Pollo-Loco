@@ -431,47 +431,6 @@ class World {
     }
   }
 
-  //ALT (kann evtl. raus):
-  // updateEndbossBehavior(endboss, distance) {
-  //   // Überspringe, wenn Endboss bereits tot ist oder gerade getroffen wurde
-  //   if (endboss.isDead || endboss.isHurt) return;
-
-  //   if (endboss.wasHitRecently) {
-  //     console.log("Endboss recently hit, forcing alert mode");
-  //     if (!endboss.isAlert) {
-  //       endboss.startAlert();
-  //     }
-  //     return; // Don't proceed with other behavior checks
-  //   }
-
-  //   if (this.endbossTriggered && endboss.x > this.levelWidth - 500) {
-  //     console.log("Endboss in entrance zone, walking");
-  //     if (!endboss.isWalking) {
-  //       endboss.startWalking();
-  //     }
-  //     return;
-  //   }
-
-  //   console.log(`Distance-based behavior: ${distance}`);
-
-  //   // Distance-based behavior (only if not in entrance zone and not recently hit)
-  //   if (distance < 300) {
-  //     if (!endboss.isAttacking) {
-  //       endboss.startAttacking();
-  //     }
-  //   } else if (distance < 900) {
-  //     if (!endboss.isWalking) {
-  //       endboss.startWalking();
-  //       this.moveEndbossTowardsPlayer(endboss);
-  //     }
-  //   } else {
-  //     if (!endboss.isAlert) {
-  //       endboss.startAlert();
-  //     }
-  //   }
-  // }
-
-  //NEU (kompakter als vorher))
   updateEndbossBehavior(endboss, distance) {
     if (distance < 300) {
       endboss.startAttacking();
@@ -529,8 +488,14 @@ class World {
   resumeGame() {
     this.paused = false;
 
+    //NEU
+    // Only restart animation loop if it's not already running
+    if (!this.animationId) {
+      this.animationId = requestAnimationFrame(() => this.draw());
+    }
+
     // Resume the animation loop
-    this.draw();
+    // this.draw();
 
     // Resume all intervals
     this.resumeIntervals();
