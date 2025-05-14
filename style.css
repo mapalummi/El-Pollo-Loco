@@ -279,33 +279,33 @@ button:hover {
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 12px;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.312);
+  /* background-color: rgba(0, 0, 0, 0.312); */
   z-index: 10;
 }
 
 .footer-btn {
   background: linear-gradient(to bottom, #ffd343, #ffb600);
-  border: 3px solid #7d4d00;
+  border: 1px solid #7d4d00;
   border-radius: 8px;
   color: #7d4d00;
   font-family: "Arial", sans-serif;
-  font-weight: bold;
-  font-size: 16px;
-  padding: 8px 16px;
+  /* font-weight: bold; */
+  font-size: 14px;
+  padding: 3px 6px;
   cursor: pointer;
   text-transform: uppercase;
-  box-shadow: 0 4px 0 #7d4d00;
+  box-shadow: 0 2px 0 #7d4d00;
   transform: translateY(0);
   transition: all 0.1s ease;
-  backdrop-filter: blur(2px); /* Schöner Blur-Effekt */
+  backdrop-filter: blur(2px);
 }
 
 .footer-btn:hover {
   background: linear-gradient(to bottom, #ffe066, #ffc933);
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 #7d4d00;
+  box-shadow: 0 4px 0 #7d4d00;
 }
 
 .footer-btn:active {
