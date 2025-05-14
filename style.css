@@ -485,16 +485,6 @@ button:hover {
   }
 }
 
-@media screen and (orientation: landscape) {
-  #keyboard-controls {
-    display: none !important;
-  }
-
-  .footer-buttons {
-    display: none !important;
-  }
-}
-
 /* @media screen and (orientation: landscape) {
   #keyboard-controls {
     display: none !important;
@@ -503,8 +493,18 @@ button:hover {
   .footer-buttons {
     display: none !important;
   }
+} */
 
-  
+@media screen and (orientation: landscape) {
+  #keyboard-controls {
+    display: none !important;
+  }
+
+  .footer-buttons {
+    display: none !important;
+  }
+
+  /* Make canvas fullscreen in landscape mode */
   h1 {
     display: none;
   }
@@ -529,6 +529,35 @@ button:hover {
     margin: 0;
   }
 
+  /* Center the play button in landscape mode */
+  #startButton {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    font-size: 1.5rem;
+    padding: 12px 24px;
+  }
+
+  /* Also adjust other game buttons to be centered */
+  #homeButton,
+  #restartButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+  }
+
+  #homeButton {
+    top: calc(50% + 60px);
+  }
+
+  #restartButton {
+    top: calc(50% - 60px);
+  }
+
+  /* Adjust control buttons position for fullscreen */
   #corner-buttons {
     top: 20px;
     right: 20px;
@@ -543,4 +572,4 @@ button:hover {
     right: 20px;
     bottom: 20px;
   }
-} */
+}
