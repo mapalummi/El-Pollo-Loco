@@ -8,6 +8,7 @@ class Keyboard {
     this.B = false;
 
     this.initEventListeners();
+    // this.initMobileButtons();
   }
 
   initEventListeners() {
@@ -59,5 +60,36 @@ class Keyboard {
         this.B = false;
         break;
     }
+  }
+
+  initMobileButtons() {
+    document.getElementById("moveLeftButton").addEventListener("touchstart", e => {
+      e.preventDefault();
+      this.LEFT = true;
+    });
+    document.getElementById("moveLeftButton").addEventListener("touchend", () => {
+      this.LEFT = false;
+    });
+    document.getElementById("moveRightButton").addEventListener("touchstart", e => {
+      e.preventDefault();
+      this.RIGHT = true;
+    });
+    document.getElementById("moveRightButton").addEventListener("touchend", () => {
+      this.RIGHT = false;
+    });
+    document.getElementById("jumpButton").addEventListener("touchstart", e => {
+      e.preventDefault();
+      this.SPACE = true;
+    });
+    document.getElementById("jumpButton").addEventListener("touchend", () => {
+      this.SPACE = false;
+    });
+    document.getElementById("throwButton").addEventListener("touchstart", e => {
+      e.preventDefault();
+      this.B = true;
+    });
+    document.getElementById("throwButton").addEventListener("touchend", () => {
+      this.B = false;
+    });
   }
 }

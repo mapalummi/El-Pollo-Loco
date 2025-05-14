@@ -25,7 +25,6 @@ function init() {
   document.addEventListener("keydown", e => {
     if (e.repeat) return;
 
-    //NEU
     // Skip keyboard input if game is over with victory
     if (gameOver && world && world.ignoreControls) return;
 
@@ -45,6 +44,8 @@ function init() {
 
   //NEU
   addFullscreenListeners();
+
+  keyboard.initMobileButtons();
 }
 
 function drawStartText() {
