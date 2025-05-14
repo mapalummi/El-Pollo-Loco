@@ -528,7 +528,6 @@ function toggleMobileControls(show) {
   }
 }
 
-//NEU
 /**
  * Adds event listeners for fullscreen changes
  */
@@ -538,7 +537,7 @@ function addFullscreenListeners() {
   document.addEventListener("mozfullscreenchange", handleFullscreenChange);
   document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 }
-//NEU
+
 /**
  * Handles fullscreen change events
  */
@@ -557,8 +556,8 @@ function handleFullscreenChange() {
 
     // Don't change the canvas width/height (keeps game logic the same)
     // Instead only adjust the display size with CSS
-    canvas.style.width = "80vw"; // Fast die gesamte Bildschirmbreite
-    canvas.style.height = "80vh"; // Fast die gesamte Bildschirmhöhe
+    canvas.style.width = "90vw"; // Fast die gesamte Bildschirmbreite
+    canvas.style.height = "60vh"; // Fast die gesamte Bildschirmhöhe
     canvas.style.display = "block";
     canvas.style.margin = "auto";
 
@@ -591,7 +590,7 @@ function handleFullscreenChange() {
     world.draw();
   }
 }
-//NEU
+
 /**
  * Adjusts world elements to the new canvas size
  */
