@@ -484,3 +484,63 @@ button:hover {
     bottom: 30px;
   }
 }
+
+@media screen and (orientation: landscape) {
+  #keyboard-controls {
+    display: none !important;
+  }
+
+  .footer-buttons {
+    display: none !important;
+  }
+}
+
+/* @media screen and (orientation: landscape) {
+  #keyboard-controls {
+    display: none !important;
+  }
+
+  .footer-buttons {
+    display: none !important;
+  }
+
+  
+  h1 {
+    display: none;
+  }
+
+  .game-container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100vh;
+    object-fit: contain;
+    border: none;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  #corner-buttons {
+    top: 20px;
+    right: 20px;
+  }
+
+  .left-buttons {
+    left: 20px;
+    bottom: 20px;
+  }
+
+  .right-buttons {
+    right: 20px;
+    bottom: 20px;
+  }
+} */
