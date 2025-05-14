@@ -11,9 +11,8 @@ function init() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
 
-  //NEU - hide rotation message by default desktop/landscape
-  const isLandscape = window.innerWidth > window.innerHeight;
-  document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
+  // Always hide rotation message by default
+  document.getElementById("rotate-message").style.display = "none";
 
   //NEU (kann später raus)
   // Debug info for mobile detection
@@ -96,6 +95,18 @@ function startGame() {
   window.pendingGameStart = true;
 
   //NEU
+  // Check if it's a mobile device
+  const isMobileDevice =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.innerWidth < 992 && "ontouchstart" in window);
+
+  // Only on mobile devices, check orientation and show message if needed
+  if (isMobileDevice) {
+    const isLandscape = window.innerWidth > window.innerHeight;
+    document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
+  }
+
+  //NEU
   toggleMobileControls(true);
   initMobileControls();
 
@@ -121,7 +132,12 @@ function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
   const message = document.getElementById("rotate-message");
 
-  if (isLandscape) {
+  // Only consider showing/hiding rotation message on mobile devices
+  const isMobileDevice =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.innerWidth < 992 && "ontouchstart" in window);
+
+  if (isLandscape || !isMobileDevice) {
     message.style.display = "none";
 
     // Start game if it was pending
@@ -141,7 +157,7 @@ function checkOrientation() {
         }
       }
     }
-  } else {
+  } else if (isMobileDevice) {
     message.style.display = "flex";
     // Optional Spiel pausieren
     if (world && !window.gamePaused) {
