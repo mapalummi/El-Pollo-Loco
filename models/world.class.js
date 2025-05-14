@@ -66,14 +66,6 @@ class World {
       clearInterval(this._gameLoopInterval);
     }
 
-    // setInterval(() => {
-    //   this.checkCollisions();
-    //   this.checkThrowObjects();
-    //   this.checkEndbossVisibility();
-    //   this.checkLevelEndReached();
-    //   this.checkGameStatus();
-
-    // NEU:
     this._gameLoopInterval = setInterval(() => {
       if (this.paused) return;
 

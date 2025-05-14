@@ -156,13 +156,6 @@ function checkOrientation() {
     message.style.display = "none";
 
     // Start game if it was pending
-    // if (window.pendingGameStart) {
-    //   window.pendingGameStart = false;
-    //   launchGame();
-    // }
-
-    //NEU
-    // Start game if it was pending
     if (window.pendingGameStart) {
       window.pendingGameStart = false;
       launchGame();
