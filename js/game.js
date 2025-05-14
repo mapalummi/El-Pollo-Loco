@@ -33,6 +33,17 @@ function init() {
     document.body.appendChild(debugEl);
   }
 
+  //NEU Local Storage
+  // Synchronize sound icon with AudioHub muted state
+  const soundIcon = document.getElementById("soundIcon");
+  if (AudioHub.isMuted) {
+    soundIcon.src = "icons/muted-1.png";
+    soundIcon.setAttribute("data-muted", "true");
+  } else {
+    soundIcon.src = "icons/unmuted-1.png";
+    soundIcon.setAttribute("data-muted", "false");
+  }
+
   // Lade und zeige den Startscreen
   const startScreenImage = new Image();
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
@@ -64,11 +75,9 @@ function init() {
     }
   });
 
-  //NEU
   addFullscreenListeners();
 }
 
-//NEU
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     AudioHub.muteAll();
@@ -498,6 +507,14 @@ function toggleSound() {
     soundIcon.setAttribute("data-muted", "true");
     AudioHub.muteAll();
     console.log("Sound muted");
+  }
+
+  //NEU Local Storage
+  // Save the current sound state to localStorage
+  try {
+    localStorage.setItem("elPolloLoco_soundMuted", AudioHub.isMuted);
+  } catch (e) {
+    console.warn("Could not save sound settings to localStorage");
   }
 }
 

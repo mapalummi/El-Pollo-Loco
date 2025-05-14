@@ -60,8 +60,26 @@ class AudioHub {
   // Statische Variable für den aktuell abgespielten Tasten-Sound
   static currentKeySound = null;
 
-  // Add a static property to track mute state
+  // static property to track mute state
   static isMuted = false;
+
+  //NEU Local Storage
+  // Static initializer to load sound state from localStorage
+  static {
+    try {
+      const soundState = localStorage.getItem("elPolloLoco_soundMuted");
+      if (soundState !== null) {
+        AudioHub.isMuted = soundState === "true";
+
+        // Apply the loaded state immediately
+        if (AudioHub.isMuted) {
+          AudioHub.muteAll();
+        }
+      }
+    } catch (e) {
+      console.warn("Could not access localStorage for sound settings");
+    }
+  }
 
   // Spielt eine einzelne Audiodatei ab
   //   static playOne(sound) {
