@@ -619,9 +619,6 @@ function adjustWorldToResize() {
 function togglePausePlay() {
   const pausePlayIcon = document.getElementById("pausePlayIcon");
 
-  // Remove focus from button
-  // pausePlayIcon.blur();
-
   if (!window.gamePaused) {
     // Pause the game
     window.gamePaused = true;
