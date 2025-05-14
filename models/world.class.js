@@ -246,8 +246,12 @@ class World {
   }
 
   draw() {
-    // Only proceed if not paused
-    if (this.paused) return;
+    // Don't clear and redraw if paused (to keep the last frame visible)
+    if (this.paused) {
+      // Still maintain the animation frame ID for unpausing
+      this.animationId = requestAnimationFrame(() => this.draw());
+      return;
+    }
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
