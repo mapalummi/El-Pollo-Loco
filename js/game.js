@@ -643,6 +643,16 @@ function togglePausePlay() {
 
     // Pause world and animations
     if (world) {
+      // Store the current animation ID before pausing
+      world.lastAnimationId = world.animationId;
+
+      // Stop the animation loop
+      if (world.animationId) {
+        cancelAnimationFrame(world.animationId);
+        world.animationId = null;
+      }
+
+      // Pause the game logic
       world.pauseGame();
     }
   } else {
@@ -657,7 +667,13 @@ function togglePausePlay() {
 
     // Resume world and animations
     if (world) {
+      // Resume the game logic
       world.resumeGame();
+
+      // Restart the animation loop if not already running
+      if (!world.animationId) {
+        world.animationId = requestAnimationFrame(() => world.draw());
+      }
     }
   }
 }
