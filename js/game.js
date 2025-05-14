@@ -11,7 +11,7 @@ function init() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
 
-  //NEU
+  //NEU - hide rotation message by default desktop/landscape
   const isLandscape = window.innerWidth > window.innerHeight;
   document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
 
@@ -76,6 +76,9 @@ function startGame() {
   // Set a flag that we want to start the game
   window.pendingGameStart = true;
 
+  //NEU
+  toggleMobileControls(true);
+
   // Check orientation before starting the game
   checkOrientation();
 }
@@ -136,6 +139,9 @@ function showGameOverScreen(hasWon) {
   showDialog(hasWon);
 
   AudioHub.stopAll();
+
+  //NEU:
+  toggleMobileControls(false);
 
   // Hide keyboard controls
   document.getElementById("keyboard-controls").classList.add("d_none");
@@ -382,6 +388,22 @@ function toggleFullscreen() {
     if (document.exitFullscreen) {
       document.exitFullscreen();
       fullscreenIcon.src = "";
+    }
+  }
+}
+
+/**
+ * Toggle mobile controls
+ * @param {boolean} show - Whether to show or hide the controls
+ */
+function toggleMobileControls(show) {
+  const mobileButtons = document.getElementById("mobile-buttons");
+
+  if (window.innerWidth < 768) {
+    if (show) {
+      mobileButtons.classList.remove("d_none");
+    } else {
+      mobileButtons.classList.add("d_none");
     }
   }
 }

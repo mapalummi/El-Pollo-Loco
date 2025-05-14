@@ -239,7 +239,7 @@ canvas {
 /* Media query for responsive behavior */
 @media (min-width: 768px) {
   #mobile-buttons {
-    display: none; /* Hide on larger screens */
+    display: none !important; /* Hide on larger screens */
   }
 }
 
