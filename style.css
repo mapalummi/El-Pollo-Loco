@@ -254,9 +254,27 @@ canvas {
     height: auto;
   }
 
-  /* Ensure mobile buttons are properly positioned relative to the canvas */
-  #mobile-buttons {
-    bottom: 20px;
+  /* Ensure mobile buttons are visible when not hidden with d_none */
+  #mobile-buttons:not(.d_none) {
+    display: flex !important;
+    pointer-events: auto !important;
+  }
+
+  .mobile-button {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 3px solid #a0220a;
+  }
+
+  .left-buttons {
+    left: 10px;
+    bottom: 10px;
+  }
+
+  .right-buttons {
+    right: 10px;
+    bottom: 10px;
   }
 }
 
