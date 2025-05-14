@@ -15,6 +15,25 @@ function init() {
   const isLandscape = window.innerWidth > window.innerHeight;
   document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
 
+  //NEU (kann später raus)
+  // Debug info for mobile detection
+  if (window.innerWidth < 768 || "ontouchstart" in window) {
+    console.log("Mobile device detected, width:", window.innerWidth);
+
+    // Create a small debug element
+    const debugEl = document.createElement("div");
+    debugEl.style.position = "fixed";
+    debugEl.style.bottom = "5px";
+    debugEl.style.left = "5px";
+    debugEl.style.background = "rgba(0,0,0,0.5)";
+    debugEl.style.color = "white";
+    debugEl.style.padding = "5px";
+    debugEl.style.fontSize = "10px";
+    debugEl.style.zIndex = "9999";
+    debugEl.textContent = "Mobile: " + window.innerWidth + "px";
+    document.body.appendChild(debugEl);
+  }
+
   // Lade und zeige den Startscreen
   const startScreenImage = new Image();
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
@@ -78,6 +97,7 @@ function startGame() {
 
   //NEU
   toggleMobileControls(true);
+  initMobileControls();
 
   // Check orientation before starting the game
   checkOrientation();
@@ -128,6 +148,27 @@ function checkOrientation() {
       window.pausedDueToOrientation = true;
       world.pauseGame();
       AudioHub.pauseAll();
+    }
+  }
+}
+
+//NEU
+/**
+ * Initialize mobile controls if device is mobile
+ */
+function initMobileControls() {
+  // Check if device is likely a mobile device
+  if (window.innerWidth < 768 || "ontouchstart" in window) {
+    console.log("Mobile device detected, initializing mobile controls");
+
+    // Remove d_none class to make buttons visible
+    document.getElementById("mobile-buttons").classList.remove("d_none");
+
+    // Initialize touch event handlers if keyboard exists
+    if (keyboard) {
+      keyboard.initMobileButtons();
+    } else {
+      console.error("Keyboard not initialized yet");
     }
   }
 }
@@ -319,6 +360,9 @@ function restartGame() {
 
   // Re-initialize level data explicitly
   initLevel();
+
+  //NEU
+  initMobileControls();
 
   // Start fresh game after a brief pause
   setTimeout(() => {
