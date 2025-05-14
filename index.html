@@ -97,5 +97,38 @@
     </div>
 
     <div id="rotate-message" class="rotate_overlay">Bitte drehe dein Gerät ins Querformat, um das Spiel zu spielen.</div>
+
+    <!-- Footer Buttons -->
+    <div class="footer-buttons">
+      <button class="footer-btn" onclick="showModal('impressum')">Impressum</button>
+      <button class="footer-btn" onclick="showModal('datenschutz')">Datenschutz</button>
+      <button class="footer-btn" onclick="showModal('credits')">Credits</button>
+    </div>
+
+    <!-- Modal-Overlays -->
+    <div id="modal-container" class="modal-hidden">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div id="modal-impressum" class="modal-section modal-hidden">
+          <h2>Impressum</h2>
+          <p>Deine Impressum-Informationen hier.</p>
+        </div>
+        <div id="modal-datenschutz" class="modal-section modal-hidden">
+          <h2>Datenschutz</h2>
+          <p>Deine Datenschutzerklärung hier.</p>
+        </div>
+        <div id="modal-credits" class="modal-section modal-hidden">
+          <h2>Credits</h2>
+          <div class="credits-section">
+            <h3>Sound</h3>
+            <p>Sound-Effekte von [Quelle einfügen]</p>
+          </div>
+          <div class="credits-section">
+            <h3>Icons</h3>
+            <p>Icons von [Quelle einfügen]</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

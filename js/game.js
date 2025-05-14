@@ -152,7 +152,6 @@ function checkOrientation() {
   }
 }
 
-//NEU
 /**
  * Initialize mobile controls if device is mobile
  */
@@ -196,7 +195,6 @@ function initMobileControls() {
   }
 }
 
-// Also update this function
 // function toggleMobileControls(show) {
 //   const mobileButtons = document.getElementById("mobile-buttons");
 
@@ -615,6 +613,49 @@ function togglePausePlay() {
     // Resume world and animations
     if (world) {
       world.resumeGame();
+    }
+  }
+}
+
+/**
+ * Zeigt ein Modal mit dem angegebenen Inhaltstyp an
+ */
+function showModal(type) {
+  console.log("Opening modal:", type);
+  // Modal anzeigen
+  const modalContainer = document.getElementById("modal-container");
+  modalContainer.style.display = "flex"; // Wichtig: display auf flex setzen
+  modalContainer.classList.remove("modal-hidden");
+
+  // Alle Modal-Inhalte verstecken
+  document.querySelectorAll(".modal-section").forEach(section => {
+    section.classList.add("modal-hidden");
+  });
+
+  // Gewünschten Inhalt anzeigen
+  document.getElementById("modal-" + type).classList.remove("modal-hidden");
+
+  // Spiel pausieren, wenn es läuft
+  if (typeof world !== "undefined" && world && !window.gamePaused) {
+    togglePausePlay();
+  }
+}
+
+/**
+ * Schließt das Modal
+ */
+function closeModal() {
+  console.log("Modal wird geschlossen");
+  const modalContainer = document.getElementById("modal-container");
+
+  if (modalContainer) {
+    // Beide Methoden zum Verstecken anwenden
+    modalContainer.style.display = "none";
+    modalContainer.classList.add("modal-hidden");
+
+    // Ggf. Spiel fortsetzen
+    if (window.gamePaused && typeof togglePausePlay === "function") {
+      togglePausePlay();
     }
   }
 }

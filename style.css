@@ -271,6 +271,113 @@ button:hover {
   color: #ffcc00;
 }
 
+/* Footer Buttons */
+.footer-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.312);
+  z-index: 10;
+}
+
+.footer-btn {
+  background: linear-gradient(to bottom, #ffd343, #ffb600);
+  border: 3px solid #7d4d00;
+  border-radius: 8px;
+  color: #7d4d00;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 4px 0 #7d4d00;
+  transform: translateY(0);
+  transition: all 0.1s ease;
+  backdrop-filter: blur(2px); /* Schöner Blur-Effekt */
+}
+
+.footer-btn:hover {
+  background: linear-gradient(to bottom, #ffe066, #ffc933);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #7d4d00;
+}
+
+.footer-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #7d4d00;
+}
+
+/* Modal Styling */
+.modal-hidden {
+  display: none !important;
+}
+
+#modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  display: flex; /* Default ist flex */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: linear-gradient(to bottom, #faedb9, #f9e18a);
+  border: 5px solid #7d4d00;
+  border-radius: 15px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 25px;
+  position: relative;
+  box-shadow: 0 8px 0 #7d4d00, 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #7d4d00;
+  cursor: pointer;
+}
+
+.modal-section h2 {
+  color: #7d4d00;
+  margin-top: 0;
+  border-bottom: 3px solid #7d4d00;
+  padding-bottom: 10px;
+}
+
+.credits-section {
+  margin-bottom: 20px;
+}
+
+.credits-section h3 {
+  color: #7d4d00;
+  margin-bottom: 5px;
+}
+
+/* Für kleinere Bildschirme */
+@media (max-width: 768px) {
+  .footer-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
+
 /* Small phones (under 576px) */
 @media (max-width: 767px) {
   .game-container {
