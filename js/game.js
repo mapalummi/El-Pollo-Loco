@@ -11,6 +11,10 @@ function init() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
 
+  //NEU
+  const isLandscape = window.innerWidth > window.innerHeight;
+  document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
+
   // Lade und zeige den Startscreen
   const startScreenImage = new Image();
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
@@ -46,6 +50,15 @@ function init() {
   addFullscreenListeners();
 }
 
+//NEU
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    AudioHub.muteAll();
+  } else {
+    AudioHub.unmuteAll();
+  }
+});
+
 function drawStartText() {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
@@ -54,10 +67,22 @@ function drawStartText() {
   ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, textYPosition);
 }
 
+//NEU:
 function startGame() {
+  // Add orientation check listeners when game tries to start
+  window.addEventListener("resize", checkOrientation);
+  window.addEventListener("orientationchange", checkOrientation);
+
+  // Set a flag that we want to start the game
+  window.pendingGameStart = true;
+
+  // Check orientation before starting the game
+  checkOrientation();
+}
+
+function launchGame() {
   world = new World(canvas, keyboard);
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
-
   keyboard.initMobileButtons();
 
   // Show keyboard controls
@@ -68,14 +93,41 @@ function startGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
-//NEU
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    AudioHub.muteAll();
+//NEU:
+function checkOrientation() {
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const message = document.getElementById("rotate-message");
+
+  if (isLandscape) {
+    message.style.display = "none";
+
+    // Start game if it was pending
+    if (window.pendingGameStart) {
+      window.pendingGameStart = false;
+      launchGame();
+    }
+
+    // Resume game if it was paused due to orientation
+    if (window.pausedDueToOrientation && world) {
+      window.pausedDueToOrientation = false;
+      if (!window.gamePaused) {
+        // Only resume if not manually paused
+        world.resumeGame();
+        if (!AudioHub.isMuted) {
+          AudioHub.resumeAll();
+        }
+      }
+    }
   } else {
-    AudioHub.unmuteAll();
+    message.style.display = "flex";
+    // Optional Spiel pausieren
+    if (world && !window.gamePaused) {
+      window.pausedDueToOrientation = true;
+      world.pauseGame();
+      AudioHub.pauseAll();
+    }
   }
-});
+}
 
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
@@ -442,37 +494,3 @@ function togglePausePlay() {
     }
   }
 }
-//NEU:
-function checkOrientation() {
-  const isLandscape = window.innerWidth > window.innerHeight;
-  const message = document.getElementById("rotate-message");
-
-  if (isLandscape) {
-    message.style.display = "none";
-    //Optional Spiel starten
-    if (window.pausedDueToOrientation && world) {
-      window.pausedDueToOrientation = false;
-      if (!window.gamePaused) {
-        // Only resume if not manually paused
-        world.resumeGame();
-        if (!AudioHub.isMuted) {
-          AudioHub.resumeAll();
-        }
-      }
-    }
-  } else {
-    message.style.display = "flex";
-    //Optional Spiel pausieren
-    if (world && !window.gamePaused) {
-      window.pausedDueToOrientation = true;
-      world.pauseGame();
-      AudioHub.pauseAll();
-    }
-  }
-}
-
-//Bei Laden der Seite prüfen
-window.addEventListener("load", checkOrientation);
-//Bei Drehung des Gerätes prüfen
-window.addEventListener("resize", checkOrientation);
-window.addEventListener("orientationchange", checkOrientation);
