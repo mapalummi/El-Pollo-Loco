@@ -157,18 +157,6 @@ class Character extends MovableObject {
 
       if (this.isDeadAnimationComplete) return;
 
-      // if (this.isHurt()) {
-      //   this.startAnimation("hurt");
-      // } else if (this.isAboveGround()) {
-      //   this.startAnimation("jumping");
-      // } else if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
-      //   this.startAnimation("sleep");
-      // } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
-      //   this.startAnimation("idle");
-      // } else if (this.isWalking) {
-      //   this.startAnimation("walking");
-      // }
-
       if (this.isHurt()) {
         this.startAnimation("hurt");
       } else if (this.isAboveGround()) {
