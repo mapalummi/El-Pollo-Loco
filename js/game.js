@@ -14,26 +14,7 @@ function init() {
   // Always hide rotation message by default
   document.getElementById("rotate-message").style.display = "none";
 
-  //NEU (kann später raus)
-  // Debug info for mobile detection
-  // if (window.innerWidth < 768 || "ontouchstart" in window) {
-  //   console.log("Mobile device detected, width:", window.innerWidth);
-
-  //   // Create a small debug element
-  //   const debugEl = document.createElement("div");
-  //   debugEl.style.position = "fixed";
-  //   debugEl.style.bottom = "5px";
-  //   debugEl.style.left = "5px";
-  //   debugEl.style.background = "rgba(0,0,0,0.5)";
-  //   debugEl.style.color = "white";
-  //   debugEl.style.padding = "5px";
-  //   debugEl.style.fontSize = "10px";
-  //   debugEl.style.zIndex = "9999";
-  //   debugEl.textContent = "Mobile: " + window.innerWidth + "px";
-  //   document.body.appendChild(debugEl);
-  // }
-
-  //NEU Local Storage
+  // Local Storage
   // Synchronize sound icon with AudioHub muted state
   const soundIcon = document.getElementById("soundIcon");
   if (AudioHub.isMuted) {
@@ -74,6 +55,18 @@ function init() {
       AudioHub.stopKeySound();
     }
   });
+
+  // Add this new event listener to prevent Space from activating buttons
+  document.addEventListener(
+    "keydown",
+    e => {
+      // Prevent Space from activating focused buttons
+      if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+      }
+    },
+    true
+  ); // Use capture phase to intercept before regular handling
 
   addFullscreenListeners();
 }
@@ -625,6 +618,9 @@ function adjustWorldToResize() {
  */
 function togglePausePlay() {
   const pausePlayIcon = document.getElementById("pausePlayIcon");
+
+  // Remove focus from button
+  // pausePlayIcon.blur();
 
   if (!window.gamePaused) {
     // Pause the game
