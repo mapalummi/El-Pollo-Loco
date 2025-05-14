@@ -122,16 +122,18 @@ function launchGame() {
   // Show keyboard controls
   document.getElementById("keyboard-controls").classList.remove("d_none");
 
-  //NEU
   // Hide footer buttons on mobile during gameplay
   toggleFooterButtons(false);
+
+  //NEU
+  // Fill viewport on mobile in landscape mode
+  fillViewportOnMobile();
 
   gameOver = false; // Gameover zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("startButton").style.display = "none";
 }
 
-//NEU:
 function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
   const message = document.getElementById("rotate-message");
@@ -145,9 +147,19 @@ function checkOrientation() {
     message.style.display = "none";
 
     // Start game if it was pending
+    // if (window.pendingGameStart) {
+    //   window.pendingGameStart = false;
+    //   launchGame();
+    // }
+
+    //NEU
+    // Start game if it was pending
     if (window.pendingGameStart) {
       window.pendingGameStart = false;
       launchGame();
+    } else if (world) {
+      // If game is already running, adjust canvas to fill viewport
+      fillViewportOnMobile();
     }
 
     // Resume game if it was paused due to orientation
@@ -172,7 +184,6 @@ function checkOrientation() {
   }
 }
 
-//NEU
 function initMobileControls() {
   // Better mobile detection that combines screen size AND touch as primary input
   const isMobileDevice =
@@ -195,7 +206,6 @@ function initMobileControls() {
   }
 }
 
-//NEU
 function toggleMobileControls(show) {
   const mobileButtons = document.getElementById("mobile-buttons");
 
@@ -216,7 +226,6 @@ function toggleMobileControls(show) {
   }
 }
 
-//NEU
 /**
  * Controls visibility of footer buttons based on game state and device
  * @param {boolean} show - Whether to show or hide the footer buttons
@@ -676,5 +685,64 @@ function closeModal() {
     if (window.gamePaused && typeof togglePausePlay === "function") {
       togglePausePlay();
     }
+  }
+}
+
+//NEU
+function fillViewportOnMobile() {
+  const canvas = document.getElementById("canvas");
+  const gameContainer = document.querySelector(".game-container");
+
+  // Better mobile detection
+  const isMobileDevice =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.innerWidth < 992 && "ontouchstart" in window);
+
+  const isLandscape = window.innerWidth > window.innerHeight;
+
+  if (isMobileDevice && isLandscape) {
+    // Save original dimensions if not already saved
+    if (!canvas.dataset.originalWidth) {
+      canvas.dataset.originalWidth = canvas.width;
+      canvas.dataset.originalHeight = canvas.height;
+      canvas.dataset.originalStyleWidth = canvas.style.width || "";
+      canvas.dataset.originalStyleHeight = canvas.style.height || "";
+    }
+
+    // Fill entire viewport
+    canvas.style.width = "100vw";
+    canvas.style.height = "100vh";
+    canvas.style.margin = "0";
+    canvas.style.display = "block";
+
+    // Ensure the container also fills the viewport
+    gameContainer.style.margin = "0";
+    gameContainer.style.padding = "0";
+    gameContainer.style.width = "100vw";
+    gameContainer.style.height = "100vh";
+
+    // Reposition mobile controls if needed
+    const mobileButtons = document.getElementById("mobile-buttons");
+    if (mobileButtons) {
+      mobileButtons.style.position = "absolute";
+      mobileButtons.style.bottom = "10px";
+    }
+  } else {
+    // Use regular sizing for desktop or portrait mode
+    if (canvas.dataset.originalStyleWidth) {
+      canvas.style.width = canvas.dataset.originalStyleWidth;
+      canvas.style.height = canvas.dataset.originalStyleHeight;
+      canvas.style.margin = "";
+    }
+
+    gameContainer.style.margin = "";
+    gameContainer.style.padding = "";
+    gameContainer.style.width = "";
+    gameContainer.style.height = "";
+  }
+
+  // If world exists, redraw to adjust to new display size
+  if (world) {
+    world.draw();
   }
 }
