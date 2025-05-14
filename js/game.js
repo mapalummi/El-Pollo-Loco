@@ -122,6 +122,10 @@ function launchGame() {
   // Show keyboard controls
   document.getElementById("keyboard-controls").classList.remove("d_none");
 
+  //NEU
+  // Hide footer buttons on mobile during gameplay
+  toggleFooterButtons(false);
+
   gameOver = false; // Gameover zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("startButton").style.display = "none";
@@ -212,8 +216,37 @@ function toggleMobileControls(show) {
   }
 }
 
+//NEU
+/**
+ * Controls visibility of footer buttons based on game state and device
+ * @param {boolean} show - Whether to show or hide the footer buttons
+ */
+function toggleFooterButtons(show) {
+  const footerButtons = document.querySelector(".footer-buttons");
+
+  // Only hide on mobile devices during gameplay
+  const isMobileDevice =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.innerWidth < 992 && "ontouchstart" in window);
+
+  if (isMobileDevice) {
+    if (show) {
+      footerButtons.style.display = "";
+    } else {
+      footerButtons.style.display = "none";
+    }
+  } else {
+    // Always show on desktop
+    footerButtons.style.display = "";
+  }
+}
+
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
+
+  //NEU
+  // Show footer buttons when game ends
+  toggleFooterButtons(true);
 
   gameOver = true;
   showDialog(hasWon);
@@ -285,6 +318,10 @@ function showGameOverScreen(hasWon) {
 //CHECK: - CODE viel zu lang! Kürzen!
 function mainWindow() {
   console.log("Resetting to start screen with full reset...");
+
+  //NEU
+  // Show footer buttons when returning to main window
+  toggleFooterButtons(true);
 
   // Stop all sounds immediately
   AudioHub.stopAll();
