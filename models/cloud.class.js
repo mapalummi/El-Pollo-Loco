@@ -21,14 +21,31 @@ class Cloud extends MovableObject {
     this.animate();
   }
 
-  animate() {
-    setInterval(() => {
-      this.moveLeft();
+  //ALT
+  // animate() {
+  //   setInterval(() => {
+  //     this.moveLeft();
 
-      // Wenn die Wolke aus dem Level verschwindet, setze sie rechts neu
-      if (this.x + this.width < 0) {
-        this.x = this.levelWidth + Math.random() * 200; // Reset rechts außerhalb des Levels
-        this.y = 20 + Math.random() * 100; // Zufällige neue Y-Position
+  //     // Wenn die Wolke aus dem Level verschwindet, setze sie rechts neu
+  //     if (this.x + this.width < 0) {
+  //       this.x = this.levelWidth + Math.random() * 200; // Reset rechts außerhalb des Levels
+  //       this.y = 20 + Math.random() * 100; // Zufällige neue Y-Position
+  //     }
+  //   }, 1000 / 60); // 60 FPS
+  // }
+
+  //NEU
+  animate() {
+    this.animationInterval = setInterval(() => {
+      // Only move clouds if the world is not paused
+      if (!this.world || !this.world.paused) {
+        this.moveLeft();
+
+        // Wenn die Wolke aus dem Level verschwindet, setze sie rechts neu
+        if (this.x + this.width < 0) {
+          this.x = this.levelWidth + Math.random() * 200; // Reset rechts außerhalb des Levels
+          this.y = 20 + Math.random() * 100; // Zufällige neue Y-Position
+        }
       }
     }, 1000 / 60); // 60 FPS
   }

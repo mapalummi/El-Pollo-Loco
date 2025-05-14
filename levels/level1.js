@@ -69,12 +69,7 @@ function initLevel() {
     [new Coin(390, 160), new Coin(430, 140), new Coin(470, 130), new Coin(510, 140), new Coin(550, 160)]
   );
 
-  level1.clouds[0].x = 50;
-  level1.clouds[1].x = 1000;
-  level1.clouds[2].x = 1500;
-  level1.clouds[3].x = 2000;
-
   //NOTE: Kann das raus genommen werden!?
-  level1.totalCoins = level1.coins.length; // Gesamtzahl Coins berechnen!
-  level1.totalBottles = level1.bottles.length;
+  // level1.totalCoins = level1.coins.length; // Gesamtzahl Coins berechnen!
+  // level1.totalBottles = level1.bottles.length;
 }

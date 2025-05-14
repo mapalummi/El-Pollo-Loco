@@ -50,11 +50,24 @@ class World {
     }
   }
 
+  //ALT
+  // createClouds() {
+  //   const clouds = [];
+  //   for (let i = 0; i < 10; i++) {
+  //     //Erstellt 10 Wolken
+  //     clouds.push(new Cloud(this.levelWidth));
+  //   }
+  //   return clouds;
+  // }
+
+  //NEU
   createClouds() {
     const clouds = [];
     for (let i = 0; i < 10; i++) {
       //Erstellt 10 Wolken
-      clouds.push(new Cloud(this.levelWidth));
+      const cloud = new Cloud(this.levelWidth);
+      cloud.world = this; // Add this line to give each cloud a reference to the world
+      clouds.push(cloud);
     }
     return clouds;
   }
@@ -197,7 +210,7 @@ class World {
       return true; // Behalte Bottle
     });
 
-    this.checkGameStatus(); // NEU !!!
+    this.checkGameStatus();
   }
 
   updateCoinBar() {
@@ -244,7 +257,6 @@ class World {
   }
 
   draw() {
-    // NEU:
     // Only proceed if not paused
     if (this.paused) return;
 
@@ -267,26 +279,19 @@ class World {
           this.addToMap(cloud);
         });
       }
-
-      if (this.level.clouds && this.level.clouds.length) {
-        this.level.clouds.forEach(cloud => {
-          this.addToMap(cloud);
-        });
-      }
+      //CHECK: Kann das raus!?
+      // if (this.level.clouds && this.level.clouds.length) {
+      //   this.level.clouds.forEach(cloud => {
+      //     this.addToMap(cloud);
+      //   });
+      // }
     }
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
 
-    // this.addToMap(this.bottleBar);
-    // this.addToMap(this.coinBar);
-    // this.addToMap(this.healthBar);
-    // if (this.endbossBar.isVisible) {
-    //   this.addToMap(this.endbossBar);
-    // }
-
-    // NEU - Only draw status bars if they're visible
+    // Only draw status bars if they're visible
     if (this.bottleBar.isVisible) {
       this.addToMap(this.bottleBar);
     }
@@ -308,13 +313,6 @@ class World {
       this.checkGameStatus();
     }
 
-    // Draw() wird immer wieder aufgerufen:
-    // let self = this;
-    // requestAnimationFrame(function () {
-    //   self.draw();
-    // });
-
-    // NEU:
     // Store the animation ID
     let self = this;
     this.animationId = requestAnimationFrame(function () {
@@ -456,14 +454,12 @@ class World {
     // Bewege den Endboss
     endboss.x += direction * speed;
 
-    //NEU
     if (this.world) {
       const distanceToPlayer = Math.abs(this.world.character.x - this.x);
       this.world.updateEndbossBehavior(this, distanceToPlayer);
     }
   }
 
-  // NEU:
   pauseGame() {
     this.paused = true;
 
@@ -480,14 +476,10 @@ class World {
   resumeGame() {
     this.paused = false;
 
-    //NEU
     // Only restart animation loop if it's not already running
     if (!this.animationId) {
       this.animationId = requestAnimationFrame(() => this.draw());
     }
-
-    // Resume the animation loop
-    // this.draw();
 
     // Resume all intervals
     this.resumeIntervals();
@@ -524,6 +516,11 @@ class World {
 
       // Handle cloud animations
       this.clouds.forEach((cloud, index) => {
+        // Clear cloud animation interval
+        if (cloud.animationInterval) {
+          clearInterval(cloud.animationInterval);
+        }
+
         // Store cloud state
         this._storedIntervals.push({
           type: "cloud",
@@ -554,6 +551,12 @@ class World {
           const enemy = this.level.enemies[item.index];
           if (enemy && typeof enemy.animate === "function") {
             enemy.animate();
+          }
+        } else if (item.type === "cloud") {
+          // Restart cloud animations
+          const cloud = this.clouds[item.index];
+          if (cloud) {
+            cloud.animate();
           }
         }
       });
