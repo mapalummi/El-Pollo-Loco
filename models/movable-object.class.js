@@ -24,11 +24,6 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  // Kollisionen
-  // isColliding(mo) {
-  //   return this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
-  // }
-
   isColliding(mo) {
     const collision = this.rX + this.rW > mo.rX && this.rY + this.rH > mo.rY && this.rX < mo.rX + mo.rW && this.rY < mo.rY + mo.rH;
     return collision;

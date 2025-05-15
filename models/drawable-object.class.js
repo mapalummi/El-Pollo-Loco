@@ -67,8 +67,6 @@ class DrawableObject {
     arr.forEach(path => {
       let img = new Image();
       img.src = path;
-      // img.onload = () => console.log(`Bild geladen: ${path}`);
-      // img.onerror = () => console.error(`Fehler beim Laden des Bildes: ${path}`);
       this.imageCache[path] = img; // Bild im Cache speichern
     });
   }

@@ -73,7 +73,7 @@ class Chicken extends MovableObject {
     }, 2000);
   }
 
-  //NEU:
+  
   update() {
     if (!this.isJumping && !this.isDead && Math.random() < this.jumpProbability) {
       this.jump();

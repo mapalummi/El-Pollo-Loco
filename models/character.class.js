@@ -89,11 +89,10 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
 
     this.world = world;
-
     this.isLocked = false;
 
-    this.crossImage = new Image();
-    this.crossImage.src = "img/random_pics/skull-147188_640.png";
+    this.deadImage = new Image();
+    this.deadImage.src = "img/random_pics/skull-147188_640.png";
 
     this.applyGravity();
     this.animate();
@@ -280,7 +279,7 @@ class Character extends MovableObject {
       // One-time handling for dead animation completion
       setTimeout(() => {
         clearInterval(this.animationInterval);
-        this.img = this.crossImage; // Bild setzen
+        this.img = this.deadImage; // Bild setzen
         this.width = 50; //Maße des Bildes
         this.height = 50; //Maße des Bildes
         this.y = 370; //Höhe des Bildes auf Y-Achse

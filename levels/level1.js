@@ -69,7 +69,7 @@ function initLevel() {
     [new Coin(390, 160), new Coin(430, 140), new Coin(470, 130), new Coin(510, 140), new Coin(550, 160)]
   );
 
-  //NOTE: Kann das raus genommen werden!?
+  // Kann das raus genommen werden!?
   // level1.totalCoins = level1.coins.length; // Gesamtzahl Coins berechnen!
   // level1.totalBottles = level1.bottles.length;
 }

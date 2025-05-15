@@ -253,6 +253,11 @@ class World {
       return;
     }
 
+    //NEU
+    // Der Character kann sich um 100px vom linken Rand bewegen, bevor die Kamera folgt
+    const cameraOffset = 300;
+    this.camera_x = -Math.max(0, this.character.x - cameraOffset);
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
@@ -272,12 +277,6 @@ class World {
           this.addToMap(cloud);
         });
       }
-      //CHECK: Kann das raus!?
-      // if (this.level.clouds && this.level.clouds.length) {
-      //   this.level.clouds.forEach(cloud => {
-      //     this.addToMap(cloud);
-      //   });
-      // }
     }
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
