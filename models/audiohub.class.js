@@ -16,6 +16,7 @@ class AudioHub {
   static WIN = new Audio("audio/bonus-1.mp3");
   static LOST = new Audio("audio/lose-funny-1.mp3");
   static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
+  static COINS_COMPLETE = new Audio("audio/game-ui-1.mp3");
 
   static soundVolumes = {
     GAMEAUDIO: 0.5,
@@ -35,6 +36,7 @@ class AudioHub {
     WIN: 0.2,
     LOST: 0.2,
     GAMEOVER: 0.2,
+    COINS_COMPLETE: 0.2,
   };
 
   static allSounds = [
@@ -55,6 +57,7 @@ class AudioHub {
     AudioHub.WIN,
     AudioHub.LOST,
     AudioHub.GAMEOVER,
+    AudioHub.COINS_COMPLETE,
   ];
 
   // Statische Variable für den aktuell abgespielten Tasten-Sound
@@ -103,15 +106,11 @@ class AudioHub {
       // Finde den Namen des Sounds
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
-      //NEU
       if (!AudioHub.isMuted) {
         sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       } else {
         sound.volume = 0; // Keep it muted
       }
-
-      // Verwende die spezifische Lautstärke oder 0.2 als Standard
-      // sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
 
       sound.currentTime = 0;
       sound.play();
@@ -124,15 +123,12 @@ class AudioHub {
       // Finde den Namen des Sounds
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
-      //NEU
       // Only set volume if not muted
       if (!AudioHub.isMuted) {
         sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       } else {
         sound.volume = 0; // Keep it muted
       }
-
-      // sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
 
       sound.loop = true; // Aktiviert die Loop-Funktion
       sound.currentTime = 0;
@@ -215,7 +211,6 @@ class AudioHub {
     });
   }
 
-  // NEU:
   static pauseAll() {
     // Store current playing states before pausing
     AudioHub.allSounds.forEach(sound => {

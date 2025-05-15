@@ -187,8 +187,25 @@ class World {
   }
 
   updateCoinBar() {
-    this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100; //Prozentualer Fortschritt
-    this.coinBar.setPercentage(this.percentageCoins); //Fortschritt an die Coinbar übergeben
+    //Prozentualer Fortschritt
+    this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100;
+    //Fortschritt an die Coinbar übergeben
+    this.coinBar.setPercentage(this.percentageCoins);
+
+    //CHECK:
+    // Check if all coins are collected
+    if (this.percentageCoins >= 100) {
+      this.coinBar.highlight(); // Highlight the coin bar
+
+      // Play a special sound when all coins are collected
+      if (!this.allCoinsCollectedSoundPlayed) {
+        AudioHub.playOne(AudioHub.COINS_COMPLETE);
+        this.allCoinsCollectedSoundPlayed = true;
+      }
+    } else {
+      this.coinBar.removeHighlight();
+      this.allCoinsCollectedSoundPlayed = false;
+    }
   }
 
   updateBottleBar() {
@@ -229,6 +246,18 @@ class World {
     // Don't clear and redraw if paused (to keep the last frame visible)
     if (this.paused) {
       return;
+    }
+
+    //CHECK:
+    // Update highlight pulse for animations
+    if (this.coinBar.isHighlighted) {
+      this.highlightPulse += 0.05 * this.highlightDirection;
+      if (this.highlightPulse >= 1) {
+        this.highlightDirection = -1;
+      } else if (this.highlightPulse <= 0) {
+        this.highlightDirection = 1;
+      }
+      this.coinBar.pulseValue = this.highlightPulse;
     }
 
     // Neu - Der Character kann sich um 300px vom linken Rand bewegen, bevor die Kamera folgt
@@ -480,6 +509,32 @@ class World {
     if (!this._storedIntervals) {
       this._storedIntervals = [];
 
+      //CHECK:
+      // Store coin bar highlight animation with detailed state
+      if (this.coinBar) {
+        this._storedIntervals.push({
+          type: "coinBarHighlight",
+          isHighlighted: this.coinBar.isHighlighted,
+          allCoinsCollected: this.coinBar.allCoinsCollected,
+          currentFrame: this.coinBar.currentHighlightFrame,
+          // Store remaining time if timeout exists
+          remainingTime: this.coinBar.highlightTimeout
+            ? Math.max(0, this.highlightDuration - (Date.now() - this._coinBarHighlightStartTime))
+            : 0,
+        });
+
+        // Clear existing intervals and timeouts
+        if (this.coinBar.highlightAnimationInterval) {
+          clearInterval(this.coinBar.highlightAnimationInterval);
+          this.coinBar.highlightAnimationInterval = null;
+        }
+
+        if (this.coinBar.highlightTimeout) {
+          clearTimeout(this.coinBar.highlightTimeout);
+          this.coinBar.highlightTimeout = null;
+        }
+      }
+
       // Handle character animations
       if (this.character && this.character.animationInterval) {
         clearInterval(this.character.animationInterval);
@@ -548,6 +603,10 @@ class World {
           if (cloud) {
             cloud.animate();
           }
+        }
+        //CHECK:
+        if (item.type === "coinBarHighlight" && item.isHighlighted) {
+          this.coinBar.highlight(); // Restart the animation
         }
       });
 
