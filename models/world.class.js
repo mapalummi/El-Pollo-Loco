@@ -240,14 +240,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
 
-    this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.bottles);
-
-    this.ctx.translate(-this.camera_x, 0);
-
-    this.ctx.translate(this.camera_x, 0);
-
-    // Wolken nur zeichnen, wenn nicht gestoppt
+    //NEU positioniert
     if (!this.stopDrawingClouds) {
       // Verwende BEIDE Wolkenarten
       if (this.clouds && this.clouds.length) {
@@ -256,6 +249,23 @@ class World {
         });
       }
     }
+
+    this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.bottles);
+
+    this.ctx.translate(-this.camera_x, 0);
+
+    this.ctx.translate(this.camera_x, 0);
+
+    //ALT
+    // if (!this.stopDrawingClouds) {
+    //   // Verwende BEIDE Wolkenarten
+    //   if (this.clouds && this.clouds.length) {
+    //     this.clouds.forEach(cloud => {
+    //       this.addToMap(cloud);
+    //     });
+    //   }
+    // }
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
