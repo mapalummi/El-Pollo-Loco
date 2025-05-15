@@ -87,7 +87,6 @@ function drawStartText() {
   ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, textYPosition);
 }
 
-//NEU:
 function startGame() {
   // Add orientation check listeners when game tries to start
   window.addEventListener("resize", checkOrientation);
@@ -96,7 +95,6 @@ function startGame() {
   // Set a flag that we want to start the game
   window.pendingGameStart = true;
 
-  //NEU
   // Check if it's a mobile device
   const isMobileDevice =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -108,7 +106,6 @@ function startGame() {
     document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
   }
 
-  //NEU
   toggleMobileControls(true);
   initMobileControls();
 
@@ -186,7 +183,6 @@ function initMobileControls() {
     (window.innerWidth < 992 && "ontouchstart" in window);
 
   if (isMobileDevice) {
-    console.log("True mobile device detected, initializing mobile controls");
     document.getElementById("mobile-buttons").classList.remove("d_none");
 
     if (keyboard) {
@@ -197,7 +193,6 @@ function initMobileControls() {
   } else {
     // Hide controls on desktop/larger devices
     document.getElementById("mobile-buttons").classList.add("d_none");
-    console.log("Desktop device detected, hiding mobile controls");
   }
 }
 
@@ -248,7 +243,6 @@ function toggleFooterButtons(show) {
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
 
-  //NEU
   // Show footer buttons when game ends
   toggleFooterButtons(true);
 
@@ -257,7 +251,6 @@ function showGameOverScreen(hasWon) {
 
   AudioHub.stopAll();
 
-  //NEU:
   toggleMobileControls(false);
 
   // Hide keyboard controls
@@ -319,11 +312,7 @@ function showGameOverScreen(hasWon) {
   document.getElementById("restartButton").style.display = "block";
 }
 
-//CHECK: - CODE viel zu lang! Kürzen!
 function mainWindow() {
-  console.log("Resetting to start screen with full reset...");
-
-  //NEU
   // Show footer buttons when returning to main window
   toggleFooterButtons(true);
 
@@ -333,17 +322,20 @@ function mainWindow() {
   // Hide dialog overlay
   hideDialog();
 
-  //NOTE: Erklären lassen:
+  //CHECK:
   // Clear ALL intervals and timeouts
-  const highestTimeoutId = setTimeout(() => {}, 0);
-  for (let i = 0; i <= highestTimeoutId; i++) {
-    clearTimeout(i);
-  }
+  // const highestTimeoutId = setTimeout(() => {}, 0);
+  // for (let i = 0; i <= highestTimeoutId; i++) {
+  //   clearTimeout(i);
+  // }
+  //CHECK:
+  // const highestIntervalId = setInterval(() => {}, 0);
+  // for (let i = 1; i <= highestIntervalId; i++) {
+  //   clearInterval(i);
+  // }
 
-  const highestIntervalId = setInterval(() => {}, 0);
-  for (let i = 1; i <= highestIntervalId; i++) {
-    clearInterval(i);
-  }
+  //NEU
+  cleanupGameState();
 
   // Cancel ALL animation frames
   if (window.requestAnimationFrame) {
@@ -419,18 +411,22 @@ function restartGame() {
   // Show keyboard controls again if they should be visible during gameplay
   document.getElementById("keyboard-controls").classList.remove("d_none");
 
+  //CHECK:
   // Clear ALL intervals in the page, not just ones we know about
   // This ensures any lingering timers are cleaned up
-  const highestTimeoutId = setTimeout(() => {}, 0);
-  for (let i = 0; i <= highestTimeoutId; i++) {
-    clearTimeout(i);
-  }
-
+  // const highestTimeoutId = setTimeout(() => {}, 0);
+  // for (let i = 0; i <= highestTimeoutId; i++) {
+  //   clearTimeout(i);
+  // }
+  //CHECK:
   // Stop all intervals too
-  const highestIntervalId = setInterval(() => {}, 0);
-  for (let i = 1; i <= highestIntervalId; i++) {
-    clearInterval(i);
-  }
+  // const highestIntervalId = setInterval(() => {}, 0);
+  // for (let i = 1; i <= highestIntervalId; i++) {
+  //   clearInterval(i);
+  // }
+
+  //NEU
+  cleanupGameState();
 
   // Complete reset: destroy current world
   world = null;
@@ -441,7 +437,6 @@ function restartGame() {
   // Re-initialize level data explicitly
   initLevel();
 
-  //NEU
   initMobileControls();
 
   // Start fresh game after a brief pause
@@ -451,6 +446,22 @@ function restartGame() {
     AudioHub.playLoop(AudioHub.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
+}
+
+//Hilfsfunktion NEU
+// Clear ALL intervals in the page, not just ones we know about
+// This ensures any lingering timers are cleaned up
+function cleanupGameState() {
+  const highestTimeoutId = setTimeout(() => {}, 0);
+  for (let i = 0; i <= highestTimeoutId; i++) {
+    clearTimeout(i);
+  }
+
+  // Stop all intervals too
+  const highestIntervalId = setInterval(() => {}, 0);
+  for (let i = 1; i <= highestIntervalId; i++) {
+    clearInterval(i);
+  }
 }
 
 function showDialog(hasWon) {
@@ -495,7 +506,7 @@ function toggleSound() {
     console.log("Sound muted");
   }
 
-  //NEU Local Storage
+  // Local Storage
   // Save the current sound state to localStorage
   try {
     localStorage.setItem("elPolloLoco_soundMuted", AudioHub.isMuted);
@@ -668,8 +679,6 @@ function togglePausePlay() {
  * Zeigt ein Modal mit dem angegebenen Inhaltstyp an
  */
 function showModal(type) {
-  console.log("Opening modal:", type);
-  // Modal anzeigen
   const modalContainer = document.getElementById("modal-container");
   modalContainer.style.display = "flex"; // Wichtig: display auf flex setzen
   modalContainer.classList.remove("modal-hidden");
@@ -692,7 +701,6 @@ function showModal(type) {
  * Schließt das Modal
  */
 function closeModal() {
-  console.log("Modal wird geschlossen");
   const modalContainer = document.getElementById("modal-container");
 
   if (modalContainer) {
@@ -707,7 +715,6 @@ function closeModal() {
   }
 }
 
-//NEU
 function fillViewportOnMobile() {
   const canvas = document.getElementById("canvas");
   const gameContainer = document.querySelector(".game-container");

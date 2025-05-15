@@ -39,7 +39,7 @@ class MovableObject extends DrawableObject {
     } else {
       this.lastHit = now; //Zeitpunkt des letzten Treffers aktualisieren
     }
-    console.log(this.energy);
+    // console.log(this.energy);
   }
 
   isHurt() {
@@ -71,7 +71,7 @@ class MovableObject extends DrawableObject {
     if (this.energy < 0) {
       this.energy = 0; // Energie kann nicht negativ sein
     }
-    console.log(`${this.constructor.name} Energie: ${this.energy}`);
+    // console.log(`${this.constructor.name} Energie: ${this.energy}`);
     if (this instanceof Endboss) {
       world.endbossBar.setPercentage(this.energy); // Endboss-Bar aktualisieren
     }

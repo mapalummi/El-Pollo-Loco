@@ -111,7 +111,7 @@ class World {
         }, this.bottleThrowCooldownDuration);
       } else {
         console.log("Keine Flaschen mehr verfügbar!");
-        // Optional: Visuelles Feedback für den Spieler
+        //TODO: Optional: Visuelles Feedback für den Spieler
       }
     }
   }
@@ -122,10 +122,9 @@ class World {
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
         if (
-          enemy instanceof LittleChicken ||
-          (enemy instanceof Chicken &&
-            this.character.speedY < 0 &&
-            this.character.y + this.character.height <= enemy.y + enemy.height * 0.75)
+          enemy instanceof Chicken &&
+          this.character.speedY < 0 &&
+          this.character.y + this.character.height <= enemy.y + enemy.height * 0.75
         ) {
           // Spieler springt auf das Chicken
           enemy.die();
@@ -147,7 +146,6 @@ class World {
         if (bottle.isColliding(enemy)) {
           bottle.splash(); // Flasche zerplatzt
           if (enemy instanceof Endboss) {
-            console.log("Endboss getroffen");
             enemy.hit(25);
             this.endbossBar.setPercentage(enemy.energy);
           } else if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
@@ -169,8 +167,6 @@ class World {
 
     this.level.coins = this.level.coins.filter(coin => {
       if (this.character.isColliding(coin)) {
-        // console.log("Coin eingesackt:", coin);
-
         this.collectedCoins++;
         this.updateCoinBar();
 
@@ -181,21 +177,16 @@ class World {
       return true; // Behalte den Coin
     });
 
-    // console.log(`Eingesammelte Coins ${this.collectedCoins}`);
-
     this.collectedBottles = this.collectedBottles || 0;
 
     this.level.bottles = this.level.bottles.filter(bottle => {
       if (this.character.isColliding(bottle)) {
-        // console.log("Bottle eingesackt:", bottle);
-
         this.collectedBottles++;
         this.updateBottleBar();
         AudioHub.playOne(AudioHub.BOTTLES);
 
         return false; // Entferne Bottle
       }
-      // console.log("Keine Kollision mit Bottle:", bottle);
       return true; // Behalte Bottle
     });
 
@@ -205,13 +196,11 @@ class World {
   updateCoinBar() {
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100; //Prozentualer Fortschritt
     this.coinBar.setPercentage(this.percentageCoins); //Fortschritt an die Coinbar übergeben
-    // console.log(`Aktueller Fortschritt Coins: ${this.percentageCoins}%`);
   }
 
   updateBottleBar() {
     this.percentageBottles = (this.collectedBottles / this.totalBottles) * 100;
     this.bottleBar.setPercentage(this.percentageBottles);
-    // console.log(`Aktueller Fortschritt Bottles: ${this.percentageBottles}%`);
   }
 
   checkGameStatus() {
@@ -232,7 +221,6 @@ class World {
 
     // Wenn Endboss existiert und seine Energie aufgebraucht ist
     if (endboss && endboss.energy <= 0 && !this.gameEnded) {
-      console.log("Endboss wurde besiegt!", endboss);
       this.gameEnded = true; // Verhindert mehrfaches Auslösen
 
       // Warten auf Abschluss der Todesanimation, bevor GameOver gezeigt wird
@@ -253,8 +241,7 @@ class World {
       return;
     }
 
-    //NEU
-    // Der Character kann sich um 100px vom linken Rand bewegen, bevor die Kamera folgt
+    // Neu - Der Character kann sich um 300px vom linken Rand bewegen, bevor die Kamera folgt
     const cameraOffset = 300;
     this.camera_x = -Math.max(0, this.character.x - cameraOffset);
 
@@ -297,13 +284,15 @@ class World {
       this.addToMap(this.endbossBar);
     }
 
+    //CHECK: Doppelte Überprüfung?
     //Kollisionen prüfen
-    this.checkCollisions();
+    // this.checkCollisions();
 
+    //CHECK: Doppelte Überprüfung?
     // Prüfen des Spielstatus, wenn das Spiel noch läuft
-    if (!this.gameEnded) {
-      this.checkGameStatus();
-    }
+    // if (!this.gameEnded) {
+    //   this.checkGameStatus();
+    // }
 
     // Store the animation ID
     let self = this;
@@ -445,17 +434,12 @@ class World {
     endboss.otherDirection = direction > 0;
     // Bewege den Endboss
     endboss.x += direction * speed;
-
-    if (this.world) {
-      const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-      this.world.updateEndbossBehavior(this, distanceToPlayer);
-    }
   }
 
   pauseGame() {
     this.paused = true;
 
-    // NEW: Record the time when the game was paused
+    // Record the time when the game was paused
     this._pauseStartTime = Date.now();
 
     // Store the current animation frame ID so we can cancel it
@@ -469,10 +453,10 @@ class World {
   }
 
   resumeGame() {
-    // NEW: Calculate how long the game was paused
+    // Calculate how long the game was paused
     const pauseDuration = Date.now() - this._pauseStartTime;
 
-    // NEW: Adjust character's lastMoveTime to account for pause duration
+    // Adjust character's lastMoveTime to account for pause duration
     if (this.character && pauseDuration) {
       this.character.lastMoveTime += pauseDuration;
     }
