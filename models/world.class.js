@@ -246,6 +246,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
 
     this.ctx.translate(this.camera_x, 0);
+
     // Wolken nur zeichnen, wenn nicht gestoppt
     if (!this.stopDrawingClouds) {
       // Verwende BEIDE Wolkenarten
@@ -255,6 +256,7 @@ class World {
         });
       }
     }
+
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
