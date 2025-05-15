@@ -87,7 +87,7 @@ class World {
       if (endboss && endboss.isWalking) {
         this.moveEndbossTowardsPlayer(endboss);
       }
-    }, 100); //Interval hier evtl. auf 50 verkleinern!?
+    }, 50); //Interval hier evtl. auf 50 verkleinern!?
   }
 
   checkThrowObjects() {
@@ -121,7 +121,7 @@ class World {
         if (
           enemy instanceof Chicken &&
           this.character.speedY < 0 &&
-          this.character.y + this.character.height <= enemy.y + enemy.height * 0.75
+          this.character.y + this.character.height <= enemy.y + enemy.height * 0.8
         ) {
           // Spieler springt auf das Chicken
           enemy.die();
@@ -228,8 +228,6 @@ class World {
   draw() {
     // Don't clear and redraw if paused (to keep the last frame visible)
     if (this.paused) {
-      // Still maintain the animation frame ID for unpausing
-      this.animationId = requestAnimationFrame(() => this.draw());
       return;
     }
 
@@ -353,7 +351,7 @@ class World {
     setTimeout(() => {
       this.character.isLocked = false;
       console.log("Character unlocked!");
-    }, 5000); // Adjust time as needed
+    }, 3000); // Adjust time as needed
   }
 
   checkEndbossVisibility() {

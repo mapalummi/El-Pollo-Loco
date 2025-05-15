@@ -322,19 +322,6 @@ function mainWindow() {
   // Hide dialog overlay
   hideDialog();
 
-  //CHECK:
-  // Clear ALL intervals and timeouts
-  // const highestTimeoutId = setTimeout(() => {}, 0);
-  // for (let i = 0; i <= highestTimeoutId; i++) {
-  //   clearTimeout(i);
-  // }
-  //CHECK:
-  // const highestIntervalId = setInterval(() => {}, 0);
-  // for (let i = 1; i <= highestIntervalId; i++) {
-  //   clearInterval(i);
-  // }
-
-  //NEU
   cleanupGameState();
 
   // Cancel ALL animation frames
@@ -411,21 +398,6 @@ function restartGame() {
   // Show keyboard controls again if they should be visible during gameplay
   document.getElementById("keyboard-controls").classList.remove("d_none");
 
-  //CHECK:
-  // Clear ALL intervals in the page, not just ones we know about
-  // This ensures any lingering timers are cleaned up
-  // const highestTimeoutId = setTimeout(() => {}, 0);
-  // for (let i = 0; i <= highestTimeoutId; i++) {
-  //   clearTimeout(i);
-  // }
-  //CHECK:
-  // Stop all intervals too
-  // const highestIntervalId = setInterval(() => {}, 0);
-  // for (let i = 1; i <= highestIntervalId; i++) {
-  //   clearInterval(i);
-  // }
-
-  //NEU
   cleanupGameState();
 
   // Complete reset: destroy current world
@@ -448,8 +420,7 @@ function restartGame() {
   }, 200);
 }
 
-//Hilfsfunktion NEU
-// Clear ALL intervals in the page, not just ones we know about
+// Clear ALL intervals in the page
 // This ensures any lingering timers are cleaned up
 function cleanupGameState() {
   const highestTimeoutId = setTimeout(() => {}, 0);
