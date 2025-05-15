@@ -11,7 +11,6 @@ class World {
   totalBottles;
   collectedBottles; //auch als Limit für das Werfen!
   percentageBottles;
-
   bottleThrowCooldown = false;
   bottleThrowCooldownDuration = 500;
 
@@ -63,7 +62,6 @@ class World {
 
   // Timer um Aktionen auszuführen:
   run() {
-    // NEU:
     if (this._gameLoopInterval) {
       clearInterval(this._gameLoopInterval);
     }
@@ -92,7 +90,6 @@ class World {
     }, 100); //Interval hier evtl. auf 50 verkleinern!?
   }
 
-  //BottleThrow - Feedback für Spieler (evtl. Sound)?
   checkThrowObjects() {
     if (this.keyboard.B && !this.bottleThrowCooldown) {
       if (this.collectedBottles > 0) {
@@ -169,9 +166,7 @@ class World {
       if (this.character.isColliding(coin)) {
         this.collectedCoins++;
         this.updateCoinBar();
-
         AudioHub.playOne(AudioHub.COINS);
-
         return false; // Entferne den Coin
       }
       return true; // Behalte den Coin
@@ -184,12 +179,10 @@ class World {
         this.collectedBottles++;
         this.updateBottleBar();
         AudioHub.playOne(AudioHub.BOTTLES);
-
         return false; // Entferne Bottle
       }
       return true; // Behalte Bottle
     });
-
     this.checkGameStatus();
   }
 
@@ -211,7 +204,7 @@ class World {
       // Wait for death animation to complete
       const animationDuration = this.character.IMAGES_DEAD.length * 100;
       setTimeout(() => {
-        showGameOverScreen(false); // Verloren
+        showGameOverScreen(false);
       }, animationDuration);
       return;
     }
@@ -228,7 +221,6 @@ class World {
       setTimeout(() => {
         showGameOverScreen(true); // Gewonnen
       }, animationDuration);
-
       return;
     }
   }
@@ -428,6 +420,7 @@ class World {
 
     // Regular behavior when near the player
     const direction = this.character.x < endboss.x ? -1 : 1;
+    //CHECK: Speed Endboss doppelt im Spiel??
     const speed = 20; //Speed Endboss im Spiel.
 
     // Set appropriate direction for rendering
