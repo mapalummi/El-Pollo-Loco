@@ -395,6 +395,14 @@ function restartGame() {
   // Reset game state - to prevent any new game over triggers
   gameOver = false;
 
+  //CHECK:
+  // Reset pause state explicitly
+  window.gamePaused = false;
+  const pausePlayIcon = document.getElementById("pausePlayIcon");
+  if (pausePlayIcon) {
+    pausePlayIcon.src = "icons/pause-1.png"; // Reset to pause icon
+  }
+
   // Show keyboard controls again if they should be visible during gameplay
   document.getElementById("keyboard-controls").classList.remove("d_none");
 

@@ -469,6 +469,7 @@ class World {
   }
 
   pauseGame() {
+    if (this.paused) return; // Already paused
     this.paused = true;
 
     // Record the time when the game was paused
