@@ -66,10 +66,17 @@ function initLevel() {
       new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 530, 390),
       new Bottle("img/6_salsa_bottle/1_salsa_bottle_on_ground.png", 560, 390),
     ],
-    [new Coin(390, 160), new Coin(430, 140), new Coin(470, 130), new Coin(510, 140), new Coin(550, 160)]
+    [
+      new Coin(390, 160),
+      new Coin(430, 140),
+      new Coin(470, 130),
+      new Coin(510, 140),
+      new Coin(550, 160),
+      new Coin(800, 130),
+      new Coin(840, 110),
+      new Coin(880, 100),
+      new Coin(920, 110),
+      new Coin(960, 130),
+    ]
   );
-
-  // Kann das raus genommen werden!?
-  // level1.totalCoins = level1.coins.length; // Gesamtzahl Coins berechnen!
-  // level1.totalBottles = level1.bottles.length;
 }
