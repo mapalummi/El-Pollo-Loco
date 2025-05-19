@@ -38,6 +38,70 @@ canvas {
   display: block;
 }
 
+/* Game Explanation Styles */
+.game-explanation {
+  max-width: 720px;
+  margin: 20px auto;
+  background-color: rgba(255, 248, 220, 0.9);
+  border-radius: 10px;
+  border: 2px solid #8b4513;
+  padding: 15px 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: "Western", Arial, sans-serif;
+  color: #5d4037;
+  text-align: center;
+}
+
+.game-explanation h2 {
+  color: #8b4513;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.game-explanation p {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.controls-overview {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.key {
+  background-color: #8b4513;
+  color: #fff8dc;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.description {
+  font-size: 14px;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .game-explanation {
+    margin: 15px 10px;
+    padding: 10px 15px;
+  }
+
+  .controls-overview {
+    gap: 10px;
+  }
+}
+
 #keyboard-controls {
   margin-top: 12px;
   text-align: center;
