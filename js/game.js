@@ -119,7 +119,7 @@ function launchGame() {
   keyboard.initMobileButtons();
 
   // Show keyboard controls
-  document.getElementById("keyboard-controls").classList.remove("d_none");
+  // document.getElementById("keyboard-controls").classList.remove("d_none");
 
   // Hide footer buttons on mobile during gameplay
   toggleFooterButtons(false);
