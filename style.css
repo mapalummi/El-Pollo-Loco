@@ -34,17 +34,16 @@ canvas {
   border: 1px solid #a0220a;
   background-color: black;
   order: 1; /* Ensures it appears above keyboard controls */
-  /* NEU */
   display: block;
 }
 
 /* Game Explanation Styles */
 .game-explanation {
-  max-width: 720px;
+  max-width: 784px;
   margin: 20px auto;
-  background-color: rgba(255, 248, 220, 0.9);
+  background-color: rgba(255, 248, 220, 0.3);
   border-radius: 10px;
-  border: 2px solid #8b4513;
+  border: 1px solid #8b4513;
   padding: 15px 25px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   font-family: "Western", Arial, sans-serif;
@@ -54,12 +53,11 @@ canvas {
 
 .game-explanation h2 {
   color: #8b4513;
-  margin-bottom: 10px;
-  font-size: 24px;
+  margin-bottom: 32px;
+  font-size: 18px;
 }
 
 .game-explanation p {
-  margin-bottom: 15px;
   font-size: 16px;
 }
 
@@ -88,6 +86,14 @@ canvas {
 
 .description {
   font-size: 14px;
+}
+
+#startButton{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  margin-top: 34px;
 }
 
 /* Media query for mobile devices */
@@ -311,6 +317,11 @@ button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
   color: #ffcc00;
+}
+
+.gameover-buttons{
+  display: flex;
+  gap: 12px;
 }
 
 /* Footer Buttons */

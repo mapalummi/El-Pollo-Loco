@@ -66,7 +66,7 @@ function init() {
       }
     },
     true
-  ); // Use capture phase to intercept before regular handling
+  ); 
 
   addFullscreenListeners();
 }
@@ -91,6 +91,9 @@ function startGame() {
   // Add orientation check listeners when game tries to start
   window.addEventListener("resize", checkOrientation);
   window.addEventListener("orientationchange", checkOrientation);
+
+  document.getElementById("game-explanation").classList.add("d_none");
+  document.getElementById("game-controls").classList.remove("d_none");
 
   // Set a flag that we want to start the game
   window.pendingGameStart = true;
@@ -253,8 +256,8 @@ function showGameOverScreen(hasWon) {
 
   toggleMobileControls(false);
 
-  // Hide keyboard controls
-  document.getElementById("keyboard-controls").classList.add("d_none");
+  // Hide Game Explanations
+  document.getElementById("game-controls").classList.add("d_none");
 
   if (!gameOverSoundPlayed) {
     gameOverSoundPlayed = true;
@@ -404,7 +407,7 @@ function restartGame() {
   }
 
   // Show keyboard controls again if they should be visible during gameplay
-  document.getElementById("keyboard-controls").classList.remove("d_none");
+  document.getElementById("game-controls").classList.remove("d_none");
 
   cleanupGameState();
 

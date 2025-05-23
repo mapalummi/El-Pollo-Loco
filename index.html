@@ -48,6 +48,7 @@
       <div id="win_overlay" class="d_none">
         <img id="game_over_image" src="" alt="Game Over" />
       </div>
+      
       <!-- Mobile-Buttons -->
       <div id="mobile-buttons" class="d_none">
         <div class="button-group left-buttons">
@@ -83,13 +84,23 @@
       </button>
     </div>
 
-    <button id="startButton" style="display: none" onclick="startGame()">Start</button>
-    <button id="homeButton" style="display: none" onclick="mainWindow()">Zurück</button>
-    <button id="restartButton" style="display: none" onclick="restartGame()">Neustart</button>
+    <!-- START-BUTTON -->
+    <!-- <button id="startButton" style="display: none" onclick="startGame()">Start</button> -->
+
+    <div class="gameover-buttons"><button id="homeButton" style="display: none" onclick="mainWindow()">Zurück</button>
+    <button id="restartButton" style="display: none" onclick="restartGame()">Neustart</button></div>
+    
 
      <!-- Game Explanation Section -->
     <div id="game-explanation" class="game-explanation">
-      <p>Hilf Pepe, das verrückte Huhn zu besiegen! Sammle Münzen und Flaschen auf deinem Weg.</p><p>Die Hühner können mit einem Sprung oder Flaschenwurf besiegt werden, die Küken nur durch Flaschentreffer.</p><p>Besiege den Endboss um das Spiel zu gewinnen!</p>
+      <h2>Hilf Pepe, das verrückte Huhn zu besiegen!</h2>
+      <p>Sammle Münzen und Flaschen auf deinem Weg.</p><p>Die Hühner können mit einem Sprung oder Flaschenwurf besiegt werden, die Küken nur durch Flaschentreffer.</p><p>Besiege den Endboss um das Spiel zu gewinnen!</p>
+      
+      <button id="startButton" onclick="startGame()">Start</button>
+    </div>
+
+    <!-- Game Controls -->
+<div id="game-controls" class="game-explanation d_none">
       <div class="controls-overview">
         <div class="control-item">
           <span class="key">←→</span>
@@ -106,14 +117,7 @@
       </div>
     </div>
 
-    <!-- <div id="keyboard-controls" class="d_none">
-      <h2>Steuerung</h2>
-      <ul>
-        <li><strong>&#8592;  &#8594; </strong> Bewegung</li>
-        <li><strong>&#x2423;</strong> Springen (Leertaste)</li>
-        <li><strong>B</strong> Flasche werfen</li>
-      </ul>
-    </div> -->
+
 
     <div id="rotate-message" class="rotate_overlay">Bitte drehe dein Gerät ins Querformat, um das Spiel zu spielen.</div>
 
