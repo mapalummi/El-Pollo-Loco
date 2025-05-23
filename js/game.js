@@ -371,10 +371,11 @@ function mainWindow() {
     keyboard.D = false;
   }
 
-  // Hide all game UI elements
-  document.getElementById("keyboard-controls").classList.add("d_none");
+  // Hide/show all game UI elements
+  document.getElementById("game-controls").classList.add("d_none");
   document.getElementById("restartButton").style.display = "none";
   document.getElementById("homeButton").style.display = "none";
+  document.getElementById("game-explanation").classList.remove("d_none");
 
   // Re-initialize level data
   initLevel();
