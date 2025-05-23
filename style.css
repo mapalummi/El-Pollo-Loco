@@ -41,11 +41,11 @@ canvas {
 .game-explanation {
   max-width: 784px;
   margin: 10px auto;
-  /* background-color: rgba(255, 248, 220, 0.3);
+  background-color: rgba(255, 248, 220, 0.3);
   border-radius: 10px;
-  border: 1px solid #8b4513; */
+  /* border: 1px solid #8b4513; */
   padding: 15px 25px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); */
   font-family: "Western", Arial, sans-serif;
   color: #5d4037;
   text-align: center;
@@ -54,13 +54,14 @@ canvas {
 .game-explanation h2 {
   color: #71380e;
   text-shadow: 0px 4px 8px;
-  margin-bottom: 32px;
+  margin-bottom: 22px;
   font-size: 18px;
 }
 
 .game-explanation p {
   color: #71380e;
   font-size: 18px;
+  margin: 8px;
 }
 
 .controls-overview {
