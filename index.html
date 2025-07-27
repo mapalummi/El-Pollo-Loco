@@ -6,9 +6,10 @@
     <title>El Pollo Loco</title>
     <link rel="shortcut icon" href="img/favicon/favicon-2.png"image/x-icon">
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="components.css">
 
     <script>
-      console.log("%cHey Giuliano! 👋", "color: red; font-size: 20px; font-weight: bold;");
+      console.log("%cHey Entwickler! 👋", "color: red; font-size: 20px; font-weight: bold;");
       console.log("Diese Seite wurde mit ❤️ erstellt.");
       console.log("Schau dich ruhig in meinem Code um.");
     </script>
@@ -39,16 +40,13 @@
     <script src="js/game.js"></script>
   </head>
   <body onload="init()">
-    <h1>El Pollo Loco</h1>
-
-    <!-- <canvas id="canvas" width="720" height="480"></canvas> -->
+    <h1>¡Ay, mi pollo!</h1>
 
     <div class="game-container">
       <canvas id="canvas" width="720" height="480"></canvas>
       <div id="win_overlay" class="d_none">
         <img id="game_over_image" src="" alt="Game Over" />
       </div>
-      
       <!-- Mobile-Buttons -->
       <div id="mobile-buttons" class="d_none">
         <div class="button-group left-buttons">
@@ -83,21 +81,22 @@
         <img src="icons/icons8-vollbild.png" alt="Fullscreen" id="fullscreenIcon" />
       </button>
     </div>
+    <!-- Control buttons in top-right corner -->
 
-    <!-- START-BUTTON -->
-    <!-- <button id="startButton" style="display: none" onclick="startGame()">Start</button> -->
 
-    <div class="gameover-buttons"><button id="homeButton" style="display: none" onclick="mainWindow()">Zurück</button>
-    <button id="restartButton" style="display: none" onclick="restartGame()">Neustart</button></div>
+    <div class="gameover-buttons">
+      <button id="homeButton" style="display: none" onclick="mainWindow()">Home</button>
+      <button id="restartButton" style="display: none" onclick="restartGame()">Neues Spiel</button>
+    </div>
     
 
      <!-- Game Explanation Section -->
     <div id="game-explanation" class="game-explanation">
-      <h2>Hilf Pepe, das verrückte Huhn zu besiegen!</h2>
+      <h2>Hilf Pepe Peligroso, das verrückte Huhn zu besiegen!</h2>
       <p>Sammle Münzen und Flaschen auf deinem Weg.</p><p>Die Hühner können mit einem Sprung oder Flaschenwurf besiegt werden, die Küken nur durch Flaschentreffer.</p><p>Besiege den Endboss um das Spiel zu gewinnen!</p>
-      
       <button id="startButton" onclick="startGame()">Start</button>
     </div>
+    <!-- Game Explanation Section -->
 
     <!-- Game Controls -->
 <div id="game-controls" class="game-explanation d_none">
@@ -116,7 +115,7 @@
         </div>
       </div>
     </div>
-
+<!-- Game Controls -->
 
 
     <div id="rotate-message" class="rotate_overlay">Bitte drehe dein Gerät ins Querformat, um das Spiel zu spielen.</div>
@@ -127,6 +126,7 @@
       <button class="footer-btn" onclick="showModal('datenschutz')">Datenschutz</button>
       <button class="footer-btn" onclick="showModal('credits')">Credits</button>
     </div>
+    <!-- Footer Buttons -->
 
     <!-- Modal-Overlays -->
     <div id="modal-container" class="modal-hidden">
@@ -142,7 +142,7 @@ Volmerswerther Stra&szlig;e 441<br />
 
 <h2>Kontakt</h2>
 <p>Telefon: 015779751134<br />
-E-Mail: marco.palummieri@gmail.com</p>
+E-Mail: info@marcopalummieri.de</p>
 
 <p>Quelle: <a href="https://www.e-recht24.de">https://www.e-recht24.de</a></p></p>
         </div>
@@ -163,7 +163,7 @@ Volmerswerther Stra&szlig;e 441<br />
 40221 D&uuml;sseldorf</p>
 
 <p>Telefon: 015779751134<br />
-E-Mail: marco.palummieri@gmail.com</p>
+E-Mail: info@marcopalummieri.de</p>
  <p>Verantwortliche Stelle ist die nat&uuml;rliche oder juristische Person, die allein oder gemeinsam mit anderen &uuml;ber die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z.&nbsp;B. Namen, E-Mail-Adressen o. &Auml;.) entscheidet.</p>
 
 <h3>Speicherdauer</h3> <p>Soweit innerhalb dieser Datenschutzerkl&auml;rung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck f&uuml;r die Datenverarbeitung entf&auml;llt. Wenn Sie ein berechtigtes L&ouml;schersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gel&ouml;scht, sofern wir keine anderen rechtlich zul&auml;ssigen Gr&uuml;nde f&uuml;r die Speicherung Ihrer personenbezogenen Daten haben (z.&nbsp;B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die L&ouml;schung nach Fortfall dieser Gr&uuml;nde.</p>

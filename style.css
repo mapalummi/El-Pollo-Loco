@@ -13,7 +13,6 @@ body {
   align-items: center;
   height: 100vh;
   background-color: #000;
-  /* NEU */
   overflow: hidden;
   touch-action: none;
 }
@@ -33,19 +32,15 @@ h1 {
 canvas {
   border: 1px solid #a0220a;
   background-color: black;
-  order: 1; /* Ensures it appears above keyboard controls */
+  order: 1;
   display: block;
 }
 
-/* Game Explanation Styles */
 .game-explanation {
   max-width: 784px;
   margin: 10px auto;
-  background-color: rgba(255, 248, 220, 0.3);
   border-radius: 10px;
-  /* border: 1px solid #8b4513; */
   padding: 15px 25px;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); */
   font-family: "Western", Arial, sans-serif;
   color: #5d4037;
   text-align: center;
@@ -100,18 +95,6 @@ canvas {
   margin-top: 34px;
 }
 
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-  .game-explanation {
-    margin: 15px 10px;
-    padding: 10px 15px;
-  }
-
-  .controls-overview {
-    gap: 10px;
-  }
-}
-
 #keyboard-controls {
   margin-top: 12px;
   text-align: center;
@@ -121,11 +104,11 @@ canvas {
   padding: 4px;
   border-radius: 8px;
   width: 100%;
-  max-width: 500px; /* Match canvas width */
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
-  order: 2; /* Ensures it appears below canvas when using flex */
-  border: 1px solid rgba(160, 34, 10, 0.5); /* Subtle border matching game theme */
+  order: 2;
+  border: 1px solid rgba(160, 34, 10, 0.5);
 }
 
 #keyboard-controls h2 {
@@ -142,7 +125,7 @@ canvas {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px; /* Space between control items */
+  gap: 12px;
 }
 
 #keyboard-controls li {
@@ -171,7 +154,6 @@ canvas {
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
 }
 
-/* Game container positioning */
 .game-container {
   position: relative;
   width: 720px;
@@ -235,57 +217,6 @@ canvas {
   object-fit: contain;
 }
 
-/* Mobile control buttons positioning */
-#mobile-buttons {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  width: 100%;
-  pointer-events: none; /* Allows clicks to pass through to canvas where no buttons exist */
-  z-index: 10;
-}
-
-.button-group {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  gap: 10px;
-  pointer-events: auto; /* Re-enable pointer events for buttons */
-}
-
-.mobile-button {
-  width: 12vmin; /* Responsive to viewport size */
-  height: 12vmin; /* Responsive to viewport size */
-  min-width: 50px; /* Minimum size */
-  min-height: 50px; /* Minimum size */
-  max-width: 120px; /* Maximum size */
-  max-height: 120px; /* Maximum size */
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 3px solid #a0220a;
-}
-
-.left-buttons {
-  left: 4vw;
-  bottom: 4vh;
-}
-
-.right-buttons {
-  right: 4vw;
-  bottom: 4vh;
-}
-
-.mobile-button img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-
-/* Flip the right arrow icon to point right */
-#moveLeftButton img {
-  transform: scaleX(-1);
-}
-
 .rotate_overlay {
   display: none;
   position: fixed;
@@ -305,7 +236,6 @@ button {
   margin-top: 34px;
   font-size: 16px;
   font-weight: bold;
-  /* background-color: #a0220a; */
   background-color: transparent;
   color: #a0220a;
   border: none;
@@ -328,7 +258,7 @@ button:hover {
   gap: 12px;
 }
 
-/* Footer Buttons */
+
 .footer-buttons {
   position: fixed;
   bottom: 0;
@@ -338,12 +268,10 @@ button:hover {
   justify-content: center;
   gap: 12px;
   padding: 10px;
-  /* background-color: rgba(0, 0, 0, 0.312); */
   z-index: 10;
 }
 
 .footer-btn {
-  /* background: linear-gradient(to bottom, #ffd343, #ffb600); */
   background: transparent;
   border: 1px solid #7d4d00;
   border-radius: 8px;
@@ -361,7 +289,6 @@ button:hover {
 }
 
 .footer-btn:hover {
-  /* background: linear-gradient(to bottom, #ffe066, #ffc933); */
   transform: translateY(-2px);
   box-shadow: 0 4px 0 #7d4d00;
 }
@@ -371,72 +298,26 @@ button:hover {
   box-shadow: 0 2px 0 #7d4d00;
 }
 
-/* Modal Styling */
-.modal-hidden {
-  display: none !important;
-}
+/* ----------------- */
+/* RESPONIVE STYLES */
+/* --------------- */
 
-#modal-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 100;
-  display: flex; /* Default ist flex */
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: linear-gradient(to bottom, #faedb9, #f9e18a);
-  border: 5px solid #7d4d00;
-  border-radius: 15px;
-  width: 80%;
-  max-width: 600px;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 25px;
-  position: relative;
-  box-shadow: 0 8px 0 #7d4d00, 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #7d4d00;
-  cursor: pointer;
-}
-
-.modal-section h2 {
-  color: #7d4d00;
-  margin-top: 0;
-  border-bottom: 3px solid #7d4d00;
-  padding-bottom: 10px;
-}
-
-.credits-section {
-  margin-bottom: 20px;
-}
-
-.credits-section h3 {
-  color: #7d4d00;
-  margin-bottom: 5px;
-}
-
-/* Für kleinere Bildschirme */
 @media (max-width: 768px) {
+  .game-explanation {
+    margin: 15px 10px;
+    padding: 10px 15px;
+  }
+
+  .controls-overview {
+    gap: 10px;
+  }
+
   .footer-btn {
     font-size: 14px;
     padding: 6px 12px;
   }
 }
 
-/* Small phones (under 576px) */
 @media (max-width: 767px) {
   .game-container {
     width: 100%;
@@ -447,50 +328,8 @@ button:hover {
     width: 100%;
     height: auto;
   }
-
-  /* Ensure mobile buttons are visible when not hidden with d_none */
-  #mobile-buttons:not(.d_none) {
-    display: flex !important;
-    pointer-events: auto !important;
-  }
-
-  .mobile-button {
-    width: 70px;
-    height: 70px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border: 3px solid #a0220a;
-  }
-
-  .left-buttons {
-    left: 10px;
-    bottom: 10px;
-  }
-
-  .right-buttons {
-    right: 10px;
-    bottom: 10px;
-  }
 }
 
-/* Larger phones (576px-767px) */
-@media (min-width: 576px) and (max-width: 767px) {
-  .mobile-button {
-    width: 80px;
-    height: 80px;
-  }
-
-  .left-buttons {
-    left: 20px;
-    bottom: 20px;
-  }
-
-  .right-buttons {
-    right: 20px;
-    bottom: 20px;
-  }
-}
-
-/* Media query for responsive behavior */
 @media (max-width: 768px) {
   #keyboard-controls {
     padding: 15px;
@@ -513,32 +352,5 @@ button:hover {
 
   #keyboard-controls li strong {
     font-size: 1.2rem;
-  }
-
-  #mobile-buttons {
-    display: none !important; /* Hide on larger screens */
-  }
-}
-
-/* Tablets (768px-991px) */
-@media (min-width: 768px) and (max-width: 991px) {
-  /* Show mobile controls on tablets too */
-  #mobile-buttons:not(.d_none) {
-    display: flex !important;
-  }
-
-  .mobile-button {
-    width: 100px;
-    height: 100px;
-  }
-
-  .left-buttons {
-    left: 30px;
-    bottom: 30px;
-  }
-
-  .right-buttons {
-    right: 30px;
-    bottom: 30px;
   }
 }

@@ -1,0 +1,179 @@
+.modal-hidden {
+  display: none !important;
+}
+
+#modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: linear-gradient(to bottom, #faedb9, #f9e18a);
+  border: 5px solid #7d4d00;
+  border-radius: 15px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 25px;
+  position: relative;
+  box-shadow: 0 8px 0 #7d4d00, 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #7d4d00;
+  cursor: pointer;
+}
+
+.modal-section h2 {
+  color: #7d4d00;
+  margin-top: 0;
+  border-bottom: 3px solid #7d4d00;
+  padding-bottom: 10px;
+}
+
+.credits-section {
+  margin-bottom: 20px;
+}
+
+.credits-section h3 {
+  color: #7d4d00;
+  margin-bottom: 5px;
+}
+
+#mobile-buttons {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.button-group {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.mobile-button {
+  width: 12vmin;
+  height: 12vmin;
+  min-width: 50px;
+  min-height: 50px;
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 3px solid #a0220a;
+}
+
+.left-buttons {
+  left: 4vw;
+  bottom: 4vh;
+}
+
+.right-buttons {
+  right: 4vw;
+  bottom: 4vh;
+}
+
+.mobile-button img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+#moveLeftButton img {
+  transform: scaleX(-1);
+}
+
+/* ----------------- */
+/* RESPONIVE STYLES */
+/* --------------- */
+
+@media (max-width: 768px) {
+  #mobile-buttons {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Ensure mobile buttons are visible when not hidden with d_none */
+  #mobile-buttons:not(.d_none) {
+    display: flex !important;
+    pointer-events: auto !important;
+  }
+
+  .mobile-button {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 3px solid #a0220a;
+  }
+
+  .left-buttons {
+    left: 10px;
+    bottom: 10px;
+  }
+
+  .right-buttons {
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .mobile-button {
+    width: 80px;
+    height: 80px;
+  }
+
+  .left-buttons {
+    left: 20px;
+    bottom: 20px;
+  }
+
+  .right-buttons {
+    right: 20px;
+    bottom: 20px;
+  }
+}
+
+/* Tablets (768px-991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  /* Show mobile controls on tablets too */
+  #mobile-buttons:not(.d_none) {
+    display: flex !important;
+  }
+
+  .mobile-button {
+    width: 100px;
+    height: 100px;
+  }
+
+  .left-buttons {
+    left: 30px;
+    bottom: 30px;
+  }
+
+  .right-buttons {
+    right: 30px;
+    bottom: 30px;
+  }
+}

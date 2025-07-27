@@ -3,7 +3,7 @@ let ctx;
 let world;
 let gameOver = false; // Spielstatus
 let gameOverSoundPlayed = false;
-let gamePaused = false; // NEU !
+let gamePaused = false;
 const keyboard = new Keyboard();
 
 function init() {
@@ -127,7 +127,6 @@ function launchGame() {
   // Hide footer buttons on mobile during gameplay
   toggleFooterButtons(false);
 
-  //NEU
   // Fill viewport on mobile in landscape mode
   fillViewportOnMobile();
 
