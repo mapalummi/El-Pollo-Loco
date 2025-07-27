@@ -12,7 +12,7 @@ class EndbossBar extends StatusBar {
       490,
       10
     );
-    this.isVisible = false; //Standardmäßig unsichtbar
+    this.isVisible = false;
     this.setPercentage(100);
   }
 }

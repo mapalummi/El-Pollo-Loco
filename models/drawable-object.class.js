@@ -25,7 +25,7 @@ class DrawableObject {
     this.drawOffsetFrame(ctx); // Kollisionsrahmen zeichnen (optional)
   }
 
-  //NOTE: Kollisionsrahmen blau:
+  // Kollisionsrahmen blau:
   // drawFrame(ctx) {
   //   if (this instanceof Character || this instanceof Chicken) {
   //     //Quadrate zeichnen für collision detection:
@@ -60,9 +60,6 @@ class DrawableObject {
     }
   }
 
-  //
-  // @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
-  //
   loadImages(arr) {
     arr.forEach(path => {
       let img = new Image();

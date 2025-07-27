@@ -1,7 +1,7 @@
 let canvas;
 let ctx;
 let world;
-let gameOver = false; // Spielstatus
+let gameOver = false;
 let gameOverSoundPlayed = false;
 let gamePaused = false;
 const keyboard = new Keyboard();
@@ -14,7 +14,6 @@ function init() {
   // Always hide rotation message by default
   document.getElementById("rotate-message").style.display = "none";
 
-  // Local Storage
   // Synchronize sound icon with AudioHub muted state
   const soundIcon = document.getElementById("soundIcon");
   if (AudioHub.isMuted) {
@@ -111,10 +110,10 @@ function startGame() {
 
   toggleMobileControls(true);
   initMobileControls();
-
   // Check orientation before starting the game
   checkOrientation();
 }
+
 
 function launchGame() {
   world = new World(canvas, keyboard);
@@ -135,10 +134,10 @@ function launchGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
+
 function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
   const message = document.getElementById("rotate-message");
-
   // Only consider showing/hiding rotation message on mobile devices
   const isMobileDevice =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -178,6 +177,7 @@ function checkOrientation() {
   }
 }
 
+
 function initMobileControls() {
   // Better mobile detection that combines screen size AND touch as primary input
   const isMobileDevice =
@@ -197,6 +197,7 @@ function initMobileControls() {
     document.getElementById("mobile-buttons").classList.add("d_none");
   }
 }
+
 
 function toggleMobileControls(show) {
   const mobileButtons = document.getElementById("mobile-buttons");
@@ -224,7 +225,6 @@ function toggleMobileControls(show) {
  */
 function toggleFooterButtons(show) {
   const footerButtons = document.querySelector(".footer-buttons");
-
   // Only hide on mobile devices during gameplay
   const isMobileDevice =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -242,19 +242,15 @@ function toggleFooterButtons(show) {
   }
 }
 
+
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
-
   // Show footer buttons when game ends
   toggleFooterButtons(true);
-
   gameOver = true;
   showDialog(hasWon);
-
   AudioHub.stopAll();
-
   toggleMobileControls(false);
-
   // Hide Game Explanations
   document.getElementById("game-controls").classList.add("d_none");
 
@@ -323,7 +319,6 @@ function mainWindow() {
 
   // Hide dialog overlay
   hideDialog();
-
   cleanupGameState();
 
   // Cancel ALL animation frames
@@ -389,6 +384,7 @@ function mainWindow() {
   };
 }
 
+
 function restartGame() {
   gameOverSoundPlayed = false;
   hideDialog(); // NEU
@@ -408,7 +404,6 @@ function restartGame() {
 
   // Show keyboard controls again if they should be visible during gameplay
   document.getElementById("game-controls").classList.remove("d_none");
-
   cleanupGameState();
 
   // Complete reset: destroy current world
@@ -419,7 +414,6 @@ function restartGame() {
 
   // Re-initialize level data explicitly
   initLevel();
-
   initMobileControls();
 
   // Start fresh game after a brief pause
@@ -430,6 +424,7 @@ function restartGame() {
     document.getElementById("startButton").style.display = "none";
   }, 200);
 }
+
 
 // Clear ALL intervals in the page
 // This ensures any lingering timers are cleaned up
@@ -446,6 +441,7 @@ function cleanupGameState() {
   }
 }
 
+
 function showDialog(hasWon) {
   const overlay = document.getElementById("win_overlay");
   const gameOverImage = document.getElementById("game_over_image");
@@ -460,17 +456,18 @@ function showDialog(hasWon) {
   document.body.style.overflow = "hidden";
 }
 
+
 function hideDialog() {
   document.getElementById("win_overlay").classList.add("d_none");
   document.body.style.overflow = "auto"; // Re-enable scrolling
 }
+
 
 /**
  * Toggles sound on/off
  */
 function toggleSound() {
   const soundIcon = document.getElementById("soundIcon");
-
   // Keep track of mute state with a data attribute instead of trying to parse the image source
   let isMuted = soundIcon.getAttribute("data-muted") === "true";
 
@@ -487,8 +484,6 @@ function toggleSound() {
     AudioHub.muteAll();
     console.log("Sound muted");
   }
-
-  // Local Storage
   // Save the current sound state to localStorage
   try {
     localStorage.setItem("elPolloLoco_soundMuted", AudioHub.isMuted);
@@ -496,6 +491,7 @@ function toggleSound() {
     console.warn("Could not save sound settings to localStorage");
   }
 }
+
 
 /**
  * Toggles fullscreen mode
@@ -517,6 +513,7 @@ function toggleFullscreen() {
   }
 }
 
+
 /**
  * Toggle mobile controls
  * @param {boolean} show - Whether to show or hide the controls
@@ -533,6 +530,7 @@ function toggleMobileControls(show) {
   }
 }
 
+
 /**
  * Adds event listeners for fullscreen changes
  */
@@ -542,6 +540,7 @@ function addFullscreenListeners() {
   document.addEventListener("mozfullscreenchange", handleFullscreenChange);
   document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 }
+
 
 /**
  * Handles fullscreen change events
@@ -596,6 +595,7 @@ function handleFullscreenChange() {
   }
 }
 
+
 /**
  * Adjusts world elements to the new canvas size
  */
@@ -605,6 +605,7 @@ function adjustWorldToResize() {
     world.draw();
   }
 }
+
 
 /**
  * Toggles pause/play
@@ -616,7 +617,6 @@ function togglePausePlay() {
     // Pause the game
     window.gamePaused = true;
     pausePlayIcon.src = "icons/play-1.png"; // Change to play icon
-
     // Pause all audio
     AudioHub.pauseAll();
 
@@ -657,6 +657,7 @@ function togglePausePlay() {
   }
 }
 
+
 /**
  * Zeigt ein Modal mit dem angegebenen Inhaltstyp an
  */
@@ -679,6 +680,7 @@ function showModal(type) {
   }
 }
 
+
 /**
  * Schließt das Modal
  */
@@ -696,6 +698,7 @@ function closeModal() {
     }
   }
 }
+
 
 function fillViewportOnMobile() {
   const canvas = document.getElementById("canvas");

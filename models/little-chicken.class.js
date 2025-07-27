@@ -5,7 +5,6 @@ class LittleChicken extends MovableObject {
   height = 60;
   isDead = false;
 
-  //NEU
   jumpProbability = 0.02; // 2% chance (more jumpy than regular chickens)
   isJumping = false;
   initialY = 390; // Adjust based on little chicken's height
@@ -41,7 +40,6 @@ class LittleChicken extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
-  // NEU:
   animate() {
     this.animationInterval = setInterval(() => {
       if (!this.isDead) {
@@ -61,8 +59,8 @@ class LittleChicken extends MovableObject {
     this.isDead = true;
     this.loadImage("img/3_enemies_chicken/chicken_small/2_dead/dead.png");
     this.speed = 0;
-    clearInterval(this.animationInterval); // Stoppt die Bewegung
-    clearInterval(this.walkingAnimationInterval); // Stoppt die Animation
+    clearInterval(this.animationInterval);
+    clearInterval(this.walkingAnimationInterval);
 
     // Entfernt das LittleChicken nach 2 Sekunden
     setTimeout(() => {
@@ -73,7 +71,6 @@ class LittleChicken extends MovableObject {
     }, 2000);
   }
 
-  //NEU
   update() {
     if (!this.isJumping && !this.isDead && Math.random() < this.jumpProbability) {
       this.jump();

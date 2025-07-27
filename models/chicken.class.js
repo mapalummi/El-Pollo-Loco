@@ -3,9 +3,8 @@ class Chicken extends MovableObject {
   y = 350;
   width = 50;
   height = 80;
+  
   isDead = false;
-
-  //NEU:
   jumpProbability = 0.01; // 1% Chance update jump
   isJumping = false;
   initialY = 370;

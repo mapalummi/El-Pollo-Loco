@@ -1,7 +1,6 @@
 class CoinBar extends StatusBar {
   percentage = 0;
   isHighlighted = false;
-  //CHECK:
   allCoinsCollected = false; // Neuer Status für "alle Münzen gesammelt"
   highlightDuration = 3000; // Animation für 3 Sekunden
   highlightTimeout = null;
@@ -12,10 +11,9 @@ class CoinBar extends StatusBar {
     "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png",
   ];
 
-  //CHECK:
   currentHighlightFrame = 0;
   highlightAnimationInterval = null;
-  animationFrameTime = 150; // milliseconds between frames
+  animationFrameTime = 150;
 
   constructor() {
     super(
@@ -34,7 +32,7 @@ class CoinBar extends StatusBar {
     this.loadImages(this.HIGHLIGHT_IMAGES); //NEU
   }
 
-  //CHECK:
+
   /**
    * Highlights the coin bar when all coins are collected
    */

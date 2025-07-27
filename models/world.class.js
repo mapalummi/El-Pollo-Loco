@@ -24,20 +24,16 @@ class World {
   constructor(canvas, keyboard) {
     this.levelWidth = 4314;
     this.clouds = this.createClouds();
-
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-
     this.totalCoins = this.level.coins.length; //Gesamtzahl Coins aus dem Level übernehmen
     this.collectedCoins = 0; //Zähler eingesammelte Coins
     this.totalBottles = this.level.bottles.length;
     this.collectedBottles = 0;
     this.endbossTriggered = false;
-
     this.gameEnded = false;
     this.paused = false;
-
     this.draw();
     this.run();
 
@@ -87,7 +83,7 @@ class World {
       if (endboss && endboss.isWalking) {
         this.moveEndbossTowardsPlayer(endboss);
       }
-    }, 50); //Interval hier evtl. auf 50 verkleinern!?
+    }, 50);
   }
 
   checkThrowObjects() {
@@ -192,7 +188,6 @@ class World {
     //Fortschritt an die Coinbar übergeben
     this.coinBar.setPercentage(this.percentageCoins);
 
-    //CHECK:
     // Check if all coins are collected
     if (this.percentageCoins >= 100) {
       this.coinBar.highlight(); // Highlight the coin bar
@@ -248,7 +243,6 @@ class World {
       return;
     }
 
-    //CHECK:
     // Update highlight pulse for animations
     if (this.coinBar.isHighlighted) {
       this.highlightPulse += 0.05 * this.highlightDirection;
@@ -260,7 +254,7 @@ class World {
       this.coinBar.pulseValue = this.highlightPulse;
     }
 
-    // Neu - Der Character kann sich um 300px vom linken Rand bewegen, bevor die Kamera folgt
+    // Der Character kann sich um 300px vom linken Rand bewegen, bevor die Kamera folgt
     const cameraOffset = 300;
     this.camera_x = -Math.max(0, this.character.x - cameraOffset);
 
@@ -281,21 +275,8 @@ class World {
 
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
-
     this.ctx.translate(-this.camera_x, 0);
-
     this.ctx.translate(this.camera_x, 0);
-
-    //ALT
-    // if (!this.stopDrawingClouds) {
-    //   // Verwende BEIDE Wolkenarten
-    //   if (this.clouds && this.clouds.length) {
-    //     this.clouds.forEach(cloud => {
-    //       this.addToMap(cloud);
-    //     });
-    //   }
-    // }
-
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
@@ -314,16 +295,6 @@ class World {
     if (this.endbossBar.isVisible) {
       this.addToMap(this.endbossBar);
     }
-
-    //CHECK: Doppelte Überprüfung?
-    //Kollisionen prüfen
-    // this.checkCollisions();
-
-    //CHECK: Doppelte Überprüfung?
-    // Prüfen des Spielstatus, wenn das Spiel noch läuft
-    // if (!this.gameEnded) {
-    //   this.checkGameStatus();
-    // }
 
     // Store the animation ID
     let self = this;
@@ -605,7 +576,6 @@ class World {
             cloud.animate();
           }
         }
-        //CHECK:
         if (item.type === "coinBarHighlight" && item.isHighlighted) {
           this.coinBar.highlight(); // Restart the animation
         }

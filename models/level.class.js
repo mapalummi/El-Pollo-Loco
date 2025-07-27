@@ -2,8 +2,8 @@ class Level {
   enemies;
   clouds;
   backgroundObjects;
-  bottles; //NEU
-  coins; //NEU
+  bottles;
+  coins;
 
   level_end_x = 3690;
 

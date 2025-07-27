@@ -15,7 +15,7 @@ class Character extends MovableObject {
   isFrozen = false; //Trackt den Frozen Zustand.
 
   jumpAnimationPlayed = false; //Neue Flag hinzufügen
-  animationTimeout = null; //NEU
+  animationTimeout = null;
 
   offset = {
     top: 100,
@@ -90,7 +90,6 @@ class Character extends MovableObject {
 
     this.world = world;
     this.isLocked = false;
-
     this.deadImage = new Image();
     this.deadImage.src = "img/random_pics/skull-147188_640.png";
 
@@ -107,7 +106,6 @@ class Character extends MovableObject {
 
   animate() {
     setInterval(() => {
-      // Add check for frozen state along with death check
       if (this.isDead() || this.isFrozen) return; // Skip movement if frozen or dead
 
       // Reset walking state at the beginning of each frame
@@ -233,7 +231,6 @@ class Character extends MovableObject {
   }
 
   jumpingAnimation() {
-    // Entferne das bestehende Intervall
     clearInterval(this.animationInterval);
 
     // Manueller, einmaliger Durchlauf der Sprungbilder

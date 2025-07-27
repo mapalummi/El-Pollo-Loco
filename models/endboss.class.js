@@ -49,17 +49,15 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
-  isHurt = false; // Prüft ob die Hurt Animation abgespielt wird
+  isHurt = false;
   isDead = false;
   isAttacking = false;
   isWalking = false;
   isAlert = false;
   isDeathAnimationComplete = false;
-
   wasHitRecently = false;
   hitCooldownTimer = null;
   hitAlertDuration = 3000;
-
   isAttackCooldown = false;
   attackCooldownDuration = 3000;
 
@@ -79,7 +77,7 @@ class Endboss extends MovableObject {
 
     // Positioniere den Endboss am rechten Rand des Levels
     if (world && world.level && world.level.level_end_x) {
-      this.x = world.level.level_end_x - 100; // 200px vor Level-Ende
+      this.x = world.level.level_end_x - 100;
     } else {
       this.x = 4500; // Fallback
     }
@@ -96,22 +94,18 @@ class Endboss extends MovableObject {
 
   endbossWalkAnimation() {
     this.playAnimation(this.IMAGES_WALKING);
-    // this.getRealFrame();
   }
 
   endbossHurtAnimation() {
     this.playAnimation(this.IMAGES_HURT);
-    // this.getRealFrame();
   }
 
   endbossAlertAnimation() {
     this.playAnimation(this.IMAGES_ALERT);
-    // this.getRealFrame();
   }
 
   endbossAttackAnimation() {
     this.playAnimation(this.IMAGES_ATTACK);
-    // this.getRealFrame();
   }
 
   animate() {
@@ -119,7 +113,6 @@ class Endboss extends MovableObject {
     this.animationInterval = setInterval(() => {
       this.getRealFrame();
 
-      // STATE PRIORITY HIERARCHY (most important first)
       if (this.isDead) {
         if (!this.isDeathAnimationComplete) {
           this.playAnimation(this.IMAGES_DEAD);
@@ -207,7 +200,7 @@ class Endboss extends MovableObject {
           clearInterval(jumpInterval);
           this.y = originalY;
         }
-      }, 16); // ~60fps update
+      }, 16);
 
       // Animation duration timer
       setTimeout(() => {
@@ -234,7 +227,6 @@ class Endboss extends MovableObject {
   }
 
   hit(damage) {
-    // Existing hit code
     this.energy -= damage;
     if (this.energy < 0) {
       this.energy = 0;
@@ -258,7 +250,6 @@ class Endboss extends MovableObject {
     // Create a timer to reset the hurt state after animation completes
     setTimeout(() => {
       this.isHurt = false;
-      // console.log("Hurt animation complete, setting isAlert=true");
 
       // When hurt animation completes, go to alert state
       if (!this.isDead) {
@@ -268,7 +259,6 @@ class Endboss extends MovableObject {
 
     // Set timer to reset wasHitRecently after specified duration
     this.hitCooldownTimer = setTimeout(() => {
-      // console.log("wasHitRecently expired, setting to false");
       this.wasHitRecently = false;
 
       // Re-evaluate behavior based on current position and distance
@@ -293,16 +283,12 @@ class Endboss extends MovableObject {
     this.isAlert = false;
     this.isDeathAnimationComplete = false;
 
-    console.log("Endboss stirbt - Animation wird gestartet"); // Debug
-
     // Die Animation wird durch animate() einmal gestartet
     setTimeout(() => {
       this.isDeathAnimationComplete = true;
 
       // Setze das letzte Bild EXPLIZIT
       const lastDeathImage = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
-
-      console.log("Setze letztes Bild:", lastDeathImage); // Debug
 
       // Doppelte Sicherheit: Explizit das Bild neu laden und setzen
       this.loadImage(lastDeathImage); //Alt
@@ -312,8 +298,6 @@ class Endboss extends MovableObject {
       if (this.imageCache && this.imageCache[lastDeathImage]) {
         this.img = this.imageCache[lastDeathImage];
       }
-
-      console.log("Endboss-Animation abgeschlossen"); // Debug
     }, this.IMAGES_DEAD.length * 200);
   }
 }
