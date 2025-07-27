@@ -55,14 +55,15 @@ canvas {
 
 .game-explanation h2 {
   color: #71380e;
+  font-size: 18px;
   text-shadow: 0px 4px 8px;
   margin-bottom: 22px;
-  font-size: 18px;
 }
 
 .game-explanation p {
   color: #71380e;
-  font-size: 18px;
+  font-size: 16px;
+  text-shadow: 1px 1px 1px #71380e;
   margin: 8px;
 }
 
@@ -92,14 +93,6 @@ canvas {
 .description {
   color: #71380e;
   font-size: 14px;
-}
-
-#startButton {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: fit-content;
-  margin-top: 34px;
 }
 
 #keyboard-controls {
@@ -192,37 +185,7 @@ canvas {
   object-fit: contain;
 }
 
-#corner-buttons {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  display: flex;
-  gap: 10px;
-}
 
-.icon-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s;
-}
-
-.icon-button:hover {
-  transform: scale(1.1);
-}
-
-.icon-button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
 
 .rotate_overlay {
   display: none;
@@ -238,76 +201,9 @@ canvas {
   font-size: 1.5rem;
 }
 
-button {
-  padding: 18px 32px;
-  margin-top: 34px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: transparent;
-  color: #a0220a;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-button:hover {
-  background-color: #c02a0c;
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
-  color: #ffcc00;
-}
-
-.gameover-buttons {
-  display: flex;
-  gap: 12px;
-}
-
-/* .footer-buttons {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 0 0;
-  z-index: 10;
-} */
-
-.footer-btn {
-  background: transparent;
-  border: 1px solid #7d4d00;
-  border-radius: 8px;
-  color: #7d4d00;
-  font-family: "Arial", sans-serif;
-  font-weight: lighter;
-  font-size: 14px;
-  padding: 3px 6px;
-  cursor: pointer;
-  text-transform: uppercase;
-  box-shadow: 0 2px 0 #7d4d00;
-  transform: translateY(0);
-  transition: all 0.1s ease;
-  backdrop-filter: blur(2px);
-}
-
-.footer-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 0 #7d4d00;
-}
-
-.footer-btn:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px 0 #7d4d00;
-}
-
 footer {
-  /* position: fixed;
-  bottom: 0; */
   width: 100%;
-  min-height: 50px;
+  min-height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -315,7 +211,7 @@ footer {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 8px 0;
+  padding: 0;
 }
 
 /* ----------------- */
@@ -330,11 +226,6 @@ footer {
 
   .controls-overview {
     gap: 10px;
-  }
-
-  .footer-btn {
-    font-size: 14px;
-    padding: 6px 12px;
   }
 }
 

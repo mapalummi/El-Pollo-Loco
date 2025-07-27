@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="img/favicon/favicon-2.png"image/x-icon">
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="buttons.css">
 
     <script>
       console.log("%cHey Entwickler! 👋", "color: red; font-size: 20px; font-weight: bold;");
@@ -73,7 +74,7 @@
     </div>
 
     <!-- Control buttons in top-right corner -->
-    <div id="corner-buttons">
+    <div id="corner-buttons" class="corner-btn">
       <button id="pausePlayButton" class="icon-button" onclick="togglePausePlay()">
         <img src="icons/pause-1.png" alt="Pause" id="pausePlayIcon" />
       </button>
@@ -88,8 +89,8 @@
 
 
     <div class="gameover-buttons">
-      <button id="homeButton" style="display: none" onclick="mainWindow()">Home</button>
-      <button id="restartButton" style="display: none" onclick="restartGame()">Neues Spiel</button>
+      <button id="homeButton" class="home-btn" style="display: none" onclick="mainWindow()">Home</button>
+      <button id="restartButton" class="restart-btn" style="display: none" onclick="restartGame()">Neues Spiel</button>
     </div>
     
 
@@ -97,7 +98,7 @@
     <div id="game-explanation" class="game-explanation">
       <h2>Hilf Pepe Peligroso, das verrückte Huhn zu besiegen!</h2>
       <p>Sammle Münzen und Flaschen auf deinem Weg.</p><p>Die Hühner können mit einem Sprung oder Flaschenwurf besiegt werden, die Küken nur durch Flaschentreffer.</p><p>Besiege den Endboss um das Spiel zu gewinnen!</p>
-      <button id="startButton" onclick="startGame()">Start</button>
+      <button id="startButton" class="start-btn" onclick="startGame()">Start</button>
     </div>
     <!-- Game Explanation Section -->
 
@@ -135,6 +136,10 @@
       <button class="footer-btn" onclick="showModal('credits')">Credits</button>
     </div>
     <!-- Footer Buttons -->
+
+    
+
+    </footer>
 
     <!-- Modal-Overlays -->
     <div id="modal-container" class="modal-hidden">
@@ -215,6 +220,6 @@ E-Mail: info@marcopalummieri.de</p>
         </div>
       </div>
     </div>
-    </footer>
+
   </body>
 </html>
