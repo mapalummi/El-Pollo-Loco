@@ -68,24 +68,23 @@ canvas {
 }
 
 .game-explanation {
-  max-width: 784px;
+  max-width: 650px;
   margin: 10px auto;
-  border-radius: 10px;
-  padding: 15px 25px;
-  
+  /* padding: 15px 25px; */
   color: #a0220a;
   text-align: center;
 }
 
 .game-explanation h2 {
   font-family: "Burrito", Arial, sans-serif;
+  font-size: 32px;
   text-shadow: 1px 1px 1px black;
   margin-bottom: 22px;
 }
 
 .game-explanation p {
   font-family: "Burrito", Arial, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   text-shadow: 1px 1px 1px black;
   margin: 8px;
 }
