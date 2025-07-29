@@ -82,7 +82,7 @@
 }
 
 .restart-btn {
-    padding: 18px 32px;
+  padding: 18px 32px;
   margin-top: 34px;
   font-size: 16px;
   font-weight: bold;
@@ -109,52 +109,6 @@
   gap: 12px;
 }
 
-.footer-buttons {
-  width: auto;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-btn {
-  background: transparent;
-  border: 1px solid #7d4d00;
-  border-radius: 8px;
-  color: #7d4d00;
-  font-family: "Arial", sans-serif;
-  font-weight: lighter;
-  font-size: 14px;
-  padding: 3px 6px;
-  margin-top: 0;
-  cursor: pointer;
-  text-transform: uppercase;
-  box-shadow: 0 2px 0 #7d4d00;
-  transform: translateY(0);
-  transition: all 0.1s ease;
-  backdrop-filter: blur(2px);
-}
-
-.footer-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 0 #7d4d00;
-}
-
-.footer-btn:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px 0 #7d4d00;
-}
-
 /* ----------------- */
 /* RESPONIVE STYLES */
 /* --------------- */
-
-@media (max-width: 768px) {
-  .footer-btn {
-    font-size: 14px;
-    padding: 6px 12px;
-  }
-}
