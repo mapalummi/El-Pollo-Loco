@@ -72,7 +72,6 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-
     this.world = world;
 
     // Positioniere den Endboss am rechten Rand des Levels

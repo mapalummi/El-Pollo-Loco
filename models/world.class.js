@@ -183,7 +183,6 @@ class World {
   }
 
   updateCoinBar() {
-    //Prozentualer Fortschritt
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100;
     //Fortschritt an die Coinbar übergeben
     this.coinBar.setPercentage(this.percentageCoins);

@@ -4,7 +4,7 @@ class ThrowableObject extends MovableObject {
   width = 50;
   height = 60;
 
-  throwDirection = 1; // Standardmäßig nach rechts
+  throwDirection = 1; // Standardmäßig rechts
   isSplashing = false;
   hasHit = false;
 
@@ -33,8 +33,8 @@ class ThrowableObject extends MovableObject {
 
   constructor(x, y) {
     super().loadImage("img/6_salsa_bottle/salsa_bottle.png");
-    this.loadImages(this.IMAGES_THROW); // Bilder vorladen
-    this.loadImages(this.IMAGES_SPLASH); // Bilder fürs Zerplatzen vorladen
+    this.loadImages(this.IMAGES_THROW);
+    this.loadImages(this.IMAGES_SPLASH);
     this.x = x;
     this.y = y;
 

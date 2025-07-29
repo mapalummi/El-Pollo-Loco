@@ -9,11 +9,9 @@ class Character extends MovableObject {
   idleTimeout = 100;
   sleepTimeout = 15000; //15 Sekunden
   isDeadAnimationComplete = false;
-
   isWalking = false;
   currentAnimation = null; //Trackt aktuell aktive Animation
   isFrozen = false; //Trackt den Frozen Zustand.
-
   jumpAnimationPlayed = false; //Neue Flag hinzufügen
   animationTimeout = null;
 
@@ -92,7 +90,6 @@ class Character extends MovableObject {
     this.isLocked = false;
     this.deadImage = new Image();
     this.deadImage.src = "img/random_pics/skull-147188_640.png";
-
     this.applyGravity();
     this.animate();
   }
@@ -235,7 +232,6 @@ class Character extends MovableObject {
 
     // Manueller, einmaliger Durchlauf der Sprungbilder
     let currentIndex = 0;
-
     // Funktion, die jedes Bild mit kurzer Verzögerung zeigt
     const playNextFrame = () => {
       if (currentIndex < this.IMAGES_JUMPING.length) {
