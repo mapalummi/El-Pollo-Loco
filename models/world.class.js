@@ -356,12 +356,12 @@ class World {
 
     AudioHub.playOne(AudioHub.ENDBOSS_SOUND);
 
-    console.log("Endboss entrance triggered!");
+    // console.log("Endboss entrance triggered!");
 
     // Unlock the character after a delay (e.g., 3 seconds)
     setTimeout(() => {
       this.character.isLocked = false;
-      console.log("Character unlocked!");
+      // console.log("Character unlocked!");
     }, 3000); // Adjust time as needed
   }
 
