@@ -256,7 +256,6 @@ class Character extends MovableObject {
 
   idleAnimation() {
     this.animationInterval = setInterval(() => {
-      // if (this.isFrozen) return; // NEU
       this.playAnimation(this.IMAGES_IDLE);
     }, 1000 / 10);
   }

@@ -28,7 +28,6 @@ function init() {
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
   startScreenImage.onload = () => {
     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
-    drawStartText();
     document.getElementById("startButton").style.display = "block";
     document.getElementById("homeButton").style.display = "none";
     document.getElementById("restartButton").style.display = "none";
@@ -107,8 +106,8 @@ function launchGame() {
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
   keyboard.initMobileButtons();
 
-  // Hide footer buttons on mobile during gameplay
-  toggleFooterButtons(false);
+  // Hide Gameoverbuttons on mobile during gameplay
+  toggleGameoverButtons(false);
 
   // Fill viewport on mobile in landscape mode
   fillViewportOnMobile();
@@ -162,7 +161,7 @@ function checkOrientation() {
 
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
-  // Show footer buttons when game ends
+  // Show Gameoverbuttons when game ends
   toggleGameoverButtons(true);
   gameOver = true;
   showDialog(hasWon);
@@ -247,8 +246,8 @@ function showGameOverScreen(hasWon) {
 }
 
 function mainWindow() {
-  // Show footer buttons when returning to main window
-  toggleFooterButtons(true);
+  // Show Gameoverbuttons when returning to main window
+  toggleGameoverButtons(true);
   AudioHub.stopAll();
 
   // Hide dialog overlay
@@ -312,7 +311,6 @@ function mainWindow() {
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
   startScreenImage.onload = () => {
     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
-    drawStartText();
     document.getElementById("startButton").style.display = "block";
   };
 }
