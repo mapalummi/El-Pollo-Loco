@@ -23,12 +23,9 @@
 }
 
 
-
-
-
-
 body {
   margin: 0;
+  width: 100%;
   min-height: 100vh;
   background-image: url("img/random_pics/bgpic.jpg");
   background-size: cover;
@@ -50,11 +47,14 @@ body {
 }
 
 .content-wrapper {
+  max-width: 1440px;
   width: 100%;
+  min-height: 100vh;
   flex: 1;
   display: flex;
   justify-content: center;
   flex-direction: column;
+  margin: 0 auto;
 }
 
 h1 {
@@ -231,6 +231,15 @@ canvas {
   font-size: 1.5rem;
 }
 
+.footer-inner {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .footer-link{
   text-decoration: none;
   color: white;
@@ -239,14 +248,12 @@ canvas {
 footer {
   width: 100%;
   min-height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0;
+  padding: 8px;
+  margin: 0 auto;
 }
 
 /* ----------------- */
