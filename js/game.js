@@ -77,7 +77,6 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-
 function startGame() {
   // Add orientation check listeners when game tries to start
   window.addEventListener("resize", checkOrientation);
@@ -161,83 +160,10 @@ function checkOrientation() {
   }
 }
 
-
-
-
-// function showGameOverScreen(hasWon) {
-//   if (gameOver) return; // Prevent multiple game over screens
-//   toggleFooterButtons(true);
-//   gameOver = true;
-//   showDialog(hasWon);
-//   AudioHub.stopAll();
-//   toggleMobileControls(false);
-//   // Hide Game Explanations
-//   document.getElementById("game-controls").classList.add("d_none");
-
-//   if (!gameOverSoundPlayed) {
-//     gameOverSoundPlayed = true;
-//   }
-
-//   if (hasWon) {
-//     AudioHub.playOne(AudioHub.WIN);
-//     // Freeze the character when the boss is defeated
-//     if (world && world.character) {
-//       world.character.isFrozen = true;
-
-//       // Disable keyboard controls
-//       keyboard.RIGHT = false;
-//       keyboard.LEFT = false;
-//       keyboard.UP = false;
-//       keyboard.DOWN = false;
-//       keyboard.SPACE = false;
-//       keyboard.D = false;
-//       // Additional flag to ignore new keyboard inputs
-//       world.ignoreControls = true;
-//     }
-//   } else {
-//     AudioHub.playOne(AudioHub.GAMEOVER);
-//   }
-
-//   // Entfernt alle Status-Bars
-//   if (world) {
-//     if (world.healthBar && typeof world.healthBar.hide === "function") {
-//       world.healthBar.hide();
-//     }
-//     if (world.bottleBar && typeof world.bottleBar.hide === "function") {
-//       world.bottleBar.hide();
-//     }
-//     if (world.coinBar && typeof world.coinBar.hide === "function") {
-//       world.coinBar.hide();
-//     }
-//     if (world.endbossBar && typeof world.endbossBar.hide === "function") {
-//       world.endbossBar.hide();
-//     }
-//   }
-
-//   // Buttons wieder anzeigen
-//   document.getElementById("homeButton").style.display = "block";
-//   document.getElementById("restartButton").style.display = "block";
-
-//   // Stoppe die Animation (freeze)
-//   if (window.requestAnimationFrame) {
-//     const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
-//     if (cancelAnim && world && world.animationId) {
-//       cancelAnim(world.animationId);
-//       world.animationId = null;
-//     }
-//     for (let i = 0; i < 100; i++) {
-//       cancelAnim(i);
-//     }
-//   }
-//   cleanupGameState();
-// }
-
-
-
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
   // Show footer buttons when game ends
-  toggleFooterButtons(true);
+  toggleGameoverButtons(true);
   gameOver = true;
   showDialog(hasWon);
   AudioHub.stopAll();
@@ -251,10 +177,18 @@ function showGameOverScreen(hasWon) {
 
   if (hasWon) {
     AudioHub.playOne(AudioHub.WIN);
-    //TODO:
     // Freeze the character when the boss is defeated
     if (world && world.character) {
       world.character.isFrozen = true;
+
+      if (world.character.animationInterval) {
+        clearInterval(world.character.animationInterval);
+        world.character.animationInterval = null;
+      }
+      if (world.character.animationTimeout) {
+        clearTimeout(world.character.animationTimeout);
+        world.character.animationTimeout = null;
+      }
 
       // Disable keyboard controls
       keyboard.RIGHT = false;
@@ -263,7 +197,6 @@ function showGameOverScreen(hasWon) {
       keyboard.DOWN = false;
       keyboard.SPACE = false;
       keyboard.D = false;
-
       // Additional flag to ignore new keyboard inputs
       world.ignoreControls = true;
     }
@@ -271,17 +204,17 @@ function showGameOverScreen(hasWon) {
     AudioHub.playOne(AudioHub.GAMEOVER);
   }
 
-  // Behalte nur den Hintergrund, entferne alle anderen Objekte
+  // Nur den Hintergrund behalten, entfernt alle anderen Objekte
   if (world) {
     world.level.clouds = [];
     world.level.coins = [];
     world.level.bottles = [];
     world.level.enemies = [];
 
-    // Wolken-Rendering explizit deaktivieren
+    // Wolken-Rendering deaktivieren
     world.stopDrawingClouds = true;
 
-    // Hide the status bar
+    // Hide status bars
     if (world.healthBar && typeof world.healthBar.hide === "function") {
       world.healthBar.hide();
     }
@@ -296,12 +229,22 @@ function showGameOverScreen(hasWon) {
     }
   }
 
-  // Buttons wieder anzeigen
   document.getElementById("homeButton").style.display = "block";
   document.getElementById("restartButton").style.display = "block";
+
+  // Stoppe die Animation (freeze)
+  // if (window.requestAnimationFrame) {
+  //   const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
+  //   if (cancelAnim && world && world.animationId) {
+  //     cancelAnim(world.animationId);
+  //     world.animationId = null;
+  //   }
+  //   for (let i = 0; i < 100; i++) {
+  //     cancelAnim(i);
+  //   }
+  // }
+  // cleanupGameState();
 }
-
-
 
 function mainWindow() {
   // Show footer buttons when returning to main window
@@ -383,7 +326,6 @@ function restartGame() {
   // Reset game state - to prevent any new game over triggers
   gameOver = false;
 
-  //CHECK:
   // Reset pause state explicitly
   window.gamePaused = false;
   const pausePlayIcon = document.getElementById("pausePlayIcon");
@@ -415,7 +357,6 @@ function restartGame() {
 }
 
 // Clear ALL intervals in the page
-// This ensures any lingering timers are cleaned up
 function cleanupGameState() {
   const highestTimeoutId = setTimeout(() => {}, 0);
   for (let i = 0; i <= highestTimeoutId; i++) {

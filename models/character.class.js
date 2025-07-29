@@ -11,8 +11,8 @@ class Character extends MovableObject {
   isDeadAnimationComplete = false;
   isWalking = false;
   currentAnimation = null; //Trackt aktuell aktive Animation
-  isFrozen = false; //Trackt den Frozen Zustand.
-  jumpAnimationPlayed = false; //Neue Flag hinzufügen
+  isFrozen = false; 
+  jumpAnimationPlayed = false; 
   animationTimeout = null;
 
   offset = {
@@ -174,6 +174,7 @@ class Character extends MovableObject {
   }
 
   startAnimation(animationType) {
+    if (this.isFrozen) return; // NEU
     // If already running this animation, don't restart it
     if (this.currentAnimation === animationType) return;
 
@@ -255,6 +256,7 @@ class Character extends MovableObject {
 
   idleAnimation() {
     this.animationInterval = setInterval(() => {
+      // if (this.isFrozen) return; // NEU
       this.playAnimation(this.IMAGES_IDLE);
     }, 1000 / 10);
   }
