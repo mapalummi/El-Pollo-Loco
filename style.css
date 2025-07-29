@@ -1,27 +1,26 @@
 @font-face {
-  font-family: 'Tacobox';
-  src: url('fonts/TACOBOX_.TTF') format('woff2');
-  src: url('fonts/TACOBOX_.TTF') format('woff');
+  font-family: "Tacobox";
+  src: url("fonts/TACOBOX_.TTF") format("woff2");
+  src: url("fonts/TACOBOX_.TTF") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Locuras';
-  src: url('fonts/Locuras.TTF') format('woff2');
-  src: url('fonts/Locuras.TTF') format('woff');
+  font-family: "Locuras";
+  src: url("fonts/Locuras.TTF") format("woff2");
+  src: url("fonts/Locuras.TTF") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Burrito';
-  src: url('fonts/burrito.TTF') format('woff2');
-  src: url('fonts/burrito.TTF') format('woff');
+  font-family: "Burrito";
+  src: url("fonts/burrito.TTF") format("woff2");
+  src: url("fonts/burrito.TTF") format("woff");
   font-weight: normal;
   font-style: normal;
 }
-
 
 body {
   margin: 0;
@@ -32,13 +31,6 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   /* background-color: #000; */
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-
-  /* overflow: hidden; */
   touch-action: none;
 }
 
@@ -61,7 +53,7 @@ h1 {
   color: #a0220a;
   margin: 0;
   padding: 18px;
-  font-family: 'Burrito', Arial, Helvetica, sans-serif;
+  font-family: "Burrito", Arial, Helvetica, sans-serif;
   font-size: 5rem;
   text-align: center;
 }
@@ -215,8 +207,6 @@ canvas {
   object-fit: contain;
 }
 
-
-
 .rotate_overlay {
   display: none;
   position: fixed;
@@ -240,7 +230,7 @@ canvas {
   align-items: center;
 }
 
-.footer-link{
+.footer-link {
   text-decoration: none;
   color: white;
 }
@@ -248,12 +238,14 @@ canvas {
 footer {
   width: 100%;
   min-height: 60px;
+  display: flex;
+  align-items: center;
   background: rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 8px;
-  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* ----------------- */
