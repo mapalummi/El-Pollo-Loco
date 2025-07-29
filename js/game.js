@@ -78,13 +78,15 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-function drawStartText() {
-  ctx.fillStyle = "white";
-  ctx.font = "30px Arial";
-  ctx.textAlign = "center";
-  const textYPosition = canvas.height - 25; // Abstand von der unteren Kante (25px)
-  ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, textYPosition);
-}
+// Starttext anzeigen
+// function drawStartText() {
+//   ctx.fillStyle = "white";
+//   ctx.font = "30px Arial";
+//   ctx.textAlign = "center";
+//   const textYPosition = canvas.height - 25; // Abstand von der unteren Kante (25px)
+//   ctx.fillText("Drücke Start, um das Spiel zu beginnen!", canvas.width / 2, textYPosition);
+// }
+
 
 function startGame() {
   // Add orientation check listeners when game tries to start
@@ -178,69 +180,69 @@ function checkOrientation() {
 }
 
 
-function initMobileControls() {
-  // Better mobile detection that combines screen size AND touch as primary input
-  const isMobileDevice =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window);
+// function initMobileControls() {
+//   // Better mobile detection that combines screen size AND touch as primary input
+//   const isMobileDevice =
+//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+//     (window.innerWidth < 992 && "ontouchstart" in window);
 
-  if (isMobileDevice) {
-    document.getElementById("mobile-buttons").classList.remove("d_none");
+//   if (isMobileDevice) {
+//     document.getElementById("mobile-buttons").classList.remove("d_none");
 
-    if (keyboard) {
-      keyboard.initMobileButtons();
-    } else {
-      console.error("Keyboard not initialized yet");
-    }
-  } else {
-    // Hide controls on desktop/larger devices
-    document.getElementById("mobile-buttons").classList.add("d_none");
-  }
-}
+//     if (keyboard) {
+//       keyboard.initMobileButtons();
+//     } else {
+//       console.error("Keyboard not initialized yet");
+//     }
+//   } else {
+//     // Hide controls on desktop/larger devices
+//     document.getElementById("mobile-buttons").classList.add("d_none");
+//   }
+// }
 
 
-function toggleMobileControls(show) {
-  const mobileButtons = document.getElementById("mobile-buttons");
+// function toggleMobileControls(show) {
+//   const mobileButtons = document.getElementById("mobile-buttons");
 
-  // Better mobile detection that combines screen size AND touch as primary input
-  const isMobileDevice =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window);
+//   // Better mobile detection that combines screen size AND touch as primary input
+//   const isMobileDevice =
+//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+//     (window.innerWidth < 992 && "ontouchstart" in window);
 
-  if (isMobileDevice) {
-    if (show) {
-      mobileButtons.classList.remove("d_none");
-    } else {
-      mobileButtons.classList.add("d_none");
-    }
-  } else {
-    // Always hide on desktop
-    mobileButtons.classList.add("d_none");
-  }
-}
+//   if (isMobileDevice) {
+//     if (show) {
+//       mobileButtons.classList.remove("d_none");
+//     } else {
+//       mobileButtons.classList.add("d_none");
+//     }
+//   } else {
+//     // Always hide on desktop
+//     mobileButtons.classList.add("d_none");
+//   }
+// }
 
-/**
- * Controls visibility of footer buttons based on game state and device
- * @param {boolean} show - Whether to show or hide the footer buttons
- */
-function toggleFooterButtons(show) {
-  const footerButtons = document.querySelector(".footer-buttons");
-  // Only hide on mobile devices during gameplay
-  const isMobileDevice =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window);
+// /**
+//  * Controls visibility of footer buttons based on game state and device
+//  * @param {boolean} show - Whether to show or hide the footer buttons
+//  */
+// function toggleFooterButtons(show) {
+//   const footerButtons = document.querySelector(".footer-buttons");
+//   // Only hide on mobile devices during gameplay
+//   const isMobileDevice =
+//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+//     (window.innerWidth < 992 && "ontouchstart" in window);
 
-  if (isMobileDevice) {
-    if (show) {
-      footerButtons.style.display = "";
-    } else {
-      footerButtons.style.display = "none";
-    }
-  } else {
-    // Always show on desktop
-    footerButtons.style.display = "";
-  }
-}
+//   if (isMobileDevice) {
+//     if (show) {
+//       footerButtons.style.display = "";
+//     } else {
+//       footerButtons.style.display = "none";
+//     }
+//   } else {
+//     // Always show on desktop
+//     footerButtons.style.display = "";
+//   }
+// }
 
 
 function showGameOverScreen(hasWon) {
@@ -309,6 +311,7 @@ function showGameOverScreen(hasWon) {
   document.getElementById("homeButton").style.display = "block";
   document.getElementById("restartButton").style.display = "block";
 }
+
 
 function mainWindow() {
   // Show footer buttons when returning to main window
@@ -387,7 +390,7 @@ function mainWindow() {
 
 function restartGame() {
   gameOverSoundPlayed = false;
-  hideDialog(); // NEU
+  hideDialog();
   document.getElementById("restartButton").style.display = "none";
   document.getElementById("homeButton").style.display = "none";
 
@@ -442,169 +445,169 @@ function cleanupGameState() {
 }
 
 
-function showDialog(hasWon) {
-  const overlay = document.getElementById("win_overlay");
-  const gameOverImage = document.getElementById("game_over_image");
+// function showDialog(hasWon) {
+//   const overlay = document.getElementById("win_overlay");
+//   const gameOverImage = document.getElementById("game_over_image");
 
-  if (hasWon) {
-    gameOverImage.src = "img/You won, you lost/You Win A.png";
-  } else {
-    gameOverImage.src = "img/You won, you lost/Game Over.png";
-  }
+//   if (hasWon) {
+//     gameOverImage.src = "img/You won, you lost/You Win A.png";
+//   } else {
+//     gameOverImage.src = "img/You won, you lost/Game Over.png";
+//   }
 
-  overlay.classList.remove("d_none");
-  document.body.style.overflow = "hidden";
-}
-
-
-function hideDialog() {
-  document.getElementById("win_overlay").classList.add("d_none");
-  document.body.style.overflow = "auto"; // Re-enable scrolling
-}
+//   overlay.classList.remove("d_none");
+//   document.body.style.overflow = "hidden";
+// }
 
 
-/**
- * Toggles sound on/off
- */
-function toggleSound() {
-  const soundIcon = document.getElementById("soundIcon");
-  // Keep track of mute state with a data attribute instead of trying to parse the image source
-  let isMuted = soundIcon.getAttribute("data-muted") === "true";
-
-  if (isMuted) {
-    // Currently muted, so unmute
-    soundIcon.src = "icons/unmuted-1.png"; // Change to sound-on icon
-    soundIcon.setAttribute("data-muted", "false");
-    AudioHub.unmuteAll();
-    console.log("Sound unmuted");
-  } else {
-    // Currently unmuted, so mute
-    soundIcon.src = "icons/muted-1.png"; // Change to muted icon
-    soundIcon.setAttribute("data-muted", "true");
-    AudioHub.muteAll();
-    console.log("Sound muted");
-  }
-  // Save the current sound state to localStorage
-  try {
-    localStorage.setItem("elPolloLoco_soundMuted", AudioHub.isMuted);
-  } catch (e) {
-    console.warn("Could not save sound settings to localStorage");
-  }
-}
+// function hideDialog() {
+//   document.getElementById("win_overlay").classList.add("d_none");
+//   document.body.style.overflow = "auto"; // Re-enable scrolling
+// }
 
 
-/**
- * Toggles fullscreen mode
- */
-function toggleFullscreen() {
-  const gameContainer = document.querySelector(".game-container");
-  const fullscreenIcon = document.getElementById("fullscreenIcon");
+// /**
+//  * Toggles sound on/off
+//  */
+// function toggleSound() {
+//   const soundIcon = document.getElementById("soundIcon");
+//   // Keep track of mute state with a data attribute instead of trying to parse the image source
+//   let isMuted = soundIcon.getAttribute("data-muted") === "true";
 
-  if (!document.fullscreenElement) {
-    if (gameContainer.requestFullscreen) {
-      gameContainer.requestFullscreen();
-      fullscreenIcon.src = "icons/icons8-vollbild.png"; //Icon Fullscreen verlassen
-    }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-      fullscreenIcon.src = "";
-    }
-  }
-}
-
-
-/**
- * Toggle mobile controls
- * @param {boolean} show - Whether to show or hide the controls
- */
-function toggleMobileControls(show) {
-  const mobileButtons = document.getElementById("mobile-buttons");
-
-  if (window.innerWidth < 768) {
-    if (show) {
-      mobileButtons.classList.remove("d_none");
-    } else {
-      mobileButtons.classList.add("d_none");
-    }
-  }
-}
+//   if (isMuted) {
+//     // Currently muted, so unmute
+//     soundIcon.src = "icons/unmuted-1.png"; // Change to sound-on icon
+//     soundIcon.setAttribute("data-muted", "false");
+//     AudioHub.unmuteAll();
+//     console.log("Sound unmuted");
+//   } else {
+//     // Currently unmuted, so mute
+//     soundIcon.src = "icons/muted-1.png"; // Change to muted icon
+//     soundIcon.setAttribute("data-muted", "true");
+//     AudioHub.muteAll();
+//     console.log("Sound muted");
+//   }
+//   // Save the current sound state to localStorage
+//   try {
+//     localStorage.setItem("elPolloLoco_soundMuted", AudioHub.isMuted);
+//   } catch (e) {
+//     console.warn("Could not save sound settings to localStorage");
+//   }
+// }
 
 
-/**
- * Adds event listeners for fullscreen changes
- */
-function addFullscreenListeners() {
-  document.addEventListener("fullscreenchange", handleFullscreenChange);
-  document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-  document.addEventListener("mozfullscreenchange", handleFullscreenChange);
-  document.addEventListener("MSFullscreenChange", handleFullscreenChange);
-}
+// /**
+//  * Toggles fullscreen mode
+//  */
+// function toggleFullscreen() {
+//   const gameContainer = document.querySelector(".game-container");
+//   const fullscreenIcon = document.getElementById("fullscreenIcon");
+
+//   if (!document.fullscreenElement) {
+//     if (gameContainer.requestFullscreen) {
+//       gameContainer.requestFullscreen();
+//       fullscreenIcon.src = "icons/icons8-vollbild.png"; //Icon Fullscreen verlassen
+//     }
+//   } else {
+//     if (document.exitFullscreen) {
+//       document.exitFullscreen();
+//       fullscreenIcon.src = "";
+//     }
+//   }
+// }
 
 
-/**
- * Handles fullscreen change events
- */
-function handleFullscreenChange() {
-  const canvas = document.getElementById("canvas");
-  const gameContainer = document.querySelector(".game-container");
+// /**
+//  * Toggle mobile controls
+//  * @param {boolean} show - Whether to show or hide the controls
+//  */
+// function toggleMobileControls(show) {
+//   const mobileButtons = document.getElementById("mobile-buttons");
 
-  if (document.fullscreenElement) {
-    // Save original dimensions if not already saved
-    if (!canvas.dataset.originalWidth) {
-      canvas.dataset.originalWidth = canvas.width;
-      canvas.dataset.originalHeight = canvas.height;
-      canvas.dataset.originalStyleWidth = canvas.style.width || "";
-      canvas.dataset.originalStyleHeight = canvas.style.height || "";
-    }
-
-    // Don't change the canvas width/height (keeps game logic the same)
-    // Instead only adjust the display size with CSS
-    canvas.style.width = "90vw"; // Fast die gesamte Bildschirmbreite
-    canvas.style.height = "60vh"; // Fast die gesamte Bildschirmhöhe
-    canvas.style.display = "block";
-    canvas.style.margin = "auto";
-
-    // Center the canvas in fullscreen mode
-    gameContainer.style.display = "flex";
-    gameContainer.style.justifyContent = "center";
-    gameContainer.style.alignItems = "center";
-
-    // Update fullscreen icon
-    const fullscreenIcon = document.getElementById("fullscreenIcon");
-    fullscreenIcon.src = "icons/icons8-vollbild.png";
-  } else {
-    // Restore original styles
-    canvas.style.width = canvas.dataset.originalStyleWidth;
-    canvas.style.height = canvas.dataset.originalStyleHeight;
-    canvas.style.margin = "";
-
-    // Reset container styles
-    gameContainer.style.display = "";
-    gameContainer.style.justifyContent = "";
-    gameContainer.style.alignItems = "";
-
-    // Reset fullscreen icon
-    const fullscreenIcon = document.getElementById("fullscreenIcon");
-    fullscreenIcon.src = "icons/icons8-vollbild.png";
-  }
-
-  // If world exists, redraw to adjust to new display size
-  if (world) {
-    world.draw();
-  }
-}
+//   if (window.innerWidth < 768) {
+//     if (show) {
+//       mobileButtons.classList.remove("d_none");
+//     } else {
+//       mobileButtons.classList.add("d_none");
+//     }
+//   }
+// }
 
 
-/**
- * Adjusts world elements to the new canvas size
- */
-function adjustWorldToResize() {
-  // Redraw the current frame
-  if (world) {
-    world.draw();
-  }
-}
+// /**
+//  * Adds event listeners for fullscreen changes
+//  */
+// function addFullscreenListeners() {
+//   document.addEventListener("fullscreenchange", handleFullscreenChange);
+//   document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+//   document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+//   document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+// }
+
+
+// /**
+//  * Handles fullscreen change events
+//  */
+// function handleFullscreenChange() {
+//   const canvas = document.getElementById("canvas");
+//   const gameContainer = document.querySelector(".game-container");
+
+//   if (document.fullscreenElement) {
+//     // Save original dimensions if not already saved
+//     if (!canvas.dataset.originalWidth) {
+//       canvas.dataset.originalWidth = canvas.width;
+//       canvas.dataset.originalHeight = canvas.height;
+//       canvas.dataset.originalStyleWidth = canvas.style.width || "";
+//       canvas.dataset.originalStyleHeight = canvas.style.height || "";
+//     }
+
+//     // Don't change the canvas width/height (keeps game logic the same)
+//     // Instead only adjust the display size with CSS
+//     canvas.style.width = "90vw"; // Fast die gesamte Bildschirmbreite
+//     canvas.style.height = "60vh"; // Fast die gesamte Bildschirmhöhe
+//     canvas.style.display = "block";
+//     canvas.style.margin = "auto";
+
+//     // Center the canvas in fullscreen mode
+//     gameContainer.style.display = "flex";
+//     gameContainer.style.justifyContent = "center";
+//     gameContainer.style.alignItems = "center";
+
+//     // Update fullscreen icon
+//     const fullscreenIcon = document.getElementById("fullscreenIcon");
+//     fullscreenIcon.src = "icons/icons8-vollbild.png";
+//   } else {
+//     // Restore original styles
+//     canvas.style.width = canvas.dataset.originalStyleWidth;
+//     canvas.style.height = canvas.dataset.originalStyleHeight;
+//     canvas.style.margin = "";
+
+//     // Reset container styles
+//     gameContainer.style.display = "";
+//     gameContainer.style.justifyContent = "";
+//     gameContainer.style.alignItems = "";
+
+//     // Reset fullscreen icon
+//     const fullscreenIcon = document.getElementById("fullscreenIcon");
+//     fullscreenIcon.src = "icons/icons8-vollbild.png";
+//   }
+
+//   // If world exists, redraw to adjust to new display size
+//   if (world) {
+//     world.draw();
+//   }
+// }
+
+
+// /**
+//  * Adjusts world elements to the new canvas size
+//  */
+// function adjustWorldToResize() {
+//   // Redraw the current frame
+//   if (world) {
+//     world.draw();
+//   }
+// }
 
 
 /**
@@ -658,102 +661,102 @@ function togglePausePlay() {
 }
 
 
-/**
- * Zeigt ein Modal mit dem angegebenen Inhaltstyp an
- */
-function showModal(type) {
-  const modalContainer = document.getElementById("modal-container");
-  modalContainer.style.display = "flex"; // Wichtig: display auf flex setzen
-  modalContainer.classList.remove("modal-hidden");
+// /**
+//  * Zeigt ein Modal mit dem angegebenen Inhaltstyp an
+//  */
+// function showModal(type) {
+//   const modalContainer = document.getElementById("modal-container");
+//   modalContainer.style.display = "flex"; // Wichtig: display auf flex setzen
+//   modalContainer.classList.remove("modal-hidden");
 
-  // Alle Modal-Inhalte verstecken
-  document.querySelectorAll(".modal-section").forEach(section => {
-    section.classList.add("modal-hidden");
-  });
+//   // Alle Modal-Inhalte verstecken
+//   document.querySelectorAll(".modal-section").forEach(section => {
+//     section.classList.add("modal-hidden");
+//   });
 
-  // Gewünschten Inhalt anzeigen
-  document.getElementById("modal-" + type).classList.remove("modal-hidden");
+//   // Gewünschten Inhalt anzeigen
+//   document.getElementById("modal-" + type).classList.remove("modal-hidden");
 
-  // Spiel pausieren, wenn es läuft
-  if (typeof world !== "undefined" && world && !window.gamePaused) {
-    togglePausePlay();
-  }
-}
-
-
-/**
- * Schließt das Modal
- */
-function closeModal() {
-  const modalContainer = document.getElementById("modal-container");
-
-  if (modalContainer) {
-    // Beide Methoden zum Verstecken anwenden
-    modalContainer.style.display = "none";
-    modalContainer.classList.add("modal-hidden");
-
-    // Ggf. Spiel fortsetzen
-    if (window.gamePaused && typeof togglePausePlay === "function") {
-      togglePausePlay();
-    }
-  }
-}
+//   // Spiel pausieren, wenn es läuft
+//   if (typeof world !== "undefined" && world && !window.gamePaused) {
+//     togglePausePlay();
+//   }
+// }
 
 
-function fillViewportOnMobile() {
-  const canvas = document.getElementById("canvas");
-  const gameContainer = document.querySelector(".game-container");
+// /**
+//  * Schließt das Modal
+//  */
+// function closeModal() {
+//   const modalContainer = document.getElementById("modal-container");
 
-  // Better mobile detection
-  const isMobileDevice =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window);
+//   if (modalContainer) {
+//     // Beide Methoden zum Verstecken anwenden
+//     modalContainer.style.display = "none";
+//     modalContainer.classList.add("modal-hidden");
 
-  const isLandscape = window.innerWidth > window.innerHeight;
+//     // Ggf. Spiel fortsetzen
+//     if (window.gamePaused && typeof togglePausePlay === "function") {
+//       togglePausePlay();
+//     }
+//   }
+// }
 
-  if (isMobileDevice && isLandscape) {
-    // Save original dimensions if not already saved
-    if (!canvas.dataset.originalWidth) {
-      canvas.dataset.originalWidth = canvas.width;
-      canvas.dataset.originalHeight = canvas.height;
-      canvas.dataset.originalStyleWidth = canvas.style.width || "";
-      canvas.dataset.originalStyleHeight = canvas.style.height || "";
-    }
 
-    // Fill entire viewport
-    canvas.style.width = "100vw";
-    canvas.style.height = "100vh";
-    canvas.style.margin = "0";
-    canvas.style.display = "block";
+// function fillViewportOnMobile() {
+//   const canvas = document.getElementById("canvas");
+//   const gameContainer = document.querySelector(".game-container");
 
-    // Ensure the container also fills the viewport
-    gameContainer.style.margin = "0";
-    gameContainer.style.padding = "0";
-    gameContainer.style.width = "100vw";
-    gameContainer.style.height = "100vh";
+//   // Better mobile detection
+//   const isMobileDevice =
+//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+//     (window.innerWidth < 992 && "ontouchstart" in window);
 
-    // Reposition mobile controls if needed
-    const mobileButtons = document.getElementById("mobile-buttons");
-    if (mobileButtons) {
-      mobileButtons.style.position = "absolute";
-      mobileButtons.style.bottom = "10px";
-    }
-  } else {
-    // Use regular sizing for desktop or portrait mode
-    if (canvas.dataset.originalStyleWidth) {
-      canvas.style.width = canvas.dataset.originalStyleWidth;
-      canvas.style.height = canvas.dataset.originalStyleHeight;
-      canvas.style.margin = "";
-    }
+//   const isLandscape = window.innerWidth > window.innerHeight;
 
-    gameContainer.style.margin = "";
-    gameContainer.style.padding = "";
-    gameContainer.style.width = "";
-    gameContainer.style.height = "";
-  }
+//   if (isMobileDevice && isLandscape) {
+//     // Save original dimensions if not already saved
+//     if (!canvas.dataset.originalWidth) {
+//       canvas.dataset.originalWidth = canvas.width;
+//       canvas.dataset.originalHeight = canvas.height;
+//       canvas.dataset.originalStyleWidth = canvas.style.width || "";
+//       canvas.dataset.originalStyleHeight = canvas.style.height || "";
+//     }
 
-  // If world exists, redraw to adjust to new display size
-  if (world) {
-    world.draw();
-  }
-}
+//     // Fill entire viewport
+//     canvas.style.width = "100vw";
+//     canvas.style.height = "100vh";
+//     canvas.style.margin = "0";
+//     canvas.style.display = "block";
+
+//     // Ensure the container also fills the viewport
+//     gameContainer.style.margin = "0";
+//     gameContainer.style.padding = "0";
+//     gameContainer.style.width = "100vw";
+//     gameContainer.style.height = "100vh";
+
+//     // Reposition mobile controls if needed
+//     const mobileButtons = document.getElementById("mobile-buttons");
+//     if (mobileButtons) {
+//       mobileButtons.style.position = "absolute";
+//       mobileButtons.style.bottom = "10px";
+//     }
+//   } else {
+//     // Use regular sizing for desktop or portrait mode
+//     if (canvas.dataset.originalStyleWidth) {
+//       canvas.style.width = canvas.dataset.originalStyleWidth;
+//       canvas.style.height = canvas.dataset.originalStyleHeight;
+//       canvas.style.margin = "";
+//     }
+
+//     gameContainer.style.margin = "";
+//     gameContainer.style.padding = "";
+//     gameContainer.style.width = "";
+//     gameContainer.style.height = "";
+//   }
+
+//   // If world exists, redraw to adjust to new display size
+//   if (world) {
+//     world.draw();
+//   }
+// }

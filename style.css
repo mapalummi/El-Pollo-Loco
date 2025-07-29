@@ -26,11 +26,12 @@ body {
   margin: 0;
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-image: url("img/random_pics/bgpic.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* background-color: #000; */
   touch-action: none;
 }
 
@@ -41,12 +42,12 @@ body {
 .content-wrapper {
   max-width: 1440px;
   width: 100%;
-  min-height: 100vh;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+  flex: 1 0 auto;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
@@ -61,6 +62,7 @@ h1 {
 canvas {
   border: 1px solid #a0220a;
   background-color: black;
+  box-shadow: 1px 1px 61px rgba(0, 0, 0, 1);
   order: 1;
   display: block;
 }
@@ -237,7 +239,8 @@ canvas {
 
 footer {
   width: 100%;
-  min-height: 60px;
+  height: 50px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   background: rgba(0, 0, 0, 0.05);
