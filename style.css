@@ -72,22 +72,19 @@ canvas {
   margin: 10px auto;
   border-radius: 10px;
   padding: 15px 25px;
-  font-family: "Western", Arial, sans-serif;
-  color: #5d4037;
+  font-family: "Burrito", Arial, sans-serif;
+  color: #a0220a;
   text-align: center;
 }
 
 .game-explanation h2 {
-  color: #71380e;
-  font-size: 18px;
-  text-shadow: 0px 4px 8px;
+  text-shadow: 1px 1px 1px black;
   margin-bottom: 22px;
 }
 
 .game-explanation p {
-  color: #71380e;
   font-size: 16px;
-  text-shadow: 1px 1px 1px #71380e;
+  text-shadow: 1px 1px 1px black;
   margin: 8px;
 }
 
