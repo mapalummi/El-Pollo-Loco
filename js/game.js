@@ -379,7 +379,6 @@ function resumeGameIfPausedByOrientation() {
 //   document.getElementById("restartButton").style.display = "block";
 // }
 
-
 // NEU:
 function showGameOverScreen(hasWon) {
   if (gameOver) return;
@@ -471,31 +470,111 @@ function showGameOverButtons() {
 //
 //
 
-function mainWindow() {
-  // Show Gameoverbuttons when returning to main window
-  toggleGameoverButtons(true);
-  AudioHub.stopAll();
+// function mainWindow() {
+//   // Show Gameoverbuttons when returning to main window
+//   toggleGameoverButtons(true);
+//   AudioHub.stopAll();
 
-  // Hide dialog overlay
+//   // Hide dialog overlay
+//   hideDialog();
+//   cleanupGameState();
+
+//   // Cancel ALL animation frames
+//   if (window.requestAnimationFrame) {
+//     const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
+//     // If world has an animation ID, cancel it
+//     if (cancelAnim && world && world.animationId) {
+//       cancelAnim(world.animationId);
+//     }
+//     // Also try to cancel any other potential animation frames
+//     for (let i = 0; i < 100; i++) {
+//       cancelAnim(i);
+//     }
+//   }
+
+//   // Destroy world completely
+//   world = null;
+
+//   // RECREATE THE CANVAS - this is the key change
+//   const canvasContainer = document.getElementById("canvas").parentElement;
+//   const oldCanvas = document.getElementById("canvas");
+//   const newCanvas = document.createElement("canvas");
+//   newCanvas.id = "canvas";
+//   newCanvas.width = oldCanvas.width;
+//   newCanvas.height = oldCanvas.height;
+//   canvasContainer.removeChild(oldCanvas);
+//   canvasContainer.appendChild(newCanvas);
+
+//   // Get the new canvas context
+//   canvas = newCanvas;
+//   ctx = canvas.getContext("2d");
+
+//   // Reset all game state
+//   gameOver = false;
+//   gameOverSoundPlayed = false;
+
+//   // Reset keyboard state
+//   if (keyboard) {
+//     keyboard.RIGHT = false;
+//     keyboard.LEFT = false;
+//     keyboard.UP = false;
+//     keyboard.DOWN = false;
+//     keyboard.SPACE = false;
+//     keyboard.D = false;
+//   }
+
+//   // Hide/show all game UI elements
+//   document.getElementById("game-controls").classList.add("d_none");
+//   document.getElementById("restartButton").style.display = "none";
+//   document.getElementById("homeButton").style.display = "none";
+//   document.getElementById("game-explanation").classList.remove("d_none");
+
+//   initLevel();
+
+//   // Draw the start screen on the fresh canvas
+//   const startScreenImage = new Image();
+//   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
+//   startScreenImage.onload = () => {
+//     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
+//     document.getElementById("startButton").style.display = "block";
+//   };
+// }
+
+function mainWindow() {
+  showGameOverUIOnMain();
+  stopAllAudioAndDialog();
+  cancelAllAnimations();
+  destroyWorldAndCanvas();
+  resetGameStateAndUI();
+  drawStartScreenOnFreshCanvas();
+}
+
+function showGameOverUIOnMain() {
+  toggleGameoverButtons(true);
+}
+
+function stopAllAudioAndDialog() {
+  AudioHub.stopAll();
   hideDialog();
   cleanupGameState();
+}
 
-  // Cancel ALL animation frames
-  if (window.requestAnimationFrame) {
-    const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
-    // If world has an animation ID, cancel it
-    if (cancelAnim && world && world.animationId) {
-      cancelAnim(world.animationId);
-    }
-    // Also try to cancel any other potential animation frames
-    for (let i = 0; i < 100; i++) {
-      cancelAnim(i);
-    }
+function cancelAllAnimations() {
+  if (!window.requestAnimationFrame) return;
+  const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
+  // If world has an animation ID, cancel it
+  if (cancelAnim && world && world.animationId) {
+    cancelAnim(world.animationId);
   }
+  // Also try to cancel any other potential animation frames
+  for (let i = 0; i < 100; i++) {
+    cancelAnim(i);
+  }
+}
 
+function destroyWorldAndCanvas() {
   // Destroy world completely
   world = null;
-
   // RECREATE THE CANVAS - this is the key change
   const canvasContainer = document.getElementById("canvas").parentElement;
   const oldCanvas = document.getElementById("canvas");
@@ -505,34 +584,33 @@ function mainWindow() {
   newCanvas.height = oldCanvas.height;
   canvasContainer.removeChild(oldCanvas);
   canvasContainer.appendChild(newCanvas);
-
-  // Get the new canvas context
   canvas = newCanvas;
   ctx = canvas.getContext("2d");
+}
 
+function resetGameStateAndUI() {
   // Reset all game state
   gameOver = false;
   gameOverSoundPlayed = false;
-
-  // Reset keyboard state
-  if (keyboard) {
-    keyboard.RIGHT = false;
-    keyboard.LEFT = false;
-    keyboard.UP = false;
-    keyboard.DOWN = false;
-    keyboard.SPACE = false;
-    keyboard.D = false;
-  }
-
-  // Hide/show all game UI elements
+  resetKeyboardState();
   document.getElementById("game-controls").classList.add("d_none");
   document.getElementById("restartButton").style.display = "none";
   document.getElementById("homeButton").style.display = "none";
   document.getElementById("game-explanation").classList.remove("d_none");
-
   initLevel();
+}
 
-  // Draw the start screen on the fresh canvas
+function resetKeyboardState() {
+  if (!keyboard) return;
+  keyboard.RIGHT = false;
+  keyboard.LEFT = false;
+  keyboard.UP = false;
+  keyboard.DOWN = false;
+  keyboard.SPACE = false;
+  keyboard.D = false;
+}
+
+function drawStartScreenOnFreshCanvas() {
   const startScreenImage = new Image();
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
   startScreenImage.onload = () => {
@@ -541,11 +619,9 @@ function mainWindow() {
   };
 }
 
-
-
-// 
-// 
-// 
+//
+//
+//
 
 function restartGame() {
   gameOverSoundPlayed = false;
