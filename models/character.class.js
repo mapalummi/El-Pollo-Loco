@@ -250,30 +250,77 @@ class Character extends MovableObject {
   //
   //
 
-  startAnimation(animationType) {
-    if (this.isFrozen) return; // NEU
-    // If already running this animation, don't restart it
-    if (this.currentAnimation === animationType) return;
+  // startAnimation(animationType) {
+  //   if (this.isFrozen) return; // NEU
+  //   // If already running this animation, don't restart it
+  //   if (this.currentAnimation === animationType) return;
 
-    // Check if we need to stop sleep sound when changing animations
+  //   // Check if we need to stop sleep sound when changing animations
+  //   if (this.currentAnimation === "sleep") {
+  //     AudioHub.stopOne(AudioHub.SLEEP);
+  //   }
+
+  //   // Clear any existing animation interval
+  //   if (this.animationInterval) {
+  //     clearInterval(this.animationInterval);
+  //   }
+
+  //   if (this.animationTimeout) {
+  //     clearTimeout(this.animationTimeout);
+  //   }
+
+  //   // Set current animation type
+  //   this.currentAnimation = animationType;
+
+  //   // Start the appropriate animation
+  //   switch (animationType) {
+  //     case "walking":
+  //       this.walkingAnimation();
+  //       break;
+  //     case "jumping":
+  //       AudioHub.playOne(AudioHub.JUMP);
+  //       this.jumpingAnimation();
+  //       break;
+  //     case "hurt":
+  //       AudioHub.playOne(AudioHub.HURT);
+  //       this.hurtAnimation();
+  //       break;
+  //     case "idle":
+  //       this.idleAnimation();
+  //       break;
+  //     case "sleep":
+  //       AudioHub.playLoop(AudioHub.SLEEP);
+  //       this.sleepAnimation();
+  //       break;
+  //     case "dead":
+  //       AudioHub.playOne(AudioHub.DEAD);
+  //       this.deadAnimation();
+  //       break;
+  //   }
+  // }
+
+  // NEU:
+  startAnimation(animationType) {
+    if (this.isFrozen || this.currentAnimation === animationType) return;
+    this.stopSleepSoundIfNeeded();
+    this.clearAnimationTimers();
+    this.currentAnimation = animationType;
+    this.runAnimationByType(animationType);
+  }
+
+  stopSleepSoundIfNeeded() {
     if (this.currentAnimation === "sleep") {
       AudioHub.stopOne(AudioHub.SLEEP);
     }
+  }
 
-    // Clear any existing animation interval
-    if (this.animationInterval) {
-      clearInterval(this.animationInterval);
-    }
+  clearAnimationTimers() {
+    if (this.animationInterval) clearInterval(this.animationInterval);
+    if (this.animationTimeout) clearTimeout(this.animationTimeout);
+  }
 
-    if (this.animationTimeout) {
-      clearTimeout(this.animationTimeout);
-    }
-
-    // Set current animation type
-    this.currentAnimation = animationType;
-
-    // Start the appropriate animation
-    switch (animationType) {
+  runAnimationByType(type) {
+    switch (type) {
       case "walking":
         this.walkingAnimation();
         break;
