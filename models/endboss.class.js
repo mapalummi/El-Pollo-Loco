@@ -138,8 +138,6 @@ class Endboss extends MovableObject {
       console.log("Blocking walking mode because wasHitRecently=true");
       return;
     }
-    // console.log("Starting walking mode");
-
     if (!this.isDead && !this.isHurt) {
       this.isWalking = true;
       this.isAlert = false;
@@ -151,10 +149,13 @@ class Endboss extends MovableObject {
     this.isAlert = true;
     this.isAttacking = false;
     this.isWalking = false;
-    // Set the correct animation images
     this.playAnimation(this.IMAGES_ALERT);
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
+
+  // 
+  // 
+  // 
 
   startAttacking() {
     if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
@@ -224,6 +225,10 @@ class Endboss extends MovableObject {
       }, this.attackCooldownDuration);
     }
   }
+
+  // 
+  // 
+  // 
 
   hit(damage) {
     this.energy -= damage;

@@ -362,21 +362,14 @@ class Character extends MovableObject {
 
   jumpingAnimation() {
     clearInterval(this.animationInterval);
-
-    // Manueller, einmaliger Durchlauf der Sprungbilder
     let currentIndex = 0;
-    // Funktion, die jedes Bild mit kurzer Verzögerung zeigt
     const playNextFrame = () => {
       if (currentIndex < this.IMAGES_JUMPING.length) {
         this.img = this.imageCache[this.IMAGES_JUMPING[currentIndex]];
         currentIndex++;
-
-        // Nächstes Bild mit Verzögerung zeigen (66ms entspricht etwa 15fps)
         this.animationTimeout = setTimeout(playNextFrame, 66);
       }
     };
-
-    // Animation starten
     playNextFrame();
   }
 
@@ -405,7 +398,6 @@ class Character extends MovableObject {
   deadAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_DEAD);
-
       // One-time handling for dead animation completion
       setTimeout(() => {
         clearInterval(this.animationInterval);
@@ -419,7 +411,7 @@ class Character extends MovableObject {
   }
 
   moveRight() {
-    if (this.isDead()) return; // Bewegung verhindern, wenn der Charakter tot ist
+    if (this.isDead()) return;
     this.x += this.speed;
     this.facingRight = true; // Blickrichtung nach rechts
     this.otherDirection = false;
