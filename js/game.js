@@ -244,6 +244,7 @@ function launchGame() {
 //   }
 // }
 
+// NEU:
 function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
   const message = document.getElementById("rotate-message");
@@ -305,91 +306,170 @@ function resumeGameIfPausedByOrientation() {
 //
 //
 
+// function showGameOverScreen(hasWon) {
+//   if (gameOver) return; // Prevent multiple game over screens
+//   // Show Gameoverbuttons when game ends
+//   toggleGameoverButtons(true);
+//   gameOver = true;
+//   showDialog(hasWon);
+//   AudioHub.stopAll();
+//   toggleMobileControls(false);
+//   // Hide Game Explanations
+//   document.getElementById("game-controls").classList.add("d_none");
+
+//   if (!gameOverSoundPlayed) {
+//     gameOverSoundPlayed = true;
+//   }
+
+//   if (hasWon) {
+//     AudioHub.playOne(AudioHub.WIN);
+//     // Freeze the character when the boss is defeated
+//     if (world && world.character) {
+//       world.character.isFrozen = true;
+
+//       if (world.character.animationInterval) {
+//         clearInterval(world.character.animationInterval);
+//         world.character.animationInterval = null;
+//       }
+//       if (world.character.animationTimeout) {
+//         clearTimeout(world.character.animationTimeout);
+//         world.character.animationTimeout = null;
+//       }
+
+//       // Disable keyboard controls
+//       keyboard.RIGHT = false;
+//       keyboard.LEFT = false;
+//       keyboard.UP = false;
+//       keyboard.DOWN = false;
+//       keyboard.SPACE = false;
+//       keyboard.D = false;
+//       // Additional flag to ignore new keyboard inputs
+//       world.ignoreControls = true;
+//     }
+//   } else {
+//     AudioHub.playOne(AudioHub.GAMEOVER);
+//   }
+
+//   // Nur den Hintergrund behalten, entfernt alle anderen Objekte
+//   if (world) {
+//     world.level.clouds = [];
+//     world.level.coins = [];
+//     world.level.bottles = [];
+//     world.level.enemies = [];
+
+//     // Wolken-Rendering deaktivieren
+//     world.stopDrawingClouds = true;
+
+//     // Hide status bars
+//     if (world.healthBar && typeof world.healthBar.hide === "function") {
+//       world.healthBar.hide();
+//     }
+//     if (world.bottleBar && typeof world.bottleBar.hide === "function") {
+//       world.bottleBar.hide();
+//     }
+//     if (world.coinBar && typeof world.coinBar.hide === "function") {
+//       world.coinBar.hide();
+//     }
+//     if (world.endbossBar && typeof world.endbossBar.hide === "function") {
+//       world.endbossBar.hide();
+//     }
+//   }
+
+//   document.getElementById("homeButton").style.display = "block";
+//   document.getElementById("restartButton").style.display = "block";
+// }
+
+
+// NEU:
 function showGameOverScreen(hasWon) {
-  if (gameOver) return; // Prevent multiple game over screens
-  // Show Gameoverbuttons when game ends
+  if (gameOver) return;
+  prepareGameOverUI();
+  handleGameOverAudio(hasWon);
+  freezeCharacterIfWon(hasWon);
+  clearWorldObjects();
+  showGameOverButtons();
+}
+
+function prepareGameOverUI() {
   toggleGameoverButtons(true);
   gameOver = true;
-  showDialog(hasWon);
+  // showDialog(hasWon);
+  showDialog(arguments[0]); // Warum???
   AudioHub.stopAll();
   toggleMobileControls(false);
-  // Hide Game Explanations
   document.getElementById("game-controls").classList.add("d_none");
+  if (!gameOverSoundPlayed) gameOverSoundPlayed = true;
+}
 
-  if (!gameOverSoundPlayed) {
-    gameOverSoundPlayed = true;
-  }
-
+function handleGameOverAudio(hasWon) {
   if (hasWon) {
     AudioHub.playOne(AudioHub.WIN);
-    // Freeze the character when the boss is defeated
-    if (world && world.character) {
-      world.character.isFrozen = true;
-
-      if (world.character.animationInterval) {
-        clearInterval(world.character.animationInterval);
-        world.character.animationInterval = null;
-      }
-      if (world.character.animationTimeout) {
-        clearTimeout(world.character.animationTimeout);
-        world.character.animationTimeout = null;
-      }
-
-      // Disable keyboard controls
-      keyboard.RIGHT = false;
-      keyboard.LEFT = false;
-      keyboard.UP = false;
-      keyboard.DOWN = false;
-      keyboard.SPACE = false;
-      keyboard.D = false;
-      // Additional flag to ignore new keyboard inputs
-      world.ignoreControls = true;
-    }
   } else {
     AudioHub.playOne(AudioHub.GAMEOVER);
   }
+}
 
-  // Nur den Hintergrund behalten, entfernt alle anderen Objekte
-  if (world) {
-    world.level.clouds = [];
-    world.level.coins = [];
-    world.level.bottles = [];
-    world.level.enemies = [];
+function freezeCharacterIfWon(hasWon) {
+  if (!hasWon || !world || !world.character) return;
+  world.character.isFrozen = true;
+  clearCharacterAnimation();
+  disableKeyboardControls();
+  world.ignoreControls = true;
+}
 
-    // Wolken-Rendering deaktivieren
-    world.stopDrawingClouds = true;
-
-    // Hide status bars
-    if (world.healthBar && typeof world.healthBar.hide === "function") {
-      world.healthBar.hide();
-    }
-    if (world.bottleBar && typeof world.bottleBar.hide === "function") {
-      world.bottleBar.hide();
-    }
-    if (world.coinBar && typeof world.coinBar.hide === "function") {
-      world.coinBar.hide();
-    }
-    if (world.endbossBar && typeof world.endbossBar.hide === "function") {
-      world.endbossBar.hide();
-    }
+function clearCharacterAnimation() {
+  if (world.character.animationInterval) {
+    clearInterval(world.character.animationInterval);
+    world.character.animationInterval = null;
   }
+  if (world.character.animationTimeout) {
+    clearTimeout(world.character.animationTimeout);
+    world.character.animationTimeout = null;
+  }
+}
 
+function disableKeyboardControls() {
+  keyboard.RIGHT = false;
+  keyboard.LEFT = false;
+  keyboard.UP = false;
+  keyboard.DOWN = false;
+  keyboard.SPACE = false;
+  keyboard.D = false;
+}
+
+function clearWorldObjects() {
+  if (!world) return;
+  world.level.clouds = [];
+  world.level.coins = [];
+  world.level.bottles = [];
+  world.level.enemies = [];
+  world.stopDrawingClouds = true;
+  hideStatusBars();
+}
+
+function hideStatusBars() {
+  if (world.healthBar && typeof world.healthBar.hide === "function") {
+    world.healthBar.hide();
+  }
+  if (world.bottleBar && typeof world.bottleBar.hide === "function") {
+    world.bottleBar.hide();
+  }
+  if (world.coinBar && typeof world.coinBar.hide === "function") {
+    world.coinBar.hide();
+  }
+  if (world.endbossBar && typeof world.endbossBar.hide === "function") {
+    world.endbossBar.hide();
+  }
+}
+
+function showGameOverButtons() {
   document.getElementById("homeButton").style.display = "block";
   document.getElementById("restartButton").style.display = "block";
-
-  // Stoppe die Animation (freeze)
-  // if (window.requestAnimationFrame) {
-  //   const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
-  //   if (cancelAnim && world && world.animationId) {
-  //     cancelAnim(world.animationId);
-  //     world.animationId = null;
-  //   }
-  //   for (let i = 0; i < 100; i++) {
-  //     cancelAnim(i);
-  //   }
-  // }
-  // cleanupGameState();
 }
+
+//
+//
+//
 
 function mainWindow() {
   // Show Gameoverbuttons when returning to main window
@@ -460,6 +540,12 @@ function mainWindow() {
     document.getElementById("startButton").style.display = "block";
   };
 }
+
+
+
+// 
+// 
+// 
 
 function restartGame() {
   gameOverSoundPlayed = false;
