@@ -540,6 +540,7 @@ function showGameOverButtons() {
 //   };
 // }
 
+// NEU:
 function mainWindow() {
   showGameOverUIOnMain();
   stopAllAudioAndDialog();
@@ -623,44 +624,97 @@ function drawStartScreenOnFreshCanvas() {
 //
 //
 
+// function restartGame() {
+//   gameOverSoundPlayed = false;
+//   hideDialog();
+//   document.getElementById("restartButton").style.display = "none";
+//   document.getElementById("homeButton").style.display = "none";
+
+//   // Reset game state - to prevent any new game over triggers
+//   gameOver = false;
+
+//   // Reset pause state explicitly
+//   window.gamePaused = false;
+//   const pausePlayIcon = document.getElementById("pausePlayIcon");
+//   if (pausePlayIcon) {
+//     pausePlayIcon.src = "icons/pause-1.png"; // Reset to pause icon
+//   }
+
+//   // Show keyboard controls again if they should be visible during gameplay
+//   document.getElementById("game-controls").classList.remove("d_none");
+//   cleanupGameState();
+
+//   // Complete reset: destroy current world
+//   world = null;
+
+//   // Clear the canvas
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+//   // Re-initialize level data explicitly
+//   initLevel();
+//   initMobileControls();
+
+//   // Start fresh game after a brief pause
+//   setTimeout(() => {
+//     world = new World(canvas, keyboard);
+//     world.stopDrawingClouds = false; // Flag zurücksetzen
+//     AudioHub.playLoop(AudioHub.GAMEAUDIO);
+//     document.getElementById("startButton").style.display = "none";
+//   }, 200);
+// }
+
 function restartGame() {
+  resetGameOverAndPause();
+  showControlsForRestart();
+  cleanupGameState();
+  destroyWorldAndClearCanvas();
+  reinitLevelAndMobile();
+  startFreshGameAfterDelay();
+}
+
+function resetGameOverAndPause() {
   gameOverSoundPlayed = false;
-  hideDialog();
-  document.getElementById("restartButton").style.display = "none";
-  document.getElementById("homeButton").style.display = "none";
-
-  // Reset game state - to prevent any new game over triggers
   gameOver = false;
-
-  // Reset pause state explicitly
   window.gamePaused = false;
+  hideDialog();
+  resetPauseIcon();
+}
+
+function resetPauseIcon() {
   const pausePlayIcon = document.getElementById("pausePlayIcon");
   if (pausePlayIcon) {
     pausePlayIcon.src = "icons/pause-1.png"; // Reset to pause icon
   }
+}
 
-  // Show keyboard controls again if they should be visible during gameplay
+function showControlsForRestart() {
+  document.getElementById("restartButton").style.display = "none";
+  document.getElementById("homeButton").style.display = "none";
   document.getElementById("game-controls").classList.remove("d_none");
-  cleanupGameState();
+}
 
-  // Complete reset: destroy current world
+function destroyWorldAndClearCanvas() {
   world = null;
-
-  // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
-  // Re-initialize level data explicitly
+function reinitLevelAndMobile() {
   initLevel();
   initMobileControls();
+}
 
-  // Start fresh game after a brief pause
+function startFreshGameAfterDelay() {
   setTimeout(() => {
     world = new World(canvas, keyboard);
-    world.stopDrawingClouds = false; // Flag zurücksetzen
+    world.stopDrawingClouds = false;
     AudioHub.playLoop(AudioHub.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
 }
+
+//
+//
+//
 
 // Clear ALL intervals in the page
 function cleanupGameState() {
@@ -679,47 +733,92 @@ function cleanupGameState() {
 /**
  * Toggles pause/play
  */
+// function togglePausePlay() {
+//   const pausePlayIcon = document.getElementById("pausePlayIcon");
+
+//   if (!window.gamePaused) {
+//     window.gamePaused = true;
+//     pausePlayIcon.src = "icons/play-1.png"; // Change to play icon
+//     AudioHub.pauseAll();
+
+//     // Pause world and animations
+//     if (world) {
+//       // Store the current animation ID before pausing
+//       world.lastAnimationId = world.animationId;
+
+//       // Stop the animation loop
+//       if (world.animationId) {
+//         cancelAnimationFrame(world.animationId);
+//         world.animationId = null;
+//       }
+
+//       // Pause the game logic
+//       world.pauseGame();
+//     }
+//   } else {
+//     // Resume the game
+//     window.gamePaused = false;
+//     pausePlayIcon.src = "icons/pause-1.png"; // Change to pause icon
+
+//     // Resume audio if it wasn't muted
+//     if (!AudioHub.isMuted) {
+//       AudioHub.resumeAll();
+//     }
+
+//     // Resume world and animations
+//     if (world) {
+//       // Resume the game logic
+//       world.resumeGame();
+
+//       // Restart the animation loop if not already running
+//       if (!world.animationId) {
+//         world.animationId = requestAnimationFrame(() => world.draw());
+//       }
+//     }
+//   }
+// }
+
 function togglePausePlay() {
   const pausePlayIcon = document.getElementById("pausePlayIcon");
-
   if (!window.gamePaused) {
-    window.gamePaused = true;
-    pausePlayIcon.src = "icons/play-1.png"; // Change to play icon
-    AudioHub.pauseAll();
-
-    // Pause world and animations
-    if (world) {
-      // Store the current animation ID before pausing
-      world.lastAnimationId = world.animationId;
-
-      // Stop the animation loop
-      if (world.animationId) {
-        cancelAnimationFrame(world.animationId);
-        world.animationId = null;
-      }
-
-      // Pause the game logic
-      world.pauseGame();
-    }
+    pauseGame(pausePlayIcon);
   } else {
-    // Resume the game
-    window.gamePaused = false;
-    pausePlayIcon.src = "icons/pause-1.png"; // Change to pause icon
+    resumeGame(pausePlayIcon);
+  }
+}
 
-    // Resume audio if it wasn't muted
-    if (!AudioHub.isMuted) {
-      AudioHub.resumeAll();
+function pauseGame(pausePlayIcon) {
+  window.gamePaused = true;
+  pausePlayIcon.src = "icons/play-1.png";
+  AudioHub.pauseAll();
+  if (world) {
+    world.lastAnimationId = world.animationId;
+    stopAnimationLoop();
+    world.pauseGame();
+  }
+
+  function stopAnimationLoop() {
+    if (world.animationId) {
+      cancelAnimationFrame(world.animationId);
+      world.animationId = null;
     }
+  }
+}
 
-    // Resume world and animations
-    if (world) {
-      // Resume the game logic
-      world.resumeGame();
+function resumeGame(pausePlayIcon) {
+  window.gamePaused = false;
+  pausePlayIcon.src = "icons/pause-1.png";
+  if (!AudioHub.isMuted) {
+    AudioHub.resumeAll();
+  }
+  if (world) {
+    world.resumeGame();
+    restartAnimationLoop();
+  }
+}
 
-      // Restart the animation loop if not already running
-      if (!world.animationId) {
-        world.animationId = requestAnimationFrame(() => world.draw());
-      }
-    }
+function restartAnimationLoop() {
+  if (!world.animationId) {
+    world.animationId = requestAnimationFrame(() => world.draw());
   }
 }
