@@ -11,8 +11,8 @@ class Character extends MovableObject {
   isDeadAnimationComplete = false;
   isWalking = false;
   currentAnimation = null; //Trackt aktuell aktive Animation
-  isFrozen = false; 
-  jumpAnimationPlayed = false; 
+  isFrozen = false;
+  jumpAnimationPlayed = false;
   animationTimeout = null;
 
   offset = {
@@ -101,77 +101,154 @@ class Character extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
+  //
+  //
+  //
+
+  // animate() {
+  //   setInterval(() => {
+  //     if (this.isDead() || this.isFrozen) return; // Skip movement if frozen or dead
+
+  //     // Reset walking state at the beginning of each frame
+  //     this.isWalking = false;
+
+  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+  //       if (this.isLocked) {
+  //         return; // Skip movement if locked
+  //       }
+  //       this.moveRight();
+  //       this.otherDirection = false;
+  //     }
+
+  //     if (this.world.keyboard.LEFT && this.x > 0) {
+  //       if (this.isLocked) {
+  //         return; // Skip movement if locked
+  //       }
+  //       this.moveLeft();
+  //       this.otherDirection = true;
+  //     }
+
+  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+  //       // Check if character is locked before jumping
+  //       if (this.isLocked) {
+  //         return; // Skip jump if locked
+  //       }
+  //       this.jump();
+  //     }
+
+  //     this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
+  //     this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
+  //   }, 1000 / 60);
+
+  //   // Animation state management
+  //   setInterval(() => {
+  //     // Check for death first
+  //     if (this.isDead()) {
+  //       if (!this.isDeadAnimationComplete) {
+  //         this.startAnimation("dead");
+  //       }
+  //       return;
+  //     }
+
+  //     // If frozen or world is paused, don't change animations
+  //     if (this.isFrozen || (this.world && this.world.paused)) return;
+
+  //     if (this.isDeadAnimationComplete) return;
+
+  //     if (this.isHurt()) {
+  //       this.startAnimation("hurt");
+  //     } else if (this.isAboveGround()) {
+  //       if (!this.jumpAnimationPlayed) {
+  //         // Nur einmal pro Sprung abspielen
+  //         this.startAnimation("jumping");
+  //         this.jumpAnimationPlayed = true;
+  //       }
+  //     } else {
+  //       this.jumpAnimationPlayed = false; // Reset wenn auf dem Boden
+
+  //       if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
+  //         this.startAnimation("sleep");
+  //       } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
+  //         this.startAnimation("idle");
+  //       } else if (this.isWalking) {
+  //         this.startAnimation("walking");
+  //       }
+  //     }
+  //   }, 200);
+  // }
+
+  // NEU:
   animate() {
-    setInterval(() => {
-      if (this.isDead() || this.isFrozen) return; // Skip movement if frozen or dead
+    setInterval(() => this.handleMovement(), 1000 / 60);
+    setInterval(() => this.handleAnimationState(), 200);
+  }
 
-      // Reset walking state at the beginning of each frame
-      this.isWalking = false;
+  handleMovement() {
+    if (this.isDead() || this.isFrozen) return;
+    this.isWalking = false;
 
-      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        if (this.isLocked) {
-          return; // Skip movement if locked
-        }
-        this.moveRight();
-        this.otherDirection = false;
+    if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+      if (this.isLocked) {
       }
+      this.moveRight();
+      this.otherDirection = false;
+    }
 
-      if (this.world.keyboard.LEFT && this.x > 0) {
-        if (this.isLocked) {
-          return; // Skip movement if locked
-        }
+    if (this.world.keyboard.LEFT && this.x > 0) {
+      if (!this.isLocked) {
         this.moveLeft();
         this.otherDirection = true;
       }
+    }
 
-      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-        // Check if character is locked before jumping
-        if (this.isLocked) {
-          return; // Skip jump if locked
-        }
+    if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+      if (!this.isLocked) {
         this.jump();
       }
+    }
 
-      this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
-      this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
-    }, 1000 / 60);
-
-    // Animation state management
-    setInterval(() => {
-      // Check for death first
-      if (this.isDead()) {
-        if (!this.isDeadAnimationComplete) {
-          this.startAnimation("dead");
-        }
-        return;
-      }
-
-      // If frozen or world is paused, don't change animations
-      if (this.isFrozen || (this.world && this.world.paused)) return;
-
-      if (this.isDeadAnimationComplete) return;
-
-      if (this.isHurt()) {
-        this.startAnimation("hurt");
-      } else if (this.isAboveGround()) {
-        if (!this.jumpAnimationPlayed) {
-          // Nur einmal pro Sprung abspielen
-          this.startAnimation("jumping");
-          this.jumpAnimationPlayed = true;
-        }
-      } else {
-        this.jumpAnimationPlayed = false; // Reset wenn auf dem Boden
-
-        if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
-          this.startAnimation("sleep");
-        } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
-          this.startAnimation("idle");
-        } else if (this.isWalking) {
-          this.startAnimation("walking");
-        }
-      }
-    }, 200);
+    this.world.camera_x = -this.x + 100;
+    this.getRealFrame();
   }
+
+  handleAnimationState() {
+    if (this.isDead()) {
+      if (!this.isDeadAnimationComplete) {
+        this.startAnimation("dead");
+      }
+      return;
+    }
+
+    if (this.isFrozen || (this.world && this.world.paused)) return;
+    if (this.isDeadAnimationComplete) return;
+
+    if (this.isHurt()) {
+      this.startAnimation("hurt");
+    } else if (this.isAboveGround()) {
+      if (!this.jumpAnimationPlayed) {
+        this.startAnimation("jumping");
+        this.jumpAnimationPlayed = true;
+      }
+    } else {
+      this.jumpAnimationPlayed = false;
+      this.handleIdleOrWalking();
+    }
+  }
+
+  handleIdleOrWalking() {
+    const now = Date.now();
+    if (now - this.lastMoveTime > this.sleepTimeout) {
+      this.startAnimation("sleep");
+    } else if (now - this.lastMoveTime > this.idleTimeout) {
+      this.startAnimation("idle");
+    } else if (this.isWalking) {
+      this.startAnimation("walking");
+    }
+  }
+
+  //
+  //
+  //
 
   startAnimation(animationType) {
     if (this.isFrozen) return; // NEU
@@ -222,11 +299,19 @@ class Character extends MovableObject {
     }
   }
 
+  //
+  //
+  //
+
   walkingAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 1000 / 15);
   }
+
+  //
+  //
+  //
 
   jumpingAnimation() {
     clearInterval(this.animationInterval);
@@ -247,6 +332,10 @@ class Character extends MovableObject {
     // Animation starten
     playNextFrame();
   }
+
+  //
+  //
+  //
 
   hurtAnimation() {
     this.animationInterval = setInterval(() => {
