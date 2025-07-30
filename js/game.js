@@ -147,9 +147,9 @@ function preventSpaceOnButtons() {
   );
 }
 
-// 
-// 
-// 
+//
+//
+//
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
@@ -159,9 +159,9 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-// 
-// 
-// 
+//
+//
+//
 
 function startGame() {
   // Add orientation check listeners when game tries to start
@@ -194,7 +194,6 @@ function launchGame() {
 
   // Hide Gameoverbuttons on mobile during gameplay
   toggleGameoverButtons(false);
-
   // Fill viewport on mobile in landscape mode
   fillViewportOnMobile();
 
@@ -203,47 +202,108 @@ function launchGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
+// function checkOrientation() {
+//   const isLandscape = window.innerWidth > window.innerHeight;
+//   const message = document.getElementById("rotate-message");
+//   // Only consider showing/hiding rotation message on mobile devices
+//   const isMobileDevice =
+//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+//     (window.innerWidth < 992 && "ontouchstart" in window);
+
+//   if (isLandscape || !isMobileDevice) {
+//     message.style.display = "none";
+
+//     // Start game if it was pending
+//     if (window.pendingGameStart) {
+//       window.pendingGameStart = false;
+//       launchGame();
+//     } else if (world) {
+//       // If game is already running, adjust canvas to fill viewport
+//       fillViewportOnMobile();
+//     }
+
+//     // Resume game if it was paused due to orientation
+//     if (window.pausedDueToOrientation && world) {
+//       window.pausedDueToOrientation = false;
+//       if (!window.gamePaused) {
+//         // Only resume if not manually paused
+//         world.resumeGame();
+//         if (!AudioHub.isMuted) {
+//           AudioHub.resumeAll();
+//         }
+//       }
+//     }
+//   } else if (isMobileDevice) {
+//     message.style.display = "flex";
+//     // Optional Spiel pausieren
+//     if (world && !window.gamePaused) {
+//       window.pausedDueToOrientation = true;
+//       world.pauseGame();
+//       AudioHub.pauseAll();
+//     }
+//   }
+// }
+
 function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
   const message = document.getElementById("rotate-message");
   // Only consider showing/hiding rotation message on mobile devices
-  const isMobileDevice =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window);
+  const isMobileDevice = detectMobileDevice();
 
   if (isLandscape || !isMobileDevice) {
-    message.style.display = "none";
-
-    // Start game if it was pending
-    if (window.pendingGameStart) {
-      window.pendingGameStart = false;
-      launchGame();
-    } else if (world) {
-      // If game is already running, adjust canvas to fill viewport
-      fillViewportOnMobile();
-    }
-
-    // Resume game if it was paused due to orientation
-    if (window.pausedDueToOrientation && world) {
-      window.pausedDueToOrientation = false;
-      if (!window.gamePaused) {
-        // Only resume if not manually paused
-        world.resumeGame();
-        if (!AudioHub.isMuted) {
-          AudioHub.resumeAll();
-        }
-      }
-    }
+    handleLandscapeMode(message);
   } else if (isMobileDevice) {
-    message.style.display = "flex";
-    // Optional Spiel pausieren
-    if (world && !window.gamePaused) {
-      window.pausedDueToOrientation = true;
-      world.pauseGame();
-      AudioHub.pauseAll();
+    handlePortraitMode(message);
+  }
+}
+
+function detectMobileDevice() {
+  return (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (window.innerWidth < 992 && "ontouchstart" in window)
+  );
+}
+
+function handleLandscapeMode(message) {
+  message.style.display = "none";
+  // Start game if it was pending
+  if (window.pendingGameStart) {
+    window.pendingGameStart = false;
+    launchGame();
+  } else if (world) {
+    // If game is already running, adjust canvas to fill viewport
+    fillViewportOnMobile();
+  }
+  resumeGameIfPausedByOrientation();
+}
+
+function handlePortraitMode(message) {
+  message.style.display = "flex";
+  // Optional Spiel pausieren
+  if (world && !window.gamePaused) {
+    window.pausedDueToOrientation = true;
+    world.pauseGame();
+    AudioHub.pauseAll();
+  }
+}
+
+// Resume game if it was paused due to orientation
+function resumeGameIfPausedByOrientation() {
+  if (window.pausedDueToOrientation && world) {
+    window.pausedDueToOrientation = false;
+    if (!window.gamePaused) {
+      // Only resume if not manually paused
+      world.resumeGame();
+      if (!AudioHub.isMuted) {
+        AudioHub.resumeAll();
+      }
     }
   }
 }
+
+//
+//
+//
 
 function showGameOverScreen(hasWon) {
   if (gameOver) return; // Prevent multiple game over screens
