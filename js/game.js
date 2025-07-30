@@ -6,15 +6,90 @@ let gameOverSoundPlayed = false;
 let gamePaused = false;
 const keyboard = new Keyboard();
 
+// function init() {
+//   initLevel();
+//   canvas = document.getElementById("canvas");
+//   ctx = canvas.getContext("2d");
+
+//   // Always hide rotation message by default
+//   document.getElementById("rotate-message").style.display = "none";
+
+//   // Synchronize sound icon with AudioHub muted state
+//   const soundIcon = document.getElementById("soundIcon");
+//   if (AudioHub.isMuted) {
+//     soundIcon.src = "icons/muted-1.png";
+//     soundIcon.setAttribute("data-muted", "true");
+//   } else {
+//     soundIcon.src = "icons/unmuted-1.png";
+//     soundIcon.setAttribute("data-muted", "false");
+//   }
+
+//   const startScreenImage = new Image();
+//   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
+//   startScreenImage.onload = () => {
+//     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
+//     document.getElementById("startButton").style.display = "block";
+//     document.getElementById("homeButton").style.display = "none";
+//     document.getElementById("restartButton").style.display = "none";
+//   };
+
+//   document.addEventListener("keydown", e => {
+//     if (e.repeat) return;
+//     // Skip keyboard input if game is paused, game is over or controls should be ignored
+//     if (window.gamePaused || (gameOver && world && world.ignoreControls)) return;
+
+//     if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+//       AudioHub.playWhileKeyPressed(AudioHub.WALK);
+//     }
+//   });
+
+//   document.addEventListener("keyup", e => {
+//     // Skip keyboard input if game is over with victory
+//     if (gameOver && world && world.ignoreControls) return;
+
+//     if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+//       AudioHub.stopKeySound();
+//     }
+//   });
+
+//   // Add this new event listener to prevent Space from activating buttons
+//   document.addEventListener(
+//     "keydown",
+//     e => {
+//       // Prevent Space from activating focused buttons
+//       if (e.key === " " || e.code === "Space") {
+//         e.preventDefault();
+//       }
+//     },
+//     true
+//   );
+
+//   addFullscreenListeners();
+// }
+
 function init() {
   initLevel();
+  setupCanvas();
+  hideRotatemessage();
+  syncSoundIcon();
+  drawStartScreen();
+  addKeyboardListeners();
+  preventSpaceOnButtons();
+  addFullscreenListeners();
+}
+
+function setupCanvas() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
+}
 
-  // Always hide rotation message by default
+// Always hide rotation message by default
+function hideRotatemessage() {
   document.getElementById("rotate-message").style.display = "none";
+}
 
-  // Synchronize sound icon with AudioHub muted state
+// Synchronize sound icon with AudioHub muted state
+function syncSoundIcon() {
   const soundIcon = document.getElementById("soundIcon");
   if (AudioHub.isMuted) {
     soundIcon.src = "icons/muted-1.png";
@@ -23,7 +98,9 @@ function init() {
     soundIcon.src = "icons/unmuted-1.png";
     soundIcon.setAttribute("data-muted", "false");
   }
+}
 
+function drawStartScreen() {
   const startScreenImage = new Image();
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
   startScreenImage.onload = () => {
@@ -32,28 +109,32 @@ function init() {
     document.getElementById("homeButton").style.display = "none";
     document.getElementById("restartButton").style.display = "none";
   };
+}
 
-  document.addEventListener("keydown", e => {
-    if (e.repeat) return;
+function addKeyboardListeners() {
+  document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener("keydup", handleKeyUp);
+}
 
-    // Skip keyboard input if game is paused, game is over or controls should be ignored
-    if (window.gamePaused || (gameOver && world && world.ignoreControls)) return;
+function handleKeyDown(e) {
+  if (e.repeat) return;
+  // Skip keyboard input if game is paused, game is over or controls should be ignored
+  if (window.gamePaused || (gameOver && world && world.ignoreControls)) return;
+  if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+    AudioHub.playWhileKeyPressed(AudioHub.WALK);
+  }
+}
 
-    if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
-      AudioHub.playWhileKeyPressed(AudioHub.WALK);
-    }
-  });
+function handleKeyUp(e) {
+  // Skip keyboard input if game is over with victory
+  if (gameOver && world && world.ignoreControls) return;
+  if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+    AudioHub.stopKeySound();
+  }
+}
 
-  document.addEventListener("keyup", e => {
-    // Skip keyboard input if game is over with victory
-    if (gameOver && world && world.ignoreControls) return;
-
-    if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
-      AudioHub.stopKeySound();
-    }
-  });
-
-  // Add this new event listener to prevent Space from activating buttons
+// Add this new event listener to prevent Space from activating buttons
+function preventSpaceOnButtons() {
   document.addEventListener(
     "keydown",
     e => {
@@ -64,9 +145,11 @@ function init() {
     },
     true
   );
-
-  addFullscreenListeners();
 }
+
+// 
+// 
+// 
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
@@ -75,6 +158,10 @@ document.addEventListener("visibilitychange", () => {
     AudioHub.unmuteAll();
   }
 });
+
+// 
+// 
+// 
 
 function startGame() {
   // Add orientation check listeners when game tries to start
@@ -89,7 +176,6 @@ function startGame() {
   const isMobileDevice =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
     (window.innerWidth < 992 && "ontouchstart" in window);
-
   // Only on mobile devices, check orientation and show message if needed
   if (isMobileDevice) {
     const isLandscape = window.innerWidth > window.innerHeight;
