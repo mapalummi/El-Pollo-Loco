@@ -56,43 +56,84 @@ class World {
     return clouds;
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
- 
+  // run() {
+  //   if (this._gameLoopInterval) {
+  //     clearInterval(this._gameLoopInterval);
+  //   }
+
+  //   this._gameLoopInterval = setInterval(() => {
+  //     if (this.paused) return;
+
+  //     this.checkCollisions();
+  //     this.checkThrowObjects();
+  //     this.checkEndbossVisibility();
+  //     this.checkLevelEndReached();
+  //     this.checkGameStatus();
+
+  //     this.level.enemies.forEach(enemy => {
+  //       if ((enemy instanceof Chicken || enemy instanceof LittleChicken) && !enemy.isDead && typeof enemy.update === "function") {
+  //         //Checkt ob updates existieren
+  //         enemy.update();
+  //       }
+  //     });
+
+  //     // Bewege den Endboss, wenn er im Walking-Modus ist
+  //     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+  //     if (endboss && endboss.isWalking) {
+  //       this.moveEndbossTowardsPlayer(endboss);
+  //     }
+  //   }, 50);
+  // }
+
+  // NEU:
   run() {
+    this.clearGameLoopInterval();
+    this._gameLoopInterval = setInterval(() => this.gameLoop(), 50);
+  }
+
+  clearGameLoopInterval() {
     if (this._gameLoopInterval) {
       clearInterval(this._gameLoopInterval);
     }
-
-    this._gameLoopInterval = setInterval(() => {
-      if (this.paused) return;
-
-      this.checkCollisions();
-      this.checkThrowObjects();
-      this.checkEndbossVisibility();
-      this.checkLevelEndReached();
-      this.checkGameStatus();
-
-      this.level.enemies.forEach(enemy => {
-        if ((enemy instanceof Chicken || enemy instanceof LittleChicken) && !enemy.isDead && typeof enemy.update === "function") {
-          //Checkt ob updates existieren
-          enemy.update();
-        }
-      });
-
-      // Bewege den Endboss, wenn er im Walking-Modus ist
-      const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-      if (endboss && endboss.isWalking) {
-        this.moveEndbossTowardsPlayer(endboss);
-      }
-    }, 50);
   }
 
-  // 
-  // 
-  // 
+  gameLoop() {
+    if (this.paused) return;
+    this.checkGameEvents();
+    this.updateEnemies();
+    this.moveEndbossIfWalking();
+  }
+
+  checkGameEvents() {
+    this.checkCollisions();
+    this.checkThrowObjects();
+    this.checkEndbossVisibility();
+    this.checkLevelEndReached();
+    this.checkGameStatus();
+  }
+
+  updateEnemies() {
+    this.level.enemies.forEach(enemy => {
+      if ((enemy instanceof Chicken || enemy instanceof LittleChicken) && !enemy.isDead && typeof enemy.update === "function") {
+        enemy.update();
+      }
+    });
+  }
+
+  moveEndbossIfWalking() {
+    const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    if (endboss && endboss.isWalking) {
+      this.moveEndbossTowardsPlayer(endboss);
+    }
+  }
+
+  //
+  //
+  //
 
   checkThrowObjects() {
     if (this.keyboard.B && !this.bottleThrowCooldown) {
@@ -117,9 +158,9 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   checkCollisions() {
     if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
@@ -194,9 +235,9 @@ class World {
     this.checkGameStatus();
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   updateCoinBar() {
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100;
@@ -218,18 +259,18 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   updateBottleBar() {
     this.percentageBottles = (this.collectedBottles / this.totalBottles) * 100;
     this.bottleBar.setPercentage(this.percentageBottles);
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   checkGameStatus() {
     // Verlust-Bedingung: Character ist tot
@@ -260,9 +301,9 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   draw() {
     // Don't clear and redraw if paused (to keep the last frame visible)
@@ -330,9 +371,9 @@ class World {
     });
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   addObjectsToMap(objects) {
     objects.forEach(o => {
@@ -340,9 +381,9 @@ class World {
     });
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   addToMap(mo) {
     if (mo.otherDirection) {
@@ -356,9 +397,9 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   flipImage(mo) {
     this.ctx.save();
@@ -382,9 +423,9 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   triggerEndbossEntrance(endboss) {
     // Position the endboss just off-screen to the right
@@ -409,9 +450,9 @@ class World {
     }, 3000); // Adjust time as needed
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   checkEndbossVisibility() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -451,9 +492,9 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   updateEndbossBehavior(endboss, distance) {
     if (distance < 300) {
@@ -465,9 +506,9 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   moveEndbossTowardsPlayer(endboss) {
     // Don't move if not in walking state
@@ -494,9 +535,9 @@ class World {
     endboss.x += direction * speed;
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   pauseGame() {
     if (this.paused) return; // Already paused
@@ -515,9 +556,9 @@ class World {
     this.pauseIntervals();
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   resumeGame() {
     // Calculate how long the game was paused
@@ -539,9 +580,9 @@ class World {
     this.resumeIntervals();
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   pauseIntervals() {
     // Store all active intervals
@@ -621,9 +662,9 @@ class World {
     }
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
   resumeIntervals() {
     // Restore all active intervals
