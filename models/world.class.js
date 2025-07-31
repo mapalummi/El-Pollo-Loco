@@ -56,7 +56,11 @@ class World {
     return clouds;
   }
 
-  // Timer um Aktionen auszuführen:
+  // 
+  // 
+  // 
+
+ 
   run() {
     if (this._gameLoopInterval) {
       clearInterval(this._gameLoopInterval);
@@ -86,6 +90,10 @@ class World {
     }, 50);
   }
 
+  // 
+  // 
+  // 
+
   checkThrowObjects() {
     if (this.keyboard.B && !this.bottleThrowCooldown) {
       if (this.collectedBottles > 0) {
@@ -108,6 +116,10 @@ class World {
       }
     }
   }
+
+  // 
+  // 
+  // 
 
   checkCollisions() {
     if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
@@ -182,6 +194,10 @@ class World {
     this.checkGameStatus();
   }
 
+  // 
+  // 
+  // 
+
   updateCoinBar() {
     this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100;
     //Fortschritt an die Coinbar übergeben
@@ -202,10 +218,18 @@ class World {
     }
   }
 
+  // 
+  // 
+  // 
+
   updateBottleBar() {
     this.percentageBottles = (this.collectedBottles / this.totalBottles) * 100;
     this.bottleBar.setPercentage(this.percentageBottles);
   }
+
+  // 
+  // 
+  // 
 
   checkGameStatus() {
     // Verlust-Bedingung: Character ist tot
@@ -235,6 +259,10 @@ class World {
       return;
     }
   }
+
+  // 
+  // 
+  // 
 
   draw() {
     // Don't clear and redraw if paused (to keep the last frame visible)
@@ -302,11 +330,19 @@ class World {
     });
   }
 
+  // 
+  // 
+  // 
+
   addObjectsToMap(objects) {
     objects.forEach(o => {
       this.addToMap(o);
     });
   }
+
+  // 
+  // 
+  // 
 
   addToMap(mo) {
     if (mo.otherDirection) {
@@ -319,6 +355,10 @@ class World {
       this.flipImageBack(mo);
     }
   }
+
+  // 
+  // 
+  // 
 
   flipImage(mo) {
     this.ctx.save();
@@ -342,6 +382,10 @@ class World {
     }
   }
 
+  // 
+  // 
+  // 
+
   triggerEndbossEntrance(endboss) {
     // Position the endboss just off-screen to the right
     endboss.x = this.levelWidth + 200;
@@ -364,6 +408,10 @@ class World {
       // console.log("Character unlocked!");
     }, 3000); // Adjust time as needed
   }
+
+  // 
+  // 
+  // 
 
   checkEndbossVisibility() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -403,6 +451,10 @@ class World {
     }
   }
 
+  // 
+  // 
+  // 
+
   updateEndbossBehavior(endboss, distance) {
     if (distance < 300) {
       endboss.startAttacking();
@@ -412,6 +464,10 @@ class World {
       endboss.startAlert();
     }
   }
+
+  // 
+  // 
+  // 
 
   moveEndbossTowardsPlayer(endboss) {
     // Don't move if not in walking state
@@ -438,6 +494,10 @@ class World {
     endboss.x += direction * speed;
   }
 
+  // 
+  // 
+  // 
+
   pauseGame() {
     if (this.paused) return; // Already paused
     this.paused = true;
@@ -454,6 +514,10 @@ class World {
     // Pause all intervals
     this.pauseIntervals();
   }
+
+  // 
+  // 
+  // 
 
   resumeGame() {
     // Calculate how long the game was paused
@@ -474,6 +538,10 @@ class World {
     // Resume all intervals
     this.resumeIntervals();
   }
+
+  // 
+  // 
+  // 
 
   pauseIntervals() {
     // Store all active intervals
@@ -552,6 +620,10 @@ class World {
       }
     }
   }
+
+  // 
+  // 
+  // 
 
   resumeIntervals() {
     // Restore all active intervals
