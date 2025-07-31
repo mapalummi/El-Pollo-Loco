@@ -220,7 +220,7 @@ class Endboss extends MovableObject {
   evaluateBehaviourAfterAttack() {
     if (this.world) {
       const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-      this.world.updateEndbossBehavior(this, distanceToPlayer);
+      updateEndbossBehavior(this, distanceToPlayer);
     } else {
       this.isAlert = true;
     }

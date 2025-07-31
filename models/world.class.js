@@ -102,7 +102,7 @@ class World {
       if (this.collectedBottles > 0) {
         this.throwBottle();
       } else {
-        this.showNoBottlesFeedback();
+        showNoBottlesFeedback();
       }
     }
   }
@@ -128,10 +128,10 @@ class World {
     this.throwableObjects.push(bottle);
   }
 
-  showNoBottlesFeedback() {
-    console.log("Keine Flaschen mehr verfügbar!");
-    //TODO: Optional: Visuelles Feedback für den Spieler
-  }
+  // showNoBottlesFeedback() {
+  //   console.log("Keine Flaschen mehr verfügbar!");
+  //   // Optional: Visuelles Feedback für den Spieler
+  // }
 
   checkCollisions() {
     if (this.character.isDead()) return;
@@ -413,70 +413,24 @@ class World {
   }
 
   checkEndbossVisibility() {
-    const endboss = this.getEndboss();
+    const endboss = getEndboss(this.level);
     if (!endboss) return;
 
-    this.ensureEndbossWorldReference(endboss);
+    ensureEndbossWorldReference(endboss, this);
 
     if (this.endbossTriggered) {
-      this.showEndbossBar();
-      if (this.shouldSkipEnbossBehavior(endboss)) return;
+      showEndbossBar(this.endbossBar);
+      if (shouldSkipEnbossBehavior(endboss, this.levelWidth)) return;
     }
 
-    const distanceToEndboss = this.getDistanceToEndboss(endboss);
+    const distanceToEndboss = getDistanceToEndboss(this.character, endboss);
 
-    if (this.shouldShowEndbossBar(distanceToEndboss)) {
-      this.showEndbossBar();
-      this.triggerEndbossAlertIfNeeded(endboss);
-      this.updateEndbossBehavior(endboss, distanceToEndboss);
+    if (shouldShowEndbossBar(distanceToEndboss, this.endbossTriggered)) {
+      showEndbossBar(this.endbossBar);
+      triggerEndbossAlertIfNeeded(endboss);
+      updateEndbossBehavior(endboss, distanceToEndboss);
     } else {
-      this.hideEndbossBarIfNotTriggered();
-    }
-  }
-
-  getEndboss() {
-    return this.level.enemies.find(enemy => enemy instanceof Endboss);
-  }
-
-  ensureEndbossWorldReference(endboss) {
-    if (!endboss.world) endboss.world = this;
-  }
-
-  showEndbossBar() {
-    this.endbossBar.isVisible = true;
-  }
-
-  shouldSkipEnbossBehavior(endboss) {
-    return endboss.x > this.levelWidth - 500 && !endboss.isHurt && !endboss.wasHitRecently;
-  }
-
-  getDistanceToEndboss(endboss) {
-    return Math.abs(this.character.x - endboss.x);
-  }
-
-  shouldShowEndbossBar(distanceToEndboss) {
-    return distanceToEndboss < 500 || this.endbossTriggered;
-  }
-
-  triggerEndbossAlertIfNeeded(endboss) {
-    if (!endboss.isAlert && !endboss.isAttacking && !endboss.isWalking && !endboss.isDead) {
-      endboss.startAlert();
-    }
-  }
-
-  hideEndbossBarIfNotTriggered() {
-    if (!this.endbossTriggered) {
-      this.endbossBar.isVisible = false;
-    }
-  }
-
-  updateEndbossBehavior(endboss, distance) {
-    if (distance < 300) {
-      endboss.startAttacking();
-    } else if (distance < 800) {
-      endboss.startWalking();
-    } else {
-      endboss.startAlert();
+      hideEndbossBarIfNotTriggered(this.endbossBar, this.endbossTriggered);
     }
   }
 
@@ -488,12 +442,9 @@ class World {
       endboss.otherDirection = false;
       return;
     }
-
-    // Regular behavior when near the player
     const direction = this.character.x < endboss.x ? -1 : 1;
     //CHECK: Speed Endboss doppelt im Spiel??
     const speed = 20; //Speed Endboss im Spiel.
-
     // Set appropriate direction for rendering
     endboss.otherDirection = direction > 0;
     // Bewege den Endboss
