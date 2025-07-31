@@ -9,12 +9,12 @@ function toggleSound() {
     soundIcon.src = "icons/unmuted-1.png";
     soundIcon.setAttribute("data-muted", "false");
     AudioHub.unmuteAll();
-    console.log("Sound unmuted");
+    // console.log("Sound unmuted");
   } else {
     soundIcon.src = "icons/muted-1.png";
     soundIcon.setAttribute("data-muted", "true");
     AudioHub.muteAll();
-    console.log("Sound muted");
+    // console.log("Sound muted");
   }
   try {
     localStorage.setItem("elPolloLoco_soundMuted", AudioHub.isMuted);
