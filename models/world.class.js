@@ -135,27 +135,64 @@ class World {
   //
   //
 
+  // checkThrowObjects() {
+  //   if (this.keyboard.B && !this.bottleThrowCooldown) {
+  //     if (this.collectedBottles > 0) {
+  //       this.bottleThrowCooldown = true;
+
+  //       let offsetX = this.character.facingRight ? 50 : -10;
+  //       let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
+  //       bottle.throwDirection = this.character.facingRight ? 1 : -1;
+  //       this.throwableObjects.push(bottle);
+
+  //       this.collectedBottles--;
+  //       this.updateBottleBar();
+
+  //       setTimeout(() => {
+  //         this.bottleThrowCooldown = false;
+  //       }, this.bottleThrowCooldownDuration);
+  //     } else {
+  //       console.log("Keine Flaschen mehr verfügbar!");
+  //       //TODO: Optional: Visuelles Feedback für den Spieler
+  //     }
+  //   }
+  // }
+
+  // NEU:
   checkThrowObjects() {
-    if (this.keyboard.B && !this.bottleThrowCooldown) {
+    if (this.canThrowBottle()) {
       if (this.collectedBottles > 0) {
-        this.bottleThrowCooldown = true;
-
-        let offsetX = this.character.facingRight ? 50 : -10;
-        let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
-        bottle.throwDirection = this.character.facingRight ? 1 : -1;
-        this.throwableObjects.push(bottle);
-
-        this.collectedBottles--;
-        this.updateBottleBar();
-
-        setTimeout(() => {
-          this.bottleThrowCooldown = false;
-        }, this.bottleThrowCooldownDuration);
+        this.throwBottle();
       } else {
-        console.log("Keine Flaschen mehr verfügbar!");
-        //TODO: Optional: Visuelles Feedback für den Spieler
+        this.showNoBottlesFeedback();
       }
     }
+  }
+
+  canThrowBottle() {
+    return this.keyboard.B && !this.bottleThrowCooldown;
+  }
+
+  throwBottle() {
+    this.bottleThrowCooldown = true;
+    this.createAndAddBottle();
+    this.collectedBottles--;
+    this.updateBottleBar();
+    setTimeout(() => {
+      this.bottleThrowCooldown = false;
+    }, this.bottleThrowCooldownDuration);
+  }
+
+  createAndAddBottle() {
+    let offsetX = this.character.facingRight ? 50 : -10;
+    let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
+    bottle.throwDirection = this.character.facingRight ? 1 : -1;
+    this.throwableObjects.push(bottle);
+  }
+
+  showNoBottlesFeedback() {
+    console.log("Keine Flaschen mehr verfügbar!");
+    //TODO: Optional: Visuelles Feedback für den Spieler
   }
 
   //
