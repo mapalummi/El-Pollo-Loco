@@ -22,3 +22,28 @@ function toggleSound() {
     console.warn("Could not save sound settings to localStorage");
   }
 }
+
+function handleGameOverAudio(hasWon) {
+  if (hasWon) {
+    AudioHub.playOne(AudioHub.WIN);
+  } else {
+    AudioHub.playOne(AudioHub.GAMEOVER);
+  }
+}
+
+function stopAllAudioAndDialog() {
+  AudioHub.stopAll();
+  hideDialog();
+  cleanupGameState();
+}
+
+function syncSoundIcon() {
+  const soundIcon = document.getElementById("soundIcon");
+  if (AudioHub.isMuted) {
+    soundIcon.src = "icons/muted-1.png";
+    soundIcon.setAttribute("data-muted", "true");
+  } else {
+    soundIcon.src = "icons/unmuted-1.png";
+    soundIcon.setAttribute("data-muted", "false");
+  }
+}

@@ -112,3 +112,67 @@ function closeModal() {
     }
   }
 }
+
+function drawStartScreen() {
+  const startScreenImage = new Image();
+  startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
+  startScreenImage.onload = () => {
+    ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
+    document.getElementById("startButton").style.display = "block";
+    document.getElementById("homeButton").style.display = "none";
+    document.getElementById("restartButton").style.display = "none";
+  };
+}
+
+function hideStatusBars() {
+  if (world.healthBar && typeof world.healthBar.hide === "function") {
+    world.healthBar.hide();
+  }
+  if (world.bottleBar && typeof world.bottleBar.hide === "function") {
+    world.bottleBar.hide();
+  }
+  if (world.coinBar && typeof world.coinBar.hide === "function") {
+    world.coinBar.hide();
+  }
+  if (world.endbossBar && typeof world.endbossBar.hide === "function") {
+    world.endbossBar.hide();
+  }
+}
+
+function showGameOverButtons() {
+  document.getElementById("homeButton").style.display = "block";
+  document.getElementById("restartButton").style.display = "block";
+}
+
+function prepareGameOverUI() {
+  toggleGameoverButtons(true);
+  gameOver = true;
+  // showDialog(hasWon);
+  showDialog(arguments[0]); // Warum???
+  AudioHub.stopAll();
+  toggleMobileControls(false);
+  document.getElementById("game-controls").classList.add("d_none");
+  if (!gameOverSoundPlayed) gameOverSoundPlayed = true;
+}
+
+function resetPauseIcon() {
+  const pausePlayIcon = document.getElementById("pausePlayIcon");
+  if (pausePlayIcon) {
+    pausePlayIcon.src = "icons/pause-1.png"; // Reset to pause icon
+  }
+}
+
+function drawStartScreenOnFreshCanvas() {
+  const startScreenImage = new Image();
+  startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
+  startScreenImage.onload = () => {
+    ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
+    document.getElementById("startButton").style.display = "block";
+  };
+}
+
+function showControlsForRestart() {
+  document.getElementById("restartButton").style.display = "none";
+  document.getElementById("homeButton").style.display = "none";
+  document.getElementById("game-controls").classList.remove("d_none");
+}

@@ -26,63 +26,6 @@ function hideRotatemessage() {
   document.getElementById("rotate-message").style.display = "none";
 }
 
-function syncSoundIcon() {
-  const soundIcon = document.getElementById("soundIcon");
-  if (AudioHub.isMuted) {
-    soundIcon.src = "icons/muted-1.png";
-    soundIcon.setAttribute("data-muted", "true");
-  } else {
-    soundIcon.src = "icons/unmuted-1.png";
-    soundIcon.setAttribute("data-muted", "false");
-  }
-}
-
-function drawStartScreen() {
-  const startScreenImage = new Image();
-  startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
-  startScreenImage.onload = () => {
-    ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
-    document.getElementById("startButton").style.display = "block";
-    document.getElementById("homeButton").style.display = "none";
-    document.getElementById("restartButton").style.display = "none";
-  };
-}
-
-function addKeyboardListeners() {
-  document.addEventListener("keydown", handleKeyDown);
-  document.addEventListener("keydup", handleKeyUp);
-}
-
-function handleKeyDown(e) {
-  if (e.repeat) return;
-  // Skip keyboard input if game is paused, game is over or controls should be ignored
-  if (window.gamePaused || (gameOver && world && world.ignoreControls)) return;
-  if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
-    AudioHub.playWhileKeyPressed(AudioHub.WALK);
-  }
-}
-
-function handleKeyUp(e) {
-  // Skip keyboard input if game is over with victory
-  if (gameOver && world && world.ignoreControls) return;
-  if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
-    AudioHub.stopKeySound();
-  }
-}
-
-function preventSpaceOnButtons() {
-  document.addEventListener(
-    "keydown",
-    e => {
-      // Prevent Space from activating focused buttons
-      if (e.key === " " || e.code === "Space") {
-        e.preventDefault();
-      }
-    },
-    true
-  );
-}
-
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     AudioHub.muteAll();
@@ -191,25 +134,6 @@ function showGameOverScreen(hasWon) {
   showGameOverButtons();
 }
 
-function prepareGameOverUI() {
-  toggleGameoverButtons(true);
-  gameOver = true;
-  // showDialog(hasWon);
-  showDialog(arguments[0]); // Warum???
-  AudioHub.stopAll();
-  toggleMobileControls(false);
-  document.getElementById("game-controls").classList.add("d_none");
-  if (!gameOverSoundPlayed) gameOverSoundPlayed = true;
-}
-
-function handleGameOverAudio(hasWon) {
-  if (hasWon) {
-    AudioHub.playOne(AudioHub.WIN);
-  } else {
-    AudioHub.playOne(AudioHub.GAMEOVER);
-  }
-}
-
 function freezeCharacterIfWon(hasWon) {
   if (!hasWon || !world || !world.character) return;
   world.character.isFrozen = true;
@@ -248,26 +172,6 @@ function clearWorldObjects() {
   hideStatusBars();
 }
 
-function hideStatusBars() {
-  if (world.healthBar && typeof world.healthBar.hide === "function") {
-    world.healthBar.hide();
-  }
-  if (world.bottleBar && typeof world.bottleBar.hide === "function") {
-    world.bottleBar.hide();
-  }
-  if (world.coinBar && typeof world.coinBar.hide === "function") {
-    world.coinBar.hide();
-  }
-  if (world.endbossBar && typeof world.endbossBar.hide === "function") {
-    world.endbossBar.hide();
-  }
-}
-
-function showGameOverButtons() {
-  document.getElementById("homeButton").style.display = "block";
-  document.getElementById("restartButton").style.display = "block";
-}
-
 function mainWindow() {
   showGameOverUIOnMain();
   stopAllAudioAndDialog();
@@ -279,12 +183,6 @@ function mainWindow() {
 
 function showGameOverUIOnMain() {
   toggleGameoverButtons(true);
-}
-
-function stopAllAudioAndDialog() {
-  AudioHub.stopAll();
-  hideDialog();
-  cleanupGameState();
 }
 
 function cancelAllAnimations() {
@@ -314,37 +212,6 @@ function destroyWorldAndCanvas() {
   ctx = canvas.getContext("2d");
 }
 
-function resetGameStateAndUI() {
-  // Reset all game state
-  gameOver = false;
-  gameOverSoundPlayed = false;
-  resetKeyboardState();
-  document.getElementById("game-controls").classList.add("d_none");
-  document.getElementById("restartButton").style.display = "none";
-  document.getElementById("homeButton").style.display = "none";
-  document.getElementById("game-explanation").classList.remove("d_none");
-  initLevel();
-}
-
-function resetKeyboardState() {
-  if (!keyboard) return;
-  keyboard.RIGHT = false;
-  keyboard.LEFT = false;
-  keyboard.UP = false;
-  keyboard.DOWN = false;
-  keyboard.SPACE = false;
-  keyboard.D = false;
-}
-
-function drawStartScreenOnFreshCanvas() {
-  const startScreenImage = new Image();
-  startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
-  startScreenImage.onload = () => {
-    ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
-    document.getElementById("startButton").style.display = "block";
-  };
-}
-
 function restartGame() {
   resetGameOverAndPause();
   showControlsForRestart();
@@ -360,19 +227,6 @@ function resetGameOverAndPause() {
   window.gamePaused = false;
   hideDialog();
   resetPauseIcon();
-}
-
-function resetPauseIcon() {
-  const pausePlayIcon = document.getElementById("pausePlayIcon");
-  if (pausePlayIcon) {
-    pausePlayIcon.src = "icons/pause-1.png"; // Reset to pause icon
-  }
-}
-
-function showControlsForRestart() {
-  document.getElementById("restartButton").style.display = "none";
-  document.getElementById("homeButton").style.display = "none";
-  document.getElementById("game-controls").classList.remove("d_none");
 }
 
 function destroyWorldAndClearCanvas() {
@@ -392,18 +246,6 @@ function startFreshGameAfterDelay() {
     AudioHub.playLoop(AudioHub.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
-}
-
-function cleanupGameState() {
-  const highestTimeoutId = setTimeout(() => {}, 0);
-  for (let i = 0; i <= highestTimeoutId; i++) {
-    clearTimeout(i);
-  }
-
-  const highestIntervalId = setInterval(() => {}, 0);
-  for (let i = 1; i <= highestIntervalId; i++) {
-    clearInterval(i);
-  }
 }
 
 /**

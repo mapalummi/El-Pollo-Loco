@@ -106,20 +106,13 @@ function fillViewportOnMobile() {
   adjustWorldToResize();
 }
 
-function detectMobileDevice() {
-  return (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window)
-  );
-}
+
 
 function setMobileFullscreenStyles(canvas, gameContainer) {
-  // Fill entire viewport
   canvas.style.width = "100vw";
   canvas.style.height = "100vh";
   canvas.style.margin = "0";
   canvas.style.display = "block";
-  // Ensure the container also fills the viewport
   gameContainer.style.margin = "0";
   gameContainer.style.padding = "0";
   gameContainer.style.width = "100vw";
