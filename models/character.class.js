@@ -101,83 +101,6 @@ class Character extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
-  //
-  //
-  //
-
-  // animate() {
-  //   setInterval(() => {
-  //     if (this.isDead() || this.isFrozen) return; // Skip movement if frozen or dead
-
-  //     // Reset walking state at the beginning of each frame
-  //     this.isWalking = false;
-
-  //     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-  //       if (this.isLocked) {
-  //         return; // Skip movement if locked
-  //       }
-  //       this.moveRight();
-  //       this.otherDirection = false;
-  //     }
-
-  //     if (this.world.keyboard.LEFT && this.x > 0) {
-  //       if (this.isLocked) {
-  //         return; // Skip movement if locked
-  //       }
-  //       this.moveLeft();
-  //       this.otherDirection = true;
-  //     }
-
-  //     if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-  //       // Check if character is locked before jumping
-  //       if (this.isLocked) {
-  //         return; // Skip jump if locked
-  //       }
-  //       this.jump();
-  //     }
-
-  //     this.world.camera_x = -this.x + 100; // Kamera folgt dem Charakter
-  //     this.getRealFrame(); // Kollisionsbox wird ständig aktualisiert
-  //   }, 1000 / 60);
-
-  //   // Animation state management
-  //   setInterval(() => {
-  //     // Check for death first
-  //     if (this.isDead()) {
-  //       if (!this.isDeadAnimationComplete) {
-  //         this.startAnimation("dead");
-  //       }
-  //       return;
-  //     }
-
-  //     // If frozen or world is paused, don't change animations
-  //     if (this.isFrozen || (this.world && this.world.paused)) return;
-
-  //     if (this.isDeadAnimationComplete) return;
-
-  //     if (this.isHurt()) {
-  //       this.startAnimation("hurt");
-  //     } else if (this.isAboveGround()) {
-  //       if (!this.jumpAnimationPlayed) {
-  //         // Nur einmal pro Sprung abspielen
-  //         this.startAnimation("jumping");
-  //         this.jumpAnimationPlayed = true;
-  //       }
-  //     } else {
-  //       this.jumpAnimationPlayed = false; // Reset wenn auf dem Boden
-
-  //       if (Date.now() - this.lastMoveTime > this.sleepTimeout) {
-  //         this.startAnimation("sleep");
-  //       } else if (Date.now() - this.lastMoveTime > this.idleTimeout) {
-  //         this.startAnimation("idle");
-  //       } else if (this.isWalking) {
-  //         this.startAnimation("walking");
-  //       }
-  //     }
-  //   }, 200);
-  // }
-
-  // NEU:
   animate() {
     setInterval(() => this.handleMovement(), 1000 / 60);
     setInterval(() => this.handleAnimationState(), 200);
@@ -246,60 +169,6 @@ class Character extends MovableObject {
     }
   }
 
-  //
-  //
-  //
-
-  // startAnimation(animationType) {
-  //   if (this.isFrozen) return; // NEU
-  //   // If already running this animation, don't restart it
-  //   if (this.currentAnimation === animationType) return;
-
-  //   // Check if we need to stop sleep sound when changing animations
-  //   if (this.currentAnimation === "sleep") {
-  //     AudioHub.stopOne(AudioHub.SLEEP);
-  //   }
-
-  //   // Clear any existing animation interval
-  //   if (this.animationInterval) {
-  //     clearInterval(this.animationInterval);
-  //   }
-
-  //   if (this.animationTimeout) {
-  //     clearTimeout(this.animationTimeout);
-  //   }
-
-  //   // Set current animation type
-  //   this.currentAnimation = animationType;
-
-  //   // Start the appropriate animation
-  //   switch (animationType) {
-  //     case "walking":
-  //       this.walkingAnimation();
-  //       break;
-  //     case "jumping":
-  //       AudioHub.playOne(AudioHub.JUMP);
-  //       this.jumpingAnimation();
-  //       break;
-  //     case "hurt":
-  //       AudioHub.playOne(AudioHub.HURT);
-  //       this.hurtAnimation();
-  //       break;
-  //     case "idle":
-  //       this.idleAnimation();
-  //       break;
-  //     case "sleep":
-  //       AudioHub.playLoop(AudioHub.SLEEP);
-  //       this.sleepAnimation();
-  //       break;
-  //     case "dead":
-  //       AudioHub.playOne(AudioHub.DEAD);
-  //       this.deadAnimation();
-  //       break;
-  //   }
-  // }
-
-  // NEU:
   startAnimation(animationType) {
     if (this.isFrozen || this.currentAnimation === animationType) return;
     this.stopSleepSoundIfNeeded();
@@ -346,19 +215,11 @@ class Character extends MovableObject {
     }
   }
 
-  //
-  //
-  //
-
   walkingAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 1000 / 15);
   }
-
-  //
-  //
-  //
 
   jumpingAnimation() {
     clearInterval(this.animationInterval);
@@ -372,10 +233,6 @@ class Character extends MovableObject {
     };
     playNextFrame();
   }
-
-  //
-  //
-  //
 
   hurtAnimation() {
     this.animationInterval = setInterval(() => {

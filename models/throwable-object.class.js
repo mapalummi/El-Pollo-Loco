@@ -68,34 +68,6 @@ class ThrowableObject extends MovableObject {
     }, 100);
   }
 
-  // splash() {
-  //   if (this.isSplashing) return; // Verhindert mehrfaches Aufrufen
-  //   this.isSplashing = true;
-  //   this.hasHit = true; //Flasche als getroffen markiert
-  //   this.speedY = 0; // Stoppt die Bewegung
-  //   this.speed = 0;
-
-  //   AudioHub.playOne(AudioHub.SPLASH);
-
-  //   clearInterval(this.movementInterval);
-  //   clearInterval(this.animationInterval);
-
-  //   // Spielt die Zerplatzen-Animation ab
-  //   let splashAnimationInterval = setInterval(() => {
-  //     this.playAnimation(this.IMAGES_SPLASH);
-  //   }, 50);
-
-  //   // Entfernt die Flasche nach der Animation
-  //   setTimeout(() => {
-  //     clearInterval(splashAnimationInterval);
-  //     const index = world.throwableObjects.indexOf(this);
-  //     if (index > -1) {
-  //       world.throwableObjects.splice(index, 1);
-  //     }
-  //   }, this.IMAGES_SPLASH.length * 50); // Wartezeit basierend auf der Anzahl der Bilder
-  // }
-
-  // NEU:
   splash() {
     if (this.isSplashing) return;
     this.setSpashState();

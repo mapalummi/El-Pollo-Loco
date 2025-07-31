@@ -153,80 +153,6 @@ class Endboss extends MovableObject {
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
-  //
-  //
-  //
-
-  // startAttacking() {
-  //   if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
-  //     this.isAttacking = true;
-  //     this.isWalking = false;
-  //     this.isAlert = false;
-  //     AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
-
-  //     // Set attack on cooldown immediately
-  //     this.isAttackOnCooldown = true;
-
-  //     // Store original position and calculate jump trajectory
-  //     const originalY = this.y;
-  //     const originalX = this.x;
-  //     const jumpStartTime = new Date().getTime();
-
-  //     // Determine direction to jump (toward character)
-  //     let direction = 1; // Default: right
-  //     if (this.world && this.world.character) {
-  //       // Direction und otherDirection werden gesetzt
-  //       direction = this.world.character.x > this.x ? 1 : -1;
-  //       this.otherDirection = direction > 0;
-  //     }
-
-  //     // Create jump interval
-  //     const jumpInterval = setInterval(() => {
-  //       const currentTime = new Date().getTime();
-  //       const elapsedTime = currentTime - jumpStartTime;
-
-  //       // Calculate vertical position (parabolic trajectory)
-  //       const jumpProgress = elapsedTime / this.JUMP_DURATION;
-
-  //       if (jumpProgress <= 1) {
-  //         // Parabola: y = 4h * (x - x²) where h is jump height
-  //         const verticalOffset = 4 * this.JUMP_HEIGHT * (jumpProgress - jumpProgress * jumpProgress);
-  //         this.y = originalY - verticalOffset;
-
-  //         // Move horizontally toward character
-  //         this.x += direction * this.JUMP_SPEED * (1 - Math.abs(jumpProgress - 0.5) * 2);
-  //       } else {
-  //         // Jump complete, clear interval and reset position
-  //         clearInterval(jumpInterval);
-  //         this.y = originalY;
-  //       }
-  //     }, 16);
-
-  //     // Animation duration timer
-  //     setTimeout(() => {
-  //       clearInterval(jumpInterval); // Ensure jump interval is cleared
-  //       this.y = originalY; // Reset vertical position
-
-  //       if (!this.isDead && !this.isHurt) {
-  //         this.isAttacking = false;
-  //         // Verhalten basierend auf Distanz neu evaluieren
-  //         if (this.world) {
-  //           const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-  //           this.world.updateEndbossBehavior(this, distanceToPlayer);
-  //         } else {
-  //           this.isAlert = true; // Fallback
-  //         }
-  //       }
-  //     }, this.IMAGES_ATTACK.length * 100);
-
-  //     // Reset cooldown after the specified duration
-  //     setTimeout(() => {
-  //       this.isAttackOnCooldown = false;
-  //     }, this.attackCooldownDuration);
-  //   }
-  // }
-
-  // NEU:
   startAttacking() {
     if (this.canAttack()) {
       this.prepareAttack();
@@ -306,60 +232,6 @@ class Endboss extends MovableObject {
     }, this.attackCooldownDuration);
   }
 
-  //
-  //
-  //
-
-  // hit(damage) {
-  //   this.energy -= damage;
-  //   if (this.energy < 0) {
-  //     this.energy = 0;
-  //   }
-
-  //   this.lastHit = new Date().getTime();
-
-  //   // Set hurt state
-  //   this.isHurt = true;
-  //   this.isAttacking = false;
-  //   this.isWalking = false;
-
-  //   // New code for maintaining alert mode after hit
-  //   this.wasHitRecently = true;
-
-  //   // Clear existing timer if there is one
-  //   if (this.hitCooldownTimer) {
-  //     clearTimeout(this.hitCooldownTimer);
-  //   }
-
-  //   // Create a timer to reset the hurt state after animation completes
-  //   setTimeout(() => {
-  //     this.isHurt = false;
-
-  //     // When hurt animation completes, go to alert state
-  //     if (!this.isDead) {
-  //       this.startAlert();
-  //     }
-  //   }, this.IMAGES_HURT.length * 100);
-
-  //   // Set timer to reset wasHitRecently after specified duration
-  //   this.hitCooldownTimer = setTimeout(() => {
-  //     this.wasHitRecently = false;
-
-  //     // Re-evaluate behavior based on current position and distance
-  //     if (this.world && !this.isDead) {
-  //       const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-  //       console.log("Re-evaluating endboss behavior after timer, distance:", distanceToPlayer);
-  //       this.world.updateEndbossBehavior(this, distanceToPlayer);
-  //     }
-  //   }, this.hitAlertDuration);
-
-  //   // Additional code for death check
-  //   if (this.energy === 0) {
-  //     this.die();
-  //   }
-  // }
-
-  // NEU:
   hit(damage) {
     this.reduceEnergy(damage);
     this.setHurtState();
@@ -414,10 +286,6 @@ class Endboss extends MovableObject {
   checkDeath() {
     if (this.energy === 0) this.die();
   }
-
-  //
-  //
-  //
 
   die() {
     this.isDead = true;

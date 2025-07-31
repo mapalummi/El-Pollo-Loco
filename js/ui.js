@@ -1,23 +1,3 @@
-// function initMobileControls() {
-//   // Better mobile detection that combines screen size AND touch as primary input
-//   const isMobileDevice =
-//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-//     (window.innerWidth < 992 && "ontouchstart" in window);
-
-//   if (isMobileDevice) {
-//     document.getElementById("mobile-buttons").classList.remove("d_none");
-
-//     if (keyboard) {
-//       keyboard.initMobileButtons();
-//     } else {
-//       console.error("Keyboard not initialized yet");
-//     }
-//   } else {
-//     // Hide controls on desktop/larger devices
-//     document.getElementById("mobile-buttons").classList.add("d_none");
-//   }
-// }
-
 function initMobileControls() {
   const isMobileDevice = detectMobileDevice();
   const mobileButtons = document.getElementById("mobile-buttons");
@@ -39,23 +19,6 @@ function detectMobileDevice() {
   );
 }
 
-// if (isMobileDevice) {
-//   document.getElementById("mobile-buttons").classList.remove("d_none");
-
-//   if (keyboard) {
-//     keyboard.initMobileButtons();
-//   } else {
-//     console.error("Keyboard not initialized yet");
-//   }
-// } else {
-//   // Hide controls on desktop/larger devices
-//   document.getElementById("mobile-buttons").classList.add("d_none");
-// }
-
-//
-//
-//
-
 function toggleMobileControls(show) {
   const mobileButtons = document.getElementById("mobile-buttons");
   if (detectMobileDevice()) {
@@ -63,51 +26,12 @@ function toggleMobileControls(show) {
   } else {
     mobileButtons.classList.add("d_none");
   }
-
-  // Better mobile detection that combines screen size AND touch as primary input
-  // const isMobileDevice =
-  //   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-  //   (window.innerWidth < 992 && "ontouchstart" in window);
-
-  // if (isMobileDevice) {
-  //   if (show) {
-  //     mobileButtons.classList.remove("d_none");
-  //   } else {
-  //     mobileButtons.classList.add("d_none");
-  //   }
-  // } else {
-  //   // Always hide on desktop
-  //   mobileButtons.classList.add("d_none");
-  // }
 }
-
-//
-//
-//
 
 /**
  * Controls visibility of footer buttons based on game state and device
  * @param {boolean} show - Whether to show or hide the footer buttons
  */
-// function toggleGameoverButtons(show) {
-//   const footerButtons = document.querySelector(".gameover-buttons");
-//   // Only hide on mobile devices during gameplay
-//   const isMobileDevice =
-//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-//     (window.innerWidth < 992 && "ontouchstart" in window);
-
-//   if (isMobileDevice) {
-//     if (show) {
-//       footerButtons.style.display = "";
-//     } else {
-//       footerButtons.style.display = "none";
-//     }
-//   } else {
-//     // Always show on desktop
-//     footerButtons.style.display = "";
-//   }
-// }
-
 function toggleGameoverButtons(show) {
   const footerButtons = document.querySelector(".gameover-buttons");
   if (detectMobileDevice()) {
@@ -116,10 +40,6 @@ function toggleGameoverButtons(show) {
     footerButtons.style.display = "";
   }
 }
-
-//
-//
-//
 
 function showDialog(hasWon) {
   const overlay = document.getElementById("win_overlay");
@@ -135,18 +55,10 @@ function showDialog(hasWon) {
   document.body.style.overflow = "hidden";
 }
 
-//
-//
-//
-
 function hideDialog() {
   document.getElementById("win_overlay").classList.add("d_none");
   document.body.style.overflow = "auto"; // Re-enable scrolling
 }
-
-//
-//
-//
 
 /**
  * Toggle mobile controls
