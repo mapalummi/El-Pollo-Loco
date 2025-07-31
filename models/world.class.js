@@ -685,43 +685,111 @@ class World {
   //
   //
 
+  // checkEndbossVisibility() {
+  //   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+  //   if (!endboss) return;
+
+  //   if (!endboss.world) {
+  //     endboss.world = this;
+  //   }
+
+  //   // Nach dem Triggern immer die Healthbar anzeigen
+  //   if (this.endbossTriggered) {
+  //     this.endbossBar.isVisible = true;
+
+  //     if (endboss.x > this.levelWidth - 500 && !endboss.isHurt && !endboss.wasHitRecently) {
+  //       return;
+  //     }
+  //   }
+
+  //   const distanceToEndboss = Math.abs(this.character.x - endboss.x);
+
+  //   // Standard-Verhalten basierend auf Distanz
+  //   if (distanceToEndboss < 500 || this.endbossTriggered) {
+  //     this.endbossBar.isVisible = true;
+
+  //     // Alert-Animation, wenn der Endboss den Spieler zum ersten Mal sieht
+  //     if (!endboss.isAlert && !endboss.isAttacking && !endboss.isWalking && !endboss.isDead) {
+  //       endboss.startAlert();
+  //     }
+
+  //     // Aktualisiere das Endboss-Verhalten basierend auf der Distanz
+  //     this.updateEndbossBehavior(endboss, distanceToEndboss);
+  //   } else {
+  //     // Nur verstecken wenn nicht getriggert
+  //     if (!this.endbossTriggered) {
+  //       this.endbossBar.isVisible = false;
+  //     }
+  //   }
+  // }
+
+  // NEU:
   checkEndbossVisibility() {
-    const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    const endboss = this.getEndboss();
     if (!endboss) return;
 
-    if (!endboss.world) {
-      endboss.world = this;
-    }
+    this.ensureEndbossWorldReference(endboss);
 
-    // Nach dem Triggern immer die Healthbar anzeigen
     if (this.endbossTriggered) {
-      this.endbossBar.isVisible = true;
-
-      if (endboss.x > this.levelWidth - 500 && !endboss.isHurt && !endboss.wasHitRecently) {
-        return;
-      }
+      this.showEndbossBar();
+      if (this.shouldSkipEnbossBehavior(endboss)) return;
     }
 
-    const distanceToEndboss = Math.abs(this.character.x - endboss.x);
+    const distanceToEndboss = this.getDistanceToEndboss(endboss);
 
-    // Standard-Verhalten basierend auf Distanz
-    if (distanceToEndboss < 500 || this.endbossTriggered) {
-      this.endbossBar.isVisible = true;
-
-      // Alert-Animation, wenn der Endboss den Spieler zum ersten Mal sieht
-      if (!endboss.isAlert && !endboss.isAttacking && !endboss.isWalking && !endboss.isDead) {
-        endboss.startAlert();
-      }
-
-      // Aktualisiere das Endboss-Verhalten basierend auf der Distanz
+    if (this.shouldShowEndbossBar(distanceToEndboss)) {
+      this.showEndbossBar();
+      this.triggerEndbossAlertIfNeeded(endboss);
       this.updateEndbossBehavior(endboss, distanceToEndboss);
     } else {
-      // Nur verstecken wenn nicht getriggert
-      if (!this.endbossTriggered) {
-        this.endbossBar.isVisible = false;
-      }
+      this.hideEndbossBarIfNotTriggered();
     }
   }
+
+  getEndboss() {
+    return this.level.enemies.find(enemy => enemy instanceof Endboss);
+  }
+
+  ensureEndbossWorldReference(endboss) {
+    if (!endboss.world) endboss.world = this;
+  }
+
+  showEndbossBar() {
+    this.endbossBar.isVisible = true;
+  }
+
+  shouldSkipEnbossBehavior(endboss) {
+    return endboss.x > this.levelWidth - 500 && !endboss.isHurt && !endboss.wasHitRecently;
+  }
+
+  getDistanceToEndboss(endboss) {
+    return Math.abs(this.Character.x - endboss.x);
+  }
+
+  shouldShowEndbossBar(distanceToEndboss) {
+    return distanceToEndboss < 500 || this.endbossTriggered;
+  }
+
+  triggerEndbossAlertIfNeeded(endboss) {
+    if (!endboss.isAlert && !endboss.isAttacking && !endboss.isWalking && !endboss.isDead) {
+      endboss.startAlert();
+    }
+  }
+
+  hideEndbossBarIfNotTriggered() {
+    if (!this.endbossTriggered) {
+      this.endbossBar.isVisible = false;
+    }
+  }
+
+  // Aktualisiere das Endboss-Verhalten basierend auf der Distanz
+  //   this.updateEndbossBehavior(endboss, distanceToEndboss);
+  // } else {
+  //   // Nur verstecken wenn nicht getriggert
+  //   // if (!this.endbossTriggered) {
+  //   //   this.endbossBar.isVisible = false;
+  //   // }
+  // }
 
   //
   //
