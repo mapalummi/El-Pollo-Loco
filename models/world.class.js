@@ -272,10 +272,6 @@ class World {
   //   this.checkGameStatus();
   // }
 
-
-
-
-
   // NEU:
   checkCollisions() {
     if (this.character.isDead()) return;
@@ -367,8 +363,6 @@ class World {
     // Check if all coins are collected
     if (this.percentageCoins >= 100) {
       this.coinBar.highlight(); // Highlight the coin bar
-
-      // Play a special sound when all coins are collected
       if (!this.allCoinsCollectedSoundPlayed) {
         AudioHub.playOne(AudioHub.COINS_COMPLETE);
         this.allCoinsCollectedSoundPlayed = true;
@@ -392,33 +386,71 @@ class World {
   //
   //
 
+  // checkGameStatus() {
+  //   // Verlust-Bedingung: Character ist tot
+  //   if (this.character.energy <= 0 && !this.gameEnded) {
+  //     this.gameEnded = true; // Prevent multiple triggers
+
+  //     // Wait for death animation to complete
+  //     const animationDuration = this.character.IMAGES_DEAD.length * 100;
+  //     setTimeout(() => {
+  //       showGameOverScreen(false);
+  //     }, animationDuration);
+  //     return;
+  //   }
+
+  //   // Gewinn-Bedingung: Endboss besiegt
+  //   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+
+  //   // Wenn Endboss existiert und seine Energie aufgebraucht ist
+  //   if (endboss && endboss.energy <= 0 && !this.gameEnded) {
+  //     this.gameEnded = true; // Verhindert mehrfaches Auslösen
+
+  //     // Warten auf Abschluss der Todesanimation, bevor GameOver gezeigt wird
+  //     const animationDuration = endboss.IMAGES_DEAD.length * 200; // Gleiche Zeit wie in die()
+  //     setTimeout(() => {
+  //       showGameOverScreen(true); // Gewonnen
+  //     }, animationDuration);
+  //     return;
+  //   }
+  // }
+
+  // NEU:
   checkGameStatus() {
-    // Verlust-Bedingung: Character ist tot
-    if (this.character.energy <= 0 && !this.gameEnded) {
-      this.gameEnded = true; // Prevent multiple triggers
-
-      // Wait for death animation to complete
-      const animationDuration = this.character.IMAGES_DEAD.length * 100;
-      setTimeout(() => {
-        showGameOverScreen(false);
-      }, animationDuration);
+    if (this.isGameLost()) {
+      this.handleGameLost();
       return;
     }
+    if (this.isGameWon()) {
+      this.handleGameWon();
+      return;
+    }
+  }
 
-    // Gewinn-Bedingung: Endboss besiegt
+  isGameLost() {
+    return this.character.energy <= 0 && !this.gameEnded;
+  }
+
+  handleGameLost() {
+    this.gameEnded = true;
+    const animationDuration = this.character.IMAGES_DEAD.length * 100;
+    setTimeout(() => {
+      showGameOverScreen(false);
+    }, animationDuration);
+  }
+
+  isGameWon() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    return endboss && endboss.energy <= 0 && !this.gameEnded;
+  }
 
-    // Wenn Endboss existiert und seine Energie aufgebraucht ist
-    if (endboss && endboss.energy <= 0 && !this.gameEnded) {
-      this.gameEnded = true; // Verhindert mehrfaches Auslösen
-
-      // Warten auf Abschluss der Todesanimation, bevor GameOver gezeigt wird
-      const animationDuration = endboss.IMAGES_DEAD.length * 200; // Gleiche Zeit wie in die()
-      setTimeout(() => {
-        showGameOverScreen(true); // Gewonnen
-      }, animationDuration);
-      return;
-    }
+  handleGameWon() {
+    this.gameEnded = true;
+    const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    const animationDuration = endboss.IMAGES_DEAD.length * 200;
+    setTimeout(() => {
+      showGameOverScreen(true);
+    }, animationDuration);
   }
 
   //
