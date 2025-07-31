@@ -153,7 +153,7 @@ class World {
   //       }, this.bottleThrowCooldownDuration);
   //     } else {
   //       console.log("Keine Flaschen mehr verfügbar!");
-  //       //TODO: Optional: Visuelles Feedback für den Spieler
+  //      Optional: Visuelles Feedback für den Spieler
   //     }
   //   }
   // }
@@ -199,9 +199,94 @@ class World {
   //
   //
 
-  checkCollisions() {
-    if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
+  // checkCollisions() {
+  //   if (this.character.isDead()) return; //Keine Kollision wenn Character tot ist!
 
+  //   this.level.enemies.forEach(enemy => {
+  //     if (this.character.isColliding(enemy)) {
+  //       if (
+  //         enemy instanceof Chicken &&
+  //         this.character.speedY < 0 &&
+  //         this.character.y + this.character.height <= enemy.y + enemy.height * 0.8
+  //       ) {
+  //         // Spieler springt auf das Chicken
+  //         enemy.die();
+  //         AudioHub.playOne(AudioHub.CHICKEN);
+  //         this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+  //       } else {
+  //         // Spieler wird getroffen
+  //         this.character.hit();
+  //         this.healthBar.setPercentage(this.character.energy);
+  //       }
+  //     }
+  //   });
+
+  //   // Prüfe Kollisionen zwischen Flaschen und Gegnern
+  //   this.throwableObjects.forEach(bottle => {
+  //     if (bottle.hasHit) return; //Flaschen, die bereits getroffen haben überspringen
+
+  //     this.level.enemies.forEach(enemy => {
+  //       if (bottle.isColliding(enemy)) {
+  //         bottle.splash(); // Flasche zerplatzt
+  //         if (enemy instanceof Endboss) {
+  //           enemy.hit(25);
+  //           this.endbossBar.setPercentage(enemy.energy);
+  //         } else if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
+  //           enemy.die();
+  //           AudioHub.playOne(AudioHub.CHICKEN);
+  //         }
+  //       }
+  //     });
+
+  //     // Bodenkollision
+  //     const groundLevel = 380;
+  //     if (bottle.y >= groundLevel) {
+  //       bottle.splash();
+  //     }
+  //   });
+
+  //   // Coins und Flaschen
+  //   this.collectedCoins = this.collectedCoins || 0; //Sicherstellen, dass Zähler existiert.
+
+  //   this.level.coins = this.level.coins.filter(coin => {
+  //     if (this.character.isColliding(coin)) {
+  //       this.collectedCoins++;
+  //       this.updateCoinBar();
+  //       AudioHub.playOne(AudioHub.COINS);
+  //       return false; // Entferne den Coin
+  //     }
+  //     return true; // Behalte den Coin
+  //   });
+
+  //   this.collectedBottles = this.collectedBottles || 0;
+
+  //   this.level.bottles = this.level.bottles.filter(bottle => {
+  //     if (this.character.isColliding(bottle)) {
+  //       this.collectedBottles++;
+  //       this.updateBottleBar();
+  //       AudioHub.playOne(AudioHub.BOTTLES);
+  //       return false; // Entferne Bottle
+  //     }
+  //     return true; // Behalte Bottle
+  //   });
+  //   this.checkGameStatus();
+  // }
+
+
+
+
+
+  // NEU:
+  checkCollisions() {
+    if (this.character.isDead()) return;
+    this.checkEnemyCollisions();
+    this.checkBottleEnemyCollisions();
+    this.collectCoins();
+    this.collectBottles();
+    this.checkGameStatus();
+  }
+
+  checkEnemyCollisions() {
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
         if (
@@ -220,14 +305,14 @@ class World {
         }
       }
     });
+  }
 
-    // Prüfe Kollisionen zwischen Flaschen und Gegnern
+  checkBottleEnemyCollisions() {
     this.throwableObjects.forEach(bottle => {
-      if (bottle.hasHit) return; //Flaschen, die bereits getroffen haben überspringen
-
+      if (bottle.hasHit) return;
       this.level.enemies.forEach(enemy => {
         if (bottle.isColliding(enemy)) {
-          bottle.splash(); // Flasche zerplatzt
+          bottle.splash();
           if (enemy instanceof Endboss) {
             enemy.hit(25);
             this.endbossBar.setPercentage(enemy.energy);
@@ -237,17 +322,15 @@ class World {
           }
         }
       });
-
-      // Bodenkollision
       const groundLevel = 380;
       if (bottle.y >= groundLevel) {
         bottle.splash();
       }
     });
+  }
 
-    // Coins und Flaschen
-    this.collectedCoins = this.collectedCoins || 0; //Sicherstellen, dass Zähler existiert.
-
+  collectCoins() {
+    this.collectedCoins = this.collectedCoins || 0;
     this.level.coins = this.level.coins.filter(coin => {
       if (this.character.isColliding(coin)) {
         this.collectedCoins++;
@@ -257,9 +340,10 @@ class World {
       }
       return true; // Behalte den Coin
     });
+  }
 
+  collectBottles() {
     this.collectedBottles = this.collectedBottles || 0;
-
     this.level.bottles = this.level.bottles.filter(bottle => {
       if (this.character.isColliding(bottle)) {
         this.collectedBottles++;
@@ -269,7 +353,6 @@ class World {
       }
       return true; // Behalte Bottle
     });
-    this.checkGameStatus();
   }
 
   //

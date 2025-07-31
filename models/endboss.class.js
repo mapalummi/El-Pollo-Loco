@@ -367,7 +367,7 @@ class Endboss extends MovableObject {
     this.checkDeath();
   }
 
-  reduceEnergy() {
+  reduceEnergy(damage) {
     this.energy -= damage;
     if (this.energy < 0) this.energy = 0;
     this.lastHit = Date.now();
