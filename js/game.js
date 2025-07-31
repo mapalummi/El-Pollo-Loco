@@ -125,14 +125,11 @@ function resumeGameIfPausedByOrientation() {
   }
 }
 
-function showGameOverScreen(hasWon) {
-  if (gameOver) return;
-  prepareGameOverUI();
-  handleGameOverAudio(hasWon);
-  freezeCharacterIfWon(hasWon);
-  clearWorldObjects();
-  showGameOverButtons();
-}
+
+
+
+
+
 
 function freezeCharacterIfWon(hasWon) {
   if (!hasWon || !world || !world.character) return;

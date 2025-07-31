@@ -115,7 +115,7 @@ class World {
     this.bottleThrowCooldown = true;
     this.createAndAddBottle();
     this.collectedBottles--;
-    this.updateBottleBar();
+    updateBottleBar(this);
     setTimeout(() => {
       this.bottleThrowCooldown = false;
     }, this.bottleThrowCooldownDuration);
@@ -127,11 +127,6 @@ class World {
     bottle.throwDirection = this.character.facingRight ? 1 : -1;
     this.throwableObjects.push(bottle);
   }
-
-  // showNoBottlesFeedback() {
-  //   console.log("Keine Flaschen mehr verfügbar!");
-  //   // Optional: Visuelles Feedback für den Spieler
-  // }
 
   checkCollisions() {
     if (this.character.isDead()) return;
@@ -190,7 +185,7 @@ class World {
     this.level.coins = this.level.coins.filter(coin => {
       if (this.character.isColliding(coin)) {
         this.collectedCoins++;
-        this.updateCoinBar();
+        updateCoinBar(this);
         AudioHub.playOne(AudioHub.COINS);
         return false; // Entferne den Coin
       }
@@ -203,7 +198,7 @@ class World {
     this.level.bottles = this.level.bottles.filter(bottle => {
       if (this.character.isColliding(bottle)) {
         this.collectedBottles++;
-        this.updateBottleBar();
+        updateBottleBar(this);
         AudioHub.playOne(AudioHub.BOTTLES);
         return false; // Entferne Bottle
       }
@@ -211,50 +206,15 @@ class World {
     });
   }
 
-  updateCoinBar() {
-    this.percentageCoins = (this.collectedCoins / this.totalCoins) * 100;
-    //Fortschritt an die Coinbar übergeben
-    this.coinBar.setPercentage(this.percentageCoins);
-
-    // Check if all coins are collected
-    if (this.percentageCoins >= 100) {
-      this.coinBar.highlight(); // Highlight the coin bar
-      if (!this.allCoinsCollectedSoundPlayed) {
-        AudioHub.playOne(AudioHub.COINS_COMPLETE);
-        this.allCoinsCollectedSoundPlayed = true;
-      }
-    } else {
-      this.coinBar.removeHighlight();
-      this.allCoinsCollectedSoundPlayed = false;
-    }
-  }
-
-  updateBottleBar() {
-    this.percentageBottles = (this.collectedBottles / this.totalBottles) * 100;
-    this.bottleBar.setPercentage(this.percentageBottles);
-  }
-
   checkGameStatus() {
     if (this.isGameLost()) {
-      this.handleGameLost();
+      handleGameLost(this);
       return;
     }
     if (this.isGameWon()) {
-      this.handleGameWon();
+      handleGameWon(this);
       return;
     }
-  }
-
-  isGameLost() {
-    return this.character.energy <= 0 && !this.gameEnded;
-  }
-
-  handleGameLost() {
-    this.gameEnded = true;
-    const animationDuration = this.character.IMAGES_DEAD.length * 100;
-    setTimeout(() => {
-      showGameOverScreen(false);
-    }, animationDuration);
   }
 
   isGameWon() {
@@ -262,38 +222,21 @@ class World {
     return endboss && endboss.energy <= 0 && !this.gameEnded;
   }
 
-  handleGameWon() {
-    this.gameEnded = true;
-    const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-    const animationDuration = endboss.IMAGES_DEAD.length * 200;
-    setTimeout(() => {
-      showGameOverScreen(true);
-    }, animationDuration);
+  isGameLost() {
+    return this.character.energy <= 0 && !this.gameEnded;
   }
 
   draw() {
     if (this.paused) return;
-    this.updateCoinBarPulse();
+    updateCoinBarPulse(this);
     this.updateCamera();
     this.clearCanvas();
     this.drawBackground();
     this.drawClouds();
     this.drawCollectibles();
     this.drawCharacterAndEnemies();
-    this.drawStatusBars();
+    drawStatusBars(this);
     this.scheduleNextFrame();
-  }
-
-  updateCoinBarPulse() {
-    if (this.coinBar.isHighlighted) {
-      this.highlightPulse += 0.05 * this.highlightDirection;
-      if (this.highlightPulse >= 1) {
-        this.highlightDirection = -1;
-      } else if (this.highlightPulse <= 0) {
-        this.highlightDirection = 1;
-      }
-      this.coinBar.pulseValue = this.highlightPulse;
-    }
   }
 
   updateCamera() {
@@ -328,21 +271,6 @@ class World {
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
-  }
-
-  drawStatusBars() {
-    if (this.bottleBar.isVisible) {
-      this.addToMap(this.bottleBar);
-    }
-    if (this.coinBar.isVisible) {
-      this.addToMap(this.coinBar);
-    }
-    if (this.healthBar.isVisible) {
-      this.addToMap(this.healthBar);
-    }
-    if (this.endbossBar.isVisible) {
-      this.addToMap(this.endbossBar);
-    }
   }
 
   scheduleNextFrame() {

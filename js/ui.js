@@ -176,3 +176,79 @@ function showControlsForRestart() {
   document.getElementById("homeButton").style.display = "none";
   document.getElementById("game-controls").classList.remove("d_none");
 }
+
+function showGameOverScreen(hasWon) {
+  if (gameOver) return;
+  prepareGameOverUI();
+  handleGameOverAudio(hasWon);
+  freezeCharacterIfWon(hasWon);
+  clearWorldObjects();
+  showGameOverButtons();
+}
+
+function handleGameWon(world) {
+    world.gameEnded = true;
+    const endboss = world.level.enemies.find(enemy => enemy instanceof Endboss);
+    const animationDuration = endboss.IMAGES_DEAD.length * 200;
+    setTimeout(() => {
+      showGameOverScreen(true);
+    }, animationDuration);
+  }
+
+ function handleGameLost(world) {
+    world.gameEnded = true;
+    const animationDuration = world.character.IMAGES_DEAD.length * 100;
+    setTimeout(() => {
+      showGameOverScreen(false);
+    }, animationDuration);
+  }
+
+  function updateCoinBar(world) {
+    world.percentageCoins = (world.collectedCoins / world.totalCoins) * 100;
+    //Fortschritt an die Coinbar übergeben
+    world.coinBar.setPercentage(world.percentageCoins);
+
+    // Check if all coins are collected
+    if (world.percentageCoins >= 100) {
+      world.coinBar.highlight(); // Highlight the coin bar
+      if (!world.allCoinsCollectedSoundPlayed) {
+        AudioHub.playOne(AudioHub.COINS_COMPLETE);
+        world.allCoinsCollectedSoundPlayed = true;
+      }
+    } else {
+      world.coinBar.removeHighlight();
+      world.allCoinsCollectedSoundPlayed = false;
+    }
+  }
+
+  function updateBottleBar(world) {
+    world.percentageBottles = (world.collectedBottles / world.totalBottles) * 100;
+    world.bottleBar.setPercentage(world.percentageBottles);
+  }
+
+  function updateCoinBarPulse(world) {
+    if (world.coinBar.isHighlighted) {
+      world.highlightPulse += 0.05 * world.highlightDirection;
+      if (world.highlightPulse >= 1) {
+        world.highlightDirection = -1;
+      } else if (world.highlightPulse <= 0) {
+        world.highlightDirection = 1;
+      }
+      world.coinBar.pulseValue = world.highlightPulse;
+    }
+  }
+
+  function drawStatusBars(world) {
+    if (world.bottleBar.isVisible) {
+      world.addToMap(world.bottleBar);
+    }
+    if (world.coinBar.isVisible) {
+      world.addToMap(world.coinBar);
+    }
+    if (world.healthBar.isVisible) {
+      world.addToMap(world.healthBar);
+    }
+    if (world.endbossBar.isVisible) {
+      world.addToMap(world.endbossBar);
+    }
+  }
