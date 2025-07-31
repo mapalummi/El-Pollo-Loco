@@ -956,25 +956,24 @@ class World {
 
   storeCoinBarInterval() {
     if (!this.coinBar) return;
-      this._storedIntervals.push({
-        type: "coinBarHighlight",
-        isHighlighted: this.coinBar.isHighlighted,
-        allCoinsCollected: this.coinBar.allCoinsCollected,
-        currentFrame: this.coinBar.currentHighlightFrame,
-        remainingTime: this.coinBar.highlightTimeout
-          ? Math.max(0, this.highlightDuration - (Date.now() - this._coinBarHighlightStartTime))
-          : 0,
-      });
-      if (this.coinBar.highlightAnimationInterval) {
-        clearInterval(this.coinBar.highlightAnimationInterval);
-        this.coinBar.highlightAnimationInterval = null;
-      }
-      if (this.coinBar.highlightTimeout) {
-        clearTimeout(this.coinBar.highlightTimeout);
-        this.coinBar.highlightTimeout = null;
-      }
+    this._storedIntervals.push({
+      type: "coinBarHighlight",
+      isHighlighted: this.coinBar.isHighlighted,
+      allCoinsCollected: this.coinBar.allCoinsCollected,
+      currentFrame: this.coinBar.currentHighlightFrame,
+      remainingTime: this.coinBar.highlightTimeout
+        ? Math.max(0, this.highlightDuration - (Date.now() - this._coinBarHighlightStartTime))
+        : 0,
+    });
+    if (this.coinBar.highlightAnimationInterval) {
+      clearInterval(this.coinBar.highlightAnimationInterval);
+      this.coinBar.highlightAnimationInterval = null;
     }
-  
+    if (this.coinBar.highlightTimeout) {
+      clearTimeout(this.coinBar.highlightTimeout);
+      this.coinBar.highlightTimeout = null;
+    }
+  }
 
   pauseCharacterAnimation() {
     if (this.character && this.character.animationInterval) {
@@ -1026,38 +1025,89 @@ class World {
   //
   //
 
+  // resumeIntervals() {
+  //   // Restore all active intervals
+  //   if (this._storedIntervals) {
+  //     this._storedIntervals.forEach(item => {
+  //       if (item.type === "character") {
+  //         // Restart character animation
+  //         if (this.character) {
+  //           this.character.startAnimation(item.animation);
+  //         }
+  //       } else if (item.type === "enemy") {
+  //         // Restart enemy animations
+  //         const enemy = this.level.enemies[item.index];
+  //         if (enemy && typeof enemy.animate === "function") {
+  //           enemy.animate();
+  //         }
+  //       } else if (item.type === "cloud") {
+  //         // Restart cloud animations
+  //         const cloud = this.clouds[item.index];
+  //         if (cloud) {
+  //           cloud.animate();
+  //         }
+  //       }
+  //       if (item.type === "coinBarHighlight" && item.isHighlighted) {
+  //         this.coinBar.highlight(); // Restart the animation
+  //       }
+  //     });
+
+  //     // Start the main game loop again
+  //     this.run();
+
+  //     // Clear stored intervals
+  //     this._storedIntervals = null;
+  //   }
+  // }
+
+  // NEU:
   resumeIntervals() {
-    // Restore all active intervals
-    if (this._storedIntervals) {
-      this._storedIntervals.forEach(item => {
-        if (item.type === "character") {
-          // Restart character animation
-          if (this.character) {
-            this.character.startAnimation(item.animation);
-          }
-        } else if (item.type === "enemy") {
-          // Restart enemy animations
-          const enemy = this.level.enemies[item.index];
-          if (enemy && typeof enemy.animate === "function") {
-            enemy.animate();
-          }
-        } else if (item.type === "cloud") {
-          // Restart cloud animations
-          const cloud = this.clouds[item.index];
-          if (cloud) {
-            cloud.animate();
-          }
-        }
-        if (item.type === "coinBarHighlight" && item.isHighlighted) {
-          this.coinBar.highlight(); // Restart the animation
-        }
-      });
+    if (!this._storedIntervals) return;
+    this._storedIntervals.forEach(item => this.resumeIntervalitem(item));
+    this.run();
+    this._storedIntervals = null;
+  }
 
-      // Start the main game loop again
-      this.run();
+  resumeIntervalitem(item) {
+    switch (item.type) {
+      case "character":
+        this.resumeCharacterAnimation(item);
+        break;
+      case "enemy":
+        this.resumeEnemyAnimation(item);
+        break;
+      case "cloud":
+        this.resumeCloudAnimation(item);
+        break;
+      case "coinBarHighlight":
+        this.resumeCoinBarHighlight(item);
+        break;
+    }
+  }
 
-      // Clear stored intervals
-      this._storedIntervals = null;
+  resumeCharacterAnimation(item) {
+    if (this.character) {
+      this.character.startAnimation(item.animation);
+    }
+  }
+
+  resumeEnemyAnimation(item) {
+    const enemy = this.level.enemies[item.index];
+    if (enemy && typeof enemy.animate === "function") {
+      enemy.animate();
+    }
+  }
+
+  resumeCloudAnimation(item) {
+    const cloud = this.clouds[item.index];
+    if (cloud) {
+      cloud.animate();
+    }
+  }
+
+  resumeCoinBarHighlight(item) {
+    if (item.isHighlighted) {
+      this.coinBar.highlight();
     }
   }
 }
