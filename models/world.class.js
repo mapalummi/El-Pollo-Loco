@@ -18,7 +18,6 @@ class World {
   healthBar = new HealthBar();
   coinBar = new CoinBar();
   endbossBar = new EndbossBar();
-
   throwableObjects = [];
 
   constructor(canvas, keyboard) {
@@ -321,38 +320,26 @@ class World {
     // Position the endboss just off-screen to the right
     endboss.x = this.levelWidth + 200;
     endboss.otherDirection = false;
-
     this.character.isLocked = true;
     this.character.currentImage = 0;
-
     endboss.startWalking();
-
     this.endbossBar.isVisible = true;
-
     AudioHub.playOne(AudioHub.ENDBOSS_SOUND);
-
-    // console.log("Endboss entrance triggered!");
-
     // Unlock the character after a delay (e.g., 3 seconds)
     setTimeout(() => {
       this.character.isLocked = false;
-      // console.log("Character unlocked!");
     }, 3000); // Adjust time as needed
   }
 
   checkEndbossVisibility() {
     const endboss = getEndboss(this.level);
     if (!endboss) return;
-
     ensureEndbossWorldReference(endboss, this);
-
     if (this.endbossTriggered) {
       showEndbossBar(this.endbossBar);
       if (shouldSkipEnbossBehavior(endboss, this.levelWidth)) return;
     }
-
     const distanceToEndboss = getDistanceToEndboss(this.character, endboss);
-
     if (shouldShowEndbossBar(distanceToEndboss, this.endbossTriggered)) {
       showEndbossBar(this.endbossBar);
       triggerEndbossAlertIfNeeded(endboss);
@@ -371,28 +358,20 @@ class World {
       return;
     }
     const direction = this.character.x < endboss.x ? -1 : 1;
-    //CHECK: Speed Endboss doppelt im Spiel??
     const speed = 20; //Speed Endboss im Spiel.
-    // Set appropriate direction for rendering
     endboss.otherDirection = direction > 0;
-    // Bewege den Endboss
     endboss.x += direction * speed;
   }
 
   pauseGame() {
-    if (this.paused) return; // Already paused
+    if (this.paused) return;
     this.paused = true;
-
     // Record the time when the game was paused
     this._pauseStartTime = Date.now();
-
-    // Store the current animation frame ID so we can cancel it
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
       this.animationId = null;
     }
-
-    // Pause all intervals
     pauseIntervals(this);
   }
 
@@ -411,131 +390,4 @@ class World {
     // Resume all intervals
     resumeIntervals(this);
   }
-
-  // pauseIntervals() {
-  //   if (this._storedIntervals) return;
-  //   this._storedIntervals = [];
-  //   this.storeCoinBarInterval();
-  //   this.pauseCharacterAnimation();
-  //   this.pauseEnemyAnimations();
-  //   this.pauseCloudAnimations();
-  //   this.pauseGameLoopInterval();
-  // }
-
-  // storeCoinBarInterval() {
-  //   if (!this.coinBar) return;
-  //   this._storedIntervals.push({
-  //     type: "coinBarHighlight",
-  //     isHighlighted: this.coinBar.isHighlighted,
-  //     allCoinsCollected: this.coinBar.allCoinsCollected,
-  //     currentFrame: this.coinBar.currentHighlightFrame,
-  //     remainingTime: this.coinBar.highlightTimeout
-  //       ? Math.max(0, this.highlightDuration - (Date.now() - this._coinBarHighlightStartTime))
-  //       : 0,
-  //   });
-  //   if (this.coinBar.highlightAnimationInterval) {
-  //     clearInterval(this.coinBar.highlightAnimationInterval);
-  //     this.coinBar.highlightAnimationInterval = null;
-  //   }
-  //   if (this.coinBar.highlightTimeout) {
-  //     clearTimeout(this.coinBar.highlightTimeout);
-  //     this.coinBar.highlightTimeout = null;
-  //   }
-  // }
-
-  // pauseCharacterAnimation() {
-  //   if (this.character && this.character.animationInterval) {
-  //     clearInterval(this.character.animationInterval);
-  //     this._storedIntervals.push({
-  //       type: "character",
-  //       animation: this.character.currentAnimation,
-  //     });
-  //   }
-  // }
-
-  // pauseEnemyAnimations() {
-  //   this.level.enemies.forEach((enemy, index) => {
-  //     if (enemy.animationInterval) {
-  //       clearInterval(enemy.animationInterval);
-  //     }
-  //     if (enemy.walkingAnimationInterval) {
-  //       clearInterval(enemy.walkingAnimationInterval);
-  //     }
-  //     this._storedIntervals.push({
-  //       type: "enemy",
-  //       index: index,
-  //       object: enemy,
-  //     });
-  //   });
-  // }
-
-  // pauseCloudAnimations() {
-  //   this.clouds.forEach((cloud, index) => {
-  //     if (cloud.animationInterval) {
-  //       clearInterval(cloud.animationInterval);
-  //     }
-  //     this._storedIntervals.push({
-  //       type: "cloud",
-  //       index: index,
-  //       x: cloud.x,
-  //       y: cloud.y,
-  //     });
-  //   });
-  // }
-
-  // pauseGameLoopInterval() {
-  //   if (this._gameLoopInterval) {
-  //     clearInterval(this._gameLoopInterval);
-  //   }
-  // }
-
-  // resumeIntervals() {
-  //   if (!this._storedIntervals) return;
-  //   this._storedIntervals.forEach(item => this.resumeIntervalitem(item));
-  //   this.run();
-  //   this._storedIntervals = null;
-  // }
-
-  // resumeIntervalitem(item) {
-  //   switch (item.type) {
-  //     case "character":
-  //       this.resumeCharacterAnimation(item);
-  //       break;
-  //     case "enemy":
-  //       this.resumeEnemyAnimation(item);
-  //       break;
-  //     case "cloud":
-  //       this.resumeCloudAnimation(item);
-  //       break;
-  //     case "coinBarHighlight":
-  //       this.resumeCoinBarHighlight(item);
-  //       break;
-  //   }
-  // }
-
-  // resumeCharacterAnimation(item) {
-  //   if (this.character) {
-  //     this.character.startAnimation(item.animation);
-  //   }
-  // }
-
-  // resumeEnemyAnimation(item) {
-  //   const enemy = this.level.enemies[item.index];
-  //   if (enemy && typeof enemy.animate === "function") {
-  //     enemy.animate();
-  //   }
-  // }
-
-  // resumeCloudAnimation(item) {
-  //   const cloud = this.clouds[item.index];
-  //   if (cloud) {
-  //     cloud.animate();
-  //   }
-  // }
-
-  // resumeCoinBarHighlight(item) {
-  //   if (item.isHighlighted) {
-  //     this.coinBar.highlight();
-  //   }
-  // }
 }
