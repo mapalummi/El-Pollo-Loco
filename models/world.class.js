@@ -457,13 +457,87 @@ class World {
   //
   //
 
-  draw() {
-    // Don't clear and redraw if paused (to keep the last frame visible)
-    if (this.paused) {
-      return;
-    }
+  // draw() {
+  //   // Don't clear and redraw if paused (to keep the last frame visible)
+  //   if (this.paused) {
+  //     return;
+  //   }
 
-    // Update highlight pulse for animations
+  //   // Update highlight pulse for animations
+  //   if (this.coinBar.isHighlighted) {
+  //     this.highlightPulse += 0.05 * this.highlightDirection;
+  //     if (this.highlightPulse >= 1) {
+  //       this.highlightDirection = -1;
+  //     } else if (this.highlightPulse <= 0) {
+  //       this.highlightDirection = 1;
+  //     }
+  //     this.coinBar.pulseValue = this.highlightPulse;
+  //   }
+
+  //   // Der Character kann sich um 300px vom linken Rand bewegen, bevor die Kamera folgt
+  //   const cameraOffset = 300;
+  //   this.camera_x = -Math.max(0, this.character.x - cameraOffset);
+
+  //   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+  //   this.ctx.translate(this.camera_x, 0);
+  //   this.addObjectsToMap(this.level.backgroundObjects);
+
+  //   //NEU positioniert
+  //   if (!this.stopDrawingClouds) {
+  //     // Verwende BEIDE Wolkenarten
+  //     if (this.clouds && this.clouds.length) {
+  //       this.clouds.forEach(cloud => {
+  //         this.addToMap(cloud);
+  //       });
+  //     }
+  //   }
+
+  //   this.addObjectsToMap(this.level.coins);
+  //   this.addObjectsToMap(this.level.bottles);
+  //   this.ctx.translate(-this.camera_x, 0);
+  //   this.ctx.translate(this.camera_x, 0);
+  //   this.addToMap(this.character);
+  //   this.addObjectsToMap(this.level.enemies);
+  //   this.addObjectsToMap(this.throwableObjects);
+  //   this.ctx.translate(-this.camera_x, 0);
+
+  //   // Only draw status bars if they're visible
+  //   if (this.bottleBar.isVisible) {
+  //     this.addToMap(this.bottleBar);
+  //   }
+  //   if (this.coinBar.isVisible) {
+  //     this.addToMap(this.coinBar);
+  //   }
+  //   if (this.healthBar.isVisible) {
+  //     this.addToMap(this.healthBar);
+  //   }
+  //   if (this.endbossBar.isVisible) {
+  //     this.addToMap(this.endbossBar);
+  //   }
+
+  //   // Store the animation ID
+  //   let self = this;
+  //   this.animationId = requestAnimationFrame(function () {
+  //     self.draw();
+  //   });
+  // }
+
+  // NEU:
+  draw() {
+    if (this.paused) return;
+    this.updateCoinBarPulse();
+    this.updateCamera();
+    this.clearCanvas();
+    this.drawBackground();
+    this.drawClouds();
+    this.drawCollectibles();
+    this.drawCharacterAndEnemies();
+    this.drawStatusBars();
+    this.scheduleNextFrame();
+  }
+
+  updateCoinBarPulse() {
     if (this.coinBar.isHighlighted) {
       this.highlightPulse += 0.05 * this.highlightDirection;
       if (this.highlightPulse >= 1) {
@@ -473,36 +547,43 @@ class World {
       }
       this.coinBar.pulseValue = this.highlightPulse;
     }
+  }
 
-    // Der Character kann sich um 300px vom linken Rand bewegen, bevor die Kamera folgt
+  updateCamera() {
     const cameraOffset = 300;
     this.camera_x = -Math.max(0, this.character.x - cameraOffset);
+  }
 
+  clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
 
+  drawBackground() {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
+  }
 
-    //NEU positioniert
-    if (!this.stopDrawingClouds) {
-      // Verwende BEIDE Wolkenarten
-      if (this.clouds && this.clouds.length) {
-        this.clouds.forEach(cloud => {
-          this.addToMap(cloud);
-        });
-      }
+  drawClouds() {
+    if (!this.stopDrawingClouds && this.clouds && this.clouds.length) {
+      this.clouds.forEach(cloud => this.addToMap(cloud));
     }
+  }
 
+  drawCollectibles() {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
     this.ctx.translate(-this.camera_x, 0);
     this.ctx.translate(this.camera_x, 0);
+  }
+
+  drawCharacterAndEnemies() {
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
+  }
 
-    // Only draw status bars if they're visible
+  drawStatusBars() {
     if (this.bottleBar.isVisible) {
       this.addToMap(this.bottleBar);
     }
@@ -515,12 +596,10 @@ class World {
     if (this.endbossBar.isVisible) {
       this.addToMap(this.endbossBar);
     }
+  }
 
-    // Store the animation ID
-    let self = this;
-    this.animationId = requestAnimationFrame(function () {
-      self.draw();
-    });
+  scheduleNextFrame() {
+    this.animationId = requestAnimationFrame(() => this.draw());
   }
 
   //
