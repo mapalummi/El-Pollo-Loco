@@ -4,7 +4,6 @@ class LittleChicken extends MovableObject {
   width = 50;
   height = 60;
   isDead = false;
-
   jumpProbability = 0.02; // 2% chance (more jumpy than regular chickens)
   isJumping = false;
   initialY = 390; // Adjust based on little chicken's height

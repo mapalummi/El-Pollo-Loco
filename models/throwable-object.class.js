@@ -3,7 +3,6 @@ class ThrowableObject extends MovableObject {
   y;
   width = 50;
   height = 60;
-
   throwDirection = 1; // Standardmäßig rechts
   isSplashing = false;
   hasHit = false;
@@ -64,36 +63,78 @@ class ThrowableObject extends MovableObject {
     }, 25);
 
     // Animation der Flasche!
-    // Timer in Variable gespeichert:
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_THROW);
     }, 100);
   }
 
+  // splash() {
+  //   if (this.isSplashing) return; // Verhindert mehrfaches Aufrufen
+  //   this.isSplashing = true;
+  //   this.hasHit = true; //Flasche als getroffen markiert
+  //   this.speedY = 0; // Stoppt die Bewegung
+  //   this.speed = 0;
+
+  //   AudioHub.playOne(AudioHub.SPLASH);
+
+  //   clearInterval(this.movementInterval);
+  //   clearInterval(this.animationInterval);
+
+  //   // Spielt die Zerplatzen-Animation ab
+  //   let splashAnimationInterval = setInterval(() => {
+  //     this.playAnimation(this.IMAGES_SPLASH);
+  //   }, 50);
+
+  //   // Entfernt die Flasche nach der Animation
+  //   setTimeout(() => {
+  //     clearInterval(splashAnimationInterval);
+  //     const index = world.throwableObjects.indexOf(this);
+  //     if (index > -1) {
+  //       world.throwableObjects.splice(index, 1);
+  //     }
+  //   }, this.IMAGES_SPLASH.length * 50); // Wartezeit basierend auf der Anzahl der Bilder
+  // }
+
+  // NEU:
   splash() {
-    if (this.isSplashing) return; // Verhindert mehrfaches Aufrufen
+    if (this.isSplashing) return;
+    this.setSpashState();
+    this.stopMovementAndAnimation();
+    this.playSplashSound();
+    this.startSplashAnimation();
+  }
+
+  setSpashState() {
     this.isSplashing = true;
     this.hasHit = true; //Flasche als getroffen markiert
     this.speedY = 0; // Stoppt die Bewegung
     this.speed = 0;
+  }
 
-    AudioHub.playOne(AudioHub.SPLASH);
-
+  stopMovementAndAnimation() {
     clearInterval(this.movementInterval);
     clearInterval(this.animationInterval);
+  }
 
-    // Spielt die Zerplatzen-Animation ab
+  playSplashSound() {
+    AudioHub.playOne(AudioHub.SPLASH);
+  }
+
+  startSplashAnimation() {
     let splashAnimationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_SPLASH);
     }, 50);
 
-    // Entfernt die Flasche nach der Animation
     setTimeout(() => {
       clearInterval(splashAnimationInterval);
-      const index = world.throwableObjects.indexOf(this);
-      if (index > -1) {
-        world.throwableObjects.splice(index, 1);
-      }
-    }, this.IMAGES_SPLASH.length * 50); // Wartezeit basierend auf der Anzahl der Bilder
+      this.removeFromWorld();
+    }, this.IMAGES_SPLASH.length * 50);
+  }
+
+  removeFromWorld() {
+    const index = world.throwableObjects.indexOf(this);
+    if (index > -1) {
+      world.throwableObjects.splice(index, 1);
+    }
   }
 }

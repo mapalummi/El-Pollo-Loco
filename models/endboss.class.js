@@ -153,131 +153,271 @@ class Endboss extends MovableObject {
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
-  // 
-  // 
-  // 
+  //
+  //
+  //
 
+  // startAttacking() {
+  //   if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
+  //     this.isAttacking = true;
+  //     this.isWalking = false;
+  //     this.isAlert = false;
+  //     AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
+
+  //     // Set attack on cooldown immediately
+  //     this.isAttackOnCooldown = true;
+
+  //     // Store original position and calculate jump trajectory
+  //     const originalY = this.y;
+  //     const originalX = this.x;
+  //     const jumpStartTime = new Date().getTime();
+
+  //     // Determine direction to jump (toward character)
+  //     let direction = 1; // Default: right
+  //     if (this.world && this.world.character) {
+  //       // Direction und otherDirection werden gesetzt
+  //       direction = this.world.character.x > this.x ? 1 : -1;
+  //       this.otherDirection = direction > 0;
+  //     }
+
+  //     // Create jump interval
+  //     const jumpInterval = setInterval(() => {
+  //       const currentTime = new Date().getTime();
+  //       const elapsedTime = currentTime - jumpStartTime;
+
+  //       // Calculate vertical position (parabolic trajectory)
+  //       const jumpProgress = elapsedTime / this.JUMP_DURATION;
+
+  //       if (jumpProgress <= 1) {
+  //         // Parabola: y = 4h * (x - x²) where h is jump height
+  //         const verticalOffset = 4 * this.JUMP_HEIGHT * (jumpProgress - jumpProgress * jumpProgress);
+  //         this.y = originalY - verticalOffset;
+
+  //         // Move horizontally toward character
+  //         this.x += direction * this.JUMP_SPEED * (1 - Math.abs(jumpProgress - 0.5) * 2);
+  //       } else {
+  //         // Jump complete, clear interval and reset position
+  //         clearInterval(jumpInterval);
+  //         this.y = originalY;
+  //       }
+  //     }, 16);
+
+  //     // Animation duration timer
+  //     setTimeout(() => {
+  //       clearInterval(jumpInterval); // Ensure jump interval is cleared
+  //       this.y = originalY; // Reset vertical position
+
+  //       if (!this.isDead && !this.isHurt) {
+  //         this.isAttacking = false;
+  //         // Verhalten basierend auf Distanz neu evaluieren
+  //         if (this.world) {
+  //           const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+  //           this.world.updateEndbossBehavior(this, distanceToPlayer);
+  //         } else {
+  //           this.isAlert = true; // Fallback
+  //         }
+  //       }
+  //     }, this.IMAGES_ATTACK.length * 100);
+
+  //     // Reset cooldown after the specified duration
+  //     setTimeout(() => {
+  //       this.isAttackOnCooldown = false;
+  //     }, this.attackCooldownDuration);
+  //   }
+  // }
+
+  // NEU:
   startAttacking() {
-    if (!this.isDead && !this.isHurt && !this.isAttackOnCooldown) {
-      this.isAttacking = true;
-      this.isWalking = false;
-      this.isAlert = false;
-      AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
-
-      // Set attack on cooldown immediately
-      this.isAttackOnCooldown = true;
-
-      // Store original position and calculate jump trajectory
-      const originalY = this.y;
-      const originalX = this.x;
-      const jumpStartTime = new Date().getTime();
-
-      // Determine direction to jump (toward character)
-      let direction = 1; // Default: right
-      if (this.world && this.world.character) {
-        // Direction und otherDirection werden gesetzt
-        direction = this.world.character.x > this.x ? 1 : -1;
-        this.otherDirection = direction > 0;
-      }
-
-      // Create jump interval
-      const jumpInterval = setInterval(() => {
-        const currentTime = new Date().getTime();
-        const elapsedTime = currentTime - jumpStartTime;
-
-        // Calculate vertical position (parabolic trajectory)
-        const jumpProgress = elapsedTime / this.JUMP_DURATION;
-
-        if (jumpProgress <= 1) {
-          // Parabola: y = 4h * (x - x²) where h is jump height
-          const verticalOffset = 4 * this.JUMP_HEIGHT * (jumpProgress - jumpProgress * jumpProgress);
-          this.y = originalY - verticalOffset;
-
-          // Move horizontally toward character
-          this.x += direction * this.JUMP_SPEED * (1 - Math.abs(jumpProgress - 0.5) * 2);
-        } else {
-          // Jump complete, clear interval and reset position
-          clearInterval(jumpInterval);
-          this.y = originalY;
-        }
-      }, 16);
-
-      // Animation duration timer
-      setTimeout(() => {
-        clearInterval(jumpInterval); // Ensure jump interval is cleared
-        this.y = originalY; // Reset vertical position
-
-        if (!this.isDead && !this.isHurt) {
-          this.isAttacking = false;
-          // Verhalten basierend auf Distanz neu evaluieren
-          if (this.world) {
-            const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-            this.world.updateEndbossBehavior(this, distanceToPlayer);
-          } else {
-            this.isAlert = true; // Fallback
-          }
-        }
-      }, this.IMAGES_ATTACK.length * 100);
-
-      // Reset cooldown after the specified duration
-      setTimeout(() => {
-        this.isAttackOnCooldown = false;
-      }, this.attackCooldownDuration);
+    if (this.canAttack()) {
+      this.prepareAttack();
+      const { originalY, jumpInterval } = this.startJump();
+      this.finishAttack(jumpInterval, originalY);
+      this.setAttackCooldown();
     }
   }
 
-  // 
-  // 
-  // 
+  canAttack() {
+    return !this.isDead && !this.isHurt && !this.isAttackOnCooldown;
+  }
 
-  hit(damage) {
-    this.energy -= damage;
-    if (this.energy < 0) {
-      this.energy = 0;
+  prepareAttack() {
+    this.isAttacking = true;
+    this.isWalking = false;
+    this.isAlert = false;
+    AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
+    this.isAttackOnCooldown = true;
+  }
+
+  startJump() {
+    const originalY = this.y;
+    const direction = this.getJumpDirection();
+    const jumpStartTime = Date.now();
+    const jumpInterval = setInterval(() => {
+      this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
+    }, 16);
+    return { originalY, jumpInterval };
+  }
+
+  getJumpDirection() {
+    if (this.world && this.world.character) {
+      const dir = this.world.character.x > this.x ? 1 : -1;
+      this.otherDirection = dir > 0;
+      return dir;
     }
+    return 1;
+  }
 
-    this.lastHit = new Date().getTime();
+  updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval) {
+    const elapsedTime = Date.now() - jumpStartTime;
+    const jumpProgress = elapsedTime / this.JUMP_DURATION;
+    if (jumpProgress <= 1) {
+      const verticalOffset = 4 * this.JUMP_HEIGHT * (jumpProgress - jumpProgress * jumpProgress);
+      this.y = originalY - verticalOffset;
+      this.x += direction * this.JUMP_SPEED * (1 - Math.abs(jumpProgress - 0.5) * 2);
+    } else {
+      clearInterval(jumpInterval);
+      this.y = originalY;
+    }
+  }
 
-    // Set hurt state
+  finishAttack(jumpInterval, originalY) {
+    setTimeout(() => {
+      clearInterval(jumpInterval);
+      this.y = originalY;
+      if (!this.isDead && !this.isHurt) {
+        this.isAttacking = false;
+        this.evaluateBehaviourAfterAttack();
+      }
+    }, this.IMAGES_ATTACK.length * 100);
+  }
+
+  evaluateBehaviourAfterAttack() {
+    if (this.world) {
+      const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+      this.world.updateEndbossBehavior(this, distanceToPlayer);
+    } else {
+      this.isAlert = true;
+    }
+  }
+
+  setAttackCooldown() {
+    setTimeout(() => {
+      this.isAttackOnCooldown = false;
+    }, this.attackCooldownDuration);
+  }
+
+  //
+  //
+  //
+
+  // hit(damage) {
+  //   this.energy -= damage;
+  //   if (this.energy < 0) {
+  //     this.energy = 0;
+  //   }
+
+  //   this.lastHit = new Date().getTime();
+
+  //   // Set hurt state
+  //   this.isHurt = true;
+  //   this.isAttacking = false;
+  //   this.isWalking = false;
+
+  //   // New code for maintaining alert mode after hit
+  //   this.wasHitRecently = true;
+
+  //   // Clear existing timer if there is one
+  //   if (this.hitCooldownTimer) {
+  //     clearTimeout(this.hitCooldownTimer);
+  //   }
+
+  //   // Create a timer to reset the hurt state after animation completes
+  //   setTimeout(() => {
+  //     this.isHurt = false;
+
+  //     // When hurt animation completes, go to alert state
+  //     if (!this.isDead) {
+  //       this.startAlert();
+  //     }
+  //   }, this.IMAGES_HURT.length * 100);
+
+  //   // Set timer to reset wasHitRecently after specified duration
+  //   this.hitCooldownTimer = setTimeout(() => {
+  //     this.wasHitRecently = false;
+
+  //     // Re-evaluate behavior based on current position and distance
+  //     if (this.world && !this.isDead) {
+  //       const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+  //       console.log("Re-evaluating endboss behavior after timer, distance:", distanceToPlayer);
+  //       this.world.updateEndbossBehavior(this, distanceToPlayer);
+  //     }
+  //   }, this.hitAlertDuration);
+
+  //   // Additional code for death check
+  //   if (this.energy === 0) {
+  //     this.die();
+  //   }
+  // }
+
+  // NEU:
+  hit(damage) {
+    this.reduceEnergy(damage);
+    this.setHurtState();
+    this.handleHitTimers();
+    this.checkDeath();
+  }
+
+  reduceEnergy() {
+    this.energy -= damage;
+    if (this.energy < 0) this.energy = 0;
+    this.lastHit = Date.now();
+  }
+
+  setHurtState() {
     this.isHurt = true;
     this.isAttacking = false;
     this.isWalking = false;
-
-    // New code for maintaining alert mode after hit
     this.wasHitRecently = true;
+  }
 
-    // Clear existing timer if there is one
-    if (this.hitCooldownTimer) {
-      clearTimeout(this.hitCooldownTimer);
-    }
+  handleHitTimers() {
+    this.clearHitCooldownTimer();
+    this.setHurtAnimationTimer();
+    this.setHitCooldownTimer();
+  }
 
-    // Create a timer to reset the hurt state after animation completes
+  clearHitCooldownTimer() {
+    if (this.hitCooldownTimer) clearTimeout(this.hitCooldownTimer);
+  }
+
+  setHurtAnimationTimer() {
     setTimeout(() => {
       this.isHurt = false;
-
-      // When hurt animation completes, go to alert state
-      if (!this.isDead) {
-        this.startAlert();
-      }
+      if (!this.isDead) this.startAlert();
     }, this.IMAGES_HURT.length * 100);
+  }
 
-    // Set timer to reset wasHitRecently after specified duration
+  setHitCooldownTimer() {
     this.hitCooldownTimer = setTimeout(() => {
       this.wasHitRecently = false;
-
-      // Re-evaluate behavior based on current position and distance
-      if (this.world && !this.isDead) {
-        const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-        console.log("Re-evaluating endboss behavior after timer, distance:", distanceToPlayer);
-        this.world.updateEndbossBehavior(this, distanceToPlayer);
-      }
+      this.reEvaluateBehaviour();
     }, this.hitAlertDuration);
+  }
 
-    // Additional code for death check
-    if (this.energy === 0) {
-      this.die();
+  reEvaluateBehaviour() {
+    if (this.world && !this.isDead) {
+      const distanceToPlayer = Math.abs(this.world.character.x - this.x);
+      this.world.updateEndbossBehavior(this, distanceToPlayer);
     }
   }
+
+  checkDeath() {
+    if (this.energy === 0) this.die();
+  }
+
+  //
+  //
+  //
 
   die() {
     this.isDead = true;
@@ -290,15 +430,11 @@ class Endboss extends MovableObject {
     // Die Animation wird durch animate() einmal gestartet
     setTimeout(() => {
       this.isDeathAnimationComplete = true;
-
       // Setze das letzte Bild EXPLIZIT
       const lastDeathImage = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
-
       // Doppelte Sicherheit: Explizit das Bild neu laden und setzen
       this.loadImage(lastDeathImage); //Alt
-
       // Zusätzlicher Check für den imageCache
-      //Alt
       if (this.imageCache && this.imageCache[lastDeathImage]) {
         this.img = this.imageCache[lastDeathImage];
       }
