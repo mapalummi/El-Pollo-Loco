@@ -136,8 +136,7 @@ class World {
     this.checkGameStatus();
   }
 
-
-  //NOTE: 
+  //NOTE:
   // NEU:
   checkEnemyCollisions() {
     this.level.enemies.forEach(enemy => {
@@ -375,15 +374,6 @@ class World {
     const speed = 20; //Speed Endboss im Spiel.
     endboss.otherDirection = direction > 0;
     endboss.x += direction * speed;
-  }
-
-  //TODO:
-  updateEndbossBehavior(endboss, distanceToPlayer){
-    if (distanceToPlayer < 400 && !endboss.isDead){
-      endboss.startAttacking();
-    } else if (!endboss.isDead){
-      endboss.startWalking();
-    }
   }
 
   pauseGame() {

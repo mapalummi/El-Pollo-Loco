@@ -68,7 +68,7 @@ function hideEndbossBarIfNotTriggered(endbossBar, endbossTriggered) {
 }
 
 function updateEndbossBehavior(endboss, distance) {
-  if (distance < 300) {
+  if (distance < 500) {
     endboss.startAttacking();
   } else if (distance < 800) {
     endboss.startWalking();

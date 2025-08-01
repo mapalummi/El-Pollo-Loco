@@ -171,15 +171,47 @@ class Endboss extends MovableObject {
     this.isAttackOnCooldown = true;
   }
 
-  startJump() {
-    const originalY = this.y;
-    const direction = this.getJumpDirection();
-    const jumpStartTime = Date.now();
-    const jumpInterval = setInterval(() => {
-      this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
-    }, 16);
-    return { originalY, jumpInterval };
+  // startJump() {
+  //   const originalY = this.y;
+  //   const direction = this.getJumpDirection();
+  //   const jumpStartTime = Date.now();
+
+  //   const jumpInterval = setInterval(() => {
+  //     this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
+  //   }, 16);
+  //   return { originalY, jumpInterval };
+  // }
+
+
+startJump() {
+  const originalY = this.y;
+  const direction = this.getJumpDirection();
+  const jumpStartTime = Date.now();
+  let hasHitPlayer = false;
+  const jumpInterval = setInterval(() => {
+    this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
+    if (!hasHitPlayer && this.checkJumpHitOnPlayer()) {
+      hasHitPlayer = true;
+    }
+  }, 16);
+  return { originalY, jumpInterval };
+}
+
+checkJumpHitOnPlayer() {
+  if (
+    this.world &&
+    this.world.character &&
+    this.isColliding(this.world.character) &&
+    !this.world.character.isDead()
+  ) {
+    this.world.character.hit();
+    this.world.healthBar.setPercentage(this.world.character.energy);
+    return true;
   }
+  return false;
+}
+
+
 
   getJumpDirection() {
     if (this.world && this.world.character) {
@@ -226,6 +258,10 @@ class Endboss extends MovableObject {
   setAttackCooldown() {
     setTimeout(() => {
       this.isAttackOnCooldown = false;
+      if (this.world && this.world.character){
+        const distance = Math.abs(this.world.character.x - this.x);
+        updateEndbossBehavior(this, distance)
+      }
     }, this.attackCooldownDuration);
   }
 
@@ -276,7 +312,7 @@ class Endboss extends MovableObject {
   reEvaluateBehaviour() {
     if (this.world && !this.isDead) {
       const distanceToPlayer = Math.abs(this.world.character.x - this.x);
-      this.world.updateEndbossBehavior(this, distanceToPlayer);
+      updateEndbossBehavior(this, distanceToPlayer);
     }
   }
 
