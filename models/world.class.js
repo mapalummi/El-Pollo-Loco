@@ -136,8 +136,6 @@ class World {
     this.checkGameStatus();
   }
 
-  //NOTE:
-  // NEU:
   checkEnemyCollisions() {
     this.level.enemies.forEach(enemy => {
       if (enemy.isDead) return;

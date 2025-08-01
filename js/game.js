@@ -61,10 +61,9 @@ function launchGame() {
 
   // Hide Gameoverbuttons on mobile during gameplay
   toggleGameoverButtons(false);
-  // Fill viewport on mobile in landscape mode
   fillViewportOnMobile();
 
-  gameOver = false; // Gameover zurücksetzen
+  gameOver = false;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.getElementById("startButton").style.display = "none";
 }
@@ -72,7 +71,6 @@ function launchGame() {
 function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
   const message = document.getElementById("rotate-message");
-  // Only consider showing/hiding rotation message on mobile devices
   const isMobileDevice = detectMobileDevice();
 
   if (isLandscape || !isMobileDevice) {
@@ -96,7 +94,6 @@ function handleLandscapeMode(message) {
     window.pendingGameStart = false;
     launchGame();
   } else if (world) {
-    // If game is already running, adjust canvas to fill viewport
     fillViewportOnMobile();
   }
   resumeGameIfPausedByOrientation();
