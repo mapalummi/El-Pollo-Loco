@@ -1,3 +1,10 @@
+.start-btn,
+.home-btn,
+.restart-btn {
+  font-family: Georgia, serif;
+}
+
+
 .start-btn {
   display: block;
   width: fit-content;

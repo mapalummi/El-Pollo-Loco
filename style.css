@@ -28,6 +28,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: Georgia, serif;
   background-image: url("img/random_pics/bgpic.jpg");
   background-size: cover;
   background-position: center;
@@ -77,14 +78,13 @@ canvas {
 }
 
 .game-explanation h2 {
-  font-family: "Burrito", Arial, sans-serif;
+  /* font-family: "Burrito", Arial, sans-serif; */
   font-size: 32px;
   text-shadow: 1px 1px 1px black;
   margin-bottom: 22px;
 }
 
 .game-explanation p {
-  font-family: "Burrito", Arial, sans-serif;
   font-size: 18px;
   text-shadow: 1px 1px 1px black;
   margin: 8px;
