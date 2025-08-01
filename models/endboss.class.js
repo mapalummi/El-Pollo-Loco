@@ -58,7 +58,7 @@ class Endboss extends MovableObject {
   wasHitRecently = false;
   hitCooldownTimer = null;
   hitAlertDuration = 3000;
-  isAttackCooldown = false;
+  isAttackOnCooldown = false;
   attackCooldownDuration = 3000;
 
   JUMP_HEIGHT = 150;
@@ -171,47 +171,28 @@ class Endboss extends MovableObject {
     this.isAttackOnCooldown = true;
   }
 
-  // startJump() {
-  //   const originalY = this.y;
-  //   const direction = this.getJumpDirection();
-  //   const jumpStartTime = Date.now();
-
-  //   const jumpInterval = setInterval(() => {
-  //     this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
-  //   }, 16);
-  //   return { originalY, jumpInterval };
-  // }
-
-
-startJump() {
-  const originalY = this.y;
-  const direction = this.getJumpDirection();
-  const jumpStartTime = Date.now();
-  let hasHitPlayer = false;
-  const jumpInterval = setInterval(() => {
-    this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
-    if (!hasHitPlayer && this.checkJumpHitOnPlayer()) {
-      hasHitPlayer = true;
-    }
-  }, 16);
-  return { originalY, jumpInterval };
-}
-
-checkJumpHitOnPlayer() {
-  if (
-    this.world &&
-    this.world.character &&
-    this.isColliding(this.world.character) &&
-    !this.world.character.isDead()
-  ) {
-    this.world.character.hit();
-    this.world.healthBar.setPercentage(this.world.character.energy);
-    return true;
+  startJump() {
+    const originalY = this.y;
+    const direction = this.getJumpDirection();
+    const jumpStartTime = Date.now();
+    let hasHitPlayer = false;
+    const jumpInterval = setInterval(() => {
+      this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
+      if (!hasHitPlayer && this.checkJumpHitOnPlayer()) {
+        hasHitPlayer = true;
+      }
+    }, 16);
+    return { originalY, jumpInterval };
   }
-  return false;
-}
 
-
+  checkJumpHitOnPlayer() {
+    if (this.world && this.world.character && this.isColliding(this.world.character) && !this.world.character.isDead()) {
+      this.world.character.hit();
+      this.world.healthBar.setPercentage(this.world.character.energy);
+      return true;
+    }
+    return false;
+  }
 
   getJumpDirection() {
     if (this.world && this.world.character) {
@@ -225,13 +206,11 @@ checkJumpHitOnPlayer() {
   updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval) {
     const elapsedTime = Date.now() - jumpStartTime;
     const jumpProgress = elapsedTime / this.JUMP_DURATION;
+
     if (jumpProgress <= 1) {
       const verticalOffset = 4 * this.JUMP_HEIGHT * (jumpProgress - jumpProgress * jumpProgress);
       this.y = originalY - verticalOffset;
       this.x += direction * this.JUMP_SPEED * (1 - Math.abs(jumpProgress - 0.5) * 2);
-    } else {
-      clearInterval(jumpInterval);
-      this.y = originalY;
     }
   }
 
@@ -258,9 +237,9 @@ checkJumpHitOnPlayer() {
   setAttackCooldown() {
     setTimeout(() => {
       this.isAttackOnCooldown = false;
-      if (this.world && this.world.character){
+      if (this.world && this.world.character) {
         const distance = Math.abs(this.world.character.x - this.x);
-        updateEndbossBehavior(this, distance)
+        updateEndbossBehavior(this, distance);
       }
     }, this.attackCooldownDuration);
   }
@@ -328,14 +307,9 @@ checkJumpHitOnPlayer() {
     this.isAlert = false;
     this.isDeathAnimationComplete = false;
 
-    // Die Animation wird durch animate() einmal gestartet
     setTimeout(() => {
       this.isDeathAnimationComplete = true;
-      // Setze das letzte Bild EXPLIZIT
       const lastDeathImage = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
-      // Doppelte Sicherheit: Explizit das Bild neu laden und setzen
-      this.loadImage(lastDeathImage); //Alt
-      // Zusätzlicher Check für den imageCache
       if (this.imageCache && this.imageCache[lastDeathImage]) {
         this.img = this.imageCache[lastDeathImage];
       }
