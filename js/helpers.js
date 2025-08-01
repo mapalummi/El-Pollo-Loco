@@ -1,10 +1,3 @@
-// function detectMobileDevice() {
-//   return (
-//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-//     (window.innerWidth < 992 && "ontouchstart" in window)
-//   );
-// }
-
 function cleanupGameState() {
   const highestTimeoutId = setTimeout(() => {}, 0);
   for (let i = 0; i <= highestTimeoutId; i++) {
