@@ -136,25 +136,56 @@ class World {
     this.checkGameStatus();
   }
 
+  // checkEnemyCollisions() {
+  //   this.level.enemies.forEach(enemy => {
+  //     if (this.character.isColliding(enemy)) {
+  //       if (
+  //         enemy instanceof Chicken &&
+  //         this.character.speedY < 0 &&
+  //         this.character.y + this.character.height <= enemy.y + enemy.height * 0.8
+  //       ) {
+  //         // Spieler springt auf das Chicken
+  //         enemy.die();
+  //         AudioHub.playOne(AudioHub.CHICKEN);
+  //         this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+  //       } else {
+  //         // Spieler wird getroffen
+  //         this.character.hit();
+  //         this.healthBar.setPercentage(this.character.energy);
+  //       }
+  //     }
+  //   });
+  // }
+
+  //NOTE: 
+  // NEU:
   checkEnemyCollisions() {
     this.level.enemies.forEach(enemy => {
       if (this.character.isColliding(enemy)) {
-        if (
-          enemy instanceof Chicken &&
-          this.character.speedY < 0 &&
-          this.character.y + this.character.height <= enemy.y + enemy.height * 0.8
-        ) {
-          // Spieler springt auf das Chicken
-          enemy.die();
-          AudioHub.playOne(AudioHub.CHICKEN);
-          this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+        if (this.isPlayerJumpingOnChicken(enemy)) {
+          this.handleChickenDefeat(enemy);
         } else {
-          // Spieler wird getroffen
-          this.character.hit();
-          this.healthBar.setPercentage(this.character.energy);
+          this.handlePlayerHit();
         }
       }
     });
+  }
+
+  isPlayerJumpingOnChicken(enemy) {
+    return (
+      enemy instanceof Chicken && this.character.speedY < 0 && this.character.y + this.character.height <= enemy.y + enemy.height * 0.8
+    );
+  }
+
+  handleChickenDefeat(enemy) {
+    enemy.die();
+    AudioHub.playOne(AudioHub.CHICKEN);
+    this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+  }
+
+  handlePlayerHit() {
+    this.character.hit();
+    this.healthBar.setPercentage(this.character.energy);
   }
 
   checkBottleEnemyCollisions() {

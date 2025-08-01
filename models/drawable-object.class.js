@@ -8,7 +8,7 @@ class DrawableObject {
   height = 200;
 
   loadImage(path) {
-    this.img = new Image(); // this.img = document.getElementById('image') <img id="image" src>
+    this.img = new Image();
     this.img.src = path;
     this.img.onerror = () => {
       console.error(`Bild konnte nicht geladen werden: ${path}`);

@@ -87,11 +87,9 @@ class LittleChicken extends MovableObject {
     }
   }
 
-  // Add the jump method
   jump() {
     this.isJumping = true;
     this.speedY = 12; // Smaller jump for little chickens
-
     if (!this.initialY || this.initialY > this.y) {
       this.initialY = this.y;
     }

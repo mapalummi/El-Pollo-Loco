@@ -32,7 +32,7 @@ function storeCoinBarInterval(world) {
   }
   if (world.coinBar.highlightTimeout) {
     clearTimeout(world.coinBar.highlightTimeout);
-    thworldis.coinBar.highlightTimeout = null;
+    world.coinBar.highlightTimeout = null;
   }
 }
 

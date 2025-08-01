@@ -53,12 +53,10 @@ class ThrowableObject extends MovableObject {
   throw() {
     this.speedY = 30; // Wurfhöhe
     this.applyGravity();
-
     AudioHub.playOne(AudioHub.THROW);
-
     // Bewegung der Flasche
     this.movementInterval = setInterval(() => {
-      this.x += 10 * this.throwDirection; // Bewegt sich nach rechts oder links
+      this.x += 10 * this.throwDirection;
       this.getRealFrame();
     }, 25);
 
