@@ -118,7 +118,7 @@ canvas {
   font-size: 14px;
 }
 
-#keyboard-controls {
+/* #keyboard-controls {
   margin-top: 12px;
   text-align: center;
   font-family: Arial, sans-serif;
@@ -132,9 +132,9 @@ canvas {
   margin-right: auto;
   order: 2;
   border: 1px solid rgba(160, 34, 10, 0.5);
-}
+} */
 
-#keyboard-controls h2 {
+/* #keyboard-controls h2 {
   font-size: 1.4rem;
   color: #ffcc00;
   margin-bottom: 8px;
@@ -175,7 +175,7 @@ canvas {
   transform: scale(1.05);
   background-color: rgba(160, 34, 10, 0.3);
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
-}
+} */
 
 .game-container {
   position: relative;
