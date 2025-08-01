@@ -52,8 +52,6 @@ document.addEventListener("visibilitychange", () => {
 });
 
 function startGame() {
-  window.addEventListener("resize", checkOrientation);
-  window.addEventListener("orientationchange", checkOrientation);
   document.getElementById("game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
   window.pendingGameStart = true;
@@ -61,16 +59,16 @@ function startGame() {
 
   const isMobileDevice = detectMobileDevice();
 
-  if (isMobileDevice) {
-    const isLandscape = window.innerWidth > window.innerHeight;
-    document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
+  if (!isMobileDevice) {
+    // Auf Desktop: Spiel direkt starten
+    window.pendingGameStart = false;
+    launchGame();
   } else {
-    document.getElementById("rotate-message").style.display = "none";
+    // Auf Mobile: erst Orientierung prüfen
+    toggleMobileControls(true);
+    initMobileControls();
+    checkOrientation();
   }
-
-  toggleMobileControls(true);
-  initMobileControls();
-  checkOrientation();
 }
 
 function launchGame() {
