@@ -17,14 +17,13 @@ class DrawableObject {
 
   draw(ctx) {
     if (this.img) {
-      // Überprüfen, ob ein Bild vorhanden ist
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
-
-    this.drawOffsetFrame(ctx); // Kollisionsrahmen zeichnen (optional)
+    // KOLLISIONSRAHMEN ZEICHNEN:
+    // this.drawOffsetFrame(ctx);
   }
 
-  // Kollisionsrahmen blau:
+  // KOLLISIONSRAHMEN (blau):
   // drawFrame(ctx) {
   //   if (this instanceof Character || this instanceof Chicken) {
   //     //Quadrate zeichnen für collision detection:
@@ -36,28 +35,29 @@ class DrawableObject {
   //   }
   // }
 
-  drawOffsetFrame(ctx) {
-    if (
-      this instanceof Character ||
-      this instanceof Chicken ||
-      this instanceof LittleChicken ||
-      this instanceof Endboss ||
-      this instanceof ThrowableObject ||
-      this instanceof Coin ||
-      this instanceof Bottle
-    ) {
-      ctx.beginPath();
-      ctx.lineWidth = "2";
-      ctx.strokeStyle = "red";
-      ctx.rect(
-        this.x + this.offset.left,
-        this.y + this.offset.top,
-        this.width - this.offset.left - this.offset.right,
-        this.height - this.offset.top - this.offset.bottom
-      );
-      ctx.stroke();
-    }
-  }
+  // KOLLISIONSRAHMEN (rot):
+  // drawOffsetFrame(ctx) {
+  //   if (
+  //     this instanceof Character ||
+  //     this instanceof Chicken ||
+  //     this instanceof LittleChicken ||
+  //     this instanceof Endboss ||
+  //     this instanceof ThrowableObject ||
+  //     this instanceof Coin ||
+  //     this instanceof Bottle
+  //   ) {
+  //     ctx.beginPath();
+  //     ctx.lineWidth = "2";
+  //     ctx.strokeStyle = "red";
+  //     ctx.rect(
+  //       this.x + this.offset.left,
+  //       this.y + this.offset.top,
+  //       this.width - this.offset.left - this.offset.right,
+  //       this.height - this.offset.top - this.offset.bottom
+  //     );
+  //     ctx.stroke();
+  //   }
+  // }
 
   loadImages(arr) {
     arr.forEach(path => {

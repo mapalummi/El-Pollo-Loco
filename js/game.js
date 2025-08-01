@@ -125,12 +125,6 @@ function resumeGameIfPausedByOrientation() {
   }
 }
 
-
-
-
-
-
-
 function freezeCharacterIfWon(hasWon) {
   if (!hasWon || !world || !world.character) return;
   world.character.isFrozen = true;
