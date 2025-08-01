@@ -136,31 +136,12 @@ class World {
     this.checkGameStatus();
   }
 
-  // checkEnemyCollisions() {
-  //   this.level.enemies.forEach(enemy => {
-  //     if (this.character.isColliding(enemy)) {
-  //       if (
-  //         enemy instanceof Chicken &&
-  //         this.character.speedY < 0 &&
-  //         this.character.y + this.character.height <= enemy.y + enemy.height * 0.8
-  //       ) {
-  //         // Spieler springt auf das Chicken
-  //         enemy.die();
-  //         AudioHub.playOne(AudioHub.CHICKEN);
-  //         this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
-  //       } else {
-  //         // Spieler wird getroffen
-  //         this.character.hit();
-  //         this.healthBar.setPercentage(this.character.energy);
-  //       }
-  //     }
-  //   });
-  // }
 
   //NOTE: 
   // NEU:
   checkEnemyCollisions() {
     this.level.enemies.forEach(enemy => {
+      if (enemy.isDead) return;
       if (this.character.isColliding(enemy)) {
         if (this.isPlayerJumpingOnChicken(enemy)) {
           this.handleChickenDefeat(enemy);
@@ -179,6 +160,7 @@ class World {
 
   handleChickenDefeat(enemy) {
     enemy.die();
+    enemy.isDead = true;
     AudioHub.playOne(AudioHub.CHICKEN);
     this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
   }
@@ -186,6 +168,7 @@ class World {
   handlePlayerHit() {
     this.character.hit();
     this.healthBar.setPercentage(this.character.energy);
+    console.log("Energieverlust");
   }
 
   checkBottleEnemyCollisions() {
@@ -392,6 +375,15 @@ class World {
     const speed = 20; //Speed Endboss im Spiel.
     endboss.otherDirection = direction > 0;
     endboss.x += direction * speed;
+  }
+
+  //TODO:
+  updateEndbossBehavior(endboss, distanceToPlayer){
+    if (distanceToPlayer < 400 && !endboss.isDead){
+      endboss.startAttacking();
+    } else if (!endboss.isDead){
+      endboss.startWalking();
+    }
   }
 
   pauseGame() {

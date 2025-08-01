@@ -134,15 +134,12 @@ class Endboss extends MovableObject {
   }
 
   startWalking() {
-    if (this.wasHitRecently) {
-      console.log("Blocking walking mode because wasHitRecently=true");
+    if (this.wasHitRecently || this.isDead || this.isHurt) {
       return;
     }
-    if (!this.isDead && !this.isHurt) {
-      this.isWalking = true;
-      this.isAlert = false;
-      this.isAttacking = false;
-    }
+    this.isWalking = true;
+    this.isAlert = false;
+    this.isAttacking = false;
   }
 
   startAlert() {
