@@ -9,21 +9,38 @@ const keyboard = new Keyboard();
 function init() {
   initLevel();
   setupCanvas();
-  hideRotatemessage();
+  checkInitialOrientation();
   syncSoundIcon();
   drawStartScreen();
   addKeyboardListeners();
   preventSpaceOnButtons();
   addFullscreenListeners();
+
+  // Event Listener für Orientierungsänderungen bereits beim Laden hinzufügen
+  window.addEventListener("resize", checkOrientation);
+  window.addEventListener("orientationchange", checkOrientation);
+}
+
+function checkInitialOrientation() {
+  const isMobileDevice = detectMobileDevice();
+  const isLandscape = window.innerWidth > window.innerHeight;
+
+  if (isMobileDevice && !isLandscape) {
+    // Auf Mobilgeräten im Hochformat: rotate-message anzeigen
+    document.getElementById("rotate-message").style.display = "flex";
+  } else {
+    // Auf Desktop oder Mobilgeräten im Querformat: verstecken
+    document.getElementById("rotate-message").style.display = "none";
+  }
+}
+
+function hideRotatemessage() {
+  document.getElementById("rotate-message").style.display = "none";
 }
 
 function setupCanvas() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
-}
-
-function hideRotatemessage() {
-  document.getElementById("rotate-message").style.display = "none";
 }
 
 document.addEventListener("visibilitychange", () => {
@@ -44,7 +61,7 @@ function startGame() {
 
   const isMobileDevice = detectMobileDevice();
 
-  if (isMobileDevice){
+  if (isMobileDevice) {
     const isLandscape = window.innerWidth > window.innerHeight;
     document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
   } else {
@@ -75,21 +92,17 @@ function checkOrientation() {
   const message = document.getElementById("rotate-message");
   const isMobileDevice = detectMobileDevice();
 
-  if (!window.gameStarted) {
-    return;
+  // Orientierungsprüfung für Mobilgeräte (auch vor Spielstart)
+  if (isMobileDevice) {
+    if (isLandscape) {
+      handleLandscapeMode(message);
+    } else {
+      handlePortraitMode(message);
+    }
+  } else {
+    // Auf Desktop: immer verstecken
+    message.style.display = "none";
   }
-
-  if (isLandscape || !isMobileDevice) {
-    handleLandscapeMode(message);
-  } else if (isMobileDevice) {
-    handlePortraitMode(message);
-  }
-
-  // if (isLandscape || !isMobileDevice) {
-  //   handleLandscapeMode(message);
-  // } else if (isMobileDevice) {
-  //   handlePortraitMode(message);
-  // }
 }
 
 function detectMobileDevice() {
