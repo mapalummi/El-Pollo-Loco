@@ -40,13 +40,15 @@ function startGame() {
   document.getElementById("game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
   window.pendingGameStart = true;
+  window.gameStarted = true;
 
-  const isMobileDevice =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window);
-  if (isMobileDevice) {
+  const isMobileDevice = detectMobileDevice();
+
+  if (isMobileDevice){
     const isLandscape = window.innerWidth > window.innerHeight;
     document.getElementById("rotate-message").style.display = isLandscape ? "none" : "flex";
+  } else {
+    document.getElementById("rotate-message").style.display = "none";
   }
 
   toggleMobileControls(true);
@@ -73,11 +75,21 @@ function checkOrientation() {
   const message = document.getElementById("rotate-message");
   const isMobileDevice = detectMobileDevice();
 
+  if (!window.gameStarted) {
+    return;
+  }
+
   if (isLandscape || !isMobileDevice) {
     handleLandscapeMode(message);
   } else if (isMobileDevice) {
     handlePortraitMode(message);
   }
+
+  // if (isLandscape || !isMobileDevice) {
+  //   handleLandscapeMode(message);
+  // } else if (isMobileDevice) {
+  //   handlePortraitMode(message);
+  // }
 }
 
 function detectMobileDevice() {
@@ -167,6 +179,10 @@ function mainWindow() {
   destroyWorldAndCanvas();
   resetGameStateAndUI();
   drawStartScreenOnFreshCanvas();
+
+  // Game-Started Flag zurücksetzen
+  window.gameStarted = false;
+  document.getElementById("rotate-message").style.display = "none";
 }
 
 function showGameOverUIOnMain() {

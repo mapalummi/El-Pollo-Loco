@@ -1,9 +1,9 @@
-function detectMobileDevice() {
-  return (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window)
-  );
-}
+// function detectMobileDevice() {
+//   return (
+//     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+//     (window.innerWidth < 992 && "ontouchstart" in window)
+//   );
+// }
 
 function cleanupGameState() {
   const highestTimeoutId = setTimeout(() => {}, 0);
@@ -24,12 +24,10 @@ function resetGameStateAndUI() {
   document.getElementById("restartButton").style.display = "none";
   document.getElementById("homeButton").style.display = "none";
   document.getElementById("game-explanation").classList.remove("d_none");
+  document.getElementById("rotate-message").style.display = "none";
+  window.gameStarted = false;
   initLevel();
 }
-
-
-
-
 
 function getEndboss(level) {
   return level.enemies.find(enemy => enemy instanceof Endboss);
@@ -81,5 +79,3 @@ function showNoBottlesFeedback() {
   // Optional: Visuelles Feedback für den Spieler
   console.log("Keine Flaschen mehr verfügbar!");
 }
-
-
