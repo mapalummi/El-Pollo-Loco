@@ -84,22 +84,6 @@ class AudioHub {
     }
   }
 
-  // Spielt eine einzelne Audiodatei ab
-  //   static playOne(sound) {
-  //     sound.volume = 0.2; // Setzt die Lautstärke auf 0.2 = 20% / 1 = 100%
-  //     sound.currentTime = 0; // Startet ab einer bestimmten stelle (0=Anfang/ 5 = 5 sec.)
-  //     sound.play(); // Spielt das übergebene Sound-Objekt ab
-  //   }
-
-  // Spielt eine einzelne Audiodatei ab, - wenn sie bereit ist -
-  // static playOne(sound) {
-  //   if (sound.readyState == 4) {
-  //     sound.volume = 0.2;
-  //     sound.currentTime = 0;
-  //     sound.play();
-  //   }
-  // }
-
   // Modifiziertes playOne
   static playOne(sound) {
     if (sound.readyState == 4) {
