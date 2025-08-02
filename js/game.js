@@ -240,11 +240,25 @@ function resetGameOverAndPause() {
   gameOverSoundPlayed = false;
   gameOver = false;
   window.gamePaused = false;
+// Reset world game state if it exists
+  if (world) {
+    world.gameEnded = false;
+    world.endbossTriggered = false;
+    world.paused = false;
+  }
   hideDialog();
   resetPauseIcon();
 }
 
 function destroyWorldAndClearCanvas() {
+  // Additional cleanup before destroying world
+  if (world) {
+    world.clearGameLoopInterval();
+    if (world.animationId) {
+      cancelAnimationFrame(world.animationId);
+      world.animationId = null;
+    }
+  }
   world = null;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -258,6 +272,9 @@ function startFreshGameAfterDelay() {
   setTimeout(() => {
     world = new World(canvas, keyboard);
     world.stopDrawingClouds = false;
+    // Ensure completely fresh game state
+    world.gameEnded = false;
+    world.endbossTriggered = false;
     AudioHub.playLoop(AudioHub.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
   }, 200);
