@@ -168,3 +168,41 @@
     bottom: 30px;
   }
 }
+
+/* ...existing code... */
+
+/* Mobile Landscape Fullscreen */
+@media screen and (max-width: 991px) and (orientation: landscape) {
+  #mobile-buttons {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+  }
+  
+  .left-buttons {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+  }
+  
+  .right-buttons {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+  }
+  
+  .mobile-button {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 2px solid #a0220a;
+  }
+  
+  .mobile-button img {
+    width: 25px;
+    height: 25px;
+  }
+}

@@ -112,6 +112,12 @@ function detectMobileDevice() {
 
 function handleLandscapeMode(message) {
   message.style.display = "none";
+  
+  // Apply fullscreen styles for mobile
+  if (detectMobileDevice()) {
+    fillViewportOnMobile();
+  }
+  
   // Start game if it was pending
   if (window.pendingGameStart) {
     window.pendingGameStart = false;

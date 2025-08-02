@@ -100,8 +100,10 @@ function fillViewportOnMobile() {
     saveOriginalCanvasStyles(canvas);
     setMobileFullscreenStyles(canvas, gameContainer);
     repositionMobileControls();
+    hideMobileElements();
   } else {
     restoreMobileStyles(canvas, gameContainer);
+    showMobileElements();
   }
   adjustWorldToResize();
 }
@@ -109,15 +111,54 @@ function fillViewportOnMobile() {
 
 
 function setMobileFullscreenStyles(canvas, gameContainer) {
+  // Force fullscreen on mobile landscape
   canvas.style.width = "100vw";
-  canvas.style.height = "100vh";
+  canvas.style.height = "calc(100vh - 60px)";
   canvas.style.margin = "0";
   canvas.style.display = "block";
+  canvas.style.objectFit = "cover";
+  
   gameContainer.style.margin = "0";
   gameContainer.style.padding = "0";
   gameContainer.style.width = "100vw";
-  gameContainer.style.height = "100vh";
+  gameContainer.style.height = "calc(100vh - 60px)";
+  gameContainer.style.display = "flex";
+  gameContainer.style.justifyContent = "center";
+  gameContainer.style.alignItems = "center";
+  
+  // Hide scroll bars
+  document.body.style.overflow = "hidden";
 }
+
+function hideMobileElements() {
+  const gameExplanation = document.getElementById("game-explanation");
+  const gameControls = document.getElementById("game-controls");
+  const footer = document.querySelector("footer");
+  
+  if (gameExplanation) gameExplanation.style.display = "none";
+  if (gameControls) gameControls.style.display = "none";
+  if (footer) footer.style.display = "none";
+}
+
+function showMobileElements() {
+  const gameExplanation = document.getElementById("game-explanation");
+  const gameControls = document.getElementById("game-controls");
+  const footer = document.querySelector("footer");
+  
+  if (gameExplanation && !gameExplanation.classList.contains("d_none")) {
+    gameExplanation.style.display = "";
+  }
+  if (gameControls && !gameControls.classList.contains("d_none")) {
+    gameControls.style.display = "";
+  }
+  if (footer) footer.style.display = "";
+  
+  // Restore scroll
+  document.body.style.overflow = "";
+}
+
+
+
 
 function repositionMobileControls() {
   const mobileButtons = document.getElementById("mobile-buttons");
@@ -132,9 +173,13 @@ function restoreMobileStyles(canvas, gameContainer) {
     canvas.style.width = canvas.dataset.originalStyleWidth;
     canvas.style.height = canvas.dataset.originalStyleHeight;
     canvas.style.margin = "";
+    canvas.style.objectFit = "";
   }
   gameContainer.style.margin = "";
   gameContainer.style.padding = "";
   gameContainer.style.width = "";
   gameContainer.style.height = "";
+  gameContainer.style.display = "";
+  gameContainer.style.justifyContent = "";
+  gameContainer.style.alignItems = "";
 }

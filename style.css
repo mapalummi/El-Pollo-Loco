@@ -197,6 +197,12 @@ footer {
 /* RESPONIVE STYLES */
 /* --------------- */
 
+/* ...existing code... */
+
+/* ----------------- */
+/* RESPONIVE STYLES */
+/* --------------- */
+
 @media (max-width: 768px) {
   .game-explanation {
     margin: 15px 10px;
@@ -217,6 +223,82 @@ footer {
   canvas {
     width: 100%;
     height: auto;
+  }
+}
+
+/* Mobile Landscape Fullscreen */
+@media screen and (max-width: 991px) and (orientation: landscape) {
+  body {
+    overflow: hidden;
+  }
+  
+  .content-wrapper {
+    height: 100vh;
+    justify-content: flex-start;
+    padding: 0;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    padding: 5px;
+    margin: 0;
+  }
+  
+  .game-container {
+    width: 100vw;
+    height: calc(100vh - 60px); /* Platz für Titel */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  canvas {
+    width: 100vw !important;
+    height: calc(100vh - 60px) !important;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+  }
+  
+  #win_overlay {
+    width: 100vw;
+    height: calc(100vh - 60px);
+  }
+  
+  .corner-btn {
+    top: 5px;
+    right: 5px;
+    z-index: 1000;
+  }
+  
+  .icon-button {
+    width: 35px;
+    height: 35px;
+  }
+  
+  footer {
+    display: none;
+  }
+  
+  .gameover-buttons {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+  }
+  
+  .game-explanation,
+  #game-controls {
+    display: none;
+  }
+}
+
+/* Portrait mode - show rotate message */
+@media screen and (max-width: 991px) and (orientation: portrait) {
+  .rotate_overlay {
+    display: flex !important;
   }
 }
 
