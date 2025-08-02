@@ -6,12 +6,12 @@ function toggleSound() {
   let isMuted = soundIcon.getAttribute("data-muted") === "true";
 
   if (isMuted) {
-    soundIcon.src = "icons/unmuted-1.png";
+    soundIcon.src = "icons/unmuted.png";
     soundIcon.setAttribute("data-muted", "false");
     AudioHub.unmuteAll();
     // console.log("Sound unmuted");
   } else {
-    soundIcon.src = "icons/muted-1.png";
+    soundIcon.src = "icons/muted.png";
     soundIcon.setAttribute("data-muted", "true");
     AudioHub.muteAll();
     // console.log("Sound muted");
@@ -40,10 +40,10 @@ function stopAllAudioAndDialog() {
 function syncSoundIcon() {
   const soundIcon = document.getElementById("soundIcon");
   if (AudioHub.isMuted) {
-    soundIcon.src = "icons/muted-1.png";
+    soundIcon.src = "icons/muted.png";
     soundIcon.setAttribute("data-muted", "true");
   } else {
-    soundIcon.src = "icons/unmuted-1.png";
+    soundIcon.src = "icons/unmuted.png";
     soundIcon.setAttribute("data-muted", "false");
   }
 }
