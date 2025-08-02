@@ -118,8 +118,6 @@ canvas {
   font-size: 14px;
 }
 
-
-
 .game-container {
   position: relative;
   width: 720px;
@@ -197,12 +195,6 @@ footer {
 /* RESPONIVE STYLES */
 /* --------------- */
 
-/* ...existing code... */
-
-/* ----------------- */
-/* RESPONIVE STYLES */
-/* --------------- */
-
 @media (max-width: 768px) {
   .game-explanation {
     margin: 15px 10px;
@@ -231,28 +223,28 @@ footer {
   body {
     overflow: hidden;
   }
-  
+
   .content-wrapper {
     height: 100vh;
     justify-content: flex-start;
     padding: 0;
   }
-  
+
   h1 {
     font-size: 2.5rem;
     padding: 5px;
     margin: 0;
   }
-  
+
   .game-container {
     width: 100vw;
-    height: calc(100vh - 60px); /* Platz für Titel */
+    height: calc(100vh - 60px);
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   canvas {
     width: 100vw !important;
     height: calc(100vh - 60px) !important;
@@ -260,27 +252,27 @@ footer {
     max-height: none;
     object-fit: cover;
   }
-  
+
   #win_overlay {
     width: 100vw;
     height: calc(100vh - 60px);
   }
-  
+
   .corner-btn {
     top: 5px;
     right: 5px;
     z-index: 1000;
   }
-  
+
   .icon-button {
     width: 35px;
     height: 35px;
   }
-  
+
   footer {
     display: none;
   }
-  
+
   .gameover-buttons {
     position: absolute;
     bottom: 20px;
@@ -288,8 +280,37 @@ footer {
     transform: translateX(-50%);
     z-index: 1000;
   }
-  
-  .game-explanation,
+
+  /* Nur die Erklärung ausblenden, aber Start Button behalten */
+  .game-explanation:not(.d_none) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80vw;
+    text-align: center;
+  }
+
+  .game-explanation h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .game-explanation p {
+    font-size: 14px;
+    margin: 10px 0;
+  }
+
+  .start-btn {
+    margin-top: 15px;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
   #game-controls {
     display: none;
   }
@@ -301,5 +322,3 @@ footer {
     display: flex !important;
   }
 }
-
-

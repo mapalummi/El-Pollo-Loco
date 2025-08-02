@@ -112,12 +112,12 @@ function detectMobileDevice() {
 
 function handleLandscapeMode(message) {
   message.style.display = "none";
-  
+
   // Apply fullscreen styles for mobile
   if (detectMobileDevice()) {
     fillViewportOnMobile();
   }
-  
+
   // Start game if it was pending
   if (window.pendingGameStart) {
     window.pendingGameStart = false;
@@ -130,11 +130,46 @@ function handleLandscapeMode(message) {
 
 function handlePortraitMode(message) {
   message.style.display = "flex";
+
+  // Restore mobile styles when in portrait
+  if (detectMobileDevice()) {
+    const canvas = document.getElementById("canvas");
+    const gameContainer = document.querySelector(".game-container");
+    restoreMobileStyles(canvas, gameContainer);
+    showMobileElements();
+  }
+
   if (world && !window.gamePaused) {
     window.pausedDueToOrientation = true;
     world.pauseGame();
     AudioHub.pauseAll();
   }
+}
+
+function setMobileFullscreenStyles(canvas, gameContainer) {
+  // Force fullscreen on mobile landscape
+  canvas.style.width = "100vw";
+  canvas.style.height = "calc(100vh - 60px)";
+  canvas.style.margin = "0";
+  canvas.style.display = "block";
+  canvas.style.objectFit = "contain"; // Changed from cover to contain for better game visibility
+  canvas.style.maxWidth = "none";
+  canvas.style.maxHeight = "none";
+
+  gameContainer.style.margin = "0";
+  gameContainer.style.padding = "0";
+  gameContainer.style.width = "100vw";
+  gameContainer.style.height = "calc(100vh - 60px)";
+  gameContainer.style.display = "flex";
+  gameContainer.style.justifyContent = "center";
+  gameContainer.style.alignItems = "center";
+  gameContainer.style.position = "relative";
+
+  // Hide scroll bars
+  document.body.style.overflow = "hidden";
+
+  // Ensure proper z-index layering
+  canvas.style.zIndex = "1";
 }
 
 // Resume game if it was paused due to orientation
@@ -246,7 +281,7 @@ function resetGameOverAndPause() {
   gameOverSoundPlayed = false;
   gameOver = false;
   window.gamePaused = false;
-// Reset world game state if it exists
+  // Reset world game state if it exists
   if (world) {
     world.gameEnded = false;
     world.endbossTriggered = false;

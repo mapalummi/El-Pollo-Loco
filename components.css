@@ -98,14 +98,21 @@
 /* RESPONIVE STYLES */
 /* --------------- */
 
-@media (max-width: 768px) {
+/* ...existing code... */
+
+/* ----------------- */
+/* RESPONIVE STYLES */
+/* --------------- */
+
+/* Desktop - Hide mobile buttons */
+@media (min-width: 992px) {
   #mobile-buttons {
     display: none !important;
   }
 }
 
-@media (max-width: 767px) {
-  /* Ensure mobile buttons are visible when not hidden with d_none */
+/* Tablets and Mobile - Show mobile controls when needed */
+@media (max-width: 991px) {
   #mobile-buttons:not(.d_none) {
     display: flex !important;
     pointer-events: auto !important;
@@ -129,6 +136,7 @@
   }
 }
 
+/* Larger Mobile/Small Tablets */
 @media (min-width: 576px) and (max-width: 767px) {
   .mobile-button {
     width: 80px;
@@ -148,11 +156,6 @@
 
 /* Tablets (768px-991px) */
 @media (min-width: 768px) and (max-width: 991px) {
-  /* Show mobile controls on tablets too */
-  #mobile-buttons:not(.d_none) {
-    display: flex !important;
-  }
-
   .mobile-button {
     width: 100px;
     height: 100px;
@@ -168,8 +171,6 @@
     bottom: 30px;
   }
 }
-
-/* ...existing code... */
 
 /* Mobile Landscape Fullscreen */
 @media screen and (max-width: 991px) and (orientation: landscape) {
