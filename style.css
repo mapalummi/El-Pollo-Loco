@@ -118,64 +118,7 @@ canvas {
   font-size: 14px;
 }
 
-/* #keyboard-controls {
-  margin-top: 12px;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 4px;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  order: 2;
-  border: 1px solid rgba(160, 34, 10, 0.5);
-} */
 
-/* #keyboard-controls h2 {
-  font-size: 1.4rem;
-  color: #ffcc00;
-  margin-bottom: 8px;
-  margin-top: 8px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-#keyboard-controls ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-}
-
-#keyboard-controls li {
-  font-size: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
-  padding: 8px 8px;
-  border-radius: 6px;
-  min-width: 90px;
-  transition: all 0.2s ease-in-out;
-}
-
-#keyboard-controls li strong {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: #ffcc00;
-  display: block;
-}
-
-#keyboard-controls li:hover {
-  color: #ffcc00;
-  transform: scale(1.05);
-  background-color: rgba(160, 34, 10, 0.3);
-  box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
-} */
 
 .game-container {
   position: relative;
@@ -277,27 +220,4 @@ footer {
   }
 }
 
-@media (max-width: 768px) {
-  #keyboard-controls {
-    padding: 15px;
-  }
 
-  #keyboard-controls h2 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-  }
-
-  #keyboard-controls ul {
-    gap: 10px;
-  }
-
-  #keyboard-controls li {
-    min-width: 90px;
-    padding: 8px;
-    font-size: 1rem;
-  }
-
-  #keyboard-controls li strong {
-    font-size: 1.2rem;
-  }
-}
