@@ -90,6 +90,7 @@ class Character extends MovableObject {
     this.isLocked = false;
     this.deadImage = new Image();
     this.deadImage.src = "img/random_pics/skull-147188_640.png";
+    this.walkSoundPlaying = false;
     this.applyGravity();
     this.animate();
   }
@@ -108,28 +109,52 @@ class Character extends MovableObject {
 
   handleMovement() {
     if (this.isDead() || this.isFrozen) return;
+
     this.isWalking = false;
+    const wasMoving = this.processMovementInput();
+    this.handleWalkSoundState(wasMoving);
+    this.handleJumpInput();
+    this.updateCameraAndFrame();
+  }
 
-    if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-      if (this.isLocked) {
-      }
+  processMovementInput() {
+    let wasMoving = false;
+
+    if (this.shouldMoveRight()) {
       this.moveRight();
-      this.otherDirection = false;
+      wasMoving = true;
     }
 
-    if (this.world.keyboard.LEFT && this.x > 0) {
-      if (!this.isLocked) {
-        this.moveLeft();
-        this.otherDirection = true;
-      }
+    if (this.shouldMoveLeft()) {
+      this.moveLeft();
+      wasMoving = true;
     }
 
-    if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-      if (!this.isLocked) {
-        this.jump();
-      }
-    }
+    return wasMoving;
+  }
 
+  shouldMoveRight() {
+    return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.isLocked;
+  }
+
+  shouldMoveLeft() {
+    return this.world.keyboard.LEFT && this.x > 0 && !this.isLocked;
+  }
+
+  handleWalkSoundState(wasMoving) {
+    if (!wasMoving && this.walkSoundPlaying) {
+      AudioHub.stopKeySound();
+      this.walkSoundPlaying = false;
+    }
+  }
+
+  handleJumpInput() {
+    if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.isLocked) {
+      this.jump();
+    }
+  }
+
+  updateCameraAndFrame() {
     this.world.camera_x = -this.x + 100;
     this.getRealFrame();
   }
@@ -274,6 +299,11 @@ class Character extends MovableObject {
     this.otherDirection = false;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
     this.isWalking = true;
+
+    if (!this.walkSoundPlaying) {
+      AudioHub.playWhileKeyPressed(AudioHub.WALK);
+      this.walkSoundPlaying = true;
+    }
   }
 
   moveLeft() {
@@ -283,6 +313,11 @@ class Character extends MovableObject {
     this.otherDirection = true;
     this.lastMoveTime = Date.now(); // Timer zurücksetzen
     this.isWalking = true;
+
+    if (!this.walkSoundPlaying) {
+      AudioHub.playWhileKeyPressed(AudioHub.WALK);
+      this.walkSoundPlaying = true;
+    }
   }
 
   jump() {
