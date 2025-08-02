@@ -100,3 +100,63 @@
 /* ----------------- */
 /* RESPONIVE STYLES */
 /* --------------- */
+
+/* Mobile Landscape - Vertikal angeordnete Corner Buttons */
+@media screen and (max-width: 991px) and (orientation: landscape) {
+  /* .corner-btn {
+    position: fixed;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  } */
+
+  .corner-btn {
+    position: fixed;
+    top: 80px;
+    right: 5px;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .icon-button {
+    width: 35px;
+    height: 35px;
+  }
+
+  .start-btn {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 16px;
+    background-color: rgba(160, 34, 10, 0.9);
+    color: #ffcc00;
+    border: 2px solid #ffcc00;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+  }
+
+  .start-btn:hover {
+    background-color: rgba(192, 42, 12, 0.95);
+    transform: scale(1.05);
+  }
+
+  .home-btn,
+  .restart-btn {
+    width: 140px;
+    font-size: 14px;
+    padding: 12px 20px;
+  }
+
+  .gameover-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    gap: 8px;
+  }
+}

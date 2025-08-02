@@ -173,7 +173,7 @@
 }
 
 /* Mobile Landscape Fullscreen */
-@media screen and (max-width: 991px) and (orientation: landscape) {
+/* @media screen and (max-width: 991px) and (orientation: landscape) {
   #mobile-buttons {
     position: fixed;
     top: 0;
@@ -200,6 +200,48 @@
     height: 60px;
     background-color: rgba(255, 255, 255, 0.7);
     border: 2px solid #a0220a;
+  }
+  
+  .mobile-button img {
+    width: 25px;
+    height: 25px;
+  }
+} */
+
+/* ...existing code... */
+
+/* Mobile Landscape Fullscreen */
+@media screen and (max-width: 991px) and (orientation: landscape) {
+  #mobile-buttons {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    pointer-events: none;
+  }
+  
+  .left-buttons {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    pointer-events: auto;
+  }
+  
+  .right-buttons {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    pointer-events: auto;
+  }
+  
+  .mobile-button {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px solid #a0220a;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
   
   .mobile-button img {
