@@ -1,6 +1,6 @@
 function addKeyboardListeners() {
   document.addEventListener("keydown", handleKeyDown);
-  document.addEventListener("keydup", handleKeyUp);
+  document.addEventListener("keyup", handleKeyUp);
 }
 
 function handleKeyDown(e) {
