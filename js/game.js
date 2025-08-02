@@ -247,7 +247,6 @@ function resetGameOverAndPause() {
     world.paused = false;
   }
   hideDialog();
-  resetPauseIcon();
 }
 
 function destroyWorldAndClearCanvas() {
@@ -294,7 +293,7 @@ function togglePausePlay() {
 
 function pauseGame(pausePlayIcon) {
   window.gamePaused = true;
-  pausePlayIcon.src = "icons/play-1.png";
+  pausePlayIcon.src = "icons/play.png";
   AudioHub.pauseAll();
   if (world) {
     world.lastAnimationId = world.animationId;
@@ -312,7 +311,7 @@ function pauseGame(pausePlayIcon) {
 
 function resumeGame(pausePlayIcon) {
   window.gamePaused = false;
-  pausePlayIcon.src = "icons/pause-1.png";
+  pausePlayIcon.src = "icons/pause.png";
   if (!AudioHub.isMuted) {
     AudioHub.resumeAll();
   }

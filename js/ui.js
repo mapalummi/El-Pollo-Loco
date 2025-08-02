@@ -147,19 +147,10 @@ function showGameOverButtons() {
 function prepareGameOverUI(hasWon) {
   toggleGameoverButtons(true);
   showDialog(hasWon);
-  // gameOver = true;
-  // showDialog(arguments[0]); // Warum???
   AudioHub.stopAll();
   toggleMobileControls(false);
   document.getElementById("game-controls").classList.add("d_none");
   if (!gameOverSoundPlayed) gameOverSoundPlayed = true;
-}
-
-function resetPauseIcon() {
-  const pausePlayIcon = document.getElementById("pausePlayIcon");
-  if (pausePlayIcon) {
-    pausePlayIcon.src = "icons/pause-1.png"; // Reset to pause icon
-  }
 }
 
 function drawStartScreenOnFreshCanvas() {
