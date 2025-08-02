@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Icon Test - El Pollo Loco</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .icon-test { margin: 10px 0; }
+        img { border: 1px solid #000; margin: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Icon Upload Test</h1>
+    
+    <div class="test-section">
+        <h2>Pfad-Tests:</h2>
+        <div class="icon-test">
+            <strong>Test 1 (relativ):</strong> 
+            <img src="fullscreen.png" alt="Test 1" style="width: 50px; height: 50px;">
+            <span>icons/right_left.png</span>
+        </div>
+        <!-- <div class="icon-test">
+            <strong>Test 1 (relativ):</strong> 
+            <img src="icons/right_left.png" alt="Test 1" style="width: 50px; height: 50px;">
+            <span>icons/right_left.png</span>
+        </div> -->
+        <div class="icon-test">
+            <strong>Test 2 (mit ./):</strong> 
+            <img src="./icons/right_left.png" alt="Test 2" style="width: 50px; height: 50px;">
+            <span>./icons/right_left.png</span>
+        </div>
+        <div class="icon-test">
+            <strong>Test 3 (absolut):</strong> 
+            <img src="/icons/right_left.png" alt="Test 3" style="width: 50px; height: 50px;">
+            <span>/icons/right_left.png</span>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Alle Icons testen:</h2>
+        <div class="icon-test">
+            <strong>Right/Left:</strong> <img src="icons/right_left.png" style="width: 40px; height: 40px;">
+        </div>
+        <div class="icon-test">
+            <strong>Jump:</strong> <img src="icons/jump.png" style="width: 40px; height: 40px;">
+        </div>
+        <div class="icon-test">
+            <strong>Throw:</strong> <img src="icons/throw.png" style="width: 40px; height: 40px;">
+        </div>
+        <div class="icon-test">
+            <strong>Pause:</strong> <img src="icons/pause.png" style="width: 40px; height: 40px;">
+        </div>
+        <div class="icon-test">
+            <strong>Unmuted:</strong> <img src="icons/unmuted.png" style="width: 40px; height: 40px;">
+        </div>
+        <div class="icon-test">
+            <strong>Muted:</strong> <img src="icons/muted.png" style="width: 40px; height: 40px;">
+        </div>
+        <div class="icon-test">
+            <strong>Fullscreen:</strong> <img src="icons/fullscreen.png" style="width: 40px; height: 40px;">
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Anweisungen:</h2>
+        <p>✅ <strong>Funktioniert:</strong> Icon wird angezeigt</p>
+        <p>❌ <strong>Fehlgeschlagen:</strong> Broken-Image-Symbol (□ oder X)</p>
+        <p><strong>Testen Sie diese URL direkt:</strong><br>
+        <a href="https://el-pollo-loco.marcopalummieri.de/icons/right_left.png" target="_blank">
+        https://el-pollo-loco.marcopalummieri.de/icons/right_left.png</a></p>
+    </div>
+</body>
+</html>
