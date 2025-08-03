@@ -103,21 +103,11 @@
 
 /* Mobile Landscape - Vertikal angeordnete Corner Buttons */
 @media screen and (max-width: 991px) and (orientation: landscape) {
-  /* .corner-btn {
-    position: fixed;
-    top: 50%;
-    right: 5px;
-    transform: translateY(-50%);
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  } */
-
   .corner-btn {
     position: fixed;
-    top: 80px;
-    right: 15px;
+    top: 20%;
+    right: 10px;
+    transform: translateY(-50%);
     z-index: 1001;
     display: flex;
     flex-direction: column;

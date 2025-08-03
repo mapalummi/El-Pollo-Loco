@@ -148,12 +148,13 @@
 
   #jumpButton {
     position: relative;
-    bottom: 50px;
+    right: -10px;
+    bottom: 70px;
   }
 
   #throwButton {
     position: relative;
-    right: -15px;
+    right: -50px;
   }
 
   .left-buttons {
