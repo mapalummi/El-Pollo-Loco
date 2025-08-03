@@ -42,7 +42,7 @@ function toggleMobileControls(show) {
 //   }
 // }
 
-// NEU:
+// TODO: NEU
 function toggleGameoverButtons(show) {
   const isMobileDevice = detectMobileDevice();
   const isLandscape = window.innerWidth > window.innerHeight;
@@ -50,39 +50,37 @@ function toggleGameoverButtons(show) {
 
   if (isMobileLandscape) {
     // Mobile Landscape - Mobile-Buttons verwenden
-    const mobileButtons = document.querySelector('.mobile-gameover-buttons');
-    const desktopButtons = document.querySelector('.gameover-buttons');
-    
+    const mobileButtons = document.querySelector(".mobile-gameover-buttons");
+    const desktopButtons = document.querySelector(".gameover-buttons");
+
     if (show) {
-      mobileButtons.style.display = 'flex';
-      desktopButtons.style.display = 'none';
+      mobileButtons.style.display = "flex";
+      desktopButtons.style.display = "none";
     } else {
-      mobileButtons.style.display = 'none';
+      mobileButtons.style.display = "none";
     }
   } else {
     // Desktop oder Mobile Portrait - Desktop-Buttons verwenden
-    const desktopButtons = document.querySelector('.gameover-buttons');
-    const mobileButtons = document.querySelector('.mobile-gameover-buttons');
-    
+    const desktopButtons = document.querySelector(".gameover-buttons");
+    const mobileButtons = document.querySelector(".mobile-gameover-buttons");
+
     if (show) {
-      desktopButtons.style.display = 'block'; // Geändert von '' zu 'block'
-      mobileButtons.style.display = 'none';
-      
+      desktopButtons.style.display = "flex";
+      mobileButtons.style.display = "none";
+
       // Einzelne Buttons auch einblenden (wichtig!)
       document.getElementById("homeButton").style.display = "block";
       document.getElementById("restartButton").style.display = "block";
     } else {
-      desktopButtons.style.display = 'none';
-      mobileButtons.style.display = 'none';
-      
+      desktopButtons.style.display = "none";
+      mobileButtons.style.display = "none";
+
       // Einzelne Buttons auch ausblenden
       document.getElementById("homeButton").style.display = "none";
       document.getElementById("restartButton").style.display = "none";
     }
   }
 }
-
-
 
 function showDialog(hasWon) {
   const overlay = document.getElementById("win_overlay");
