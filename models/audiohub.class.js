@@ -20,7 +20,7 @@ class AudioHub {
   static COINS_COMPLETE = new Audio("audio/game-ui-1.mp3");
 
   static soundVolumes = {
-    MENU_AUDIO: 0.5,
+    MENU_AUDIO: 0.3,
     GAMEAUDIO: 0.5,
     SLEEP: 0.1,
     WALK: 0.1,
@@ -42,6 +42,7 @@ class AudioHub {
   };
 
   static allSounds = [
+    AudioHub.MENU_AUDIO,
     AudioHub.GAMEAUDIO,
     AudioHub.SLEEP,
     AudioHub.WALK,
