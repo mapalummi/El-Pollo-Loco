@@ -40,15 +40,6 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
 }
 
-// ALT:
-// document.addEventListener("visibilitychange", () => {
-//   if (document.hidden) {
-//     AudioHub.muteAll();
-//   } else {
-//     AudioHub.unmuteAll();
-//   }
-// });
-
 // NEU:
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
@@ -295,16 +286,6 @@ function destroyWorldAndCanvas() {
   ctx = canvas.getContext("2d");
 }
 
-// function restartGame() {
-//   toggleGameoverButtons(false);
-//   resetGameOverAndPause();
-//   showControlsForRestart();
-//   cleanupGameState();
-//   destroyWorldAndClearCanvas();
-//   reinitLevelAndMobile();
-//   startFreshGameAfterDelay();
-// }
-
 function restartGame() {
   toggleGameoverButtons(false);
   resetGameOverAndPause();
@@ -327,18 +308,6 @@ function resetGameOverAndPause() {
   }
   hideDialog();
 }
-
-// function destroyWorldAndClearCanvas() {
-//   if (world) {
-//     world.clearGameLoopInterval();
-//     if (world.animationId) {
-//       cancelAnimationFrame(world.animationId);
-//       world.animationId = null;
-//     }
-//   }
-//   world = null;
-//   ctx.clearRect(0, 0, canvas.width, canvas.height);
-// }
 
 function destroyWorldAndClearCanvas() {
   if (world) {

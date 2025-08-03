@@ -45,6 +45,7 @@ function addFullscreenListeners() {
 /**
  * Handles fullscreen change events (Desktop only)
  */
+// TODO: Funktion kürzen!
 function handleFullscreenChange() {
   if (detectMobileDevice()) {
     return;
