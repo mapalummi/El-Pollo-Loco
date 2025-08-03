@@ -1,5 +1,6 @@
 /**
- * Toggles sound on/off
+ * Toggles sound on/off and updates the sound icon accordingly.
+ * Also saves the sound state to localStorage.
  */
 function toggleSound() {
   const soundIcon = document.getElementById("soundIcon");
@@ -9,12 +10,10 @@ function toggleSound() {
     soundIcon.src = "icons/unmuted.png";
     soundIcon.setAttribute("data-muted", "false");
     AudioHub.unmuteAll();
-    // console.log("Sound unmuted");
   } else {
     soundIcon.src = "icons/muted.png";
     soundIcon.setAttribute("data-muted", "true");
     AudioHub.muteAll();
-    // console.log("Sound muted");
   }
   try {
     localStorage.setItem("elPolloLoco_soundMuted", AudioHub.isMuted);
@@ -23,6 +22,10 @@ function toggleSound() {
   }
 }
 
+/**
+ * Plays the appropriate audio based on game outcome.
+ * @param {boolean} hasWon - Whether the player has won the game
+ */
 function handleGameOverAudio(hasWon) {
   if (hasWon) {
     AudioHub.playOne(AudioHub.WIN);
@@ -31,12 +34,18 @@ function handleGameOverAudio(hasWon) {
   }
 }
 
+/**
+ * Stops all audio playback, hides dialogs and cleans up game state.
+ */
 function stopAllAudioAndDialog() {
   AudioHub.stopAll();
   hideDialog();
   cleanupGameState();
 }
 
+/**
+ * Synchronizes the sound icon with the current mute state from AudioHub.
+ */
 function syncSoundIcon() {
   const soundIcon = document.getElementById("soundIcon");
   if (AudioHub.isMuted) {
