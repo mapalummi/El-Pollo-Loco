@@ -33,7 +33,6 @@ function toggleMobileControls(show) {
  * @param {boolean} show - Whether to show or hide the footer buttons
  */
 
-// TODO: NEU
 function toggleGameoverButtons(show) {
   const isMobileDevice = detectMobileDevice();
   const isLandscape = window.innerWidth > window.innerHeight;
@@ -170,12 +169,6 @@ function hideStatusBars() {
     world.endbossBar.hide();
   }
 }
-
-//NOTE: Kann raus:
-// function showGameOverButtons() {
-//   document.getElementById("homeButton").style.display = "block";
-//   document.getElementById("restartButton").style.display = "block";
-// }
 
 function prepareGameOverUI(hasWon) {
   toggleGameoverButtons(true);
