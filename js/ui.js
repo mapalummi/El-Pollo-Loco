@@ -33,15 +33,6 @@ function toggleMobileControls(show) {
  * @param {boolean} show - Whether to show or hide the footer buttons
  */
 
-// function toggleGameoverButtons(show) {
-//   const footerButtons = document.querySelector(".gameover-buttons");
-//   if (detectMobileDevice()) {
-//     footerButtons.style.display = show ? "" : "none";
-//   } else {
-//     footerButtons.style.display = "";
-//   }
-// }
-
 // TODO: NEU
 function toggleGameoverButtons(show) {
   const isMobileDevice = detectMobileDevice();

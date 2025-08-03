@@ -36,11 +36,10 @@ class World {
     this.draw();
     this.run();
 
-    // Initialisierung Endboss-Zustand:
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (endboss) {
       this.endbossBar.setPercentage(endboss.energy);
-      this.endbossBar.isVisible = false; // Hide the bar initially
+      this.endbossBar.isVisible = false;
     }
   }
 
@@ -318,7 +317,7 @@ class World {
   }
 
   checkLevelEndReached() {
-    const endRegion = this.levelWidth - 800; // Define end region (800px from level end)
+    const endRegion = this.levelWidth - 800;
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
 
     if (this.character.x > endRegion && endboss && !this.endbossTriggered) {
@@ -328,7 +327,6 @@ class World {
   }
 
   triggerEndbossEntrance(endboss) {
-    // Position the endboss just off-screen to the right
     endboss.x = this.levelWidth + 200;
     endboss.otherDirection = false;
     this.character.isLocked = true;
@@ -377,7 +375,6 @@ class World {
   pauseGame() {
     if (this.paused) return;
     this.paused = true;
-    // Record the time when the game was paused
     this._pauseStartTime = Date.now();
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
@@ -387,18 +384,15 @@ class World {
   }
 
   resumeGame() {
-    // Calculate how long the game was paused
     const pauseDuration = Date.now() - this._pauseStartTime;
-    // Adjust character's lastMoveTime to account for pause duration
+
     if (this.character && pauseDuration) {
       this.character.lastMoveTime += pauseDuration;
     }
     this.paused = false;
-    // Only restart animation loop if it's not already running
     if (!this.animationId) {
       this.animationId = requestAnimationFrame(() => this.draw());
     }
-    // Resume all intervals
     resumeIntervals(this);
   }
 }

@@ -16,7 +16,6 @@ function init() {
   preventSpaceOnButtons();
   addFullscreenListeners();
 
-  // Event Listener für Orientierungsänderungen bereits beim Laden hinzufügen
   window.addEventListener("resize", checkOrientation);
   window.addEventListener("orientationchange", checkOrientation);
 }
@@ -26,10 +25,8 @@ function checkInitialOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
 
   if (isMobileDevice && !isLandscape) {
-    // Auf Mobilgeräten im Hochformat: rotate-message anzeigen
     document.getElementById("rotate-message").style.display = "flex";
   } else {
-    // Auf Desktop oder Mobilgeräten im Querformat: verstecken
     document.getElementById("rotate-message").style.display = "none";
   }
 }
@@ -43,11 +40,46 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
 }
 
+// document.addEventListener("visibilitychange", () => {
+//   if (document.hidden) {
+//     AudioHub.muteAll();
+//   } else {
+//     AudioHub.unmuteAll();
+//   }
+// });
+
+// document.addEventListener("visibilitychange", () => {
+//   if (document.hidden) {
+//     // Stoppe MENU_AUDIO komplett beim Tabwechsel
+//     AudioHub.stopOne(AudioHub.MENU_AUDIO);
+//     // Pausiere alle anderen Audios
+//     AudioHub.pauseAll();
+//   } else {
+//     // Beim Zurückkehren zum Tab
+//     if (!window.gameStarted) {
+//       // Wenn das Spiel noch nicht gestartet wurde, starte MENU_AUDIO wieder
+//       AudioHub.playLoop(AudioHub.MENU_AUDIO);
+//     } else {
+//       // Wenn das Spiel läuft, setze nur die anderen Audios fort
+//       AudioHub.resumeAll();
+//     }
+//   }
+// });
+
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
-    AudioHub.muteAll();
+    // MENU_AUDIO komplett stoppen (spart Ressourcen)
+    AudioHub.stopOne(AudioHub.MENU_AUDIO);
+    // Spielsounds pausieren (für nahtlose Fortsetzung)
+    AudioHub.pauseAll();
   } else {
-    AudioHub.unmuteAll();
+    if (!window.gameStarted) {
+      // Menu-Musik neu starten
+      AudioHub.playLoop(AudioHub.MENU_AUDIO);
+    } else {
+      // Spielsounds fortsetzen
+      AudioHub.resumeAll();
+    }
   }
 });
 
@@ -73,11 +105,9 @@ function startMobileGame() {
   const isMobileDevice = detectMobileDevice();
 
   if (!isMobileDevice) {
-    // Fallback für Desktop (sollte nicht auftreten)
     window.pendingGameStart = false;
     launchGame();
   } else {
-    // Auf Mobile: erst Orientierung prüfen
     toggleMobileControls(true);
     initMobileControls();
     checkOrientation();
@@ -102,7 +132,6 @@ function checkOrientation() {
   const message = document.getElementById("rotate-message");
   const isMobileDevice = detectMobileDevice();
 
-  // Orientierungsprüfung für Mobilgeräte (auch vor Spielstart)
   if (isMobileDevice) {
     if (isLandscape) {
       handleLandscapeMode(message);
@@ -110,7 +139,6 @@ function checkOrientation() {
       handlePortraitMode(message);
     }
   } else {
-    // Auf Desktop: immer verstecken
     message.style.display = "none";
   }
 }
@@ -125,12 +153,10 @@ function detectMobileDevice() {
 function handleLandscapeMode(message) {
   message.style.display = "none";
 
-  // Apply fullscreen styles for mobile
   if (detectMobileDevice()) {
     fillViewportOnMobile();
   }
 
-  // Start game if it was pending
   if (window.pendingGameStart) {
     window.pendingGameStart = false;
     launchGame();
@@ -143,7 +169,6 @@ function handleLandscapeMode(message) {
 function handlePortraitMode(message) {
   message.style.display = "flex";
 
-  // Restore mobile styles when in portrait
   if (detectMobileDevice()) {
     const canvas = document.getElementById("canvas");
     const gameContainer = document.querySelector(".game-container");
@@ -159,12 +184,11 @@ function handlePortraitMode(message) {
 }
 
 function setMobileFullscreenStyles(canvas, gameContainer) {
-  // Force fullscreen on mobile landscape
   canvas.style.width = "100vw";
   canvas.style.height = "calc(100vh - 60px)";
   canvas.style.margin = "0";
   canvas.style.display = "block";
-  canvas.style.objectFit = "contain"; // Changed from cover to contain for better game visibility
+  canvas.style.objectFit = "contain";
   canvas.style.maxWidth = "none";
   canvas.style.maxHeight = "none";
 
@@ -177,19 +201,15 @@ function setMobileFullscreenStyles(canvas, gameContainer) {
   gameContainer.style.alignItems = "center";
   gameContainer.style.position = "relative";
 
-  // Hide scroll bars
   document.body.style.overflow = "hidden";
 
-  // Ensure proper z-index layering
   canvas.style.zIndex = "1";
 }
 
-// Resume game if it was paused due to orientation
 function resumeGameIfPausedByOrientation() {
   if (window.pausedDueToOrientation && world) {
     window.pausedDueToOrientation = false;
     if (!window.gamePaused) {
-      // Only resume if not manually paused
       world.resumeGame();
       if (!AudioHub.isMuted) {
         AudioHub.resumeAll();
@@ -246,7 +266,6 @@ function mainWindow() {
 
   AudioHub.playLoop(AudioHub.MENU_AUDIO);
 
-  // Direkter Ansatz - richtiges Overlay anzeigen
   const isMobileDevice = detectMobileDevice();
   const isLandscape = window.innerWidth > window.innerHeight;
   const isMobileLandscape = isMobileDevice && window.innerWidth <= 991 && isLandscape;
@@ -259,16 +278,10 @@ function mainWindow() {
     document.getElementById("mobile-game-explanation").classList.add("d_none");
   }
 
-  // Game-Started Flag zurücksetzen
   window.gameStarted = false;
   document.getElementById("rotate-message").style.display = "none";
 }
 
-// function showGameOverUIOnMain() {
-//   toggleGameoverButtons(true);
-// }
-
-// NEU:
 function hideGameOverUI() {
   toggleGameoverButtons(false);
 }
@@ -276,11 +289,9 @@ function hideGameOverUI() {
 function cancelAllAnimations() {
   if (!window.requestAnimationFrame) return;
   const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
-  // If world has an animation ID, cancel it
   if (cancelAnim && world && world.animationId) {
     cancelAnim(world.animationId);
   }
-  // Also try to cancel any other potential animation frames
   for (let i = 0; i < 100; i++) {
     cancelAnim(i);
   }
@@ -314,7 +325,6 @@ function resetGameOverAndPause() {
   gameOverSoundPlayed = false;
   gameOver = false;
   window.gamePaused = false;
-  // Reset world game state if it exists
   if (world) {
     world.gameEnded = false;
     world.endbossTriggered = false;
@@ -324,7 +334,6 @@ function resetGameOverAndPause() {
 }
 
 function destroyWorldAndClearCanvas() {
-  // Additional cleanup before destroying world
   if (world) {
     world.clearGameLoopInterval();
     if (world.animationId) {
@@ -345,7 +354,6 @@ function startFreshGameAfterDelay() {
   setTimeout(() => {
     world = new World(canvas, keyboard);
     world.stopDrawingClouds = false;
-    // Ensure completely fresh game state
     world.gameEnded = false;
     world.endbossTriggered = false;
     AudioHub.playLoop(AudioHub.GAMEAUDIO);
