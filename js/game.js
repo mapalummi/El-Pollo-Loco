@@ -6,6 +6,9 @@ let gameOverSoundPlayed = false;
 let gamePaused = false;
 const keyboard = new Keyboard();
 
+/**
+ * Initializes the game by setting up canvas, orientation checks, and event listeners
+ */
 function init() {
   initLevel();
   setupCanvas();
@@ -15,11 +18,33 @@ function init() {
   addKeyboardListeners();
   preventSpaceOnButtons();
   addFullscreenListeners();
+  addVisibilityChangeListener();
 
   window.addEventListener("resize", checkOrientation);
   window.addEventListener("orientationchange", checkOrientation);
 }
 
+/**
+ * Adds event listener for page visibility changes to handle audio pause/resume
+ */
+function addVisibilityChangeListener() {
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      AudioHub.stopOne(AudioHub.MENU_AUDIO);
+      AudioHub.pauseAll();
+    } else {
+      if (!window.gameStarted) {
+        AudioHub.playLoop(AudioHub.MENU_AUDIO);
+      } else {
+        AudioHub.resumeAll();
+      }
+    }
+  });
+}
+
+/**
+ * Checks the initial device orientation and shows rotation message if needed on mobile
+ */
 function checkInitialOrientation() {
   const isMobileDevice = detectMobileDevice();
   const isLandscape = window.innerWidth > window.innerHeight;
@@ -31,29 +56,24 @@ function checkInitialOrientation() {
   }
 }
 
+/**
+ * Hides the rotation message overlay
+ */
 function hideRotatemessage() {
   document.getElementById("rotate-message").style.display = "none";
 }
 
+/**
+ * Sets up the canvas element and 2D rendering context
+ */
 function setupCanvas() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
 }
 
-
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    AudioHub.stopOne(AudioHub.MENU_AUDIO);
-    AudioHub.pauseAll();
-  } else {
-    if (!window.gameStarted) {
-      AudioHub.playLoop(AudioHub.MENU_AUDIO);
-    } else {
-      AudioHub.resumeAll();
-    }
-  }
-});
-
+/**
+ * Starts the game by hiding menu and launching the game world
+ */
 function startGame() {
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
@@ -65,6 +85,9 @@ function startGame() {
   launchGame();
 }
 
+/**
+ * Starts the mobile game with mobile-specific controls and orientation handling
+ */
 function startMobileGame() {
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
@@ -85,6 +108,9 @@ function startMobileGame() {
   }
 }
 
+/**
+ * Launches the game world and initializes all game components
+ */
 function launchGame() {
   world = new World(canvas, keyboard);
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
@@ -98,6 +124,9 @@ function launchGame() {
   document.getElementById("startButton").style.display = "none";
 }
 
+/**
+ * Checks device orientation and handles landscape/portrait mode changes
+ */
 function checkOrientation() {
   const isLandscape = window.innerWidth > window.innerHeight;
   const message = document.getElementById("rotate-message");
@@ -114,6 +143,10 @@ function checkOrientation() {
   }
 }
 
+/**
+ * Detects if the current device is a mobile device
+ * @returns {boolean} True if mobile device is detected
+ */
 function detectMobileDevice() {
   return (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -121,6 +154,10 @@ function detectMobileDevice() {
   );
 }
 
+/**
+ * Handles landscape mode on mobile devices
+ * @param {HTMLElement} message - The rotation message element
+ */
 function handleLandscapeMode(message) {
   message.style.display = "none";
 
@@ -137,6 +174,10 @@ function handleLandscapeMode(message) {
   resumeGameIfPausedByOrientation();
 }
 
+/**
+ * Handles portrait mode on mobile devices
+ * @param {HTMLElement} message - The rotation message element
+ */
 function handlePortraitMode(message) {
   message.style.display = "flex";
 
@@ -154,6 +195,11 @@ function handlePortraitMode(message) {
   }
 }
 
+/**
+ * Sets mobile-specific fullscreen styles for canvas and game container
+ * @param {HTMLCanvasElement} canvas - The canvas element to style
+ * @param {HTMLElement} gameContainer - The game container element to style
+ */
 function setMobileFullscreenStyles(canvas, gameContainer) {
   canvas.style.width = "100vw";
   canvas.style.height = "calc(100vh - 60px)";
@@ -177,6 +223,9 @@ function setMobileFullscreenStyles(canvas, gameContainer) {
   canvas.style.zIndex = "1";
 }
 
+/**
+ * Resumes the game if it was paused due to orientation change
+ */
 function resumeGameIfPausedByOrientation() {
   if (window.pausedDueToOrientation && world) {
     window.pausedDueToOrientation = false;
@@ -189,6 +238,10 @@ function resumeGameIfPausedByOrientation() {
   }
 }
 
+/**
+ * Freezes character movement and animation when the game is won
+ * @param {boolean} hasWon - Whether the player has won the game
+ */
 function freezeCharacterIfWon(hasWon) {
   if (!hasWon || !world || !world.character) return;
   world.character.isFrozen = true;
@@ -197,6 +250,9 @@ function freezeCharacterIfWon(hasWon) {
   world.ignoreControls = true;
 }
 
+/**
+ * Clears all character animation intervals and timeouts
+ */
 function clearCharacterAnimation() {
   if (world.character.animationInterval) {
     clearInterval(world.character.animationInterval);
@@ -208,6 +264,9 @@ function clearCharacterAnimation() {
   }
 }
 
+/**
+ * Disables all keyboard controls by setting them to false
+ */
 function disableKeyboardControls() {
   keyboard.RIGHT = false;
   keyboard.LEFT = false;
@@ -217,6 +276,9 @@ function disableKeyboardControls() {
   keyboard.D = false;
 }
 
+/**
+ * Clears all world objects and hides status bars
+ */
 function clearWorldObjects() {
   if (!world) return;
   world.level.clouds = [];
@@ -227,6 +289,9 @@ function clearWorldObjects() {
   hideStatusBars();
 }
 
+/**
+ * Returns to the main menu screen and resets the game state
+ */
 function mainWindow() {
   hideGameOverUI();
   stopAllAudioAndDialog();
@@ -253,10 +318,16 @@ function mainWindow() {
   document.getElementById("rotate-message").style.display = "none";
 }
 
+/**
+ * Hides the game over UI elements
+ */
 function hideGameOverUI() {
   toggleGameoverButtons(false);
 }
 
+/**
+ * Cancels all active animation frames
+ */
 function cancelAllAnimations() {
   if (!window.requestAnimationFrame) return;
   const cancelAnim = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
@@ -268,6 +339,9 @@ function cancelAllAnimations() {
   }
 }
 
+/**
+ * Destroys the current world and recreates a fresh canvas
+ */
 function destroyWorldAndCanvas() {
   world = null;
   const canvasContainer = document.getElementById("canvas").parentElement;
@@ -282,6 +356,9 @@ function destroyWorldAndCanvas() {
   ctx = canvas.getContext("2d");
 }
 
+/**
+ * Restarts the game with a fresh world and reset state
+ */
 function restartGame() {
   toggleGameoverButtons(false);
   resetGameOverAndPause();
@@ -292,6 +369,9 @@ function restartGame() {
   startFreshGameAfterDelay();
 }
 
+/**
+ * Resets game over and pause states
+ */
 function resetGameOverAndPause() {
   gameOverSoundPlayed = false;
   gameOver = false;
@@ -304,6 +384,9 @@ function resetGameOverAndPause() {
   hideDialog();
 }
 
+/**
+ * Destroys the world and clears the canvas completely
+ */
 function destroyWorldAndClearCanvas() {
   if (world) {
     world.clearGameLoopInterval();
@@ -319,11 +402,17 @@ function destroyWorldAndClearCanvas() {
   ctx.restore();
 }
 
+/**
+ * Reinitializes the level and mobile controls
+ */
 function reinitLevelAndMobile() {
   initLevel();
   initMobileControls();
 }
 
+/**
+ * Starts a fresh game after a short delay
+ */
 function startFreshGameAfterDelay() {
   setTimeout(() => {
     world = new World(canvas, keyboard);
@@ -336,7 +425,7 @@ function startFreshGameAfterDelay() {
 }
 
 /**
- * Toggles pause/play
+ * Toggles between pause and play states
  */
 function togglePausePlay() {
   const pausePlayIcon = document.getElementById("pausePlayIcon");
@@ -347,6 +436,10 @@ function togglePausePlay() {
   }
 }
 
+/**
+ * Pauses the game and updates the UI
+ * @param {HTMLElement} pausePlayIcon - The pause/play icon element
+ */
 function pauseGame(pausePlayIcon) {
   window.gamePaused = true;
   pausePlayIcon.src = "icons/play.png";
@@ -358,6 +451,9 @@ function pauseGame(pausePlayIcon) {
   }
 }
 
+/**
+ * Stops the animation loop by canceling the animation frame
+ */
 function stopAnimationLoop() {
   if (world.animationId) {
     cancelAnimationFrame(world.animationId);
@@ -365,6 +461,10 @@ function stopAnimationLoop() {
   }
 }
 
+/**
+ * Resumes the game and updates the UI
+ * @param {HTMLElement} pausePlayIcon - The pause/play icon element
+ */
 function resumeGame(pausePlayIcon) {
   window.gamePaused = false;
   pausePlayIcon.src = "icons/pause.png";
@@ -377,6 +477,9 @@ function resumeGame(pausePlayIcon) {
   }
 }
 
+/**
+ * Restarts the animation loop with a new animation frame request
+ */
 function restartAnimationLoop() {
   if (!world.animationId) {
     world.animationId = requestAnimationFrame(() => world.draw());
