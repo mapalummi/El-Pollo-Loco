@@ -69,6 +69,10 @@ canvas {
   display: block;
 }
 
+.mobile-game-overlay {
+  display: none;
+}
+
 .game-explanation {
   max-width: 650px;
   margin: 10px auto;
@@ -243,19 +247,6 @@ footer {
     z-index: 1;
   }
 
-  /* h1 {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.8rem;
-    padding: 2px 10px;
-    margin: 0;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-  } */
-
   h1 {
     display: none;
   }
@@ -287,17 +278,69 @@ footer {
     left: 0;
   }
 
+  .game-explanation {
+    display: none;
+  }
+
+  .mobile-game-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .mobile-game-overlay.d_none {
+    display: none !important;
+  }
+
+  .mobile-game-overlay h2 {
+    color: #ffcc00;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  .mobile-game-overlay p {
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.4;
+    margin: 15px 0;
+    max-width: 90%;
+  }
+
+  .mobile-game-overlay .start-btn {
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 18px;
+    background: linear-gradient(45deg, #ff6b00, #ff8500);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+  }
+
   /* #win_overlay {
     width: 100vw;
     height: 100vh;
   } */
 
   #win_overlay {
-    position: absolute; /* Bleibt absolut, aber relativ zur game-container */
+    position: absolute; 
     top: 0;
     left: 0;
-    width: 100%; /* Geändert von 100vw zu 100% */
-    height: 100%; /* Geändert von 100vh zu 100% */
+    width: 100%;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 10;
   }
@@ -306,47 +349,10 @@ footer {
     display: none;
   }
 
-  /* Start Screen Overlay für kompletten Viewport */
-  .game-explanation:not(.d_none) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    /* left: 140px; */
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.85);
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center;
-    margin: 0;
-    border: none;
-    overflow: hidden;
-    max-width: none;
-  }
-
-  .game-explanation h2 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #ffcc00;
-  }
-
-  .game-explanation p {
-    font-size: 14px;
-    margin: 10px 0;
-    color: #ffffff;
-    max-width: 80%;
-  }
-
   #game-controls {
     display: none;
   }
 
-  /* Controls Overview im Landscape-Modus anpassen */
   .controls-overview {
     display: flex;
     justify-content: center;

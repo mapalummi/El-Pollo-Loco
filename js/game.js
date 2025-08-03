@@ -51,8 +51,18 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+
 function startGame() {
   document.getElementById("game-explanation").classList.add("d_none");
+  document.getElementById("game-controls").classList.remove("d_none");
+  window.pendingGameStart = true;
+  window.gameStarted = true;
+  window.pendingGameStart = false;
+  launchGame();
+}
+
+function startMobileGame() {
+  document.getElementById("mobile-game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
   window.pendingGameStart = true;
   window.gameStarted = true;
@@ -60,7 +70,7 @@ function startGame() {
   const isMobileDevice = detectMobileDevice();
 
   if (!isMobileDevice) {
-    // Auf Desktop: Spiel direkt starten
+    // Fallback für Desktop (sollte nicht auftreten)
     window.pendingGameStart = false;
     launchGame();
   } else {
@@ -71,12 +81,15 @@ function startGame() {
   }
 }
 
+
+
+
+
 function launchGame() {
   world = new World(canvas, keyboard);
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
   keyboard.initMobileButtons();
 
-  // Hide Gameoverbuttons on mobile during gameplay
   toggleGameoverButtons(false);
   fillViewportOnMobile();
 
