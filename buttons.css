@@ -147,7 +147,7 @@
 
   .mobile-gameover-buttons {
     position: fixed;
-    bottom: 50px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -165,18 +165,18 @@
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-    min-width: 120px;
+    width: 170px;
     position: relative;
     z-index: 10003;
   }
 
   .mobile-home-btn {
-    background: linear-gradient(45deg, #6c757d, #495057);
+    background: linear-gradient(45deg, #ff6b00, #ff8500);
     color: white;
   }
 
   .mobile-restart-btn {
-    background: linear-gradient(45deg, #28a745, #20c997);
+    background: linear-gradient(45deg, #ff6b00, #ff8500);
     color: white;
   }
 }
