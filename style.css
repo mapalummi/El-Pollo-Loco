@@ -256,9 +256,6 @@ footer {
     height: 100vh;
     margin: 0;
     padding: 0;
-    /* position: absolute;
-    top: 0;
-    left: 0; */
     position: relative;
     display: flex;
     justify-content: center;
@@ -288,10 +285,10 @@ footer {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     z-index: 9999;
     padding: 20px;
@@ -306,7 +303,7 @@ footer {
   .mobile-game-overlay h2 {
     color: #ffcc00;
     font-size: 1.8rem;
-    margin-bottom: 20px;
+    margin-top: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   }
 
@@ -330,19 +327,68 @@ footer {
     box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
   }
 
-  /* #win_overlay {
-    width: 100vw;
-    height: 100vh;
+  /* Desktop Gameover-Buttons verstecken */
+  .gameover-buttons {
+    display: none !important;
+  }
+
+  /* Mobile Gameover-Buttons */
+  .mobile-gameover-buttons {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 10002; /* Über dem win_overlay */
+  }
+
+  .mobile-home-btn,
+  .mobile-restart-btn {
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    position: relative;
+    z-index: 10003;
+  }
+
+  .mobile-home-btn {
+    background: linear-gradient(45deg, #6c757d, #495057);
+    color: white;
+  }
+
+  .mobile-restart-btn {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+  }
+
+  /* .mobile-home-btn:hover,
+  .mobile-restart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   } */
 
   #win_overlay {
-    position: absolute; 
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
   }
 
   footer {

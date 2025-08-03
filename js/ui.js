@@ -29,17 +29,60 @@ function toggleMobileControls(show) {
 }
 
 /**
- * Controls visibility of footer buttons based on game state and device
+ * Controls visibility of gameover buttons based on game state and device
  * @param {boolean} show - Whether to show or hide the footer buttons
  */
+
+// function toggleGameoverButtons(show) {
+//   const footerButtons = document.querySelector(".gameover-buttons");
+//   if (detectMobileDevice()) {
+//     footerButtons.style.display = show ? "" : "none";
+//   } else {
+//     footerButtons.style.display = "";
+//   }
+// }
+
+// NEU:
 function toggleGameoverButtons(show) {
-  const footerButtons = document.querySelector(".gameover-buttons");
-  if (detectMobileDevice()) {
-    footerButtons.style.display = show ? "" : "none";
+  const isMobileDevice = detectMobileDevice();
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const isMobileLandscape = isMobileDevice && window.innerWidth <= 991 && isLandscape;
+
+  if (isMobileLandscape) {
+    // Mobile Landscape - Mobile-Buttons verwenden
+    const mobileButtons = document.querySelector('.mobile-gameover-buttons');
+    const desktopButtons = document.querySelector('.gameover-buttons');
+    
+    if (show) {
+      mobileButtons.style.display = 'flex';
+      desktopButtons.style.display = 'none';
+    } else {
+      mobileButtons.style.display = 'none';
+    }
   } else {
-    footerButtons.style.display = "";
+    // Desktop oder Mobile Portrait - Desktop-Buttons verwenden
+    const desktopButtons = document.querySelector('.gameover-buttons');
+    const mobileButtons = document.querySelector('.mobile-gameover-buttons');
+    
+    if (show) {
+      desktopButtons.style.display = 'block'; // Geändert von '' zu 'block'
+      mobileButtons.style.display = 'none';
+      
+      // Einzelne Buttons auch einblenden (wichtig!)
+      document.getElementById("homeButton").style.display = "block";
+      document.getElementById("restartButton").style.display = "block";
+    } else {
+      desktopButtons.style.display = 'none';
+      mobileButtons.style.display = 'none';
+      
+      // Einzelne Buttons auch ausblenden
+      document.getElementById("homeButton").style.display = "none";
+      document.getElementById("restartButton").style.display = "none";
+    }
   }
 }
+
+
 
 function showDialog(hasWon) {
   const overlay = document.getElementById("win_overlay");
@@ -139,10 +182,11 @@ function hideStatusBars() {
   }
 }
 
-function showGameOverButtons() {
-  document.getElementById("homeButton").style.display = "block";
-  document.getElementById("restartButton").style.display = "block";
-}
+//NOTE: Kann raus:
+// function showGameOverButtons() {
+//   document.getElementById("homeButton").style.display = "block";
+//   document.getElementById("restartButton").style.display = "block";
+// }
 
 function prepareGameOverUI(hasWon) {
   toggleGameoverButtons(true);
@@ -176,7 +220,7 @@ function showGameOverScreen(hasWon) {
   handleGameOverAudio(hasWon);
   freezeCharacterIfWon(hasWon);
   clearWorldObjects();
-  showGameOverButtons();
+  // showGameOverButtons();
 }
 
 function handleGameWon(world) {

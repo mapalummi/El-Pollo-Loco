@@ -51,7 +51,6 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-
 function startGame() {
   document.getElementById("game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
@@ -80,10 +79,6 @@ function startMobileGame() {
     checkOrientation();
   }
 }
-
-
-
-
 
 function launchGame() {
   world = new World(canvas, keyboard);
@@ -238,20 +233,39 @@ function clearWorldObjects() {
 }
 
 function mainWindow() {
-  showGameOverUIOnMain();
+  hideGameOverUI();
+  // showGameOverUIOnMain();
   stopAllAudioAndDialog();
   cancelAllAnimations();
   destroyWorldAndCanvas();
   resetGameStateAndUI();
   drawStartScreenOnFreshCanvas();
 
+  // Direkter Ansatz - richtiges Overlay anzeigen
+  const isMobileDevice = detectMobileDevice();
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const isMobileLandscape = isMobileDevice && window.innerWidth <= 991 && isLandscape;
+
+  if (isMobileLandscape) {
+    document.getElementById("mobile-game-explanation").classList.remove("d_none");
+    document.getElementById("game-explanation").classList.add("d_none");
+  } else {
+    document.getElementById("game-explanation").classList.remove("d_none");
+    document.getElementById("mobile-game-explanation").classList.add("d_none");
+  }
+
   // Game-Started Flag zurücksetzen
   window.gameStarted = false;
   document.getElementById("rotate-message").style.display = "none";
 }
 
-function showGameOverUIOnMain() {
-  toggleGameoverButtons(true);
+// function showGameOverUIOnMain() {
+//   toggleGameoverButtons(true);
+// }
+
+// NEU:
+function hideGameOverUI() {
+  toggleGameoverButtons(false);
 }
 
 function cancelAllAnimations() {
@@ -282,6 +296,7 @@ function destroyWorldAndCanvas() {
 }
 
 function restartGame() {
+  toggleGameoverButtons(false);
   resetGameOverAndPause();
   showControlsForRestart();
   cleanupGameState();
