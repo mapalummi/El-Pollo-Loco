@@ -336,3 +336,9 @@ footer {
     display: flex !important;
   }
 }
+
+@media (pointer: coarse) {
+  #fullscreenButton {
+    display: none !important;
+  }
+}

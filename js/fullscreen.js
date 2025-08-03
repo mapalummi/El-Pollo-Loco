@@ -1,7 +1,12 @@
 /**
- * Toggles fullscreen mode
+ * Toggles fullscreen mode (Desktop only)
  */
 function toggleFullscreen() {
+  // Check if device is mobile - if so, do nothing
+  if (detectMobileDevice()) {
+    return;
+  }
+
   const gameContainer = document.querySelector(".game-container");
   const fullscreenIcon = document.getElementById("fullscreenIcon");
 
@@ -19,19 +24,27 @@ function toggleFullscreen() {
 }
 
 /**
- * Adds event listeners for fullscreen changes
+ * Adds event listeners for fullscreen changes (Desktop only)
  */
 function addFullscreenListeners() {
-  document.addEventListener("fullscreenchange", handleFullscreenChange);
-  document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-  document.addEventListener("mozfullscreenchange", handleFullscreenChange);
-  document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+  // Only add listeners for desktop devices
+  if (!detectMobileDevice()) {
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+  }
 }
 
 /**
- * Handles fullscreen change events
+ * Handles fullscreen change events (Desktop only)
  */
 function handleFullscreenChange() {
+  // Double check - only handle if not mobile
+  if (detectMobileDevice()) {
+    return;
+  }
+
   const canvas = document.getElementById("canvas");
   const gameContainer = document.querySelector(".game-container");
 
@@ -43,7 +56,6 @@ function handleFullscreenChange() {
     restoreCanvasStyles(canvas, gameContainer);
     updateFullscreenIcon(false);
   }
-  // redrawWorldIfExists();
   adjustWorldToResize();
 }
 
