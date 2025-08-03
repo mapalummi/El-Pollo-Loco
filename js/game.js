@@ -40,6 +40,7 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
 }
 
+// ALT:
 // document.addEventListener("visibilitychange", () => {
 //   if (document.hidden) {
 //     AudioHub.muteAll();
@@ -48,24 +49,7 @@ function setupCanvas() {
 //   }
 // });
 
-// document.addEventListener("visibilitychange", () => {
-//   if (document.hidden) {
-//     // Stoppe MENU_AUDIO komplett beim Tabwechsel
-//     AudioHub.stopOne(AudioHub.MENU_AUDIO);
-//     // Pausiere alle anderen Audios
-//     AudioHub.pauseAll();
-//   } else {
-//     // Beim Zurückkehren zum Tab
-//     if (!window.gameStarted) {
-//       // Wenn das Spiel noch nicht gestartet wurde, starte MENU_AUDIO wieder
-//       AudioHub.playLoop(AudioHub.MENU_AUDIO);
-//     } else {
-//       // Wenn das Spiel läuft, setze nur die anderen Audios fort
-//       AudioHub.resumeAll();
-//     }
-//   }
-// });
-
+// NEU:
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     // MENU_AUDIO komplett stoppen (spart Ressourcen)
@@ -311,11 +295,22 @@ function destroyWorldAndCanvas() {
   ctx = canvas.getContext("2d");
 }
 
+// function restartGame() {
+//   toggleGameoverButtons(false);
+//   resetGameOverAndPause();
+//   showControlsForRestart();
+//   cleanupGameState();
+//   destroyWorldAndClearCanvas();
+//   reinitLevelAndMobile();
+//   startFreshGameAfterDelay();
+// }
+
 function restartGame() {
   toggleGameoverButtons(false);
   resetGameOverAndPause();
   showControlsForRestart();
   cleanupGameState();
+  // Zurück zur ursprünglichen Methode
   destroyWorldAndClearCanvas();
   reinitLevelAndMobile();
   startFreshGameAfterDelay();
@@ -333,6 +328,18 @@ function resetGameOverAndPause() {
   hideDialog();
 }
 
+// function destroyWorldAndClearCanvas() {
+//   if (world) {
+//     world.clearGameLoopInterval();
+//     if (world.animationId) {
+//       cancelAnimationFrame(world.animationId);
+//       world.animationId = null;
+//     }
+//   }
+//   world = null;
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
+// }
+
 function destroyWorldAndClearCanvas() {
   if (world) {
     world.clearGameLoopInterval();
@@ -342,7 +349,11 @@ function destroyWorldAndClearCanvas() {
     }
   }
   world = null;
+  // Canvas komplett leeren und zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save(); // Canvas-Zustand speichern
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // Transform zurücksetzen
+  ctx.restore(); // Canvas-Zustand wiederherstellen
 }
 
 function reinitLevelAndMobile() {
