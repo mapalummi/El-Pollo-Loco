@@ -40,19 +40,15 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
 }
 
-// NEU:
+
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
-    // MENU_AUDIO komplett stoppen (spart Ressourcen)
     AudioHub.stopOne(AudioHub.MENU_AUDIO);
-    // Spielsounds pausieren (für nahtlose Fortsetzung)
     AudioHub.pauseAll();
   } else {
     if (!window.gameStarted) {
-      // Menu-Musik neu starten
       AudioHub.playLoop(AudioHub.MENU_AUDIO);
     } else {
-      // Spielsounds fortsetzen
       AudioHub.resumeAll();
     }
   }
@@ -291,7 +287,6 @@ function restartGame() {
   resetGameOverAndPause();
   showControlsForRestart();
   cleanupGameState();
-  // Zurück zur ursprünglichen Methode
   destroyWorldAndClearCanvas();
   reinitLevelAndMobile();
   startFreshGameAfterDelay();
@@ -318,11 +313,10 @@ function destroyWorldAndClearCanvas() {
     }
   }
   world = null;
-  // Canvas komplett leeren und zurücksetzen
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.save(); // Canvas-Zustand speichern
-  ctx.setTransform(1, 0, 0, 1, 0, 0); // Transform zurücksetzen
-  ctx.restore(); // Canvas-Zustand wiederherstellen
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.restore();
 }
 
 function reinitLevelAndMobile() {

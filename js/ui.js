@@ -1,3 +1,6 @@
+/**
+ * Initializes mobile controls based on device detection
+ */
 function initMobileControls() {
   const isMobileDevice = detectMobileDevice();
   const mobileButtons = document.getElementById("mobile-buttons");
@@ -12,6 +15,10 @@ function initMobileControls() {
   }
 }
 
+/**
+ * Detects if the current device is a mobile device
+ * @returns {boolean} True if mobile device is detected
+ */
 function detectMobileDevice() {
   return (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -19,6 +26,10 @@ function detectMobileDevice() {
   );
 }
 
+/**
+ * Toggles the visibility of mobile control buttons
+ * @param {boolean} show - Whether to show or hide the mobile controls
+ */
 function toggleMobileControls(show) {
   const mobileButtons = document.getElementById("mobile-buttons");
   if (detectMobileDevice()) {
@@ -39,7 +50,6 @@ function toggleGameoverButtons(show) {
   const isMobileLandscape = isMobileDevice && window.innerWidth <= 991 && isLandscape;
 
   if (isMobileLandscape) {
-    // Mobile Landscape - Mobile-Buttons verwenden
     const mobileButtons = document.querySelector(".mobile-gameover-buttons");
     const desktopButtons = document.querySelector(".gameover-buttons");
 
@@ -50,7 +60,6 @@ function toggleGameoverButtons(show) {
       mobileButtons.style.display = "none";
     }
   } else {
-    // Desktop oder Mobile Portrait - Desktop-Buttons verwenden
     const desktopButtons = document.querySelector(".gameover-buttons");
     const mobileButtons = document.querySelector(".mobile-gameover-buttons");
 
@@ -58,20 +67,22 @@ function toggleGameoverButtons(show) {
       desktopButtons.style.display = "flex";
       mobileButtons.style.display = "none";
 
-      // Einzelne Buttons auch einblenden (wichtig!)
       document.getElementById("homeButton").style.display = "block";
       document.getElementById("restartButton").style.display = "block";
     } else {
       desktopButtons.style.display = "none";
       mobileButtons.style.display = "none";
 
-      // Einzelne Buttons auch ausblenden
       document.getElementById("homeButton").style.display = "none";
       document.getElementById("restartButton").style.display = "none";
     }
   }
 }
 
+/**
+ * Shows the game dialog overlay with win/lose screen
+ * @param {boolean} hasWon - Whether the player has won the game
+ */
 function showDialog(hasWon) {
   const overlay = document.getElementById("win_overlay");
   const gameOverImage = document.getElementById("game_over_image");
@@ -86,64 +97,51 @@ function showDialog(hasWon) {
   document.body.style.overflow = "hidden";
 }
 
+/**
+ * Hides the game dialog overlay and restores body scroll
+ */
 function hideDialog() {
   document.getElementById("win_overlay").classList.add("d_none");
-  document.body.style.overflow = "auto"; // Re-enable scrolling
+  document.body.style.overflow = "auto";
 }
 
 /**
- * Toggle mobile controls
- * @param {boolean} show - Whether to show or hide the controls
- */
-function toggleMobileControls(show) {
-  const mobileButtons = document.getElementById("mobile-buttons");
-
-  if (window.innerWidth < 768) {
-    if (show) {
-      mobileButtons.classList.remove("d_none");
-    } else {
-      mobileButtons.classList.add("d_none");
-    }
-  }
-}
-
-/**
- * Zeigt ein Modal mit dem angegebenen Inhaltstyp an
+ * Shows a modal dialog with the specified content type
+ * @param {string} type - The type of modal content to display
  */
 function showModal(type) {
   const modalContainer = document.getElementById("modal-container");
-  modalContainer.style.display = "flex"; // Wichtig: display auf flex setzen
+  modalContainer.style.display = "flex";
   modalContainer.classList.remove("modal-hidden");
 
-  // Alle Modal-Inhalte verstecken
   document.querySelectorAll(".modal-section").forEach(section => {
     section.classList.add("modal-hidden");
   });
 
-  // Gewünschten Inhalt anzeigen
   document.getElementById("modal-" + type).classList.remove("modal-hidden");
 
-  // Spiel pausieren, wenn es läuft
   if (typeof world !== "undefined" && world && !window.gamePaused) {
     togglePausePlay();
   }
 }
 
 /**
- * Schließt das Modal
+ * Closes the currently open modal dialog
  */
 function closeModal() {
   const modalContainer = document.getElementById("modal-container");
   if (modalContainer) {
     modalContainer.style.display = "none";
     modalContainer.classList.add("modal-hidden");
-    // Ggf. Spiel fortsetzen
     if (window.gamePaused && typeof togglePausePlay === "function") {
       togglePausePlay();
     }
   }
 }
 
+/**
+ * Draws the start screen image on the canvas
+ */
 function drawStartScreen() {
   const startScreenImage = new Image();
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
@@ -155,6 +153,9 @@ function drawStartScreen() {
   };
 }
 
+/**
+ * Hides all status bars in the game world
+ */
 function hideStatusBars() {
   if (world.healthBar && typeof world.healthBar.hide === "function") {
     world.healthBar.hide();
@@ -170,6 +171,10 @@ function hideStatusBars() {
   }
 }
 
+/**
+ * Prepares the UI for game over state
+ * @param {boolean} hasWon - Whether the player has won the game
+ */
 function prepareGameOverUI(hasWon) {
   toggleGameoverButtons(true);
   showDialog(hasWon);
@@ -179,6 +184,9 @@ function prepareGameOverUI(hasWon) {
   if (!gameOverSoundPlayed) gameOverSoundPlayed = true;
 }
 
+/**
+ * Draws the start screen image on a fresh canvas
+ */
 function drawStartScreenOnFreshCanvas() {
   const startScreenImage = new Image();
   startScreenImage.src = "img/9_intro_outro_screens/start/startscreen_1.png";
@@ -188,12 +196,19 @@ function drawStartScreenOnFreshCanvas() {
   };
 }
 
+/**
+ * Shows game controls appropriate for restart scenario
+ */
 function showControlsForRestart() {
   document.getElementById("restartButton").style.display = "none";
   document.getElementById("homeButton").style.display = "none";
   document.getElementById("game-controls").classList.remove("d_none");
 }
 
+/**
+ * Displays the game over screen with appropriate win/lose state
+ * @param {boolean} hasWon - Whether the player has won the game
+ */
 function showGameOverScreen(hasWon) {
   if (gameOver) return;
   gameOver = true;
@@ -202,9 +217,12 @@ function showGameOverScreen(hasWon) {
   handleGameOverAudio(hasWon);
   freezeCharacterIfWon(hasWon);
   clearWorldObjects();
-  // showGameOverButtons();
 }
 
+/**
+ * Handles the game won scenario with delayed screen transition
+ * @param {World} world - The game world object
+ */
 function handleGameWon(world) {
   world.gameEnded = true;
   const endboss = world.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -214,6 +232,10 @@ function handleGameWon(world) {
   }, animationDuration);
 }
 
+/**
+ * Handles the game lost scenario with delayed screen transition
+ * @param {World} world - The game world object
+ */
 function handleGameLost(world) {
   world.gameEnded = true;
   const animationDuration = world.character.IMAGES_DEAD.length * 100;
@@ -222,14 +244,16 @@ function handleGameLost(world) {
   }, animationDuration);
 }
 
+/**
+ * Updates the coin collection status bar and handles completion effects
+ * @param {World} world - The game world object containing coin data
+ */
 function updateCoinBar(world) {
   world.percentageCoins = (world.collectedCoins / world.totalCoins) * 100;
-  //Fortschritt an die Coinbar übergeben
   world.coinBar.setPercentage(world.percentageCoins);
 
-  // Check if all coins are collected
   if (world.percentageCoins >= 100) {
-    world.coinBar.highlight(); // Highlight the coin bar
+    world.coinBar.highlight();
     if (!world.allCoinsCollectedSoundPlayed) {
       AudioHub.playOne(AudioHub.COINS_COMPLETE);
       world.allCoinsCollectedSoundPlayed = true;
@@ -240,11 +264,19 @@ function updateCoinBar(world) {
   }
 }
 
+/**
+ * Updates the bottle collection status bar based on collected bottles
+ * @param {World} world - The game world object containing bottle data
+ */
 function updateBottleBar(world) {
   world.percentageBottles = (world.collectedBottles / world.totalBottles) * 100;
   world.bottleBar.setPercentage(world.percentageBottles);
 }
 
+/**
+ * Updates the pulsing animation effect for highlighted coin bar
+ * @param {World} world - The game world object containing coin bar data
+ */
 function updateCoinBarPulse(world) {
   if (world.coinBar.isHighlighted) {
     world.highlightPulse += 0.05 * world.highlightDirection;
@@ -257,6 +289,10 @@ function updateCoinBarPulse(world) {
   }
 }
 
+/**
+ * Draws all visible status bars to the game canvas
+ * @param {World} world - The game world object containing all status bars
+ */
 function drawStatusBars(world) {
   if (world.bottleBar.isVisible) {
     world.addToMap(world.bottleBar);
