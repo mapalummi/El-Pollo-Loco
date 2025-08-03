@@ -315,64 +315,7 @@ footer {
     max-width: 90%;
   }
 
-  /* .mobile-game-overlay .start-btn {
-    margin-top: 30px;
-    padding: 15px 30px;
-    font-size: 18px;
-    background: linear-gradient(45deg, #ff6b00, #ff8500);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
-  }
 
-  
-  .gameover-buttons {
-    display: none !important;
-  }
-
-  
-  .mobile-gameover-buttons {
-    position: fixed;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 20px;
-    z-index: 10002;
-  } */
-
-  /* .mobile-home-btn,
-  .mobile-restart-btn {
-    padding: 15px 25px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    min-width: 120px;
-    position: relative;
-    z-index: 10003;
-  }
-
-  .mobile-home-btn {
-    background: linear-gradient(45deg, #6c757d, #495057);
-    color: white;
-  }
-
-  .mobile-restart-btn {
-    background: linear-gradient(45deg, #28a745, #20c997);
-    color: white;
-  } */
-
-  /* .mobile-home-btn:hover,
-  .mobile-restart-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  } */
 
   #win_overlay {
     position: fixed;

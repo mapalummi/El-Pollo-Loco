@@ -1,5 +1,6 @@
 class AudioHub {
-  static GAMEAUDIO = new Audio("audio/game-music-loop-1.mp3");
+  static MENU_AUDIO = new Audio("audio/acoustic-mexican-guitar.mp3")
+  static GAMEAUDIO = new Audio("audio/keep-up-flamenco.mp3");
   static SLEEP = new Audio("audio/sleep-1.mp3");
   static WALK = new Audio("audio/steps-2.mp3");
   static JUMP = new Audio("audio/jump-1.mp3");
@@ -19,6 +20,7 @@ class AudioHub {
   static COINS_COMPLETE = new Audio("audio/game-ui-1.mp3");
 
   static soundVolumes = {
+    MENU_AUDIO: 0.5,
     GAMEAUDIO: 0.5,
     SLEEP: 0.1,
     WALK: 0.1,

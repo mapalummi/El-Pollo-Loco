@@ -58,7 +58,7 @@
   position: absolute;
   bottom: 0;
   display: flex;
-  gap: 10px;
+  gap: 4px;
   pointer-events: auto;
 }
 
@@ -98,12 +98,6 @@
 /* RESPONIVE STYLES */
 /* --------------- */
 
-/* ...existing code... */
-
-/* ----------------- */
-/* RESPONIVE STYLES */
-/* --------------- */
-
 /* Desktop - Hide mobile buttons */
 @media (min-width: 992px) {
   #mobile-buttons {
@@ -136,80 +130,6 @@
   }
 }
 
-/* Larger Mobile/Small Tablets */
-@media (min-width: 576px) and (max-width: 767px) {
-  .mobile-button {
-    width: 80px;
-    height: 80px;
-  }
-
-  .left-buttons {
-    left: 20px;
-    bottom: 20px;
-  }
-
-  .right-buttons {
-    right: 20px;
-    bottom: 20px;
-  }
-}
-
-/* Tablets (768px-991px) */
-@media (min-width: 768px) and (max-width: 991px) {
-  .mobile-button {
-    width: 100px;
-    height: 100px;
-  }
-
-  .left-buttons {
-    left: 30px;
-    bottom: 30px;
-  }
-
-  .right-buttons {
-    right: 30px;
-    bottom: 30px;
-  }
-}
-
-/* Mobile Landscape Fullscreen */
-/* @media screen and (max-width: 991px) and (orientation: landscape) {
-  #mobile-buttons {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 999;
-  }
-  
-  .left-buttons {
-    position: absolute;
-    left: 15px;
-    bottom: 15px;
-  }
-  
-  .right-buttons {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-  }
-  
-  .mobile-button {
-    width: 60px;
-    height: 60px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border: 2px solid #a0220a;
-  }
-  
-  .mobile-button img {
-    width: 25px;
-    height: 25px;
-  }
-} */
-
-/* ...existing code... */
-
 /* Mobile Landscape Fullscreen */
 @media screen and (max-width: 991px) and (orientation: landscape) {
   #mobile-buttons {
@@ -221,29 +141,29 @@
     z-index: 999;
     pointer-events: none;
   }
-  
+
   .left-buttons {
     position: absolute;
     left: 15px;
-    bottom: 15px;
+    bottom: 35px;
     pointer-events: auto;
   }
-  
+
   .right-buttons {
     position: absolute;
     right: 15px;
-    bottom: 15px;
+    bottom: 35px;
     pointer-events: auto;
   }
-  
+
   .mobile-button {
-    width: 60px;
-    height: 60px;
-    background-color: rgba(255, 255, 255, 0.8);
+    width: 80px;
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.3);
     border: 2px solid #a0220a;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
-  
+
   .mobile-button img {
     width: 25px;
     height: 25px;

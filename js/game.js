@@ -52,6 +52,8 @@ document.addEventListener("visibilitychange", () => {
 });
 
 function startGame() {
+  AudioHub.stopOne(AudioHub.MENU_AUDIO);
+
   document.getElementById("game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
   window.pendingGameStart = true;
@@ -61,6 +63,8 @@ function startGame() {
 }
 
 function startMobileGame() {
+  AudioHub.stopOne(AudioHub.MENU_AUDIO);
+
   document.getElementById("mobile-game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
   window.pendingGameStart = true;
@@ -234,12 +238,13 @@ function clearWorldObjects() {
 
 function mainWindow() {
   hideGameOverUI();
-  // showGameOverUIOnMain();
   stopAllAudioAndDialog();
   cancelAllAnimations();
   destroyWorldAndCanvas();
   resetGameStateAndUI();
   drawStartScreenOnFreshCanvas();
+
+  AudioHub.playLoop(AudioHub.MENU_AUDIO);
 
   // Direkter Ansatz - richtiges Overlay anzeigen
   const isMobileDevice = detectMobileDevice();
@@ -369,12 +374,12 @@ function pauseGame(pausePlayIcon) {
     stopAnimationLoop();
     world.pauseGame();
   }
+}
 
-  function stopAnimationLoop() {
-    if (world.animationId) {
-      cancelAnimationFrame(world.animationId);
-      world.animationId = null;
-    }
+function stopAnimationLoop() {
+  if (world.animationId) {
+    cancelAnimationFrame(world.animationId);
+    world.animationId = null;
   }
 }
 
