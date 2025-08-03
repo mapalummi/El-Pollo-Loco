@@ -1,5 +1,9 @@
+/**
+ * Central audio management hub for the El Pollo Loco game
+ * Handles all audio playback, volume control, muting, and state management
+ */
 class AudioHub {
-  static MENU_AUDIO = new Audio("audio/acoustic-mexican-guitar.mp3")
+  static MENU_AUDIO = new Audio("audio/acoustic-mexican-guitar.mp3");
   static GAMEAUDIO = new Audio("audio/keep-up-flamenco.mp3");
   static SLEEP = new Audio("audio/sleep-1.mp3");
   static WALK = new Audio("audio/steps-2.mp3");
@@ -63,21 +67,15 @@ class AudioHub {
     AudioHub.COINS_COMPLETE,
   ];
 
-  // Statische Variable für den aktuell abgespielten Tasten-Sound
   static currentKeySound = null;
-
-  // static property to track mute state
   static isMuted = false;
 
-  //NEU Local Storage
-  // Static initializer to load sound state from localStorage
   static {
     try {
       const soundState = localStorage.getItem("elPolloLoco_soundMuted");
       if (soundState !== null) {
         AudioHub.isMuted = soundState === "true";
 
-        // Apply the loaded state immediately
         if (AudioHub.isMuted) {
           AudioHub.muteAll();
         }
@@ -87,16 +85,18 @@ class AudioHub {
     }
   }
 
-  // Modifiziertes playOne
+  /**
+   * Plays a sound effect once with appropriate volume settings
+   * @param {HTMLAudioElement} sound - The audio element to play
+   */
   static playOne(sound) {
     if (sound.readyState == 4) {
-      // Finde den Namen des Sounds
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
       if (!AudioHub.isMuted) {
         sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       } else {
-        sound.volume = 0; // Keep it muted
+        sound.volume = 0;
       }
 
       sound.currentTime = 0;
@@ -104,62 +104,73 @@ class AudioHub {
     }
   }
 
-  // Modifiziertes playLoop
+  /**
+   * Plays a sound in loop mode with appropriate volume settings
+   * @param {HTMLAudioElement} sound - The audio element to play in loop
+   */
   static playLoop(sound) {
     if (sound.readyState == 4) {
-      // Finde den Namen des Sounds
       const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
-      // Only set volume if not muted
       if (!AudioHub.isMuted) {
         sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       } else {
-        sound.volume = 0; // Keep it muted
+        sound.volume = 0;
       }
 
-      sound.loop = true; // Aktiviert die Loop-Funktion
+      sound.loop = true;
       sound.currentTime = 0;
       sound.play();
     }
   }
 
-  // Stoppt das Abspielen einer einzelnen Audiodatei
+  /**
+   * Stops playback of a specific sound
+   * @param {HTMLAudioElement} sound - The audio element to stop
+   */
   static stopOne(sound) {
-    sound.pause(); // Pausiert das übergebene Audio
+    sound.pause();
   }
 
-  // Stoppt das Abspielen ALLER Audiodateien
+  /**
+   * Stops playback of all registered sounds
+   */
   static stopAll() {
     AudioHub.allSounds.forEach(sound => {
-      sound.pause(); // Pausiert jedes Audio in der Liste
+      sound.pause();
     });
   }
 
+  /**
+   * Resumes playback of a specific sound with error handling
+   * @param {HTMLAudioElement} sound - The audio element to resume
+   */
   static resume(sound) {
     sound.play().catch(e => console.log("Auto-resume prevented:", e));
   }
 
-  // Spielt einen Sound ab, solange eine Taste gedrückt wird
+  /**
+   * Plays a sound while a key is pressed and tracks it as current key sound
+   * @param {HTMLAudioElement} sound - The audio element to play while key is pressed
+   */
   static playWhileKeyPressed(sound) {
     if (sound.readyState == 4) {
-      // Check if sound should be muted
       if (!AudioHub.isMuted) {
-        // Find the sound name for volume settings
         const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
         sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
       } else {
-        sound.volume = 0; // Keep it muted
+        sound.volume = 0;
       }
 
       sound.currentTime = 0;
       sound.play();
-
-      // Speichert den Sound, damit er beim Loslassen der Taste gestoppt werden kann
       AudioHub.currentKeySound = sound;
     }
   }
 
-  // Stoppt den aktuell durch Tastendruck gespielten Sound
+  /**
+   * Stops the currently playing key sound and resets its state
+   */
   static stopKeySound() {
     if (AudioHub.currentKeySound) {
       AudioHub.currentKeySound.pause();
@@ -168,46 +179,50 @@ class AudioHub {
     }
   }
 
-  // Update the muteAll method
+  /**
+   * Mutes all sounds by setting their volume to 0 while preserving original volumes
+   */
   static muteAll() {
     AudioHub.isMuted = true;
-    // Mute all sounds without stopping them
+
     AudioHub.allSounds.forEach(sound => {
-      // Save the original volume first (if not already saved)
       if (sound._originalVolume === undefined) {
         sound._originalVolume = sound.volume;
       }
-      // Set volume to 0 (mute)
       sound.volume = 0;
     });
   }
 
-  // Update the unmuteAll method
+  /**
+   * Unmutes all sounds by restoring their original volume levels
+   */
   static unmuteAll() {
     AudioHub.isMuted = false;
-    // Restore original volumes
+
     AudioHub.allSounds.forEach(sound => {
       if (sound._originalVolume !== undefined) {
-        // Get the sound name for volume settings
         const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
-        // Restore original volume
+
         sound.volume = sound._originalVolume;
-        // Clear stored original volume
         delete sound._originalVolume;
       }
     });
   }
 
+  /**
+   * Pauses all currently playing sounds and tracks their playing state
+   */
   static pauseAll() {
-    // Store current playing states before pausing
     AudioHub.allSounds.forEach(sound => {
       sound._wasPlaying = !sound.paused;
       sound.pause();
     });
   }
 
+  /**
+   * Resumes all sounds that were playing before pauseAll() was called
+   */
   static resumeAll() {
-    // Only resume sounds that were playing before pause
     AudioHub.allSounds.forEach(sound => {
       if (sound._wasPlaying && !AudioHub.isMuted) {
         sound.play().catch(e => console.log("Auto-resume prevented:", e));

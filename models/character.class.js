@@ -1,3 +1,7 @@
+/**
+ * Represents the main player character in the game
+ * Extends MovableObject to inherit movement, collision detection, and animation functionality
+ */
 class Character extends MovableObject {
   x = 0;
   y = 20;
@@ -77,6 +81,10 @@ class Character extends MovableObject {
   ];
   world;
 
+  /**
+   * Creates a new character instance and initializes all animations and properties
+   * @param {World} world - The game world object that contains this character
+   */
   constructor(world) {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadImages(this.IMAGES_IDLE);
@@ -95,6 +103,10 @@ class Character extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Calculates and sets the real collision frame based on offset values
+   * Updates the collision boundaries (rX, rY, rW, rH) for accurate hit detection
+   */
   getRealFrame() {
     this.rX = this.x + (this.offset?.left || 0);
     this.rY = this.y + (this.offset?.top || 0);
@@ -102,11 +114,17 @@ class Character extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
+  /**
+   * Starts the main animation loops for movement and animation state handling
+   */
   animate() {
     setInterval(() => this.handleMovement(), 1000 / 60);
     setInterval(() => this.handleAnimationState(), 200);
   }
 
+  /**
+   * Handles character movement input and updates position at 60 FPS
+   */
   handleMovement() {
     if (this.isDead() || this.isFrozen) return;
 
@@ -117,6 +135,10 @@ class Character extends MovableObject {
     this.updateCameraAndFrame();
   }
 
+  /**
+   * Processes keyboard input for left and right movement
+   * @returns {boolean} True if any movement was processed
+   */
   processMovementInput() {
     let wasMoving = false;
 
@@ -133,14 +155,26 @@ class Character extends MovableObject {
     return wasMoving;
   }
 
+  /**
+   * Determines if the character should move right based on input and boundaries
+   * @returns {boolean} True if right movement is allowed
+   */
   shouldMoveRight() {
     return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.isLocked;
   }
 
+  /**
+   * Determines if the character should move left based on input and boundaries
+   * @returns {boolean} True if left movement is allowed
+   */
   shouldMoveLeft() {
     return this.world.keyboard.LEFT && this.x > 0 && !this.isLocked;
   }
 
+  /**
+   * Manages walk sound playback state based on movement
+   * @param {boolean} wasMoving - Whether the character was moving this frame
+   */
   handleWalkSoundState(wasMoving) {
     if (!wasMoving && this.walkSoundPlaying) {
       AudioHub.stopKeySound();
@@ -148,17 +182,26 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Handles jump input and triggers jump if conditions are met
+   */
   handleJumpInput() {
     if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.isLocked) {
       this.jump();
     }
   }
 
+  /**
+   * Updates camera position and collision frame
+   */
   updateCameraAndFrame() {
     this.world.camera_x = -this.x + 100;
     this.getRealFrame();
   }
 
+  /**
+   * Manages character animation states based on current conditions
+   */
   handleAnimationState() {
     if (this.isDead()) {
       if (!this.isDeadAnimationComplete) {
@@ -183,6 +226,9 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Handles idle and walking animation states based on movement timing
+   */
   handleIdleOrWalking() {
     const now = Date.now();
     if (now - this.lastMoveTime > this.sleepTimeout) {
@@ -194,6 +240,10 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Starts a specific animation type with proper cleanup and state management
+   * @param {string} animationType - The type of animation to start (walking, jumping, hurt, idle, sleep, dead)
+   */
   startAnimation(animationType) {
     if (this.isFrozen || this.currentAnimation === animationType) return;
     this.stopSleepSoundIfNeeded();
@@ -202,17 +252,27 @@ class Character extends MovableObject {
     this.runAnimationByType(animationType);
   }
 
+  /**
+   * Stops sleep sound if currently playing
+   */
   stopSleepSoundIfNeeded() {
     if (this.currentAnimation === "sleep") {
       AudioHub.stopOne(AudioHub.SLEEP);
     }
   }
 
+  /**
+   * Clears all active animation timers and intervals
+   */
   clearAnimationTimers() {
     if (this.animationInterval) clearInterval(this.animationInterval);
     if (this.animationTimeout) clearTimeout(this.animationTimeout);
   }
 
+  /**
+   * Executes the appropriate animation method based on type
+   * @param {string} type - The animation type to run
+   */
   runAnimationByType(type) {
     switch (type) {
       case "walking":
@@ -240,12 +300,18 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Starts the walking animation loop
+   */
   walkingAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 1000 / 15);
   }
 
+  /**
+   * Starts the jumping animation sequence with frame-by-frame control
+   */
   jumpingAnimation() {
     clearInterval(this.animationInterval);
     let currentIndex = 0;
@@ -259,45 +325,59 @@ class Character extends MovableObject {
     playNextFrame();
   }
 
+  /**
+   * Starts the hurt animation loop
+   */
   hurtAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_HURT);
     }, 1000 / 15);
   }
 
+  /**
+   * Starts the idle animation loop
+   */
   idleAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_IDLE);
     }, 1000 / 10);
   }
 
+  /**
+   * Starts the sleep animation loop with audio
+   */
   sleepAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_SLEEP);
     }, 1000 / 5);
   }
 
+  /**
+   * Starts the death animation sequence and handles completion state
+   */
   deadAnimation() {
     this.animationInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_DEAD);
-      // One-time handling for dead animation completion
       setTimeout(() => {
         clearInterval(this.animationInterval);
-        this.img = this.deadImage; // Bild setzen
-        this.width = 50; //Maße des Bildes
-        this.height = 50; //Maße des Bildes
-        this.y = 370; //Höhe des Bildes auf Y-Achse
-        this.isDeadAnimationComplete = true; // Animation abgeschlossen
+        this.img = this.deadImage;
+        this.width = 50;
+        this.height = 50;
+        this.y = 370;
+        this.isDeadAnimationComplete = true;
       }, this.IMAGES_DEAD.length * 100);
     }, 1000 / 10);
   }
 
+  /**
+   * Moves the character to the right with sound and animation updates
+   */
   moveRight() {
     if (this.isDead()) return;
     this.x += this.speed;
-    this.facingRight = true; // Blickrichtung nach rechts
+    this.facingRight = true;
     this.otherDirection = false;
-    this.lastMoveTime = Date.now(); // Timer zurücksetzen
+    this.lastMoveTime = Date.now();
     this.isWalking = true;
 
     if (!this.walkSoundPlaying) {
@@ -306,12 +386,15 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Moves the character to the left with sound and animation updates
+   */
   moveLeft() {
     if (this.isDead()) return;
     this.x -= this.speed;
-    this.facingRight = false; // Blickrichtung nach links
+    this.facingRight = false;
     this.otherDirection = true;
-    this.lastMoveTime = Date.now(); // Timer zurücksetzen
+    this.lastMoveTime = Date.now();
     this.isWalking = true;
 
     if (!this.walkSoundPlaying) {
@@ -320,8 +403,11 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Initiates a jump and resets jump animation state
+   */
   jump() {
     super.jump();
-    this.jumpAnimationPlayed = false; //Reset beim Start eines Sprungs
+    this.jumpAnimationPlayed = false;
   }
 }

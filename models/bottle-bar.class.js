@@ -1,5 +1,14 @@
+/**
+ * Represents the bottle collection status bar in the game UI
+ * Extends StatusBar to display bottle collection progress with different colors
+ */
 class BottleBar extends StatusBar {
   percentage = 0;
+
+  /**
+   * Creates a new bottle status bar with predefined images and positioning
+   * Initializes with orange, green, and blue bottle bar images based on collection progress
+   */
   constructor() {
     super(
       [
