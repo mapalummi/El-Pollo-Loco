@@ -1,8 +1,12 @@
+/**
+ * Represents the coin collection status bar in the game UI with highlight animation
+ * Extends StatusBar to display coin collection progress with color changes and special effects
+ */
 class CoinBar extends StatusBar {
   percentage = 0;
   isHighlighted = false;
-  allCoinsCollected = false; // Neuer Status für "alle Münzen gesammelt"
-  highlightDuration = 3000; // Animation für 3 Sekunden
+  allCoinsCollected = false;
+  highlightDuration = 3000;
   highlightTimeout = null;
 
   HIGHLIGHT_IMAGES = [
@@ -15,6 +19,11 @@ class CoinBar extends StatusBar {
   highlightAnimationInterval = null;
   animationFrameTime = 150;
 
+  /**
+   * Creates a new coin status bar with predefined images and positioning
+   * Initializes with orange, green, and blue coin bar images based on collection progress
+   * Sets up highlight animation images for completion celebration
+   */
   constructor() {
     super(
       [
@@ -29,44 +38,40 @@ class CoinBar extends StatusBar {
       37
     );
     this.setPercentage(0);
-    this.loadImages(this.HIGHLIGHT_IMAGES); //NEU
+    this.loadImages(this.HIGHLIGHT_IMAGES);
   }
 
-
   /**
-   * Highlights the coin bar when all coins are collected
+   * Activates highlight animation when all coins are collected
+   * Prevents duplicate highlighting and sets automatic timeout for highlight removal
    */
   highlight() {
-    if (this.isHighlighted) return; // Already highlighted
+    if (this.isHighlighted) return;
 
     this.isHighlighted = true;
     this.allCoinsCollected = true;
 
-    // Start the animation
     this.startHighlightAnimation();
 
-    // Set a timeout to stop the animation after 3 seconds
     if (this.highlightTimeout) {
       clearTimeout(this.highlightTimeout);
     }
 
     this.highlightTimeout = setTimeout(() => {
-      // Stop just the animation, but keep track that all coins are collected
       this.stopHighlightAnimation();
       this.isHighlighted = false;
 
-      // But keep allCoinsCollected as true
       this.allCoinsCollected = true;
     }, this.highlightDuration);
   }
 
   /**
-   * Removes highlight from the coin bar
+   * Removes highlight animation and resets coin collection state
+   * Clears all highlight-related timers and intervals
    */
   removeHighlight() {
-    if (!this.isHighlighted && !this.allCoinsCollected) return; // Not highlighted
+    if (!this.isHighlighted && !this.allCoinsCollected) return;
 
-    // Clear any pending timeout
     if (this.highlightTimeout) {
       clearTimeout(this.highlightTimeout);
       this.highlightTimeout = null;
@@ -78,21 +83,20 @@ class CoinBar extends StatusBar {
   }
 
   /**
-   * Starts the highlight animation
+   * Starts the cycling highlight animation using color frames
+   * Clears any existing animation before starting new one
    */
   startHighlightAnimation() {
-    // Clear any existing animation
     this.stopHighlightAnimation();
 
-    // Start new animation interval
     this.highlightAnimationInterval = setInterval(() => {
-      // Cycle through frames (0, 1, 2, 0, 1, 2, ...)
       this.currentHighlightFrame = (this.currentHighlightFrame + 1) % this.HIGHLIGHT_IMAGES.length;
     }, this.animationFrameTime);
   }
 
   /**
-   * Stops the highlight animation
+   * Stops the highlight animation and resets frame counter
+   * Clears the animation interval to prevent memory leaks
    */
   stopHighlightAnimation() {
     if (this.highlightAnimationInterval) {
@@ -103,13 +107,12 @@ class CoinBar extends StatusBar {
   }
 
   /**
-   * Overrides the draw method to render the highlight animation
+   * Renders the coin bar and overlay highlight animation if active
+   * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for drawing
    */
   draw(ctx) {
-    // First draw the normal status bar
     super.draw(ctx);
 
-    // Then draw the highlight animation frame if highlighted
     if (this.isHighlighted) {
       const highlightImg = this.imageCache[this.HIGHLIGHT_IMAGES[this.currentHighlightFrame]];
       if (highlightImg) {
