@@ -222,7 +222,6 @@ footer {
 @media screen and (max-width: 991px) and (orientation: landscape) {
   body {
     overflow: hidden;
-    /* Background Image über den kompletten Viewport */
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
@@ -232,11 +231,16 @@ footer {
 
   .content-wrapper {
     height: 100vh;
-    justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 0;
     margin: 0;
     max-width: none;
     width: 100vw;
+    position: relative;
+    z-index: 1;
   }
 
   /* h1 {
@@ -258,12 +262,13 @@ footer {
 
   .game-container {
     width: 100vw;
-    height: 100vh; /* Komplette Viewport-Höhe */
+    height: 100vh;
     margin: 0;
     padding: 0;
-    position: absolute;
-    top: 30px;
-    left: 0;
+    /* position: absolute;
+    top: 0;
+    left: 0; */
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -271,20 +276,30 @@ footer {
 
   canvas {
     width: auto !important;
-    height: 100vh !important; /* Canvas füllt komplette Höhe */
-    /* max-width: none;
-    max-height: none;
-    object-fit: cover; */
-    max-width: 100vw; /* Verhindert horizontales Überlaufen */
+    height: 100vh !important;
+    max-width: 100vw;
     max-height: 100vh;
-    object-fit: contain; /* Behält Proportionen bei */
-    border: none; /* Entfernt den Border für echtes Fullscreen */
-    box-shadow: none; /* Entfernt den Schatten */
+    object-fit: contain;
+    border: none;
+    box-shadow: none;
+    position: relative;
+    top: 0;
+    left: 0;
   }
 
-  #win_overlay {
+  /* #win_overlay {
     width: 100vw;
-    height: 100vh; /* Overlay auch über komplette Höhe */
+    height: 100vh;
+  } */
+
+  #win_overlay {
+    position: absolute; /* Bleibt absolut, aber relativ zur game-container */
+    top: 0;
+    left: 0;
+    width: 100%; /* Geändert von 100vw zu 100% */
+    height: 100%; /* Geändert von 100vh zu 100% */
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
   }
 
   footer {
@@ -296,6 +311,7 @@ footer {
     position: fixed;
     top: 0;
     left: 0;
+    /* left: 140px; */
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -307,6 +323,10 @@ footer {
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+    max-width: none;
   }
 
   .game-explanation h2 {
