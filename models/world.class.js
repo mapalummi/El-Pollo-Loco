@@ -1,3 +1,8 @@
+/**
+ * Main game world class that manages all game entities, physics, rendering, and game state
+ * Coordinates interactions between character, enemies, collectibles, and UI elements
+ * Handles collision detection, game loop, camera system, and pause/resume functionality
+ */
 class World {
   character = new Character(this);
   level = level1;
@@ -9,7 +14,7 @@ class World {
   collectedCoins;
   percentageCoins;
   totalBottles;
-  collectedBottles; //auch als Limit für das Werfen!
+  collectedBottles;
   percentageBottles;
   bottleThrowCooldown = false;
   bottleThrowCooldownDuration = 500;
@@ -20,14 +25,19 @@ class World {
   endbossBar = new EndbossBar();
   throwableObjects = [];
 
+  /**
+   * Creates a new game world with canvas, keyboard input, and initializes all game systems
+   * @param {HTMLCanvasElement} canvas - The HTML5 canvas element for rendering
+   * @param {Keyboard} keyboard - The keyboard input handler instance
+   */
   constructor(canvas, keyboard) {
     this.levelWidth = 4314;
     this.clouds = this.createClouds();
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    this.totalCoins = this.level.coins.length; //Gesamtzahl Coins aus dem Level übernehmen
-    this.collectedCoins = 0; //Zähler eingesammelte Coins
+    this.totalCoins = this.level.coins.length;
+    this.collectedCoins = 0;
     this.totalBottles = this.level.bottles.length;
     this.collectedBottles = 0;
     this.endbossTriggered = false;
@@ -43,28 +53,43 @@ class World {
     }
   }
 
+  /**
+   * Creates and initializes cloud objects for atmospheric background effects
+   * @returns {Cloud[]} Array of cloud objects positioned across the level width
+   */
   createClouds() {
     const clouds = [];
     for (let i = 0; i < 10; i++) {
-      //Erstellt 10 Wolken
+      
       const cloud = new Cloud(this.levelWidth);
-      cloud.world = this; // Add this line to give each cloud a reference to the world
+      cloud.world = this;
       clouds.push(cloud);
     }
     return clouds;
   }
 
+  /**
+   * Starts the main game loop at 50ms intervals (20 FPS)
+   * Clears any existing intervals before starting new one
+   */
   run() {
     this.clearGameLoopInterval();
     this._gameLoopInterval = setInterval(() => this.gameLoop(), 50);
   }
 
+  /**
+   * Clears the game loop interval to prevent multiple running loops
+   */
   clearGameLoopInterval() {
     if (this._gameLoopInterval) {
       clearInterval(this._gameLoopInterval);
     }
   }
 
+  /**
+   * Main game loop that processes all game logic when not paused
+   * Handles collisions, enemy updates, endboss movement, and game events
+   */
   gameLoop() {
     if (this.paused) return;
     this.checkGameEvents();
@@ -72,6 +97,9 @@ class World {
     this.moveEndbossIfWalking();
   }
 
+  /**
+   * Checks all game events including collisions, throwing, endboss visibility, and win/lose conditions
+   */
   checkGameEvents() {
     this.checkCollisions();
     this.checkThrowObjects();
@@ -80,6 +108,10 @@ class World {
     this.checkGameStatus();
   }
 
+  /**
+   * Updates physics and behavior for all chicken enemies
+   * Calls update method for living Chicken and LittleChicken instances
+   */
   updateEnemies() {
     this.level.enemies.forEach(enemy => {
       if ((enemy instanceof Chicken || enemy instanceof LittleChicken) && !enemy.isDead && typeof enemy.update === "function") {
@@ -88,6 +120,9 @@ class World {
     });
   }
 
+  /**
+   * Moves the endboss towards the player if endboss is in walking state
+   */
   moveEndbossIfWalking() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     if (endboss && endboss.isWalking) {
@@ -95,6 +130,10 @@ class World {
     }
   }
 
+  /**
+   * Handles bottle throwing input and cooldown management
+   * Provides feedback when no bottles are available
+   */
   checkThrowObjects() {
     if (this.canThrowBottle()) {
       if (this.collectedBottles > 0) {
@@ -105,10 +144,18 @@ class World {
     }
   }
 
+  /**
+   * Determines if a bottle can be thrown based on input and cooldown state
+   * @returns {boolean} True if bottle throwing is allowed
+   */
   canThrowBottle() {
     return this.keyboard.B && !this.bottleThrowCooldown;
   }
 
+  /**
+   * Executes bottle throwing sequence with cooldown and inventory management
+   * Creates throwable object, updates UI, and manages throw cooldown
+   */
   throwBottle() {
     this.bottleThrowCooldown = true;
     this.createAndAddBottle();
@@ -119,6 +166,10 @@ class World {
     }, this.bottleThrowCooldownDuration);
   }
 
+  /**
+   * Creates a new throwable bottle object and adds it to the world
+   * Handles direction-based positioning and throw direction
+   */
   createAndAddBottle() {
     let offsetX = this.character.facingRight ? 50 : -10;
     let bottle = new ThrowableObject(this.character.x + offsetX, this.character.y + this.character.height / 2);
@@ -126,6 +177,10 @@ class World {
     this.throwableObjects.push(bottle);
   }
 
+  /**
+   * Checks all collision types: enemies, bottles vs enemies, and collectibles
+   * Skips collision checking if character is dead
+   */
   checkCollisions() {
     if (this.character.isDead()) return;
     this.checkEnemyCollisions();
@@ -135,6 +190,10 @@ class World {
     this.checkGameStatus();
   }
 
+  /**
+   * Handles collisions between character and enemies
+   * Differentiates between jump attacks on chickens and damage-dealing collisions
+   */
   checkEnemyCollisions() {
     this.level.enemies.forEach(enemy => {
       if (enemy.isDead) return;
@@ -148,25 +207,42 @@ class World {
     });
   }
 
+  /**
+   * Determines if player is performing a jump attack on a chicken
+   * @param {MovableObject} enemy - The enemy object to check
+   * @returns {boolean} True if player is jumping on chicken from above
+   */
   isPlayerJumpingOnChicken(enemy) {
     return (
       enemy instanceof Chicken && this.character.speedY < 0 && this.character.y + this.character.height <= enemy.y + enemy.height * 0.8
     );
   }
 
+  /**
+   * Handles successful chicken defeat by jump attack
+   * @param {Chicken|LittleChicken} enemy - The chicken enemy to defeat
+   */
   handleChickenDefeat(enemy) {
     enemy.die();
     enemy.isDead = true;
     AudioHub.playOne(AudioHub.CHICKEN);
-    this.character.speedY = 20; // Spieler springt nach dem Treffer nach oben
+    this.character.speedY = 20;
   }
 
+  /**
+   * Handles player taking damage from enemy collision
+   * Reduces health and updates health bar display
+   */
   handlePlayerHit() {
     this.character.hit();
     this.healthBar.setPercentage(this.character.energy);
-    console.log("Energieverlust");
+    // console.log("Energieverlust");
   }
 
+  /**
+   * Checks collisions between thrown bottles and enemies or ground
+   * Handles different damage amounts for different enemy types
+   */
   checkBottleEnemyCollisions() {
     this.throwableObjects.forEach(bottle => {
       if (bottle.hasHit) return;
@@ -189,6 +265,10 @@ class World {
     });
   }
 
+  /**
+   * Handles coin collection with collision detection and UI updates
+   * Removes collected coins from level and plays collection sound
+   */
   collectCoins() {
     this.collectedCoins = this.collectedCoins || 0;
     this.level.coins = this.level.coins.filter(coin => {
@@ -196,12 +276,16 @@ class World {
         this.collectedCoins++;
         updateCoinBar(this);
         AudioHub.playOne(AudioHub.COINS);
-        return false; // Entferne den Coin
+        return false;
       }
-      return true; // Behalte den Coin
+      return true;
     });
   }
 
+  /**
+   * Handles bottle collection with collision detection and UI updates
+   * Removes collected bottles from level and plays collection sound
+   */
   collectBottles() {
     this.collectedBottles = this.collectedBottles || 0;
     this.level.bottles = this.level.bottles.filter(bottle => {
@@ -209,12 +293,16 @@ class World {
         this.collectedBottles++;
         updateBottleBar(this);
         AudioHub.playOne(AudioHub.BOTTLES);
-        return false; // Entferne Bottle
+        return false;
       }
-      return true; // Behalte Bottle
+      return true;
     });
   }
 
+  /**
+   * Checks current game status and handles win/lose conditions
+   * Triggers appropriate game ending sequences
+   */
   checkGameStatus() {
     if (this.isGameLost()) {
       handleGameLost(this);
@@ -226,15 +314,27 @@ class World {
     }
   }
 
+  /**
+   * Determines if the game is won based on endboss defeat
+   * @returns {boolean} True if endboss is defeated and game hasn't ended yet
+   */
   isGameWon() {
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     return endboss && endboss.energy <= 0 && !this.gameEnded;
   }
 
+  /**
+   * Determines if the game is lost based on character death
+   * @returns {boolean} True if character energy is zero and game hasn't ended yet
+   */
   isGameLost() {
     return this.character.energy <= 0 && !this.gameEnded;
   }
 
+  /**
+   * Main rendering method that draws all game objects to canvas
+   * Handles camera updates, layer ordering, and animation frame scheduling
+   */
   draw() {
     if (this.paused) return;
     updateCoinBarPulse(this);
@@ -248,26 +348,43 @@ class World {
     this.scheduleNextFrame();
   }
 
+  /**
+   * Updates camera position to follow character with offset
+   * Prevents camera from going beyond level boundaries
+   */
   updateCamera() {
     const cameraOffset = 300;
     this.camera_x = -Math.max(0, this.character.x - cameraOffset);
   }
 
+  /**
+   * Clears the entire canvas for the next frame
+   */
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  /**
+   * Draws background objects with camera translation
+   */
   drawBackground() {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
   }
 
+  /**
+   * Draws cloud objects for atmospheric background effects
+   * Respects stopDrawingClouds flag for performance optimization
+   */
   drawClouds() {
     if (!this.stopDrawingClouds && this.clouds && this.clouds.length) {
       this.clouds.forEach(cloud => this.addToMap(cloud));
     }
   }
 
+  /**
+   * Draws collectible items (coins and bottles) with proper camera handling
+   */
   drawCollectibles() {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
@@ -275,6 +392,9 @@ class World {
     this.ctx.translate(this.camera_x, 0);
   }
 
+  /**
+   * Draws character, enemies, and throwable objects with camera translation
+   */
   drawCharacterAndEnemies() {
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
@@ -282,16 +402,27 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
   }
 
+  /**
+   * Schedules the next animation frame for continuous rendering
+   */
   scheduleNextFrame() {
     this.animationId = requestAnimationFrame(() => this.draw());
   }
 
+  /**
+   * Renders an array of objects to the canvas
+   * @param {DrawableObject[]} objects - Array of drawable objects to render
+   */
   addObjectsToMap(objects) {
     objects.forEach(o => {
       this.addToMap(o);
     });
   }
 
+  /**
+   * Renders a single movable object to the canvas with direction handling
+   * @param {MovableObject} mo - The movable object to render
+   */
   addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
@@ -304,6 +435,10 @@ class World {
     }
   }
 
+  /**
+   * Flips the canvas context for rendering objects facing left
+   * @param {MovableObject} mo - The object to flip
+   */
   flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
@@ -311,21 +446,33 @@ class World {
     mo.x = mo.x * -1;
   }
 
+  /**
+   * Restores canvas context after flipping an object
+   * @param {MovableObject} mo - The object to restore
+   */
   flipImageBack(mo) {
     mo.x = mo.x * -1;
     this.ctx.restore();
   }
 
+  /**
+   * Checks if character has reached the level end and triggers endboss entrance
+   * Manages endboss triggering state to prevent multiple activations
+   */
   checkLevelEndReached() {
     const endRegion = this.levelWidth - 800;
     const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
 
     if (this.character.x > endRegion && endboss && !this.endbossTriggered) {
       this.triggerEndbossEntrance(endboss);
-      this.endbossTriggered = true; // Flag to prevent repeated triggering
+      this.endbossTriggered = true;
     }
   }
 
+  /**
+   * Triggers the endboss entrance sequence with dramatic effects
+   * @param {Endboss} endboss - The endboss object to trigger
+   */
   triggerEndbossEntrance(endboss) {
     endboss.x = this.levelWidth + 200;
     endboss.otherDirection = false;
@@ -334,12 +481,16 @@ class World {
     endboss.startWalking();
     this.endbossBar.isVisible = true;
     AudioHub.playOne(AudioHub.ENDBOSS_SOUND);
-    // Unlock the character after a delay (e.g., 3 seconds)
+    
     setTimeout(() => {
       this.character.isLocked = false;
-    }, 3000); // Adjust time as needed
+    }, 3000);
   }
 
+  /**
+   * Manages endboss visibility and behavior based on player proximity
+   * Handles endboss bar display and AI behavior updates
+   */
   checkEndbossVisibility() {
     const endboss = getEndboss(this.level);
     if (!endboss) return;
@@ -358,20 +509,28 @@ class World {
     }
   }
 
+  /**
+   * Moves endboss towards player during walking phase
+   * @param {Endboss} endboss - The endboss object to move
+   */
   moveEndbossTowardsPlayer(endboss) {
     if (!endboss.isWalking) return;
     if (endboss.wasHitRecently) return;
     if (this.endbossTriggered && endboss.x > this.levelWidth - 100) {
-      endboss.x -= 10; // Speed beim rein kommen.
+      endboss.x -= 10;
       endboss.otherDirection = false;
       return;
     }
     const direction = this.character.x < endboss.x ? -1 : 1;
-    const speed = 20; //Speed Endboss im Spiel.
+    const speed = 20;
     endboss.otherDirection = direction > 0;
     endboss.x += direction * speed;
   }
 
+  /**
+   * Pauses the game by stopping animation frames and intervals
+   * Records pause start time for duration calculations
+   */
   pauseGame() {
     if (this.paused) return;
     this.paused = true;
@@ -383,6 +542,10 @@ class World {
     pauseIntervals(this);
   }
 
+  /**
+   * Resumes the game and adjusts timing-dependent values
+   * Compensates for pause duration in character movement timing
+   */
   resumeGame() {
     const pauseDuration = Date.now() - this._pauseStartTime;
 
