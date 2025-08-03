@@ -1,12 +1,17 @@
+/**
+ * Represents a small chicken enemy in the game that can walk, jump, and be defeated
+ * Extends MovableObject to inherit movement, collision detection, and animation functionality
+ * Features smaller size, faster movement, and random jumping behavior compared to regular chickens
+ */
 class LittleChicken extends MovableObject {
   x = 0;
   y = 390;
   width = 50;
   height = 60;
   isDead = false;
-  jumpProbability = 0.02; // 2% chance (more jumpy than regular chickens)
+  jumpProbability = 0.02;
   isJumping = false;
-  initialY = 390; // Adjust based on little chicken's height
+  initialY = 390;
   speedY = 0;
 
   offset = {
@@ -22,6 +27,10 @@ class LittleChicken extends MovableObject {
     "img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
   ];
 
+  /**
+   * Creates a new little chicken enemy with random position and speed
+   * Initializes walking animation and sets up random spawn location
+   */
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/1_w.png");
     this.loadImages(this.IMAGES_WALKING);
@@ -32,6 +41,10 @@ class LittleChicken extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Calculates and sets the real collision frame based on offset values
+   * Updates the collision boundaries (rX, rY, rW, rH) for accurate hit detection
+   */
   getRealFrame() {
     this.rX = this.x + (this.offset?.left || 0);
     this.rY = this.y + (this.offset?.top || 0);
@@ -39,6 +52,10 @@ class LittleChicken extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
+  /**
+   * Starts the animation loops for movement and walking sprites
+   * Sets up 60 FPS movement with collision frame updates and 100ms walking animation
+   */
   animate() {
     this.animationInterval = setInterval(() => {
       if (!this.isDead) {
@@ -54,6 +71,10 @@ class LittleChicken extends MovableObject {
     }, 100);
   }
 
+  /**
+   * Handles little chicken death by stopping movement, changing sprite, and removing from world
+   * Automatically removes the chicken from the enemies array after 2 seconds
+   */
   die() {
     this.isDead = true;
     this.loadImage("img/3_enemies_chicken/chicken_small/2_dead/dead.png");
@@ -61,15 +82,18 @@ class LittleChicken extends MovableObject {
     clearInterval(this.animationInterval);
     clearInterval(this.walkingAnimationInterval);
 
-    // Entfernt das LittleChicken nach 2 Sekunden
     setTimeout(() => {
       const index = world.level.enemies.indexOf(this);
       if (index > -1) {
-        world.level.enemies.splice(index, 1); // Entfernt LittleChicken aus dem Array
+        world.level.enemies.splice(index, 1);
       }
     }, 2000);
   }
 
+  /**
+   * Updates little chicken physics including jump mechanics and gravity simulation
+   * Handles random jump probability and applies gravity with ground collision detection
+   */
   update() {
     if (!this.isJumping && !this.isDead && Math.random() < this.jumpProbability) {
       this.jump();
@@ -87,9 +111,13 @@ class LittleChicken extends MovableObject {
     }
   }
 
+  /**
+   * Initiates a jump by setting jump state and initial upward velocity
+   * Records the initial Y position for accurate landing calculation
+   */
   jump() {
     this.isJumping = true;
-    this.speedY = 12; // Smaller jump for little chickens
+    this.speedY = 12; 
     if (!this.initialY || this.initialY > this.y) {
       this.initialY = this.y;
     }

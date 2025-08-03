@@ -1,4 +1,13 @@
+/**
+ * Manages keyboard and touch input for the game
+ * Tracks key states and provides unified input handling for desktop and mobile devices
+ */
 class Keyboard {
+  
+  /**
+   * Creates a new keyboard input manager and initializes all key states
+   * Sets up event listeners for keyboard input handling
+   */
   constructor() {
     this.RIGHT = false;
     this.LEFT = false;
@@ -10,11 +19,20 @@ class Keyboard {
     this.initEventListeners();
   }
 
+  /**
+   * Initializes keyboard event listeners for keydown and keyup events
+   * Sets up window-level event handlers for global key detection
+   */
   initEventListeners() {
     window.addEventListener("keydown", e => this.handleKeyDown(e));
     window.addEventListener("keyup", e => this.handleKeyUp(e));
   }
 
+  /**
+   * Handles keydown events and updates corresponding key states
+   * Respects game pause state and maps keys to movement/action flags
+   * @param {KeyboardEvent} e - The keyboard event object containing key information
+   */
   handleKeyDown(e) {
     if (window.gamePaused) return;
 
@@ -40,6 +58,11 @@ class Keyboard {
     }
   }
 
+  /**
+   * Handles keyup events and resets corresponding key states
+   * Respects game pause state and ensures proper key release detection
+   * @param {KeyboardEvent} e - The keyboard event object containing key information
+   */
   handleKeyUp(e) {
     if (window.gamePaused) return;
 
@@ -65,6 +88,11 @@ class Keyboard {
     }
   }
 
+  /**
+   * Initializes touch event listeners for mobile control buttons
+   * Maps touch events to corresponding keyboard states for unified input handling
+   * Prevents default touch behavior to avoid scrolling and other mobile browser actions
+   */
   initMobileButtons() {
     document.getElementById("moveLeftButton").addEventListener("touchstart", e => {
       e.preventDefault();

@@ -1,4 +1,15 @@
+/**
+ * Represents the endboss health status bar in the game UI
+ * Extends StatusBar to display endboss health with color progression from orange to blue
+ * Initially hidden and becomes visible when the endboss encounter is triggered
+ */
 class EndbossBar extends StatusBar {
+  
+  /**
+   * Creates a new endboss status bar with predefined images and positioning
+   * Initializes with orange, green, and blue health bar images based on health percentage
+   * Sets initial state to hidden and full health (100%)
+   */
   constructor() {
     super(
       [

@@ -1,3 +1,8 @@
+/**
+ * Represents the final boss enemy in the game
+ * Extends MovableObject to inherit movement, collision detection, and animation functionality
+ * Features complex AI behavior including walking, alerting, attacking with jump mechanics, and death sequences
+ */
 class Endboss extends MovableObject {
   x = 0;
   y = -40;
@@ -65,6 +70,10 @@ class Endboss extends MovableObject {
   JUMP_DURATION = 1000;
   JUMP_SPEED = 15;
 
+  /**
+   * Creates a new endboss instance and initializes all animations and AI behavior
+   * @param {World} world - The game world object that contains this endboss
+   */
   constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
@@ -74,16 +83,20 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.world = world;
 
-    // Positioniere den Endboss am rechten Rand des Levels
+   
     if (world && world.level && world.level.level_end_x) {
       this.x = world.level.level_end_x - 100;
     } else {
-      this.x = 4500; // Fallback
+      this.x = 4500;
     }
 
     this.animate();
   }
 
+  /**
+   * Calculates and sets the real collision frame based on offset values
+   * Updates the collision boundaries (rX, rY, rW, rH) for accurate hit detection
+   */
   getRealFrame() {
     this.rX = this.x + (this.offset?.left || 0);
     this.rY = this.y + (this.offset?.top || 0);
@@ -91,24 +104,39 @@ class Endboss extends MovableObject {
     this.rH = this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0);
   }
 
+  /**
+   * Plays the walking animation sequence for the endboss
+   */
   endbossWalkAnimation() {
     this.playAnimation(this.IMAGES_WALKING);
   }
 
+  /**
+   * Plays the hurt animation sequence for the endboss
+   */
   endbossHurtAnimation() {
     this.playAnimation(this.IMAGES_HURT);
   }
 
+  /**
+   * Plays the alert animation sequence for the endboss
+   */
   endbossAlertAnimation() {
     this.playAnimation(this.IMAGES_ALERT);
   }
 
+  /**
+   * Plays the attack animation sequence for the endboss
+   */
   endbossAttackAnimation() {
     this.playAnimation(this.IMAGES_ATTACK);
   }
 
+  /**
+   * Manages endboss animation states based on current conditions and behavior
+   * Runs at 100ms intervals and prioritizes animations by state hierarchy
+   */
   animate() {
-    // Animation-Intervall speichern, damit es nicht gelöscht werden kann
     this.animationInterval = setInterval(() => {
       this.getRealFrame();
 
@@ -133,6 +161,10 @@ class Endboss extends MovableObject {
     }, 100);
   }
 
+  /**
+   * Initiates walking behavior if conditions allow
+   * Sets walking state and clears other conflicting states
+   */
   startWalking() {
     if (this.wasHitRecently || this.isDead || this.isHurt) {
       return;
@@ -142,6 +174,10 @@ class Endboss extends MovableObject {
     this.isAttacking = false;
   }
 
+  /**
+   * Initiates alert behavior with sound effects
+   * Sets alert state and plays endboss alert sound
+   */
   startAlert() {
     this.isAlert = true;
     this.isAttacking = false;
@@ -150,6 +186,10 @@ class Endboss extends MovableObject {
     AudioHub.playOne(AudioHub.ENDBOSS);
   }
 
+  /**
+   * Initiates attack sequence with jump mechanics if conditions allow
+   * Manages attack cooldown and coordinates jump attack behavior
+   */
   startAttacking() {
     if (this.canAttack()) {
       this.prepareAttack();
@@ -159,10 +199,18 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Checks if the endboss can perform an attack
+   * @returns {boolean} True if attack is allowed (not dead, hurt, or on cooldown)
+   */
   canAttack() {
     return !this.isDead && !this.isHurt && !this.isAttackOnCooldown;
   }
 
+  /**
+   * Prepares the endboss for attack by setting states and playing sound
+   * Sets attack cooldown and clears conflicting behavior states
+   */
   prepareAttack() {
     this.isAttacking = true;
     this.isWalking = false;
@@ -171,6 +219,10 @@ class Endboss extends MovableObject {
     this.isAttackOnCooldown = true;
   }
 
+  /**
+   * Starts the jump attack sequence with physics simulation
+   * @returns {Object} Object containing originalY position and jumpInterval reference
+   */
   startJump() {
     const originalY = this.y;
     const direction = this.getJumpDirection();
@@ -185,6 +237,10 @@ class Endboss extends MovableObject {
     return { originalY, jumpInterval };
   }
 
+  /**
+   * Checks for collision with player during jump attack
+   * @returns {boolean} True if player was hit during jump
+   */
   checkJumpHitOnPlayer() {
     if (this.world && this.world.character && this.isColliding(this.world.character) && !this.world.character.isDead()) {
       this.world.character.hit();
@@ -194,6 +250,10 @@ class Endboss extends MovableObject {
     return false;
   }
 
+  /**
+   * Determines jump direction based on player position
+   * @returns {number} Direction multiplier (1 for right, -1 for left)
+   */
   getJumpDirection() {
     if (this.world && this.world.character) {
       const dir = this.world.character.x > this.x ? 1 : -1;
@@ -203,6 +263,13 @@ class Endboss extends MovableObject {
     return 1;
   }
 
+  /**
+   * Updates endboss position during jump attack with parabolic trajectory
+   * @param {number} jumpStartTime - Timestamp when jump started
+   * @param {number} originalY - Original Y position before jump
+   * @param {number} direction - Direction of jump (-1 or 1)
+   * @param {number} jumpInterval - Interval reference for the jump animation
+   */
   updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval) {
     const elapsedTime = Date.now() - jumpStartTime;
     const jumpProgress = elapsedTime / this.JUMP_DURATION;
@@ -214,6 +281,11 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Completes the attack sequence and resets position
+   * @param {number} jumpInterval - Interval reference to clear
+   * @param {number} originalY - Original Y position to restore
+   */
   finishAttack(jumpInterval, originalY) {
     setTimeout(() => {
       clearInterval(jumpInterval);
@@ -225,6 +297,10 @@ class Endboss extends MovableObject {
     }, this.IMAGES_ATTACK.length * 100);
   }
 
+  /**
+   * Evaluates and sets appropriate behavior after attack completion
+   * Uses distance-based AI decision making
+   */
   evaluateBehaviourAfterAttack() {
     if (this.world) {
       const distanceToPlayer = Math.abs(this.world.character.x - this.x);
@@ -234,6 +310,10 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Sets attack cooldown timer to prevent spam attacks
+   * Re-evaluates behavior when cooldown expires
+   */
   setAttackCooldown() {
     setTimeout(() => {
       this.isAttackOnCooldown = false;
@@ -244,6 +324,10 @@ class Endboss extends MovableObject {
     }, this.attackCooldownDuration);
   }
 
+  /**
+   * Handles damage dealt to the endboss
+   * @param {number} damage - Amount of damage to deal
+   */
   hit(damage) {
     this.reduceEnergy(damage);
     this.setHurtState();
@@ -251,12 +335,19 @@ class Endboss extends MovableObject {
     this.checkDeath();
   }
 
+  /**
+   * Reduces endboss energy and updates hit timestamp
+   * @param {number} damage - Amount of damage to subtract from energy
+   */
   reduceEnergy(damage) {
     this.energy -= damage;
     if (this.energy < 0) this.energy = 0;
     this.lastHit = Date.now();
   }
 
+  /**
+   * Sets hurt state and clears conflicting behavior states
+   */
   setHurtState() {
     this.isHurt = true;
     this.isAttacking = false;
@@ -264,16 +355,27 @@ class Endboss extends MovableObject {
     this.wasHitRecently = true;
   }
 
+  /**
+   * Manages all timers related to being hit
+   * Coordinates hurt animation and hit cooldown timers
+   */
   handleHitTimers() {
     this.clearHitCooldownTimer();
     this.setHurtAnimationTimer();
     this.setHitCooldownTimer();
   }
 
+  /**
+   * Clears existing hit cooldown timer to prevent conflicts
+   */
   clearHitCooldownTimer() {
     if (this.hitCooldownTimer) clearTimeout(this.hitCooldownTimer);
   }
 
+  /**
+   * Sets timer for hurt animation duration
+   * Transitions to alert state after hurt animation completes
+   */
   setHurtAnimationTimer() {
     setTimeout(() => {
       this.isHurt = false;
@@ -281,6 +383,10 @@ class Endboss extends MovableObject {
     }, this.IMAGES_HURT.length * 100);
   }
 
+  /**
+   * Sets timer for hit cooldown period
+   * Re-evaluates behavior when cooldown expires
+   */
   setHitCooldownTimer() {
     this.hitCooldownTimer = setTimeout(() => {
       this.wasHitRecently = false;
@@ -288,6 +394,10 @@ class Endboss extends MovableObject {
     }, this.hitAlertDuration);
   }
 
+  /**
+   * Re-evaluates endboss behavior based on current game state
+   * Uses distance-based AI decision making if world exists
+   */
   reEvaluateBehaviour() {
     if (this.world && !this.isDead) {
       const distanceToPlayer = Math.abs(this.world.character.x - this.x);
@@ -295,10 +405,18 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Checks if endboss should die based on energy level
+   * Triggers death sequence if energy reaches zero
+   */
   checkDeath() {
     if (this.energy === 0) this.die();
   }
 
+  /**
+   * Handles endboss death sequence with animation timing
+   * Sets death state and manages death animation completion
+   */
   die() {
     this.isDead = true;
     this.isHurt = false;
