@@ -16,9 +16,9 @@ class LittleChicken extends MovableObject {
 
   offset = {
     top: 5,
-    right: 5,
+    right: 1,
     bottom: 5,
-    left: 5,
+    left: 1,
   };
 
   IMAGES_WALKING = [
