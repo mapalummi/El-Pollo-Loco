@@ -380,6 +380,8 @@ class Character extends MovableObject {
     this.lastMoveTime = Date.now();
     this.isWalking = true;
 
+    this.startAnimation("walking");
+
     if (!this.walkSoundPlaying) {
       AudioHub.playWhileKeyPressed(AudioHub.WALK);
       this.walkSoundPlaying = true;
@@ -396,6 +398,8 @@ class Character extends MovableObject {
     this.otherDirection = true;
     this.lastMoveTime = Date.now();
     this.isWalking = true;
+
+    this.startAnimation("walking");
 
     if (!this.walkSoundPlaying) {
       AudioHub.playWhileKeyPressed(AudioHub.WALK);

@@ -133,40 +133,84 @@ class Endboss extends MovableObject {
   }
 
   /**
-   * Manages endboss animation states based on current conditions and behavior
-   * Runs at 100ms intervals and prioritizes animations by state hierarchy
+   * Sets up the main animation interval for the endboss
+   * Creates a timer that regularly updates the endboss's visual appearance
    */
   animate() {
-    this.animationInterval = setInterval(() => {
-      // Add check for paused state
-      if (this.world && this.world.paused) return;
+    this.animationInterval = this.trackTimer(
+      setInterval(() => {
+        if (this.shouldStopAnimation()) return;
 
-      if (this.world && this.world.gameEnded && this.isDead && this.isDeathAnimationComplete) {
-        clearInterval(this.animationInterval);
-        return;
-      }
+        this.getRealFrame();
+        this.updateAnimation();
+      }, 100)
+    );
+  }
 
-      this.getRealFrame();
+  /**
+   * Checks if animation should stop due to game state or pause
+   * @returns {boolean} True if animation should stop or pause
+   */
+  shouldStopAnimation() {
+    if (this.world && this.world.paused) return true;
 
-      if (this.isDead) {
-        if (!this.isDeathAnimationComplete) {
-          this.playAnimation(this.IMAGES_DEAD);
-        }
-      } else if (this.isHurt) {
-        this.endbossHurtAnimation();
-      } else if (this.wasHitRecently) {
-        this.isAlert = true;
-        this.isAttacking = false;
-        this.isWalking = false;
-        this.endbossAlertAnimation();
-      } else if (this.isAttacking) {
-        this.endbossAttackAnimation();
-      } else if (this.isWalking) {
-        this.endbossWalkAnimation();
-      } else if (this.isAlert) {
-        this.endbossAlertAnimation();
-      }
-    }, 100);
+    if (this.world && this.world.gameEnded && this.isDead && this.isDeathAnimationComplete) {
+      clearInterval(this.animationInterval);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Updates the endboss animation based on current state
+   * Chooses appropriate animation sequence based on priority
+   */
+  updateAnimation() {
+    if (this.isDead) {
+      this.updateDeadAnimation();
+    } else if (this.isHurt) {
+      this.endbossHurtAnimation();
+    } else if (this.wasHitRecently) {
+      this.updateAlertStateFromHit();
+    } else {
+      this.updateStateAnimation();
+    }
+  }
+
+  /**
+   * Updates animation when endboss is dead
+   * Only plays death animation if not already completed
+   */
+  updateDeadAnimation() {
+    if (!this.isDeathAnimationComplete) {
+      this.playAnimation(this.IMAGES_DEAD);
+    }
+  }
+
+  /**
+   * Updates endboss state when recently hit
+   * Sets alert mode and disables other states
+   */
+  updateAlertStateFromHit() {
+    this.isAlert = true;
+    this.isAttacking = false;
+    this.isWalking = false;
+    this.endbossAlertAnimation();
+  }
+
+  /**
+   * Updates animation based on current behavior state
+   * Follows priority: attacking > walking > alert
+   */
+  updateStateAnimation() {
+    if (this.isAttacking) {
+      this.endbossAttackAnimation();
+    } else if (this.isWalking) {
+      this.endbossWalkAnimation();
+    } else if (this.isAlert) {
+      this.endbossAlertAnimation();
+    }
   }
 
   // Modify setTimeout and setInterval calls to track timers
