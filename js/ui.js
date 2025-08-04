@@ -176,11 +176,13 @@ function hideStatusBars() {
  * @param {boolean} hasWon - Whether the player has won the game
  */
 function prepareGameOverUI(hasWon) {
+  AudioHub.stopAll(); // NEU
+
   toggleGameoverButtons(true);
   showDialog(hasWon);
-  AudioHub.stopAll();
   toggleMobileControls(false);
   document.getElementById("game-controls").classList.add("d_none");
+
   if (!gameOverSoundPlayed) gameOverSoundPlayed = true;
 }
 
@@ -213,6 +215,8 @@ function showGameOverScreen(hasWon) {
   if (gameOver) return;
   gameOver = true;
 
+  AudioHub.stopAll(); // NEU
+
   prepareGameOverUI(hasWon);
   handleGameOverAudio(hasWon);
   freezeCharacterIfWon(hasWon);
@@ -225,6 +229,7 @@ function showGameOverScreen(hasWon) {
  */
 function handleGameWon(world) {
   world.gameEnded = true;
+
   const endboss = world.level.enemies.find(enemy => enemy instanceof Endboss);
   const animationDuration = endboss.IMAGES_DEAD.length * 200;
   setTimeout(() => {
@@ -238,6 +243,9 @@ function handleGameWon(world) {
  */
 function handleGameLost(world) {
   world.gameEnded = true;
+
+  // AudioHub.stopAll(); // NEU
+
   const animationDuration = world.character.IMAGES_DEAD.length * 100;
   setTimeout(() => {
     showGameOverScreen(false);

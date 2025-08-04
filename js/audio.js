@@ -7,11 +7,11 @@ function toggleSound() {
   let isMuted = soundIcon.getAttribute("data-muted") === "true";
 
   if (isMuted) {
-    soundIcon.src = "icons/unmuted.png";
+    soundIcon.src = "ui-icons/unmuted.png";
     soundIcon.setAttribute("data-muted", "false");
     AudioHub.unmuteAll();
   } else {
-    soundIcon.src = "icons/muted.png";
+    soundIcon.src = "ui-icons/muted.png";
     soundIcon.setAttribute("data-muted", "true");
     AudioHub.muteAll();
   }

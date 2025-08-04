@@ -60,7 +60,6 @@ class World {
   createClouds() {
     const clouds = [];
     for (let i = 0; i < 10; i++) {
-      
       const cloud = new Cloud(this.levelWidth);
       cloud.world = this;
       clouds.push(cloud);
@@ -481,7 +480,7 @@ class World {
     endboss.startWalking();
     this.endbossBar.isVisible = true;
     AudioHub.playOne(AudioHub.ENDBOSS_SOUND);
-    
+
     setTimeout(() => {
       this.character.isLocked = false;
     }, 3000);

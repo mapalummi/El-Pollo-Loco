@@ -275,9 +275,9 @@ function restoreCanvasStyles(canvas, gameContainer) {
 function updateFullscreenIcon(isFullscreen) {
   const fullscreenIcon = document.getElementById("fullscreenIcon");
   if (isFullscreen) {
-    fullscreenIcon.src = "icons/fullscreen.png"; // Icon für Fullscreen verlassen
+    fullscreenIcon.src = "ui-icons/fullscreen.png"; // Icon für Fullscreen verlassen
   } else {
-    fullscreenIcon.src = "icons/fullscreen.png"; // Icon für Fullscreen aktivieren
+    fullscreenIcon.src = "ui-icons/fullscreen.png"; // Icon für Fullscreen aktivieren
   }
 }
 

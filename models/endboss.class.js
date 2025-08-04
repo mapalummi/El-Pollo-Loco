@@ -83,13 +83,11 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.world = world;
 
-   
     if (world && world.level && world.level.level_end_x) {
       this.x = world.level.level_end_x - 100;
     } else {
       this.x = 4500;
     }
-
     this.animate();
   }
 
@@ -138,6 +136,11 @@ class Endboss extends MovableObject {
    */
   animate() {
     this.animationInterval = setInterval(() => {
+      if (this.world && this.world.gameEnded && this.isDead && this.isDeathAnimationComplete) {
+        clearInterval(this.animationInterval);
+        return;
+      }
+
       this.getRealFrame();
 
       if (this.isDead) {
@@ -183,7 +186,10 @@ class Endboss extends MovableObject {
     this.isAttacking = false;
     this.isWalking = false;
     this.playAnimation(this.IMAGES_ALERT);
-    AudioHub.playOne(AudioHub.ENDBOSS);
+
+    if (!this.world || !this.world.gameEnded) {
+      AudioHub.playOne(AudioHub.ENDBOSS);
+    }
   }
 
   /**
@@ -215,7 +221,11 @@ class Endboss extends MovableObject {
     this.isAttacking = true;
     this.isWalking = false;
     this.isAlert = false;
-    AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
+
+    if (!this.world || !this.world.gameEnded) {
+      AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
+    }
+
     this.isAttackOnCooldown = true;
   }
 
