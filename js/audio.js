@@ -49,10 +49,10 @@ function stopAllAudioAndDialog() {
 function syncSoundIcon() {
   const soundIcon = document.getElementById("soundIcon");
   if (AudioHub.isMuted) {
-    soundIcon.src = "icons/muted.png";
+    soundIcon.src = "ui-icons/muted.png";
     soundIcon.setAttribute("data-muted", "true");
   } else {
-    soundIcon.src = "icons/unmuted.png";
+    soundIcon.src = "ui-icons/unmuted.png";
     soundIcon.setAttribute("data-muted", "false");
   }
 }

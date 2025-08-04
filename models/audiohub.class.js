@@ -25,8 +25,8 @@ class AudioHub {
 
   static soundVolumes = {
     MENU_AUDIO: 0.3,
-    GAMEAUDIO: 0.5,
-    SLEEP: 0.1,
+    GAMEAUDIO: 0.2,
+    SLEEP: 0.03,
     WALK: 0.1,
     JUMP: 0.3,
     HURT: 0.25,
