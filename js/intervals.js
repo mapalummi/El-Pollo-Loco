@@ -66,23 +66,6 @@ function pauseCharacterAnimation(world) {
  * Pauses all enemy animations and stores their states
  * @param {World} world - The game world object containing enemies
  */
-// function pauseEnemyAnimations(world) {
-//   world.level.enemies.forEach((enemy, index) => {
-//     if (enemy.animationInterval) {
-//       clearInterval(enemy.animationInterval);
-//     }
-//     if (enemy.walkingAnimationInterval) {
-//       clearInterval(enemy.walkingAnimationInterval);
-//     }
-//     world._storedIntervals.push({
-//       type: "enemy",
-//       index: index,
-//       object: enemy,
-//     });
-//   });
-// }
-
-
 function pauseEnemyAnimations(world) {
   world.level.enemies.forEach((enemy, index) => {
     if (enemy.animationInterval) {
@@ -91,10 +74,8 @@ function pauseEnemyAnimations(world) {
     if (enemy.walkingAnimationInterval) {
       clearInterval(enemy.walkingAnimationInterval);
     }
-    
-    // Special handling for endboss
+
     if (enemy instanceof Endboss) {
-      // Store endboss state
       const endbossState = {
         type: "endboss",
         index: index,
@@ -105,19 +86,17 @@ function pauseEnemyAnimations(world) {
         isWalking: enemy.isWalking,
         isAlert: enemy.isAlert,
         isDead: enemy.isDead,
-        // Store time remaining on cooldowns
-        hitCooldownRemaining: enemy.hitCooldownTimer ? 
-          Math.max(0, enemy.hitAlertDuration - (Date.now() - enemy.lastHit)) : 0,
-        attackCooldownRemaining: enemy.isAttackOnCooldown ? 
-          Math.max(0, enemy.attackCooldownDuration - (Date.now() - enemy._lastAttackTime)) : 0
+        hitCooldownRemaining: enemy.hitCooldownTimer ? Math.max(0, enemy.hitAlertDuration - (Date.now() - enemy.lastHit)) : 0,
+        attackCooldownRemaining: enemy.isAttackOnCooldown
+          ? Math.max(0, enemy.attackCooldownDuration - (Date.now() - enemy._lastAttackTime))
+          : 0,
       };
-      
-      // Clear all timers
+
       enemy.clearAllTimers();
-      
+
       world._storedIntervals.push(endbossState);
     }
-    
+
     world._storedIntervals.push({
       type: "enemy",
       index: index,
@@ -125,10 +104,6 @@ function pauseEnemyAnimations(world) {
     });
   });
 }
-
-
-
-
 
 /**
  * Pauses all cloud animations and stores their states
@@ -183,43 +158,46 @@ function resumeIntervalitem(world, item) {
   }
 }
 
-
 function resumeEndbossState(world, item) {
   const endboss = world.level.enemies[item.index];
   if (!endboss || !(endboss instanceof Endboss)) return;
-  
-  // Restore state properties
+
   endboss.wasHitRecently = item.wasHitRecently;
   endboss.isAttackOnCooldown = item.isAttackOnCooldown;
   endboss.isHurt = item.isHurt;
   endboss.isAttacking = item.isAttacking;
   endboss.isWalking = item.isWalking;
   endboss.isAlert = item.isAlert;
-  
-  // Restore timers if needed
-  if (item.hitCooldownRemaining > 0 && item.wasHitRecently) {
-    endboss.hitCooldownTimer = endboss.trackTimer(setTimeout(() => {
-      endboss.wasHitRecently = false;
-      endboss.reEvaluateBehaviour();
-    }, item.hitCooldownRemaining));
-  }
-  
-  if (item.attackCooldownRemaining > 0 && item.isAttackOnCooldown) {
-    endboss.trackTimer(setTimeout(() => {
-      endboss.isAttackOnCooldown = false;
-      if (endboss.world && endboss.world.character) {
-        const distance = Math.abs(endboss.world.character.x - endboss.x);
-        updateEndbossBehavior(endboss, distance);
-      }
-    }, item.attackCooldownRemaining));
+
+  if (endboss.isAlert) {
+    endboss._lastAlertTime = Date.now();
   }
 
-  // Restore animation
+  if (item.hitCooldownRemaining > 0 && item.wasHitRecently) {
+    endboss.hitCooldownTimer = endboss.trackTimer(
+      setTimeout(() => {
+        endboss.wasHitRecently = false;
+        endboss.reEvaluateBehaviour();
+      }, item.hitCooldownRemaining)
+    );
+  }
+
+  if (item.attackCooldownRemaining > 0 && item.isAttackOnCooldown) {
+    endboss.trackTimer(
+      setTimeout(() => {
+        endboss.isAttackOnCooldown = false;
+        if (endboss.world && endboss.world.character) {
+          const distance = Math.abs(endboss.world.character.x - endboss.x);
+          updateEndbossBehavior(endboss, distance);
+        }
+      }, item.attackCooldownRemaining)
+    );
+  }
+
   if (typeof endboss.animate === "function") {
     endboss.animate();
   }
 }
-
 
 /**
  * Resumes character animation from stored state

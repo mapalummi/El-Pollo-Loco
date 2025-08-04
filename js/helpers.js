@@ -89,7 +89,10 @@ function shouldShowEndbossBar(distanceToEndboss, endbossTriggered) {
  * @param {Endboss} endboss - The endboss enemy object
  */
 function triggerEndbossAlertIfNeeded(endboss) {
-  if (!endboss.isAlert && !endboss.isAttacking && !endboss.isWalking && !endboss.isDead) {
+  const alertCooldown = 3000;
+  const canAlert = !endboss._lastAlertTime || Date.now() - endboss._lastAlertTime > alertCooldown;
+
+  if (canAlert && !endboss.isAlert && !endboss.isAttacking && !endboss.isWalking && !endboss.isDead) {
     endboss.startAlert();
   }
 }
