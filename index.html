@@ -4,10 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>El Pollo Loco</title>
-    <link rel="shortcut icon" href="img/favicon/favicon-2.png"image/x-icon">
+    <link rel="shortcut icon" href="img/favicon/favicon-2.png" type="image/x-icon" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="components.css">
-    <link rel="stylesheet" href="buttons.css">
+    <link rel="stylesheet" href="components.css" />
+    <link rel="stylesheet" href="buttons.css" />
+
+    <!-- Kritische Ressourcen preloaden -->
+    <link rel="preload" href="img/9_intro_outro_screens/start/startscreen_1.png" as="image" />
+    <link rel="preload" href="fonts/TACOBOX_.TTF" as="font" type="font/ttf" crossorigin />
 
     <script>
       console.log("%cHey Entwickler! 👋", "color: red; font-size: 20px; font-weight: bold;");
@@ -45,139 +49,151 @@
   </head>
 
   <body onload="init()">
+    <div class="content-wrapper">
+      <h1>¡Ay, mi pollo!</h1>
 
-  <div class="content-wrapper">
-    <h1>¡Ay, mi pollo!</h1>
+      <div class="game-container">
+        <canvas id="canvas" width="720" height="480"></canvas>
+        <div id="win_overlay" class="d_none">
+          <img id="game_over_image" src="" alt="Game Over" />
+        </div>
 
-    <div class="game-container">
-      <canvas id="canvas" width="720" height="480"></canvas>
-      <div id="win_overlay" class="d_none">
-        <img id="game_over_image" src="" alt="Game Over" />
+        <!-- Mobile-Buttons -->
+        <div id="mobile-buttons" class="d_none">
+          <div class="button-group left-buttons">
+            <button id="moveLeftButton" class="mobile-button">
+              <img src="icons/right_left.png" alt="" />
+            </button>
+            <button id="moveRightButton" class="mobile-button">
+              <img src="icons/right_left.png" alt="" />
+            </button>
+          </div>
+          <div class="button-group right-buttons">
+            <button id="throwButton" class="mobile-button">
+              <img src="icons/throw.png" alt="" />
+            </button>
+            <button id="jumpButton" class="mobile-button">
+              <img src="icons/jump.png" alt="" />
+            </button>
+          </div>
+        </div>
+        <!-- Mobile-Buttons -->
       </div>
 
-      <!-- Mobile-Buttons -->
-      <div id="mobile-buttons" class="d_none">
-        <div class="button-group left-buttons">
-          <button id="moveLeftButton" class="mobile-button">
-            <img src="icons/right_left.png" alt="" />
-          </button>
-          <button id="moveRightButton" class="mobile-button">
-            <img src="icons/right_left.png" alt="" />
-          </button>
-        </div>
-        <div class="button-group right-buttons">
-          <button id="throwButton" class="mobile-button">
-            <img src="icons/throw.png" alt="" />
-          </button>
-          <button id="jumpButton" class="mobile-button">
-            <img src="icons/jump.png" alt="" />
-          </button>
+      <!-- Control buttons in top-right corner -->
+      <div id="corner-buttons" class="corner-btn">
+        <button id="pausePlayButton" class="icon-button" onclick="togglePausePlay()">
+          <img src="icons/pause.png" alt="Pause" id="pausePlayIcon" />
+        </button>
+        <button id="soundButton" class="icon-button" onclick="toggleSound()">
+          <img src="icons/unmuted.png" alt="Sound" id="soundIcon" data-muted="false" />
+        </button>
+        <button id="fullscreenButton" class="icon-button" onclick="toggleFullscreen()">
+          <img src="icons/fullscreen.png" alt="Fullscreen" id="fullscreenIcon" />
+        </button>
+      </div>
+      <!-- Control buttons in top-right corner -->
+
+      <!-- Gameover Buttons -->
+      <div class="gameover-buttons">
+        <button id="homeButton" class="home-btn" style="display: none" onclick="mainWindow()">Home</button>
+        <button id="restartButton" class="restart-btn" style="display: none" onclick="restartGame()">Neues Spiel</button>
+      </div>
+      <!-- Gameover Buttons -->
+
+      <!-- Mobile Gameover Buttons -->
+      <div class="mobile-gameover-buttons" style="display: none">
+        <button id="mobileHomeButton" class="mobile-home-btn" onclick="mainWindow()">🏠 Home</button>
+        <button id="mobileRestartButton" class="mobile-restart-btn" onclick="restartGame()">🔄 Neues Spiel</button>
+      </div>
+      <!-- Mobile Gameover Buttons -->
+
+      <!-- Game Explanation Section -->
+      <div id="game-explanation" class="game-explanation">
+        <h2>Hilf Pepe Peligroso, das verrückte Huhn zu besiegen!</h2>
+        <p>
+          Sammle Münzen und Flaschen auf deinem Weg durch das Level. Die Hühner können mit einem Sprung oder per Flaschenwurf besiegt
+          werden, die Küken können nur mit den Flaschen abgeworfen werden. <br /><br />
+          Besiege das verrückte Endboss-Huhn um das Spiel zu gewinnen!
+        </p>
+        <button id="startButton" class="start-btn" onclick="startGame()">Start Game</button>
+      </div>
+      <!-- Game Explanation Section -->
+
+      <!-- Mobile-Only Game Explanation -->
+      <div id="mobile-game-explanation" class="mobile-game-overlay">
+        <h2>¡El Pollo Loco!</h2>
+        <p>
+          Hilf Pepe Peligroso das verrückte Huhn zu besiegen! <br />
+          Sammle Münzen und Flaschen. <br />
+          Besiege Hühner durch Springen oder Flaschen werfen.
+        </p>
+        <button class="start-btn" onclick="startMobileGame()">🎮 Spiel starten</button>
+      </div>
+      <!-- Mobile-Only Game Explanation -->
+
+      <!-- Game Controls -->
+      <div id="game-controls" class="game-explanation d_none">
+        <div class="controls-overview">
+          <div class="control-item">
+            <span class="key">← →</span>
+            <span class="description">Bewegen</span>
+          </div>
+          <div class="control-item">
+            <span class="key">Leertaste</span>
+            <span class="description">Springen</span>
+          </div>
+          <div class="control-item">
+            <span class="key">B</span>
+            <span class="description">Flasche werfen</span>
+          </div>
         </div>
       </div>
-      <!-- Mobile-Buttons -->
+      <!-- Game Controls -->
 
+      <div id="rotate-message" class="rotate_overlay">Drehe dein Gerät ins Querformat, um das Spiel zu spielen.</div>
     </div>
 
-  <!-- Control buttons in top-right corner -->
-    <div id="corner-buttons" class="corner-btn">
-      <button id="pausePlayButton" class="icon-button" onclick="togglePausePlay()">
-        <img src="icons/pause.png" alt="Pause" id="pausePlayIcon" />
-      </button>
-      <button id="soundButton" class="icon-button" onclick="toggleSound()">
-        <img src="icons/unmuted.png" alt="Sound" id="soundIcon" data-muted="false" />
-      </button>
-      <button id="fullscreenButton" class="icon-button" onclick="toggleFullscreen()">
-        <img src="icons/fullscreen.png" alt="Fullscreen" id="fullscreenIcon" />
-      </button>
-    </div>
-  <!-- Control buttons in top-right corner -->
-
-  <!-- Gameover Buttons -->
-    <div class="gameover-buttons">
-      <button id="homeButton" class="home-btn" style="display: none" onclick="mainWindow()">Home</button>
-      <button id="restartButton" class="restart-btn" style="display: none" onclick="restartGame()">Neues Spiel</button>
-    </div>
-  <!-- Gameover Buttons -->
-
-<!-- Mobile Gameover Buttons -->
-    <div class="mobile-gameover-buttons" style="display: none;">
-      <button id="mobileHomeButton" class="mobile-home-btn" onclick="mainWindow()">🏠 Home</button>
-      <button id="mobileRestartButton" class="mobile-restart-btn" onclick="restartGame()">🔄 Neues Spiel</button>
-    </div>
-  <!-- Mobile Gameover Buttons -->
-    
-  <!-- Game Explanation Section -->
-    <div id="game-explanation" class="game-explanation">
-      <h2>Hilf Pepe Peligroso, das verrückte Huhn zu besiegen!</h2>
-      <p>Sammle Münzen und Flaschen auf deinem Weg durch das Level. Die Hühner können mit einem Sprung oder per Flaschenwurf besiegt werden, die Küken können nur mit den Flaschen abgeworfen werden. <br><br> Besiege das verrückte Endboss-Huhn um das Spiel zu gewinnen!</p>
-      <button id="startButton" class="start-btn" onclick="startGame()">Start Game</button>
-    </div>
-  <!-- Game Explanation Section -->
-
-  <!-- Mobile-Only Game Explanation -->
-    <div id="mobile-game-explanation" class="mobile-game-overlay">
-      <h2>¡El Pollo Loco!</h2>
-      <p>Hilf Pepe Peligroso das verrückte Huhn zu besiegen! <br>
-      Sammle Münzen und Flaschen. <br> Besiege Hühner durch Springen oder Flaschen werfen.</p>
-      <button class="start-btn" onclick="startMobileGame()">🎮 Spiel starten</button>
-    </div>
-    <!-- Mobile-Only Game Explanation -->
-
-  <!-- Game Controls -->
-    <div id="game-controls" class="game-explanation d_none">
-      <div class="controls-overview">
-        <div class="control-item">
-          <span class="key">← →</span>
-          <span class="description">Bewegen</span>
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-text">
+          <p>Made with Love & Fun</p>
+          <p>by Marco Palummieri</p>
+          <p>© 2025 El Pollo Loco. All rights reserved</p>
         </div>
-        <div class="control-item">
-          <span class="key">Leertaste</span>
-          <span class="description">Springen</span>
-        </div>
-        <div class="control-item">
-          <span class="key">B</span>
-          <span class="description">Flasche werfen</span>
-        </div>
+        <div class="footer-imprint"><a href="#" onclick="showModal('impressum')" class="footer-link">Imprint</a></div>
       </div>
-    </div>
-  <!-- Game Controls -->
+    </footer>
 
-    <div id="rotate-message" class="rotate_overlay">Drehe dein Gerät ins Querformat, um das Spiel zu spielen.</div>
-
-  </div>
-
-<footer>
-  <div class="footer-inner">
-    <div class="footer-text"><p>Made with Love & Fun</p><p>by Marco Palummieri</p><p>© 2025 El Pollo Loco. All rights reserved</p></div>
-    <div class="footer-imprint"><a href="#" onclick="showModal('impressum')" class="footer-link">Imprint</a></div>
-  </div>
-</footer>
-
-  <!-- Modal-Overlays -->
+    <!-- Modal-Overlays -->
     <div id="modal-container" class="modal-hidden">
       <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">&times;</span>
         <div id="modal-impressum" class="modal-section modal-hidden">
           <h2>Impressum</h2>
-          <p>Marc-Antonio Palummieri<br />
-              Volmerswerther Stra&szlig;e 441<br />
-              40221 D&uuml;sseldorf
+          <p>
+            Marc-Antonio Palummieri<br />
+            Volmerswerther Stra&szlig;e 441<br />
+            40221 D&uuml;sseldorf
           </p>
           <h3>Kontakt</h3>
-          <p>Telefon: 015779751134<br />
-              E-Mail: info@marcopalummieri.de
+          <p>
+            Telefon: 015779751134<br />
+            E-Mail: info@marcopalummieri.de
           </p>
-          <p>Quelle: 
+          <p>
+            Quelle:
             <a href="https://www.e-recht24.de">https://www.e-recht24.de</a>
-          </p> 
+          </p>
           <h3>Grafiken & Sound</h3>
-          <p>Grafiken by Developer Akademie <br>
-          Icons by Icons8 <br>
-          Music by Pixabay</p>
+          <p>
+            Grafiken by Developer Akademie <br />
+            Icons by Icons8 <br />
+            Music by Pixabay
+          </p>
         </div>
       </div>
     </div>
-  <!-- Modal-Overlays -->
-
+    <!-- Modal-Overlays -->
   </body>
 </html>

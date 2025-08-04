@@ -10,18 +10,70 @@ const keyboard = new Keyboard();
  * Initializes the game by setting up canvas, orientation checks, and event listeners
  */
 function init() {
-  initLevel();
-  setupCanvas();
-  checkInitialOrientation();
-  syncSoundIcon();
-  drawStartScreen();
-  addKeyboardListeners();
-  preventSpaceOnButtons();
-  addFullscreenListeners();
-  addVisibilityChangeListener();
+  document.getElementById("rotate-message").style.display = "none";
 
-  window.addEventListener("resize", checkOrientation);
-  window.addEventListener("orientationchange", checkOrientation);
+  setupCanvas();
+  showLoadingScreen();
+
+  Promise.all([initLevel(), preloadCriticalAssets()]).then(() => {
+    checkInitialOrientation();
+    syncSoundIcon();
+    drawStartScreen();
+    addKeyboardListeners();
+    preventSpaceOnButtons();
+    addFullscreenListeners();
+    addVisibilityChangeListener();
+
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+  });
+}
+
+/**
+ * Shows a loading screen on the canvas immediately
+ */
+function showLoadingScreen() {
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#fff";
+  ctx.font = "24px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("Loading...", canvas.width / 2, canvas.height / 2);
+}
+
+/**
+ * Preloads critical assets to speed up initial display
+ */
+function preloadCriticalAssets() {
+  return new Promise(resolve => {
+    const criticalImages = ["img/9_intro_outro_screens/start/startscreen_1.png"];
+
+    let loadedCount = 0;
+    const totalImages = criticalImages.length;
+
+    if (totalImages === 0) {
+      resolve();
+      return;
+    }
+
+    criticalImages.forEach(src => {
+      const img = new Image();
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          resolve();
+        }
+      };
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          resolve();
+        }
+      };
+      img.src = src;
+    });
+  });
 }
 
 /**
@@ -68,7 +120,18 @@ function hideRotatemessage() {
  */
 function setupCanvas() {
   canvas = document.getElementById("canvas");
-  ctx = canvas.getContext("2d");
+
+  canvas.style.display = "block";
+  canvas.style.visibility = "visible";
+
+  ctx = canvas.getContext("2d", {
+    alpha: false,
+    desynchronized: true,
+    powerPreference: "high-performance",
+  });
+
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 /**
