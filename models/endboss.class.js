@@ -66,6 +66,8 @@ class Endboss extends MovableObject {
   isAttackOnCooldown = false;
   attackCooldownDuration = 3000;
 
+  activeTimers = [];
+
   JUMP_HEIGHT = 150;
   JUMP_DURATION = 1000;
   JUMP_SPEED = 15;
@@ -136,6 +138,10 @@ class Endboss extends MovableObject {
    */
   animate() {
     this.animationInterval = setInterval(() => {
+      // Add check for paused state
+    if (this.world && this.world.paused) return;
+
+
       if (this.world && this.world.gameEnded && this.isDead && this.isDeathAnimationComplete) {
         clearInterval(this.animationInterval);
         return;
@@ -163,6 +169,24 @@ class Endboss extends MovableObject {
       }
     }, 100);
   }
+
+
+  // Modify setTimeout and setInterval calls to track timers
+  trackTimer(timer) {
+    this.activeTimers.push(timer);
+    return timer;
+  }
+  
+  clearAllTimers() {
+    this.activeTimers.forEach(timer => {
+      if (typeof timer === 'number') {
+        clearTimeout(timer);
+        clearInterval(timer);
+      }
+    });
+    this.activeTimers = [];
+  }
+
 
   /**
    * Initiates walking behavior if conditions allow
@@ -234,18 +258,19 @@ class Endboss extends MovableObject {
    * @returns {Object} Object containing originalY position and jumpInterval reference
    */
   startJump() {
-    const originalY = this.y;
-    const direction = this.getJumpDirection();
-    const jumpStartTime = Date.now();
-    let hasHitPlayer = false;
-    const jumpInterval = setInterval(() => {
-      this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
-      if (!hasHitPlayer && this.checkJumpHitOnPlayer()) {
-        hasHitPlayer = true;
-      }
-    }, 16);
-    return { originalY, jumpInterval };
-  }
+  const originalY = this.y;
+  const direction = this.getJumpDirection();
+  const jumpStartTime = Date.now();
+  let hasHitPlayer = false;
+  const jumpInterval = this.trackTimer(setInterval(() => {
+    if (this.world && this.world.paused) return; // Add pause check
+    this.updateJumpPosition(jumpStartTime, originalY, direction, jumpInterval);
+    if (!hasHitPlayer && this.checkJumpHitOnPlayer()) {
+      hasHitPlayer = true;
+    }
+  }, 16));
+  return { originalY, jumpInterval };
+}
 
   /**
    * Checks for collision with player during jump attack
@@ -325,14 +350,15 @@ class Endboss extends MovableObject {
    * Re-evaluates behavior when cooldown expires
    */
   setAttackCooldown() {
-    setTimeout(() => {
-      this.isAttackOnCooldown = false;
-      if (this.world && this.world.character) {
-        const distance = Math.abs(this.world.character.x - this.x);
-        updateEndbossBehavior(this, distance);
-      }
-    }, this.attackCooldownDuration);
-  }
+  this._lastAttackTime = Date.now(); // Add this line to track when attack started
+  this.trackTimer(setTimeout(() => {
+    this.isAttackOnCooldown = false;
+    if (this.world && this.world.character) {
+      const distance = Math.abs(this.world.character.x - this.x);
+      updateEndbossBehavior(this, distance);
+    }
+  }, this.attackCooldownDuration));
+}
 
   /**
    * Handles damage dealt to the endboss
@@ -398,11 +424,11 @@ class Endboss extends MovableObject {
    * Re-evaluates behavior when cooldown expires
    */
   setHitCooldownTimer() {
-    this.hitCooldownTimer = setTimeout(() => {
-      this.wasHitRecently = false;
-      this.reEvaluateBehaviour();
-    }, this.hitAlertDuration);
-  }
+  this.hitCooldownTimer = this.trackTimer(setTimeout(() => {
+    this.wasHitRecently = false;
+    this.reEvaluateBehaviour();
+  }, this.hitAlertDuration));
+}
 
   /**
    * Re-evaluates endboss behavior based on current game state
