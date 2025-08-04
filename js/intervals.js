@@ -158,42 +158,107 @@ function resumeIntervalitem(world, item) {
   }
 }
 
+/**
+ * Resumes the endboss state by restoring all its properties and behaviors
+ * @param {World} world - The game world object containing the endboss
+ * @param {Object} item - The stored endboss state data
+ */
 function resumeEndbossState(world, item) {
-  const endboss = world.level.enemies[item.index];
-  if (!endboss || !(endboss instanceof Endboss)) return;
+  const endboss = getEndbossFromItem(world, item);
+  if (!endboss) return;
+  
+  restoreEndbossBasicState(endboss, item);
+  handleEndbossAlertState(endboss, item);
+  restoreHitCooldown(endboss, item);
+  restoreAttackCooldown(endboss, item);
+  restartEndbossAnimation(endboss);
+}
 
+/**
+ * Retrieves the endboss object from the stored item reference
+ * @param {World} world - The game world object containing enemies
+ * @param {Object} item - The stored endboss state with index reference
+ * @returns {Endboss|null} The endboss object or null if not found
+ */
+function getEndbossFromItem(world, item) {
+  const endboss = world.level.enemies[item.index];
+  if (!endboss || !(endboss instanceof Endboss)) return null;
+  return endboss;
+}
+
+/**
+ * Restores the basic state properties of the endboss
+ * @param {Endboss} endboss - The endboss object to restore state to
+ * @param {Object} item - The stored endboss state data
+ */
+function restoreEndbossBasicState(endboss, item) {
   endboss.wasHitRecently = item.wasHitRecently;
   endboss.isAttackOnCooldown = item.isAttackOnCooldown;
   endboss.isHurt = item.isHurt;
   endboss.isAttacking = item.isAttacking;
   endboss.isWalking = item.isWalking;
   endboss.isAlert = item.isAlert;
+}
 
+/**
+ * Handles the alert state of the endboss to prevent rapid re-triggering
+ * @param {Endboss} endboss - The endboss object to set alert state on
+ * @param {Object} item - The stored endboss state data
+ */
+function handleEndbossAlertState(endboss, item) {
   if (endboss.isAlert) {
     endboss._lastAlertTime = Date.now();
   }
+}
 
-  if (item.hitCooldownRemaining > 0 && item.wasHitRecently) {
-    endboss.hitCooldownTimer = endboss.trackTimer(
-      setTimeout(() => {
-        endboss.wasHitRecently = false;
-        endboss.reEvaluateBehaviour();
-      }, item.hitCooldownRemaining)
-    );
+/**
+ * Restores hit cooldown timer for the endboss if it was active
+ * @param {Endboss} endboss - The endboss object to restore cooldown to
+ * @param {Object} item - The stored endboss state with cooldown data
+ */
+function restoreHitCooldown(endboss, item) {
+  if (item.hitCooldownRemaining <= 0 || !item.wasHitRecently) return;
+  
+  endboss.hitCooldownTimer = endboss.trackTimer(
+    setTimeout(() => {
+      endboss.wasHitRecently = false;
+      endboss.reEvaluateBehaviour();
+    }, item.hitCooldownRemaining)
+  );
+}
+
+/**
+ * Restores attack cooldown timer for the endboss if it was active
+ * @param {Endboss} endboss - The endboss object to restore cooldown to
+ * @param {Object} item - The stored endboss state with cooldown data
+ */
+function restoreAttackCooldown(endboss, item) {
+  if (item.attackCooldownRemaining <= 0 || !item.isAttackOnCooldown) return;
+  
+  endboss.trackTimer(
+    setTimeout(() => {
+      endboss.isAttackOnCooldown = false;
+      updateEndbossBehaviorAfterCooldown(endboss);
+    }, item.attackCooldownRemaining)
+  );
+}
+
+/**
+ * Updates endboss behavior after attack cooldown expires
+ * @param {Endboss} endboss - The endboss object to update behavior for
+ */
+function updateEndbossBehaviorAfterCooldown(endboss) {
+  if (endboss.world && endboss.world.character) {
+    const distance = Math.abs(endboss.world.character.x - endboss.x);
+    updateEndbossBehavior(endboss, distance);
   }
+}
 
-  if (item.attackCooldownRemaining > 0 && item.isAttackOnCooldown) {
-    endboss.trackTimer(
-      setTimeout(() => {
-        endboss.isAttackOnCooldown = false;
-        if (endboss.world && endboss.world.character) {
-          const distance = Math.abs(endboss.world.character.x - endboss.x);
-          updateEndbossBehavior(endboss, distance);
-        }
-      }, item.attackCooldownRemaining)
-    );
-  }
-
+/**
+ * Restarts the animation for the endboss
+ * @param {Endboss} endboss - The endboss object to restart animation for
+ */
+function restartEndbossAnimation(endboss) {
   if (typeof endboss.animate === "function") {
     endboss.animate();
   }
