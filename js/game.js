@@ -513,7 +513,7 @@ function togglePausePlay() {
  */
 function pauseGame(pausePlayIcon) {
   window.gamePaused = true;
-  pausePlayIcon.src = "icons/play.png";
+  pausePlayIcon.src = "ui-icons/play.png";
   AudioHub.pauseAll();
   if (world) {
     world.lastAnimationId = world.animationId;
@@ -538,7 +538,7 @@ function stopAnimationLoop() {
  */
 function resumeGame(pausePlayIcon) {
   window.gamePaused = false;
-  pausePlayIcon.src = "icons/pause.png";
+  pausePlayIcon.src = "ui-icons/pause.png";
   if (!AudioHub.isMuted) {
     AudioHub.resumeAll();
   }

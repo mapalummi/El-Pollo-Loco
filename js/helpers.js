@@ -125,5 +125,5 @@ function updateEndbossBehavior(endboss, distance) {
  */
 function showNoBottlesFeedback() {
   // Optional: Visuelles Feedback für den Spieler
-  console.log("Keine Flaschen mehr verfügbar!");
+  // console.log("Keine Flaschen mehr verfügbar!");
 }
