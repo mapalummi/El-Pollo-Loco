@@ -100,7 +100,12 @@ class AudioHub {
       }
 
       sound.currentTime = 0;
-      sound.play();
+      sound.play().catch(err => {
+      // Ignore AbortError as it's expected during rapid state changes
+      if (err.name !== 'AbortError') {
+        console.warn('Audio playback error:', err);
+      }
+    });
     }
   }
 
@@ -120,7 +125,12 @@ class AudioHub {
 
       sound.loop = true;
       sound.currentTime = 0;
-      sound.play();
+      sound.play().catch(err => {
+      // Ignore AbortError as it's expected during rapid state changes
+      if (err.name !== 'AbortError') {
+        console.warn('Audio playback error:', err);
+      }
+    });
     }
   }
 
@@ -163,7 +173,12 @@ class AudioHub {
       }
 
       sound.currentTime = 0;
-      sound.play();
+      sound.play().catch(err => {
+      // Ignore AbortError as it's expected during rapid state changes
+      if (err.name !== 'AbortError') {
+        console.warn('Audio playback error:', err);
+      }
+    });
       AudioHub.currentKeySound = sound;
     }
   }

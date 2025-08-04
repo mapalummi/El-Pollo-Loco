@@ -39,6 +39,12 @@
   gap: 10px;
 }
 
+.icon-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
 .icon-button {
   width: 40px;
   height: 40px;

@@ -14,6 +14,9 @@ function init() {
 
   setupCanvas();
   showLoadingScreen();
+  disableCornerButtons(true);
+
+  document.getElementById("soundButton").classList.remove("disabled");
 
   Promise.all([initLevel(), preloadCriticalAssets()]).then(() => {
     checkInitialOrientation();
@@ -109,6 +112,26 @@ function checkInitialOrientation() {
 }
 
 /**
+ * Enables or disables the corner buttons
+ * @param {boolean} disabled - Whether the buttons should be disabled
+ */
+function disableCornerButtons(disabled) {
+  const buttons = [
+    document.getElementById("pausePlayButton"),
+    document.getElementById("soundButton"),
+    document.getElementById("fullscreenButton"),
+  ];
+
+  buttons.forEach(button => {
+    if (disabled) {
+      button.classList.add("disabled");
+    } else {
+      button.classList.remove("disabled");
+    }
+  });
+}
+
+/**
  * Hides the rotation message overlay
  */
 function hideRotatemessage() {
@@ -145,6 +168,8 @@ function startGame() {
   window.pendingGameStart = true;
   window.gameStarted = true;
   window.pendingGameStart = false;
+
+  disableCornerButtons(false);
   launchGame();
 }
 
@@ -160,6 +185,8 @@ function startMobileGame() {
   window.gameStarted = true;
 
   const isMobileDevice = detectMobileDevice();
+
+  disableCornerButtons(false);
 
   if (!isMobileDevice) {
     window.pendingGameStart = false;
@@ -178,10 +205,8 @@ function launchGame() {
   MovableObject.animationsEnabled = true;
   world = new World(canvas, keyboard);
 
-  // Animation für alle Gegner starten
   world.level.enemies.forEach(enemy => {
     if (enemy instanceof Chicken || enemy instanceof LittleChicken) {
-      // Wir rufen animate() erneut auf, jetzt wo animationsEnabled = true
       enemy.animate();
     }
   });
@@ -221,13 +246,10 @@ function checkOrientation() {
  * @returns {boolean} True if mobile device or tablet is detected
  */
 function detectMobileDevice() {
-  // User agent detection for mobile devices and tablets
   const mobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet/i.test(navigator.userAgent);
 
-  // Screen size and touch detection for tablets and mobile devices
   const isTouchDevice = window.innerWidth <= 1024 && "ontouchstart" in window;
 
-  // Additional tablet-specific detection
   const isTablet =
     /iPad|Android(?!.*Mobile)|Tablet/i.test(navigator.userAgent) ||
     (window.innerWidth >= 768 && window.innerWidth <= 1024 && "ontouchstart" in window);
@@ -395,6 +417,10 @@ function mainWindow() {
     document.getElementById("mobile-game-explanation").classList.add("d_none");
   }
 
+  disableCornerButtons(true);
+
+  document.getElementById("soundButton").classList.remove("disabled");
+
   window.gameStarted = false;
   document.getElementById("rotate-message").style.display = "none";
 }
@@ -441,6 +467,7 @@ function destroyWorldAndCanvas() {
  * Restarts the game with a fresh world and reset state
  */
 function restartGame() {
+  disableCornerButtons(true);
   toggleGameoverButtons(false);
   resetGameOverAndPause();
   showControlsForRestart();
@@ -502,6 +529,8 @@ function startFreshGameAfterDelay() {
     world.endbossTriggered = false;
     AudioHub.playLoop(AudioHub.GAMEAUDIO);
     document.getElementById("startButton").style.display = "none";
+
+    disableCornerButtons(false);
   }, 200);
 }
 
