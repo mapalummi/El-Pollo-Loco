@@ -19,7 +19,8 @@ class DrawableObject {
     this.img = new Image();
     this.img.src = path;
     this.img.onerror = () => {
-      console.error(`Bild konnte nicht geladen werden: ${path}`);
+      console.error(`Failed to load image: ${path}`);
+      // Optionally load a fallback/placeholder image
     };
   }
 
@@ -28,11 +29,11 @@ class DrawableObject {
    * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for drawing
    */
   draw(ctx) {
-    if (this.img) {
+    if (this.img && this.img.complete && this.img.naturalHeight !== 0) {
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
     // KOLLISIONSRAHMEN ZEICHNEN:
-    this.drawOffsetFrame(ctx);
+    // this.drawOffsetFrame(ctx);
   }
 
   /**
@@ -55,28 +56,28 @@ class DrawableObject {
    * Uses object's offset properties to show actual collision boundaries
    * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for drawing
    */
-  drawOffsetFrame(ctx) {
-    if (
-      this instanceof Character ||
-      this instanceof Chicken ||
-      this instanceof LittleChicken ||
-      this instanceof Endboss ||
-      this instanceof ThrowableObject ||
-      this instanceof Coin ||
-      this instanceof Bottle
-    ) {
-      ctx.beginPath();
-      ctx.lineWidth = "2";
-      ctx.strokeStyle = "red";
-      ctx.rect(
-        this.x + this.offset.left,
-        this.y + this.offset.top,
-        this.width - this.offset.left - this.offset.right,
-        this.height - this.offset.top - this.offset.bottom
-      );
-      ctx.stroke();
-    }
-  }
+  // drawOffsetFrame(ctx) {
+  //   if (
+  //     this instanceof Character ||
+  //     this instanceof Chicken ||
+  //     this instanceof LittleChicken ||
+  //     this instanceof Endboss ||
+  //     this instanceof ThrowableObject ||
+  //     this instanceof Coin ||
+  //     this instanceof Bottle
+  //   ) {
+  //     ctx.beginPath();
+  //     ctx.lineWidth = "2";
+  //     ctx.strokeStyle = "red";
+  //     ctx.rect(
+  //       this.x + this.offset.left,
+  //       this.y + this.offset.top,
+  //       this.width - this.offset.left - this.offset.right,
+  //       this.height - this.offset.top - this.offset.bottom
+  //     );
+  //     ctx.stroke();
+  //   }
+  // }
 
   /**
    * Preloads multiple images into the image cache for animation purposes
