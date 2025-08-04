@@ -111,7 +111,7 @@
 }
 
 /* Tablets and Mobile - Show mobile controls when needed */
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   #mobile-buttons:not(.d_none) {
     display: flex !important;
     pointer-events: auto !important;
@@ -136,7 +136,7 @@
 }
 
 /* Mobile Landscape Fullscreen */
-@media screen and (max-width: 991px) and (orientation: landscape) {
+@media screen and (max-width: 1024px) and (orientation: landscape) {
   #mobile-buttons {
     position: fixed;
     top: 0;
@@ -214,7 +214,7 @@
   }
 
   .mobile-game-overlay p {
-    color: #ffcc00;;
+    color: #ffcc00;
     font-size: 18px;
     line-height: 1.4;
     margin: 15px 0;

@@ -144,14 +144,22 @@ function checkOrientation() {
 }
 
 /**
- * Detects if the current device is a mobile device
- * @returns {boolean} True if mobile device is detected
+ * Detects if the current device is a mobile device or tablet
+ * @returns {boolean} True if mobile device or tablet is detected
  */
 function detectMobileDevice() {
-  return (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-    (window.innerWidth < 992 && "ontouchstart" in window)
-  );
+  // User agent detection for mobile devices and tablets
+  const mobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet/i.test(navigator.userAgent);
+
+  // Screen size and touch detection for tablets and mobile devices
+  const isTouchDevice = window.innerWidth <= 1024 && "ontouchstart" in window;
+
+  // Additional tablet-specific detection
+  const isTablet =
+    /iPad|Android(?!.*Mobile)|Tablet/i.test(navigator.userAgent) ||
+    (window.innerWidth >= 768 && window.innerWidth <= 1024 && "ontouchstart" in window);
+
+  return mobileUserAgent || isTouchDevice || isTablet;
 }
 
 /**

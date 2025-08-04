@@ -163,7 +163,6 @@ canvas {
   font-size: 1.5rem;
 }
 
-
 .footer-inner {
   max-width: 1440px;
   width: 100%;
@@ -172,7 +171,6 @@ canvas {
   justify-content: space-between;
   align-items: center;
 }
-
 
 /* .footer-imprint {
   
@@ -235,7 +233,7 @@ footer {
 }
 
 /* Mobile Landscape Fullscreen */
-@media screen and (max-width: 991px) and (orientation: landscape) {
+@media screen and (max-width: 1024px) and (orientation: landscape) {
   body {
     overflow: hidden;
     background-attachment: fixed;
@@ -347,12 +345,13 @@ footer {
 }
 
 /* Portrait mode - show rotate message */
-@media screen and (max-width: 991px) and (orientation: portrait) {
+@media screen and (max-width: 1024px) and (orientation: portrait) {
   .rotate_overlay {
     display: flex !important;
   }
 }
 
+/* Hide fullscreen button on touch devices (including tablets) */
 @media (pointer: coarse) {
   #fullscreenButton {
     display: none !important;
