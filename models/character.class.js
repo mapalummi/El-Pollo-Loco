@@ -9,15 +9,17 @@ class Character extends MovableObject {
   height = 220;
   speed = 10;
   facingRight = true;
-  lastMoveTime = Date.now(); //Zeitstempel der letzten Bewegung
+  lastMoveTime = Date.now();
   idleTimeout = 100;
-  sleepTimeout = 15000; //15 Sekunden
+  sleepTimeout = 15000;
   isDeadAnimationComplete = false;
   isWalking = false;
-  currentAnimation = null; //Trackt aktuell aktive Animation
+  currentAnimation = null;
   isFrozen = false;
   jumpAnimationPlayed = false;
   animationTimeout = null;
+
+  lastHurtSound = 0; // NEU
 
   offset = {
     top: 100,
@@ -99,6 +101,7 @@ class Character extends MovableObject {
     this.deadImage = new Image();
     this.deadImage.src = "img/random_pics/skull-147188_640.png";
     this.walkSoundPlaying = false;
+
     this.applyGravity();
     this.animate();
   }
@@ -274,6 +277,8 @@ class Character extends MovableObject {
    * @param {string} type - The animation type to run
    */
   runAnimationByType(type) {
+    const now = new Date().getTime();
+
     switch (type) {
       case "walking":
         this.walkingAnimation();
@@ -283,7 +288,12 @@ class Character extends MovableObject {
         this.jumpingAnimation();
         break;
       case "hurt":
-        AudioHub.playOne(AudioHub.HURT);
+        // Sound nur alle 800ms spielen
+        if (now - this.lastHurtSound > 800) {
+          AudioHub.playOne(AudioHub.HURT);
+          this.lastHurtSound = now;
+        }
+        // AudioHub.playOne(AudioHub.HURT);
         this.hurtAnimation();
         break;
       case "idle":

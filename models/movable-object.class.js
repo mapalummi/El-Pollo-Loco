@@ -11,6 +11,8 @@ class MovableObject extends DrawableObject {
   energy = 100;
   lastHit = 0;
 
+  static animationsEnabled = false;
+
   /**
    * Applies gravity physics to the object at 25 FPS
    * Updates vertical position and velocity, respects ground collision and splash state

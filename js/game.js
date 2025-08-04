@@ -175,7 +175,17 @@ function startMobileGame() {
  * Launches the game world and initializes all game components
  */
 function launchGame() {
+  MovableObject.animationsEnabled = true;
   world = new World(canvas, keyboard);
+
+  // Animation für alle Gegner starten
+  world.level.enemies.forEach(enemy => {
+    if (enemy instanceof Chicken || enemy instanceof LittleChicken) {
+      // Wir rufen animate() erneut auf, jetzt wo animationsEnabled = true
+      enemy.animate();
+    }
+  });
+
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
   keyboard.initMobileButtons();
 

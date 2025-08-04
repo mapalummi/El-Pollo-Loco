@@ -56,6 +56,8 @@ class Chicken extends MovableObject {
    * Sets up intervals for 60 FPS movement and 200ms walking sprite animation
    */
   animate() {
+    if (!MovableObject.animationsEnabled) return;
+
     this.animationInterval = setInterval(() => {
       if (!this.isDead) {
         this.getRealFrame();

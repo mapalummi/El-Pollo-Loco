@@ -57,6 +57,8 @@ class LittleChicken extends MovableObject {
    * Sets up 60 FPS movement with collision frame updates and 100ms walking animation
    */
   animate() {
+    if (!MovableObject.animationsEnabled) return;
+
     this.animationInterval = setInterval(() => {
       if (!this.isDead) {
         this.getRealFrame();
@@ -117,7 +119,7 @@ class LittleChicken extends MovableObject {
    */
   jump() {
     this.isJumping = true;
-    this.speedY = 12; 
+    this.speedY = 12;
     if (!this.initialY || this.initialY > this.y) {
       this.initialY = this.y;
     }
