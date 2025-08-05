@@ -6,6 +6,7 @@ let gameOverSoundPlayed = false;
 let gamePaused = false;
 const keyboard = new Keyboard();
 
+// TODO: Funktion kleiner machen!?
 /**
  * Initializes the game by setting up canvas, orientation checks, and event listeners
  */
@@ -15,6 +16,12 @@ function init() {
   setupCanvas();
   showLoadingScreen();
   disableCornerButtons(true);
+
+  const startButtons = document.querySelectorAll(".start-btn");
+  startButtons.forEach(btn => {
+    btn.disabled = true;
+    btn.innerHTML = "Loading...";
+  });
 
   document.getElementById("soundButton").classList.remove("disabled");
 
@@ -29,6 +36,12 @@ function init() {
 
     window.addEventListener("resize", checkOrientation);
     window.addEventListener("orientationchange", checkOrientation);
+
+    startButtons.forEach(btn => {
+      btn.disabled = false;
+      btn.innerHTML = btn.id === "startButton" ? "Start Game" : "🎮 Spiel starten";
+    });
+
   });
 }
 
@@ -45,6 +58,7 @@ function showLoadingScreen() {
   ctx.fillText("Loading...", canvas.width / 2, canvas.height / 2);
 }
 
+// TODO: Funktion kleiner machen!?
 /**
  * Preloads critical assets to speed up initial display
  */
@@ -177,6 +191,11 @@ function startGame() {
  * Starts the mobile game with mobile-specific controls and orientation handling
  */
 function startMobileGame() {
+  if (!canvas || !ctx) {
+    console.warn("Game resources not fully loaded yet. Please wait a moment.");
+    return;
+  }
+
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
   document.getElementById("mobile-game-explanation").classList.add("d_none");
@@ -198,28 +217,40 @@ function startMobileGame() {
   }
 }
 
+// TODO: Funktion kleiner machen!?
 /**
  * Launches the game world and initializes all game components
  */
 function launchGame() {
-  MovableObject.animationsEnabled = true;
-  world = new World(canvas, keyboard);
+  if (!canvas || !ctx) {
+    console.warn("Canvas not ready. Please try again.");
+    return;
+  }
 
-  world.level.enemies.forEach(enemy => {
-    if (enemy instanceof Chicken || enemy instanceof LittleChicken) {
-      enemy.animate();
-    }
-  });
+  try {
+    MovableObject.animationsEnabled = true;
+    world = new World(canvas, keyboard);
 
-  AudioHub.playLoop(AudioHub.GAMEAUDIO);
-  keyboard.initMobileButtons();
+    world.level.enemies.forEach(enemy => {
+      if (enemy instanceof Chicken || enemy instanceof LittleChicken) {
+        enemy.animate();
+      }
+    });
 
-  toggleGameoverButtons(false);
-  fillViewportOnMobile();
+    AudioHub.playLoop(AudioHub.GAMEAUDIO);
+    keyboard.initMobileButtons();
 
-  gameOver = false;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  document.getElementById("startButton").style.display = "none";
+    toggleGameoverButtons(false);
+    fillViewportOnMobile();
+
+    gameOver = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("startButton").style.display = "none";
+  } catch (error) {
+    console.error("Error launching game:", error);
+    // Show user-friendly error message
+    alert("Game couldn't be started. Please reload the page and try again.");
+  }
 }
 
 /**
@@ -392,6 +423,7 @@ function clearWorldObjects() {
   hideStatusBars();
 }
 
+// TODO: Funktion kleiner machen!?
 /**
  * Returns to the main menu screen and resets the game state
  */
