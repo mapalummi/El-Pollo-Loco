@@ -1,88 +1,81 @@
-
 <img width="747" height="101" alt="Pollo-Loco-Banner" src="https://github.com/user-attachments/assets/157f0dac-c3a6-4645-af39-94769f12af9d" />
 
------
+---
 
-# 🐔🌶️ El Pollo Loco 
+# 🐔🌶️ El Pollo Loco
 
-A 2D jump 'n' run game developed with JavaScript, HTML, and CSS. Slip into the role of Pepe Peligroso, fight against the crazy chicken, collect coins, and defeat the final boss\!
+**A 2D jump 'n' run game built with JavaScript, HTML, and CSS.**  
+Slip into the role of **Pepe Peligroso**, battle crazy chickens, collect coins, and defeat the final boss!
 
-**Play the game live here: [https://el-pollo-loco.marcopalummieri.de/](https://el-pollo-loco.marcopalummieri.de/)**
+👉 **Play now:** [https://el-pollo-loco.marcopalummieri.de/](https://el-pollo-loco.marcopalummieri.de/)
 
------
+---
 
-## Screenshots
+## 📸 Screenshots
 
-Desktop preview
+**Desktop View**
 
 <img width="737" height="495" alt="Pollo-Loco-Gameplay" src="https://github.com/user-attachments/assets/01d71a46-ee0c-410a-bc82-77788c975e24" />
 
-Mobile phone preview
+**Mobile View**
 
 <img width="928" height="422" alt="Pollo-Loco-Mobile" src="https://github.com/user-attachments/assets/1c8db8d4-1083-415f-9032-636580a14c18" />
 
+---
 
------
+## 📜 About the Game
 
-## 📜 Description
+**El Pollo Loco** is a classic side-scrolling browser game developed with object-oriented JavaScript.  
+You play as **Pepe Peligroso**, a fearless Mexican hero on a mission to defeat a mutant chicken boss – *El Pollo Loco*.
 
-**El Pollo Loco** is a classic side-scroller game built entirely with object-oriented JavaScript. The player controls the main character "Pepe Peligroso," a Mexican hero who must fight his way through hordes of chickens. The ultimate goal is to defeat the final boss: a mutated giant chicken known as "El Pollo Loco." To survive, players must run, jump, and throw salsa bottles.
+Your journey involves:
+- Running & jumping through the world
+- Fighting chickens using salsa bottles
+- Collecting coins and refilling resources
 
-This project was created as part of my journey as a front-end developer to demonstrate my skills in game development using vanilla JavaScript.
+This project was created to demonstrate my skills as a front-end developer using **vanilla JavaScript**.
 
------
+---
 
 ## ✨ Features
 
-  * **Classic Gameplay:** Run and jump through various levels.
-  * **Combat Mechanics:** Throw salsa bottles to defeat enemies.
-  * **Variety of Enemies:** Fight against small chickens and a challenging end boss.
-  * **Collectibles:** Collect coins and salsa bottles to replenish your health and ammunition.
-  * **Mobile Support:** Control the game on touch devices with on-screen buttons.
-  * **Sound Effects & Music:** Engaging background music and action sounds.
+- 🏃‍♂️ **Classic Platforming**: Smooth side-scrolling gameplay  
+- 🌶️ **Combat System**: Throw salsa bottles at enemies  
+- 🐣 **Variety of Enemies**: Small chicks & a giant boss  
+- 💰 **Collectibles**: Coins and bottles for health & ammo  
+- 📱 **Mobile Support**: On-screen controls for touch devices  
+- 🎵 **Sound & Music**: Immersive background sounds
 
------
+---
 
 ## 🎮 Controls
 
-### Desktop
+**Desktop**
 
-  * **Move Left:** `Left Arrow Key`
-  * **Move Right:** `Right Arrow Key`
-  * **Jump:** `Up Arrow Key`
-  * **Throw Salsa:** `Spacebar`
+- Move Left: `←`  
+- Move Right: `→`  
+- Jump: `↑`  
+- Throw Salsa: `Space`
 
-### Mobile
+**Mobile**
 
-  * Use the **on-screen buttons** on the left and right sides of the screen.
+- Use the **on-screen buttons** (left/right/jump/throw)
 
------
+---
 
-## 🛠️ Technologies Used
+## 🛠️ Tech Stack
 
-  * **JavaScript (ES6):** For all game logic and object-oriented programming.
-  * **HTML5:** As the fundamental structure for the game.
-  * **CSS3:** For styling and designing the game world.
+- **JavaScript (ES6)** – Game logic & OOP structure  
+- **HTML5** – Page structure & canvas  
+- **CSS3** – Styling and layout
 
------
+---
 
-## 🚀 Local Setup
+## 🚀 Run Locally
 
-To run the project locally on your machine, follow these steps:
+To test the game on your machine:
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/el-pollo-loco.git
-    ```
-2.  **Navigate to the project directory:**
-    ```bash
-    cd el-pollo-loco
-    ```
-3.  **Open the `index.html` file:**
-    Open the `index.html` file directly in your web browser to start the game.
+```bash
+git clone https://github.com/your-username/el-pollo-loco.git
+cd el-pollo-loco
 
------
-
-## License
-
-This project is licensed under the [MIT License](https://www.google.com/search?q=link/to/your/licensefile.md).
