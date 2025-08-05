@@ -6,42 +6,71 @@ let gameOverSoundPlayed = false;
 let gamePaused = false;
 const keyboard = new Keyboard();
 
-// TODO: Funktion kleiner machen!?
 /**
- * Initializes the game by setting up canvas, orientation checks, and event listeners
+ * Initializes the game by coordinating setup functions
  */
 function init() {
-  document.getElementById("rotate-message").style.display = "none";
+  hideRotatemessage();
+  setupInitialUI();
 
+  Promise.all([initLevel(), preloadCriticalAssets()]).then(() => {
+    setupGameEnvironment();
+    setupEventListeners();
+    enableStartButtons();
+  });
+}
+
+/**
+ * Sets up the initial UI state before loading
+ */
+function setupInitialUI() {
   setupCanvas();
   showLoadingScreen();
   disableCornerButtons(true);
+  disableStartButtons();
+  document.getElementById("soundButton").classList.remove("disabled");
+}
 
+/**
+ * Disables start buttons and changes text to "Loading..."
+ */
+function disableStartButtons() {
   const startButtons = document.querySelectorAll(".start-btn");
   startButtons.forEach(btn => {
     btn.disabled = true;
     btn.innerHTML = "Loading...";
   });
+}
 
-  document.getElementById("soundButton").classList.remove("disabled");
+/**
+ * Sets up the core game environment after assets are loaded
+ */
+function setupGameEnvironment() {
+  checkInitialOrientation();
+  syncSoundIcon();
+  drawStartScreen();
+}
 
-  Promise.all([initLevel(), preloadCriticalAssets()]).then(() => {
-    checkInitialOrientation();
-    syncSoundIcon();
-    drawStartScreen();
-    addKeyboardListeners();
-    preventSpaceOnButtons();
-    addFullscreenListeners();
-    addVisibilityChangeListener();
+/**
+ * Sets up all required event listeners
+ */
+function setupEventListeners() {
+  addKeyboardListeners();
+  preventSpaceOnButtons();
+  addFullscreenListeners();
+  addVisibilityChangeListener();
+  window.addEventListener("resize", checkOrientation);
+  window.addEventListener("orientationchange", checkOrientation);
+}
 
-    window.addEventListener("resize", checkOrientation);
-    window.addEventListener("orientationchange", checkOrientation);
-
-    startButtons.forEach(btn => {
-      btn.disabled = false;
-      btn.innerHTML = btn.id === "startButton" ? "Start Game" : "🎮 Spiel starten";
-    });
-
+/**
+ * Enables start buttons after loading is complete
+ */
+function enableStartButtons() {
+  const startButtons = document.querySelectorAll(".start-btn");
+  startButtons.forEach(btn => {
+    btn.disabled = false;
+    btn.innerHTML = btn.id === "startButton" ? "Start Game" : "🎮 Spiel starten";
   });
 }
 
@@ -58,39 +87,58 @@ function showLoadingScreen() {
   ctx.fillText("Loading...", canvas.width / 2, canvas.height / 2);
 }
 
-// TODO: Funktion kleiner machen!?
 /**
  * Preloads critical assets to speed up initial display
+ * @returns {Promise} Promise that resolves when all assets are loaded
  */
 function preloadCriticalAssets() {
+  const criticalImages = ["img/9_intro_outro_screens/start/startscreen_1.png"];
+
+  if (criticalImages.length === 0) {
+    return Promise.resolve();
+  }
+
+  return loadImageBatch(criticalImages);
+}
+
+/**
+ * Loads a batch of images and returns a promise
+ * @param {string[]} imageUrls - Array of image URLs to load
+ * @returns {Promise} Promise that resolves when all images are loaded
+ */
+function loadImageBatch(imageUrls) {
   return new Promise(resolve => {
-    const criticalImages = ["img/9_intro_outro_screens/start/startscreen_1.png"];
-
     let loadedCount = 0;
-    const totalImages = criticalImages.length;
+    const totalImages = imageUrls.length;
 
-    if (totalImages === 0) {
-      resolve();
-      return;
-    }
-
-    criticalImages.forEach(src => {
-      const img = new Image();
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === totalImages) {
-          resolve();
-        }
-      };
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount === totalImages) {
-          resolve();
-        }
-      };
-      img.src = src;
+    imageUrls.forEach(src => {
+      loadSingleImage(src, () => checkAllImagesLoaded(++loadedCount, totalImages, resolve));
     });
   });
+}
+
+/**
+ * Loads a single image and calls the callback when done
+ * @param {string} src - Image source URL
+ * @param {Function} callback - Function to call when image loads or errors
+ */
+function loadSingleImage(src, callback) {
+  const img = new Image();
+  img.onload = callback;
+  img.onerror = callback;
+  img.src = src;
+}
+
+/**
+ * Checks if all images are loaded and resolves the promise if true
+ * @param {number} loadedCount - Number of images loaded
+ * @param {number} totalImages - Total number of images to load
+ * @param {Function} resolve - Promise resolve function
+ */
+function checkAllImagesLoaded(loadedCount, totalImages, resolve) {
+  if (loadedCount === totalImages) {
+    resolve();
+  }
 }
 
 /**
@@ -217,40 +265,86 @@ function startMobileGame() {
   }
 }
 
-// TODO: Funktion kleiner machen!?
 /**
  * Launches the game world and initializes all game components
  */
 function launchGame() {
-  if (!canvas || !ctx) {
-    console.warn("Canvas not ready. Please try again.");
-    return;
-  }
+  if (!isCanvasReady()) return;
 
   try {
-    MovableObject.animationsEnabled = true;
-    world = new World(canvas, keyboard);
-
-    world.level.enemies.forEach(enemy => {
-      if (enemy instanceof Chicken || enemy instanceof LittleChicken) {
-        enemy.animate();
-      }
-    });
-
-    AudioHub.playLoop(AudioHub.GAMEAUDIO);
-    keyboard.initMobileButtons();
-
-    toggleGameoverButtons(false);
-    fillViewportOnMobile();
-
-    gameOver = false;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById("startButton").style.display = "none";
+    initGameWorld();
+    setupGameAudio();
+    configureGameUI();
+    resetGameState();
   } catch (error) {
-    console.error("Error launching game:", error);
-    // Show user-friendly error message
-    alert("Game couldn't be started. Please reload the page and try again.");
+    handleGameLaunchError(error);
   }
+}
+
+/**
+ * Checks if canvas is ready for game launch
+ * @returns {boolean} Whether canvas is ready
+ */
+function isCanvasReady() {
+  if (!canvas || !ctx) {
+    console.warn("Canvas not ready. Please try again.");
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Initializes the game world and enemy animations
+ */
+function initGameWorld() {
+  MovableObject.animationsEnabled = true;
+  world = new World(canvas, keyboard);
+  animateEnemies();
+}
+
+/**
+ * Starts animation for chicken enemies
+ */
+function animateEnemies() {
+  world.level.enemies.forEach(enemy => {
+    if (enemy instanceof Chicken || enemy instanceof LittleChicken) {
+      enemy.animate();
+    }
+  });
+}
+
+/**
+ * Sets up game audio for gameplay
+ */
+function setupGameAudio() {
+  AudioHub.playLoop(AudioHub.GAMEAUDIO);
+  keyboard.initMobileButtons();
+}
+
+/**
+ * Configures game UI elements
+ */
+function configureGameUI() {
+  toggleGameoverButtons(false);
+  fillViewportOnMobile();
+  document.getElementById("startButton").style.display = "none";
+}
+
+/**
+ * Resets game state and clears canvas
+ */
+function resetGameState() {
+  gameOver = false;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+/**
+ * Handles errors during game launch
+ * @param {Error} error - The error that occurred
+ */
+function handleGameLaunchError(error) {
+  console.error("Error launching game:", error);
+  alert("Game couldn't be started. Please reload the page and try again.");
 }
 
 /**
@@ -423,36 +517,76 @@ function clearWorldObjects() {
   hideStatusBars();
 }
 
-// TODO: Funktion kleiner machen!?
 /**
  * Returns to the main menu screen and resets the game state
  */
 function mainWindow() {
+  cleanupGameResources();
+  resetUIState();
+  setupAudioAndControls();
+  configureExplanationScreens();
+  finalizeMainWindowSetup();
+}
+
+/**
+ * Cleans up game resources when returning to main menu
+ */
+function cleanupGameResources() {
   hideGameOverUI();
   stopAllAudioAndDialog();
   cancelAllAnimations();
   destroyWorldAndCanvas();
+}
+
+/**
+ * Resets UI state for main menu
+ */
+function resetUIState() {
   resetGameStateAndUI();
   drawStartScreenOnFreshCanvas();
+}
 
+/**
+ * Sets up audio and controls for main menu
+ */
+function setupAudioAndControls() {
   AudioHub.playLoop(AudioHub.MENU_AUDIO);
+  disableCornerButtons(true);
+  document.getElementById("soundButton").classList.remove("disabled");
+}
 
+/**
+ * Configures which explanation screen to show based on device type
+ */
+function configureExplanationScreens() {
   const isMobileDevice = detectMobileDevice();
   const isLandscape = window.innerWidth > window.innerHeight;
   const isMobileLandscape = isMobileDevice && window.innerWidth <= 991 && isLandscape;
 
+  toggleExplanationScreen(isMobileLandscape);
+}
+
+/**
+ * Toggles between mobile and desktop explanation screens
+ * @param {boolean} isMobileLandscape - Whether the device is in mobile landscape mode
+ */
+function toggleExplanationScreen(isMobileLandscape) {
+  const mobileExplanation = document.getElementById("mobile-game-explanation");
+  const desktopExplanation = document.getElementById("game-explanation");
+
   if (isMobileLandscape) {
-    document.getElementById("mobile-game-explanation").classList.remove("d_none");
-    document.getElementById("game-explanation").classList.add("d_none");
+    mobileExplanation.classList.remove("d_none");
+    desktopExplanation.classList.add("d_none");
   } else {
-    document.getElementById("game-explanation").classList.remove("d_none");
-    document.getElementById("mobile-game-explanation").classList.add("d_none");
+    desktopExplanation.classList.remove("d_none");
+    mobileExplanation.classList.add("d_none");
   }
+}
 
-  disableCornerButtons(true);
-
-  document.getElementById("soundButton").classList.remove("disabled");
-
+/**
+ * Finalizes main window setup by resetting remaining flags
+ */
+function finalizeMainWindowSetup() {
   window.gameStarted = false;
   document.getElementById("rotate-message").style.display = "none";
 }
