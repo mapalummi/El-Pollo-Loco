@@ -86,3 +86,23 @@ cd el-pollo-loco
 > This project was developed for educational and demonstration purposes only and is not intended for commercial use.  
 > All included assets (images, audio files, etc.) are either original creations or used under appropriate open-source or Creative Commons licenses.
 
+
+...
+
+## 📝 To Do
+
+- [ ] Add level editor
+- [ ] Implement more enemy types
+- [ ] Build a high score system
+- [ ] Add sound/music settings
+- [ ] Support multiple languages (EN/DE)
+
+---
+
+## 👨‍💻 Author
+
+- **Marco Palummieri**  
+  [GitHub](https://github.com/mapalummi)  
+  [Portfolio](https://marcopalummieri.de/)  
+
+...
