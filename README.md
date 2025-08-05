@@ -79,3 +79,11 @@ To test the game on your machine:
 git clone https://github.com/your-username/el-pollo-loco.git
 cd el-pollo-loco
 
+---
+
+## 📄 License
+
+> **Disclaimer:**  
+> This project was developed for educational and demonstration purposes only and is not intended for commercial use.  
+> All included assets (images, audio files, etc.) are either original creations or used under appropriate open-source or Creative Commons licenses.
+
