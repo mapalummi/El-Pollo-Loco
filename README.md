@@ -3,7 +3,7 @@
 
 -----
 
-# El Pollo Loco 🐔🌶️
+#🐔🌶️ El Pollo Loco 
 
 A 2D jump 'n' run game developed with JavaScript, HTML, and CSS. Slip into the role of Pepe Peligroso, fight against the crazy chicken, collect coins, and defeat the final boss\!
 
@@ -14,9 +14,11 @@ A 2D jump 'n' run game developed with JavaScript, HTML, and CSS. Slip into the r
 ## Preview
 
 Desktop preview
+
 <img width="737" height="495" alt="Pollo-Loco-Gameplay" src="https://github.com/user-attachments/assets/01d71a46-ee0c-410a-bc82-77788c975e24" />
 
 Mobile phone preview
+
 <img width="928" height="422" alt="Pollo-Loco-Mobile" src="https://github.com/user-attachments/assets/1c8db8d4-1083-415f-9032-636580a14c18" />
 
 
