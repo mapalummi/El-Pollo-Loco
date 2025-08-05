@@ -78,8 +78,7 @@ To test the game on your machine:
 ```bash
 git clone https://github.com/your-username/el-pollo-loco.git
 cd el-pollo-loco
-
----
+```
 
 ## 📄 License
 
