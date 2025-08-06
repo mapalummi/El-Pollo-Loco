@@ -101,8 +101,14 @@ cd el-pollo-loco
 
 ## 👨‍💻 Author
 
-- **Marco Palummieri**  
-  [GitHub](https://github.com/mapalummi)  
-  [Portfolio](https://marcopalummieri.de/)  
+Hi, I'm **Marco Palummieri**, a passionate front-end developer based in Germany.  
+I built this game as part of my learning journey in JavaScript and game development.
+
+- 💻 [GitHub Profile](https://github.com/mapalummi)  
+- 🌐 [Portfolio Website](https://marcopalummieri.de/)  
+- 📫 [Contact Me via Email](mailto:marco.palummieri@gmail.com)  
+- 🔗 [LinkedIn](https://www.linkedin.com/in/marco-palummieri/)
+
+> Feel free to reach out if you have feedback, questions, or just want to connect!
 
 ...
