@@ -290,6 +290,30 @@ function createAudioObjects() {
     AudioHub.GAMEOVER,
     AudioHub.COINS_COMPLETE,
   ];
+
+  // TODO: Auslagern!
+  // NEU: Desktop-Sounds-Array ebenfalls aktualisieren!
+  AudioHub.allSounds = [
+    AudioHub.MENU_AUDIO,
+    AudioHub.GAMEAUDIO,
+    AudioHub.SLEEP,
+    AudioHub.WALK,
+    AudioHub.JUMP,
+    AudioHub.HURT,
+    AudioHub.DEAD,
+    AudioHub.THROW,
+    AudioHub.SPLASH,
+    AudioHub.COINS,
+    AudioHub.BOTTLES,
+    AudioHub.CHICKEN,
+    AudioHub.ENDBOSS,
+    AudioHub.ENDBOSS_ATTACK,
+    AudioHub.ENDBOSS_SOUND,
+    AudioHub.WIN,
+    AudioHub.LOST,
+    AudioHub.GAMEOVER,
+    AudioHub.COINS_COMPLETE,
+  ];
 }
 
 // NEU
@@ -322,6 +346,7 @@ function resetAudioObjects() {
 function startMobileGame() {
   // TEST neu
   createAudioObjects();
+  syncMuteStateWithAudioObjects(); // NEU
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
   if (!canvas || !ctx) {
@@ -644,6 +669,7 @@ function resetUIState() {
  */
 function setupAudioAndControls() {
   createAudioObjects(); // Audio-Objekte wiederherstellen! NEU
+  syncMuteStateWithAudioObjects(); // NEUER
   AudioHub.playLoop(AudioHub.MENU_AUDIO);
   disableCornerButtons(true);
   document.getElementById("soundButton").classList.remove("disabled");
@@ -735,6 +761,7 @@ function restartGame() {
   destroyWorldAndClearCanvas();
   resetAudioObjects(); // <--- NEU
   createAudioObjects();     // Audio-Objekte neu erzeugen!
+  syncMuteStateWithAudioObjects();
   reinitLevelAndMobile();
   startFreshGameAfterDelay();
 }
@@ -855,5 +882,19 @@ function resumeGame(pausePlayIcon) {
 function restartAnimationLoop() {
   if (!world.animationId) {
     world.animationId = requestAnimationFrame(() => world.draw());
+  }
+}
+
+// NEU:
+/**
+ * Synchronizes the mute state with all audio objects (Desktop & Mobile)
+ */
+function syncMuteStateWithAudioObjects() {
+  if (AudioHub.isMuted) {
+    AudioHub.muteAll();
+    AudioHub.muteAllMobile && AudioHub.muteAllMobile();
+  } else {
+    AudioHub.unmuteAll();
+    AudioHub.unmuteAllMobile && AudioHub.unmuteAllMobile();
   }
 }
