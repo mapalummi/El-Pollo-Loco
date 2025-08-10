@@ -13,11 +13,10 @@ function init() {
   hideRotatemessage();
   setupInitialUI();
 
-  // Beim Spielstart (z.B. in deiner main.js oder Init-Funktion):
-  if (!AudioHub.audioContext) {
-    AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  setupMobileAudioUnlock();
+  // if (!AudioHub.audioContext) {
+  //   AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  // }
+  // setupGlobalAudioUnlock();
 
   Promise.all([initLevel(), preloadCriticalAssets()]).then(() => {
     setupGameEnvironment();
@@ -229,6 +228,10 @@ function setupCanvas() {
  * Starts the game by hiding menu and launching the game world
  */
 function startGame() {
+  if (!AudioHub.audioContext) {
+    AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    setupGlobalAudioUnlock();
+  }
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
   document.getElementById("game-explanation").classList.add("d_none");
@@ -238,6 +241,9 @@ function startGame() {
   window.pendingGameStart = false;
 
   disableCornerButtons(false);
+
+  // NEU - Erst jetzt Sound abspielen!
+  AudioHub.playLoop(AudioHub.GAMEAUDIO);
   launchGame();
 }
 
@@ -250,6 +256,10 @@ function startMobileGame() {
     return;
   }
 
+  if (!AudioHub.audioContext) {
+    AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    setupGlobalAudioUnlock();
+  }
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
   document.getElementById("mobile-game-explanation").classList.add("d_none");
@@ -260,6 +270,9 @@ function startMobileGame() {
   const isMobileDevice = detectMobileDevice();
 
   disableCornerButtons(false);
+
+  // NEU - Erst jetzt Sound abspielen!
+  AudioHub.playLoop(AudioHub.GAMEAUDIO);
 
   if (!isMobileDevice) {
     window.pendingGameStart = false;

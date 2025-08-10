@@ -1,33 +1,34 @@
 /**
- * Unlocks the AudioContext on first user interaction (for mobile browsers)
+ * Globale Unlock-Funktion für den AudioContext (auch für iOS/Android)
  */
-function setupMobileAudioUnlock() {
-  function unlock() {
+function setupGlobalAudioUnlock() {
+  let unlocked = false;
+
+  async function unlockAudio() {
+    if (unlocked) return;
     if (AudioHub.audioContext && AudioHub.audioContext.state === "suspended") {
-      AudioHub.audioContext
-        .resume()
-        .then(() => {
-          console.log("[AudioHub] AudioContext resumed (mobile unlock)");
-        })
-        .catch(err => {
-          console.warn("[AudioHub] Failed to resume AudioContext", err);
-        });
-    } else {
-      console.log("[AudioHub] No suspended AudioContext found");
+      try {
+        await AudioHub.audioContext.resume();
+        unlocked = true;
+        console.log("[AudioHub] AudioContext unlocked via global event");
+      } catch (e) {
+        console.warn("[AudioHub] Failed to unlock AudioContext", e);
+      }
     }
-
-    // Test short sound to fully unlock HTMLAudio as well
+    // Optional: Testton abspielen, um HTMLAudio zu triggern
     const testAudio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
-    testAudio.play().catch(() => {
-      console.warn("[AudioHub] Test audio playback blocked");
-    });
-
-    document.removeEventListener("touchstart", unlock);
-    document.removeEventListener("click", unlock);
+    testAudio.play().catch(() => {});
+    // Listener nach erstem Unlock entfernen
+    document.removeEventListener("touchstart", unlockAudio);
+    document.removeEventListener("touchend", unlockAudio);
+    document.removeEventListener("click", unlockAudio);
+    document.removeEventListener("keydown", unlockAudio);
   }
 
-  document.addEventListener("touchstart", unlock, { once: true });
-  document.addEventListener("click", unlock, { once: true });
+  document.addEventListener("touchstart", unlockAudio, { once: true, passive: true });
+  document.addEventListener("touchend", unlockAudio, { once: true, passive: true });
+  document.addEventListener("click", unlockAudio, { once: true, passive: true });
+  document.addEventListener("keydown", unlockAudio, { once: true, passive: true });
 }
 
 /**
