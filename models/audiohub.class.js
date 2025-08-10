@@ -1,3 +1,10 @@
+// TEST
+// function playSoundOnMobile(src, volume = 1) {
+//   const audio = new Audio(src);
+//   audio.volume = volume;
+//   audio.play().catch(() => {});
+// }
+
 /**
  * Globale Unlock-Funktion für den AudioContext (auch für iOS/Android)
  */
@@ -37,6 +44,103 @@ function setupGlobalAudioUnlock() {
  */
 class AudioHub {
   static audioContext = null;
+
+  //
+  //
+  //
+  //
+
+  // TEST
+  static MENU_AUDIO_SRC = "audio/acoustic-mexican-guitar.mp3";
+  static GAMEAUDIO_SRC = "audio/keep-up-flamenco.mp3";
+  static SLEEP_SRC = "audio/sleep-1.mp3";
+  static WALK_SRC = "audio/steps-2.mp3";
+  static JUMP_SRC = "audio/jump-1.mp3";
+  static HURT_SRC = "audio/hurt-1.mp3";
+  static DEAD_SRC = "audio/death-1.mp3";
+  static THROW_SRC = "audio/throw-1.mp3";
+  static SPLASH_SRC = "audio/splash-1.mp3";
+  static COINS_SRC = "audio/coin-1.mp3";
+  static BOTTLES_SRC = "audio/bottle-1.mp3";
+  static CHICKEN_SRC = "audio/chicken-1.mp3";
+  static ENDBOSS_SRC = "audio/monster-1.mp3";
+  static ENDBOSS_ATTACK_SRC = "audio/monster-2.mp3";
+  static ENDBOSS_SOUND_SRC = "audio/endboss-sound-2.mp3";
+  static WIN_SRC = "audio/bonus-1.mp3";
+  static LOST_SRC = "audio/lose-funny-1.mp3";
+  static GAMEOVER_SRC = "audio/game-over-classic-1.mp3";
+  static COINS_COMPLETE_SRC = "audio/game-ui-1.mp3";
+
+  // Die Audio-Objekte werden erst nach User-Interaktion erzeugt:
+  static MENU_AUDIO = null;
+  static GAMEAUDIO = null;
+  static SLEEP = null;
+  static WALK = null;
+  static JUMP = null;
+  static HURT = null;
+  static DEAD = null;
+  static THROW = null;
+  static SPLASH = null;
+  static COINS = null;
+  static BOTTLES = null;
+  static CHICKEN = null;
+  static ENDBOSS = null;
+  static ENDBOSS_ATTACK = null;
+  static ENDBOSS_SOUND = null;
+  static WIN = null;
+  static LOST = null;
+  static GAMEOVER = null;
+  static COINS_COMPLETE = null;
+
+  static allMobileSounds = [];
+
+  static playLoopMobile(audioObj) {
+    if (!audioObj) return;
+    audioObj.loop = true;
+    audioObj.volume = 0.2; // ggf. anpassen
+    audioObj.currentTime = 0;
+    audioObj.play().catch(e => {
+    console.warn("Audio play failed:", e);
+  });
+  }
+
+  static playOneMobile(audioObj) {
+    if (!audioObj) return;
+    audioObj.currentTime = 0;
+    audioObj.volume = 0.5; // ggf. anpassen
+    audioObj.play().catch(() => {});
+  }
+
+  static stopOneMobile(audioObj) {
+    if (!audioObj) return;
+    audioObj.pause();
+    audioObj.currentTime = 0;
+  }
+
+  static pauseAllMobile() {
+    this.allMobileSounds.forEach(a => a && a.pause());
+  }
+
+  static resumeAllMobile() {
+    this.allMobileSounds.forEach(a => {
+      if (a && a.paused && !this.isMuted) a.play().catch(() => {});
+    });
+  }
+
+  static muteAllMobile() {
+    this.isMuted = true;
+    this.allMobileSounds.forEach(a => a && (a.muted = true));
+  }
+
+  static unmuteAllMobile() {
+    this.isMuted = false;
+    this.allMobileSounds.forEach(a => a && (a.muted = false));
+  }
+
+  //
+  //
+  //
+  //
 
   static MENU_AUDIO = new Audio("audio/acoustic-mexican-guitar.mp3");
   static GAMEAUDIO = new Audio("audio/keep-up-flamenco.mp3");

@@ -13,11 +13,6 @@ function init() {
   hideRotatemessage();
   setupInitialUI();
 
-  // if (!AudioHub.audioContext) {
-  //   AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  // }
-  // setupGlobalAudioUnlock();
-
   Promise.all([initLevel(), preloadCriticalAssets()]).then(() => {
     setupGameEnvironment();
     setupEventListeners();
@@ -247,20 +242,98 @@ function startGame() {
   launchGame();
 }
 
+// TEST
+function createAudioObjects() {
+  // Prüfe, ob bereits initialisiert wurde
+  if (AudioHub.MENU_AUDIO instanceof Audio) {
+    return; // Audio-Objekte existieren schon, also nichts tun!
+  }
+
+  AudioHub.MENU_AUDIO = new Audio(AudioHub.MENU_AUDIO_SRC);
+  AudioHub.GAMEAUDIO = new Audio(AudioHub.GAMEAUDIO_SRC);
+  AudioHub.SLEEP = new Audio(AudioHub.SLEEP_SRC);
+  AudioHub.WALK = new Audio(AudioHub.WALK_SRC);
+  AudioHub.JUMP = new Audio(AudioHub.JUMP_SRC);
+  AudioHub.HURT = new Audio(AudioHub.HURT_SRC);
+  AudioHub.DEAD = new Audio(AudioHub.DEAD_SRC);
+  AudioHub.THROW = new Audio(AudioHub.THROW_SRC);
+  AudioHub.SPLASH = new Audio(AudioHub.SPLASH_SRC);
+  AudioHub.COINS = new Audio(AudioHub.COINS_SRC);
+  AudioHub.BOTTLES = new Audio(AudioHub.BOTTLES_SRC);
+  AudioHub.CHICKEN = new Audio(AudioHub.CHICKEN_SRC);
+  AudioHub.ENDBOSS = new Audio(AudioHub.ENDBOSS_SRC);
+  AudioHub.ENDBOSS_ATTACK = new Audio(AudioHub.ENDBOSS_ATTACK_SRC);
+  AudioHub.ENDBOSS_SOUND = new Audio(AudioHub.ENDBOSS_SOUND_SRC);
+  AudioHub.WIN = new Audio(AudioHub.WIN_SRC);
+  AudioHub.LOST = new Audio(AudioHub.LOST_SRC);
+  AudioHub.GAMEOVER = new Audio(AudioHub.GAMEOVER_SRC);
+  AudioHub.COINS_COMPLETE = new Audio(AudioHub.COINS_COMPLETE_SRC);
+
+  AudioHub.allMobileSounds = [
+    AudioHub.MENU_AUDIO,
+    AudioHub.GAMEAUDIO,
+    AudioHub.SLEEP,
+    AudioHub.WALK,
+    AudioHub.JUMP,
+    AudioHub.HURT,
+    AudioHub.DEAD,
+    AudioHub.THROW,
+    AudioHub.SPLASH,
+    AudioHub.COINS,
+    AudioHub.BOTTLES,
+    AudioHub.CHICKEN,
+    AudioHub.ENDBOSS,
+    AudioHub.ENDBOSS_ATTACK,
+    AudioHub.ENDBOSS_SOUND,
+    AudioHub.WIN,
+    AudioHub.LOST,
+    AudioHub.GAMEOVER,
+    AudioHub.COINS_COMPLETE,
+  ];
+}
+
+// NEU
+function resetAudioObjects() {
+  AudioHub.MENU_AUDIO = null;
+  AudioHub.GAMEAUDIO = null;
+  AudioHub.SLEEP = null;
+  AudioHub.WALKv;
+  AudioHub.JUMP = null;
+  AudioHub.HURT = null;
+  AudioHub.DEAD = null;
+  AudioHub.THROW = null;
+  AudioHub.SPLASH = null;
+  AudioHub.COINS = null;
+  AudioHub.BOTTLES = null;
+  AudioHub.CHICKEN = null;
+  AudioHub.ENDBOSS = null;
+  AudioHub.ENDBOSS_ATTACK = null;
+  AudioHub.ENDBOSS_SOUND = null;
+  AudioHub.WIN = null;
+  AudioHub.LOST = null;
+  AudioHub.GAMEOVER = null;
+  AudioHub.COINS_COMPLETE = null;
+}
+
+// TODO:
 /**
  * Starts the mobile game with mobile-specific controls and orientation handling
  */
 function startMobileGame() {
+  // TEST neu
+  createAudioObjects();
+  AudioHub.stopOne(AudioHub.MENU_AUDIO);
+
   if (!canvas || !ctx) {
     console.warn("Game resources not fully loaded yet. Please wait a moment.");
     return;
   }
 
-  if (!AudioHub.audioContext) {
-    AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    setupGlobalAudioUnlock();
-  }
-  AudioHub.stopOne(AudioHub.MENU_AUDIO);
+  // if (!AudioHub.audioContext) {
+  //   AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  //   setupGlobalAudioUnlock();
+  // }
+  // AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
   document.getElementById("mobile-game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
@@ -272,7 +345,7 @@ function startMobileGame() {
   disableCornerButtons(false);
 
   // NEU - Erst jetzt Sound abspielen!
-  AudioHub.playLoop(AudioHub.GAMEAUDIO);
+  AudioHub.playLoopMobile(AudioHub.GAMEAUDIO);
 
   if (!isMobileDevice) {
     window.pendingGameStart = false;
@@ -555,6 +628,7 @@ function cleanupGameResources() {
   stopAllAudioAndDialog();
   cancelAllAnimations();
   destroyWorldAndCanvas();
+  resetAudioObjects(); // <--- NEU
 }
 
 /**
@@ -569,6 +643,7 @@ function resetUIState() {
  * Sets up audio and controls for main menu
  */
 function setupAudioAndControls() {
+  createAudioObjects(); // Audio-Objekte wiederherstellen! NEU
   AudioHub.playLoop(AudioHub.MENU_AUDIO);
   disableCornerButtons(true);
   document.getElementById("soundButton").classList.remove("disabled");
@@ -658,6 +733,8 @@ function restartGame() {
   showControlsForRestart();
   cleanupGameState();
   destroyWorldAndClearCanvas();
+  resetAudioObjects(); // <--- NEU
+  createAudioObjects();     // Audio-Objekte neu erzeugen!
   reinitLevelAndMobile();
   startFreshGameAfterDelay();
 }
