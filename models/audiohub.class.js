@@ -1,8 +1,42 @@
 /**
+ * Unlocks the AudioContext on first user interaction (for mobile browsers)
+ */
+function setupMobileAudioUnlock() {
+  function unlock() {
+    if (AudioHub.audioContext && AudioHub.audioContext.state === "suspended") {
+      AudioHub.audioContext
+        .resume()
+        .then(() => {
+          console.log("[AudioHub] AudioContext resumed (mobile unlock)");
+        })
+        .catch(err => {
+          console.warn("[AudioHub] Failed to resume AudioContext", err);
+        });
+    } else {
+      console.log("[AudioHub] No suspended AudioContext found");
+    }
+
+    // Test short sound to fully unlock HTMLAudio as well
+    const testAudio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
+    testAudio.play().catch(() => {
+      console.warn("[AudioHub] Test audio playback blocked");
+    });
+
+    document.removeEventListener("touchstart", unlock);
+    document.removeEventListener("click", unlock);
+  }
+
+  document.addEventListener("touchstart", unlock, { once: true });
+  document.addEventListener("click", unlock, { once: true });
+}
+
+/**
  * Central audio management hub for the El Pollo Loco game
  * Handles all audio playback, volume control, muting, and state management
  */
 class AudioHub {
+  static audioContext = null;
+
   static MENU_AUDIO = new Audio("audio/acoustic-mexican-guitar.mp3");
   static GAMEAUDIO = new Audio("audio/keep-up-flamenco.mp3");
   static SLEEP = new Audio("audio/sleep-1.mp3");
@@ -101,11 +135,11 @@ class AudioHub {
 
       sound.currentTime = 0;
       sound.play().catch(err => {
-      // Ignore AbortError as it's expected during rapid state changes
-      if (err.name !== 'AbortError') {
-        console.warn('Audio playback error:', err);
-      }
-    });
+        // Ignore AbortError as it's expected during rapid state changes
+        if (err.name !== "AbortError") {
+          console.warn("Audio playback error:", err);
+        }
+      });
     }
   }
 
@@ -126,11 +160,11 @@ class AudioHub {
       sound.loop = true;
       sound.currentTime = 0;
       sound.play().catch(err => {
-      // Ignore AbortError as it's expected during rapid state changes
-      if (err.name !== 'AbortError') {
-        console.warn('Audio playback error:', err);
-      }
-    });
+        // Ignore AbortError as it's expected during rapid state changes
+        if (err.name !== "AbortError") {
+          console.warn("Audio playback error:", err);
+        }
+      });
     }
   }
 
@@ -174,11 +208,11 @@ class AudioHub {
 
       sound.currentTime = 0;
       sound.play().catch(err => {
-      // Ignore AbortError as it's expected during rapid state changes
-      if (err.name !== 'AbortError') {
-        console.warn('Audio playback error:', err);
-      }
-    });
+        // Ignore AbortError as it's expected during rapid state changes
+        if (err.name !== "AbortError") {
+          console.warn("Audio playback error:", err);
+        }
+      });
       AudioHub.currentKeySound = sound;
     }
   }

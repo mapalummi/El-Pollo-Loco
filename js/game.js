@@ -13,6 +13,12 @@ function init() {
   hideRotatemessage();
   setupInitialUI();
 
+  // Beim Spielstart (z.B. in deiner main.js oder Init-Funktion):
+  if (!AudioHub.audioContext) {
+    AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  setupMobileAudioUnlock();
+
   Promise.all([initLevel(), preloadCriticalAssets()]).then(() => {
     setupGameEnvironment();
     setupEventListeners();
