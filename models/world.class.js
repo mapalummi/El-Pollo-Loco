@@ -224,7 +224,7 @@ class World {
   handleChickenDefeat(enemy) {
     enemy.die();
     enemy.isDead = true;
-    AudioHub.playOne(AudioHub.CHICKEN);
+    AudioHub.playOne("CHICKEN");
     this.character.speedY = 20;
   }
 
@@ -253,7 +253,7 @@ class World {
             this.endbossBar.setPercentage(enemy.energy);
           } else if (enemy instanceof LittleChicken || enemy instanceof Chicken) {
             enemy.die();
-            AudioHub.playOne(AudioHub.CHICKEN);
+            AudioHub.playOne("CHICKEN");
           }
         }
       });
@@ -274,7 +274,7 @@ class World {
       if (this.character.isColliding(coin)) {
         this.collectedCoins++;
         updateCoinBar(this);
-        AudioHub.playOne(AudioHub.COINS);
+        AudioHub.playOne("COINS");
         return false;
       }
       return true;
@@ -291,7 +291,7 @@ class World {
       if (this.character.isColliding(bottle)) {
         this.collectedBottles++;
         updateBottleBar(this);
-        AudioHub.playOne(AudioHub.BOTTLES);
+        AudioHub.playOne("BOTTLES");
         return false;
       }
       return true;
@@ -479,7 +479,7 @@ class World {
     this.character.currentImage = 0;
     endboss.startWalking();
     this.endbossBar.isVisible = true;
-    AudioHub.playOne(AudioHub.ENDBOSS_SOUND);
+    AudioHub.playOne("ENDBOSS_SOUND");
 
     setTimeout(() => {
       this.character.isLocked = false;

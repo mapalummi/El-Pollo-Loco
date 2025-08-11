@@ -71,7 +71,7 @@ class ThrowableObject extends MovableObject {
   throw() {
     this.speedY = 30;
     this.applyGravity();
-    AudioHub.playOne(AudioHub.THROW);
+    AudioHub.playOne("THROW");
     
     this.movementInterval = setInterval(() => {
       this.x += 10 * this.throwDirection;
@@ -119,7 +119,7 @@ class ThrowableObject extends MovableObject {
    * Plays the splash sound effect when bottle impacts
    */
   playSplashSound() {
-    AudioHub.playOne(AudioHub.SPLASH);
+    AudioHub.playOne("SPLASH");
   }
 
   /**

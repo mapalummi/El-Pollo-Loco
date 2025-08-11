@@ -17,6 +17,15 @@ function toggleSound() {
     } else {
       AudioHub.unmuteAll && AudioHub.unmuteAll();
     }
+
+    // NEU: Game-Musik wieder starten, falls das Spiel läuft und Musik nicht läuft
+    if (window.gameStarted) {
+      const gameAudio = AudioHub.getAudio("GAMEAUDIO");
+      if (gameAudio && gameAudio.paused) {
+        AudioHub.playLoop("GAMEAUDIO");
+      }
+    }
+
   } else {
     soundIcon.src = "ui-icons/muted.png";
     soundIcon.setAttribute("data-muted", "true");
@@ -37,19 +46,37 @@ function toggleSound() {
  * Plays the appropriate audio based on game outcome.
  * @param {boolean} hasWon - Whether the player has won the game
  */
+// function handleGameOverAudio(hasWon) {
+//   const isMobile = detectMobileDevice();
+//   if (hasWon) {
+//     if (isMobile) {
+//       AudioHub.playOneMobile(AudioHub.WIN);
+//     } else {
+//       AudioHub.playOne(AudioHub.WIN);
+//     }
+//   } else {
+//     if (isMobile) {
+//       AudioHub.playOneMobile(AudioHub.GAMEOVER);
+//     } else {
+//       AudioHub.playOne(AudioHub.GAMEOVER);
+//     }
+//   }
+// }
+
+// NEU
 function handleGameOverAudio(hasWon) {
   const isMobile = detectMobileDevice();
   if (hasWon) {
     if (isMobile) {
-      AudioHub.playOneMobile(AudioHub.WIN);
+      AudioHub.playOneMobile("WIN");
     } else {
-      AudioHub.playOne(AudioHub.WIN);
+      AudioHub.playOne("WIN");
     }
   } else {
     if (isMobile) {
-      AudioHub.playOneMobile(AudioHub.GAMEOVER);
+      AudioHub.playOneMobile("GAMEOVER");
     } else {
-      AudioHub.playOne(AudioHub.GAMEOVER);
+      AudioHub.playOne("GAMEOVER");
     }
   }
 }

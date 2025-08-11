@@ -259,7 +259,7 @@ class Endboss extends MovableObject {
     this._lastAlertTime = Date.now();
 
     if (!this.world || !this.world.gameEnded) {
-      AudioHub.playOne(AudioHub.ENDBOSS);
+      AudioHub.playOne("ENDBOSS");
     }
   }
 
@@ -294,7 +294,7 @@ class Endboss extends MovableObject {
     this.isAlert = false;
 
     if (!this.world || !this.world.gameEnded) {
-      AudioHub.playOne(AudioHub.ENDBOSS_ATTACK);
+      AudioHub.playOne("ENDBOSS_ATTACK");
     }
 
     this.isAttackOnCooldown = true;

@@ -260,7 +260,7 @@ class Character extends MovableObject {
    */
   stopSleepSoundIfNeeded() {
     if (this.currentAnimation === "sleep") {
-      AudioHub.stopOne(AudioHub.SLEEP);
+      AudioHub.stopOne("SLEEP");
     }
   }
 
@@ -284,27 +284,26 @@ class Character extends MovableObject {
         this.walkingAnimation();
         break;
       case "jumping":
-        AudioHub.playOne(AudioHub.JUMP);
+        AudioHub.playOne("JUMP");
         this.jumpingAnimation();
         break;
       case "hurt":
         // Sound nur alle 800ms spielen
         if (now - this.lastHurtSound > 800) {
-          AudioHub.playOne(AudioHub.HURT);
+          AudioHub.playOne("HURT");
           this.lastHurtSound = now;
         }
-        // AudioHub.playOne(AudioHub.HURT);
         this.hurtAnimation();
         break;
       case "idle":
         this.idleAnimation();
         break;
       case "sleep":
-        AudioHub.playLoop(AudioHub.SLEEP);
+        AudioHub.playLoop("SLEEP");
         this.sleepAnimation();
         break;
       case "dead":
-        AudioHub.playOne(AudioHub.DEAD);
+        AudioHub.playOne("DEAD");
         this.deadAnimation();
         break;
     }
@@ -393,7 +392,7 @@ class Character extends MovableObject {
     this.startAnimation("walking");
 
     if (!this.walkSoundPlaying) {
-      AudioHub.playWhileKeyPressed(AudioHub.WALK);
+      AudioHub.playWhileKeyPressed("WALK");
       this.walkSoundPlaying = true;
     }
   }
@@ -412,7 +411,7 @@ class Character extends MovableObject {
     this.startAnimation("walking");
 
     if (!this.walkSoundPlaying) {
-      AudioHub.playWhileKeyPressed(AudioHub.WALK);
+      AudioHub.playWhileKeyPressed("WALK");
       this.walkSoundPlaying = true;
     }
   }

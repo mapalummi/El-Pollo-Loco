@@ -215,7 +215,7 @@ function showGameOverScreen(hasWon) {
   if (gameOver) return;
   gameOver = true;
 
-  AudioHub.stopAll(); // NEU
+  AudioHub.stopAll();
 
   prepareGameOverUI(hasWon);
   handleGameOverAudio(hasWon);
@@ -244,8 +244,6 @@ function handleGameWon(world) {
 function handleGameLost(world) {
   world.gameEnded = true;
 
-  // AudioHub.stopAll(); // NEU
-
   const animationDuration = world.character.IMAGES_DEAD.length * 100;
   setTimeout(() => {
     showGameOverScreen(false);
@@ -263,7 +261,7 @@ function updateCoinBar(world) {
   if (world.percentageCoins >= 100) {
     world.coinBar.highlight();
     if (!world.allCoinsCollectedSoundPlayed) {
-      AudioHub.playOne(AudioHub.COINS_COMPLETE);
+      AudioHub.playOne("COINS_COMPLETE");
       world.allCoinsCollectedSoundPlayed = true;
     }
   } else {
