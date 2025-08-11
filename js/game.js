@@ -233,7 +233,6 @@ function startGame() {
 
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
-  // WICHTIG: Lade und spiele Game-Musik explizit
   AudioHub.GAMEAUDIO.load();
   AudioHub.GAMEAUDIO.currentTime = 0;
   AudioHub.playLoop(AudioHub.GAMEAUDIO);
@@ -248,11 +247,9 @@ function startGame() {
   launchGame();
 }
 
-// TEST
 function createAudioObjects() {
-  // Prüfe, ob bereits initialisiert wurde
   if (AudioHub.MENU_AUDIO instanceof Audio) {
-    return; // Audio-Objekte existieren schon, also nichts tun!
+    return;
   }
 
   AudioHub.MENU_AUDIO = new Audio(AudioHub.MENU_AUDIO_SRC);
@@ -322,7 +319,6 @@ function createAudioObjects() {
   ];
 }
 
-// NEU
 function resetAudioObjects() {
   AudioHub.MENU_AUDIO = null;
   AudioHub.GAMEAUDIO = null;
@@ -345,26 +341,18 @@ function resetAudioObjects() {
   AudioHub.COINS_COMPLETE = null;
 }
 
-// TODO:
 /**
  * Starts the mobile game with mobile-specific controls and orientation handling
  */
 function startMobileGame() {
-  // TEST neu
   createAudioObjects();
-  syncMuteStateWithAudioObjects(); // NEU
+  syncMuteStateWithAudioObjects();
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
   if (!canvas || !ctx) {
     console.warn("Game resources not fully loaded yet. Please wait a moment.");
     return;
   }
-
-  // if (!AudioHub.audioContext) {
-  //   AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  //   setupGlobalAudioUnlock();
-  // }
-  // AudioHub.stopOne(AudioHub.MENU_AUDIO);
 
   document.getElementById("mobile-game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
@@ -375,7 +363,6 @@ function startMobileGame() {
 
   disableCornerButtons(false);
 
-  // NEU - Erst jetzt Sound abspielen!
   AudioHub.playLoopMobile(AudioHub.GAMEAUDIO);
 
   if (!isMobileDevice) {
