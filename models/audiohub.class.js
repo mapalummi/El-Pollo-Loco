@@ -1,10 +1,3 @@
-// TEST
-// function playSoundOnMobile(src, volume = 1) {
-//   const audio = new Audio(src);
-//   audio.volume = volume;
-//   audio.play().catch(() => {});
-// }
-
 /**
  * Globale Unlock-Funktion für den AudioContext (auch für iOS/Android)
  */
@@ -45,12 +38,7 @@ function setupGlobalAudioUnlock() {
 class AudioHub {
   static audioContext = null;
 
-  //
-  //
-  //
-  //
-
-  // TEST
+  // Nur Dateipfade und null-Initialisierung!
   static MENU_AUDIO_SRC = "audio/acoustic-mexican-guitar.mp3";
   static GAMEAUDIO_SRC = "audio/keep-up-flamenco.mp3";
   static SLEEP_SRC = "audio/sleep-1.mp3";
@@ -71,7 +59,7 @@ class AudioHub {
   static GAMEOVER_SRC = "audio/game-over-classic-1.mp3";
   static COINS_COMPLETE_SRC = "audio/game-ui-1.mp3";
 
-  // Die Audio-Objekte werden erst nach User-Interaktion erzeugt:
+  // Audio-Objekte werden erst nach User-Interaktion erzeugt:
   static MENU_AUDIO = null;
   static GAMEAUDIO = null;
   static SLEEP = null;
@@ -93,6 +81,47 @@ class AudioHub {
   static COINS_COMPLETE = null;
 
   static allMobileSounds = [];
+  static allSounds = [];
+
+  static soundVolumes = {
+    MENU_AUDIO: 0.1,
+    GAMEAUDIO: 0.1,
+    SLEEP: 0.03,
+    WALK: 0.1,
+    JUMP: 0.1,
+    HURT: 0.1,
+    DEAD: 0.1,
+    THROW: 0.1,
+    SPLASH: 0.1,
+    COINS: 1,
+    BOTTLES: 0.1,
+    CHICKEN: 0.1,
+    ENDBOSS: 0.1,
+    ENDBOSS_ATTACK: 0.1,
+    ENDBOSS_SOUND: 0.1,
+    WIN: 0.1,
+    LOST: 0.1,
+    GAMEOVER: 0.1,
+    COINS_COMPLETE: 0.1,
+  };
+
+  static currentKeySound = null;
+  static isMuted = false;
+
+  static {
+    try {
+      const soundState = localStorage.getItem("elPolloLoco_soundMuted");
+      if (soundState !== null) {
+        AudioHub.isMuted = soundState === "true";
+
+        if (AudioHub.isMuted) {
+          AudioHub.muteAll();
+        }
+      }
+    } catch (e) {
+      console.warn("Could not access localStorage for sound settings");
+    }
+  }
 
   static playLoopMobile(audioObj) {
     if (!audioObj) return;
@@ -100,14 +129,14 @@ class AudioHub {
     audioObj.volume = 0.2; // ggf. anpassen
     audioObj.currentTime = 0;
     audioObj.play().catch(e => {
-    console.warn("Audio play failed:", e);
-  });
+      console.warn("Audio play failed:", e);
+    });
   }
 
   static playOneMobile(audioObj) {
     if (!audioObj) return;
     audioObj.currentTime = 0;
-    audioObj.volume = 0.5; // ggf. anpassen
+    audioObj.volume = 0.1; // ggf. anpassen
     audioObj.play().catch(() => {});
   }
 
@@ -142,110 +171,113 @@ class AudioHub {
   //
   //
 
-  static MENU_AUDIO = new Audio("audio/acoustic-mexican-guitar.mp3");
-  static GAMEAUDIO = new Audio("audio/keep-up-flamenco.mp3");
-  static SLEEP = new Audio("audio/sleep-1.mp3");
-  static WALK = new Audio("audio/steps-2.mp3");
-  static JUMP = new Audio("audio/jump-1.mp3");
-  static HURT = new Audio("audio/hurt-1.mp3");
-  static DEAD = new Audio("audio/death-1.mp3");
-  static THROW = new Audio("audio/throw-1.mp3");
-  static SPLASH = new Audio("audio/splash-1.mp3");
-  static COINS = new Audio("audio/coin-1.mp3");
-  static BOTTLES = new Audio("audio/bottle-1.mp3");
-  static CHICKEN = new Audio("audio/chicken-1.mp3");
-  static ENDBOSS = new Audio("audio/monster-1.mp3");
-  static ENDBOSS_ATTACK = new Audio("audio/monster-2.mp3");
-  static ENDBOSS_SOUND = new Audio("audio/endboss-sound-2.mp3");
-  static WIN = new Audio("audio/bonus-1.mp3");
-  static LOST = new Audio("audio/lose-funny-1.mp3");
-  static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
-  static COINS_COMPLETE = new Audio("audio/game-ui-1.mp3");
+  // static MENU_AUDIO = new Audio("audio/acoustic-mexican-guitar.mp3");
+  // static GAMEAUDIO = new Audio("audio/keep-up-flamenco.mp3");
+  // static SLEEP = new Audio("audio/sleep-1.mp3");
+  // static WALK = new Audio("audio/steps-2.mp3");
+  // static JUMP = new Audio("audio/jump-1.mp3");
+  // static HURT = new Audio("audio/hurt-1.mp3");
+  // static DEAD = new Audio("audio/death-1.mp3");
+  // static THROW = new Audio("audio/throw-1.mp3");
+  // static SPLASH = new Audio("audio/splash-1.mp3");
+  // static COINS = new Audio("audio/coin-1.mp3");
+  // static BOTTLES = new Audio("audio/bottle-1.mp3");
+  // static CHICKEN = new Audio("audio/chicken-1.mp3");
+  // static ENDBOSS = new Audio("audio/monster-1.mp3");
+  // static ENDBOSS_ATTACK = new Audio("audio/monster-2.mp3");
+  // static ENDBOSS_SOUND = new Audio("audio/endboss-sound-2.mp3");
+  // static WIN = new Audio("audio/bonus-1.mp3");
+  // static LOST = new Audio("audio/lose-funny-1.mp3");
+  // static GAMEOVER = new Audio("audio/game-over-classic-1.mp3");
+  // static COINS_COMPLETE = new Audio("audio/game-ui-1.mp3");
 
-  static soundVolumes = {
-    MENU_AUDIO: 0.1,
-    GAMEAUDIO: 0.1,
-    SLEEP: 0.03,
-    WALK: 0.1,
-    JUMP: 0.1,
-    HURT: 0.1,
-    DEAD: 0.1,
-    THROW: 0.1,
-    SPLASH: 0.1,
-    COINS: 1,
-    BOTTLES: 0.1,
-    CHICKEN: 0.1,
-    ENDBOSS: 0.1,
-    ENDBOSS_ATTACK: 0.1,
-    ENDBOSS_SOUND: 0.1,
-    WIN: 0.1,
-    LOST: 0.1,
-    GAMEOVER: 0.1,
-    COINS_COMPLETE: 0.1,
-  };
+  // static soundVolumes = {
+  //   MENU_AUDIO: 0.1,
+  //   GAMEAUDIO: 0.1,
+  //   SLEEP: 0.03,
+  //   WALK: 0.1,
+  //   JUMP: 0.1,
+  //   HURT: 0.1,
+  //   DEAD: 0.1,
+  //   THROW: 0.1,
+  //   SPLASH: 0.1,
+  //   COINS: 1,
+  //   BOTTLES: 0.1,
+  //   CHICKEN: 0.1,
+  //   ENDBOSS: 0.1,
+  //   ENDBOSS_ATTACK: 0.1,
+  //   ENDBOSS_SOUND: 0.1,
+  //   WIN: 0.1,
+  //   LOST: 0.1,
+  //   GAMEOVER: 0.1,
+  //   COINS_COMPLETE: 0.1,
+  // };
 
-  static allSounds = [
-    AudioHub.MENU_AUDIO,
-    AudioHub.GAMEAUDIO,
-    AudioHub.SLEEP,
-    AudioHub.WALK,
-    AudioHub.JUMP,
-    AudioHub.HURT,
-    AudioHub.DEAD,
-    AudioHub.THROW,
-    AudioHub.SPLASH,
-    AudioHub.COINS,
-    AudioHub.BOTTLES,
-    AudioHub.CHICKEN,
-    AudioHub.ENDBOSS,
-    AudioHub.ENDBOSS_ATTACK,
-    AudioHub.ENDBOSS_SOUND,
-    AudioHub.WIN,
-    AudioHub.LOST,
-    AudioHub.GAMEOVER,
-    AudioHub.COINS_COMPLETE,
-  ];
+  // static allSounds = [
+  //   AudioHub.MENU_AUDIO,
+  //   AudioHub.GAMEAUDIO,
+  //   AudioHub.SLEEP,
+  //   AudioHub.WALK,
+  //   AudioHub.JUMP,
+  //   AudioHub.HURT,
+  //   AudioHub.DEAD,
+  //   AudioHub.THROW,
+  //   AudioHub.SPLASH,
+  //   AudioHub.COINS,
+  //   AudioHub.BOTTLES,
+  //   AudioHub.CHICKEN,
+  //   AudioHub.ENDBOSS,
+  //   AudioHub.ENDBOSS_ATTACK,
+  //   AudioHub.ENDBOSS_SOUND,
+  //   AudioHub.WIN,
+  //   AudioHub.LOST,
+  //   AudioHub.GAMEOVER,
+  //   AudioHub.COINS_COMPLETE,
+  // ];
 
-  static currentKeySound = null;
-  static isMuted = false;
+  // static currentKeySound = null;
+  // static isMuted = false;
 
-  static {
-    try {
-      const soundState = localStorage.getItem("elPolloLoco_soundMuted");
-      if (soundState !== null) {
-        AudioHub.isMuted = soundState === "true";
+  // static {
+  //   try {
+  //     const soundState = localStorage.getItem("elPolloLoco_soundMuted");
+  //     if (soundState !== null) {
+  //       AudioHub.isMuted = soundState === "true";
 
-        if (AudioHub.isMuted) {
-          AudioHub.muteAll();
-        }
-      }
-    } catch (e) {
-      console.warn("Could not access localStorage for sound settings");
-    }
-  }
+  //       if (AudioHub.isMuted) {
+  //         AudioHub.muteAll();
+  //       }
+  //     }
+  //   } catch (e) {
+  //     console.warn("Could not access localStorage for sound settings");
+  //   }
+  // }
 
   /**
    * Plays a sound effect once with appropriate volume settings
    * @param {HTMLAudioElement} sound - The audio element to play
    */
   static playOne(sound) {
-    if (sound.readyState == 4) {
-      const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+    if (!sound) return;
+    // if (sound.readyState == 4) {
+    //   const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
-      if (!AudioHub.isMuted) {
-        sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
-      } else {
-        sound.volume = 0;
-      }
+    const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
-      sound.currentTime = 0;
-      sound.play().catch(err => {
-        // Ignore AbortError as it's expected during rapid state changes
-        if (err.name !== "AbortError") {
-          console.warn("Audio playback error:", err);
-        }
-      });
+    if (!AudioHub.isMuted) {
+      sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+    } else {
+      sound.volume = 0;
     }
+
+    sound.currentTime = 0;
+    sound.play().catch(err => {
+      // Ignore AbortError as it's expected during rapid state changes
+      if (err.name !== "AbortError") {
+        console.warn("Audio playback error:", err);
+      }
+    });
+    // }
   }
 
   /**
@@ -253,24 +285,27 @@ class AudioHub {
    * @param {HTMLAudioElement} sound - The audio element to play in loop
    */
   static playLoop(sound) {
-    if (sound.readyState == 4) {
-      const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+    if (!sound) return;
+    // if (sound.readyState == 4) {
+    //   const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
-      if (!AudioHub.isMuted) {
-        sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
-      } else {
-        sound.volume = 0;
-      }
+    const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
 
-      sound.loop = true;
-      sound.currentTime = 0;
-      sound.play().catch(err => {
-        // Ignore AbortError as it's expected during rapid state changes
-        if (err.name !== "AbortError") {
-          console.warn("Audio playback error:", err);
-        }
-      });
+    if (!AudioHub.isMuted) {
+      sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+    } else {
+      sound.volume = 0;
     }
+
+    sound.loop = true;
+    sound.currentTime = 0;
+    sound.play().catch(err => {
+      // Ignore AbortError as it's expected during rapid state changes
+      if (err.name !== "AbortError") {
+        console.warn("Audio playback error:", err);
+      }
+    });
+    // }
   }
 
   /**
@@ -278,6 +313,7 @@ class AudioHub {
    * @param {HTMLAudioElement} sound - The audio element to stop
    */
   static stopOne(sound) {
+    if (!sound) return;
     sound.pause();
   }
 
@@ -303,23 +339,24 @@ class AudioHub {
    * @param {HTMLAudioElement} sound - The audio element to play while key is pressed
    */
   static playWhileKeyPressed(sound) {
-    if (sound.readyState == 4) {
-      if (!AudioHub.isMuted) {
-        const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
-        sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
-      } else {
-        sound.volume = 0;
-      }
-
-      sound.currentTime = 0;
-      sound.play().catch(err => {
-        // Ignore AbortError as it's expected during rapid state changes
-        if (err.name !== "AbortError") {
-          console.warn("Audio playback error:", err);
-        }
-      });
-      AudioHub.currentKeySound = sound;
+    if (!sound) return;
+    // if (sound.readyState == 4) {
+    if (!AudioHub.isMuted) {
+      const soundName = Object.keys(AudioHub).find(key => AudioHub[key] === sound);
+      sound.volume = AudioHub.soundVolumes[soundName] || 0.2;
+    } else {
+      sound.volume = 0;
     }
+
+    sound.currentTime = 0;
+    sound.play().catch(err => {
+      // Ignore AbortError as it's expected during rapid state changes
+      if (err.name !== "AbortError") {
+        console.warn("Audio playback error:", err);
+      }
+    });
+    AudioHub.currentKeySound = sound;
+    // }
   }
 
   /**

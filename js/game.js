@@ -227,7 +227,16 @@ function startGame() {
     AudioHub.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     setupGlobalAudioUnlock();
   }
+
+  createAudioObjects();
+  syncMuteStateWithAudioObjects();
+
   AudioHub.stopOne(AudioHub.MENU_AUDIO);
+
+  // WICHTIG: Lade und spiele Game-Musik explizit
+  AudioHub.GAMEAUDIO.load();
+  AudioHub.GAMEAUDIO.currentTime = 0;
+  AudioHub.playLoop(AudioHub.GAMEAUDIO);
 
   document.getElementById("game-explanation").classList.add("d_none");
   document.getElementById("game-controls").classList.remove("d_none");
@@ -236,9 +245,6 @@ function startGame() {
   window.pendingGameStart = false;
 
   disableCornerButtons(false);
-
-  // NEU - Erst jetzt Sound abspielen!
-  AudioHub.playLoop(AudioHub.GAMEAUDIO);
   launchGame();
 }
 
@@ -321,7 +327,7 @@ function resetAudioObjects() {
   AudioHub.MENU_AUDIO = null;
   AudioHub.GAMEAUDIO = null;
   AudioHub.SLEEP = null;
-  AudioHub.WALKv;
+  AudioHub.WALK = null;
   AudioHub.JUMP = null;
   AudioHub.HURT = null;
   AudioHub.DEAD = null;
@@ -434,7 +440,7 @@ function animateEnemies() {
  * Sets up game audio for gameplay
  */
 function setupGameAudio() {
-  AudioHub.playLoop(AudioHub.GAMEAUDIO);
+  // AudioHub.playLoop(AudioHub.GAMEAUDIO);
   keyboard.initMobileButtons();
 }
 
@@ -760,7 +766,7 @@ function restartGame() {
   cleanupGameState();
   destroyWorldAndClearCanvas();
   resetAudioObjects(); // <--- NEU
-  createAudioObjects();     // Audio-Objekte neu erzeugen!
+  createAudioObjects(); // Audio-Objekte neu erzeugen!
   syncMuteStateWithAudioObjects();
   reinitLevelAndMobile();
   startFreshGameAfterDelay();
