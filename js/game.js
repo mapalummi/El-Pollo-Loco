@@ -247,78 +247,48 @@ function startGame() {
   launchGame();
 }
 
+/**
+ * Dynamically creates all Audio objects for the game based on a mapping list.
+ * Prevents multiple initializations.
+ * Updates arrays for mobile and desktop sounds.
+ */
 function createAudioObjects() {
-  if (AudioHub.MENU_AUDIO instanceof Audio) {
-    return;
-  }
+  if (AudioHub.MENU_AUDIO instanceof Audio) return;
 
-  AudioHub.MENU_AUDIO = new Audio(AudioHub.MENU_AUDIO_SRC);
-  AudioHub.GAMEAUDIO = new Audio(AudioHub.GAMEAUDIO_SRC);
-  AudioHub.SLEEP = new Audio(AudioHub.SLEEP_SRC);
-  AudioHub.WALK = new Audio(AudioHub.WALK_SRC);
-  AudioHub.JUMP = new Audio(AudioHub.JUMP_SRC);
-  AudioHub.HURT = new Audio(AudioHub.HURT_SRC);
-  AudioHub.DEAD = new Audio(AudioHub.DEAD_SRC);
-  AudioHub.THROW = new Audio(AudioHub.THROW_SRC);
-  AudioHub.SPLASH = new Audio(AudioHub.SPLASH_SRC);
-  AudioHub.COINS = new Audio(AudioHub.COINS_SRC);
-  AudioHub.BOTTLES = new Audio(AudioHub.BOTTLES_SRC);
-  AudioHub.CHICKEN = new Audio(AudioHub.CHICKEN_SRC);
-  AudioHub.ENDBOSS = new Audio(AudioHub.ENDBOSS_SRC);
-  AudioHub.ENDBOSS_ATTACK = new Audio(AudioHub.ENDBOSS_ATTACK_SRC);
-  AudioHub.ENDBOSS_SOUND = new Audio(AudioHub.ENDBOSS_SOUND_SRC);
-  AudioHub.WIN = new Audio(AudioHub.WIN_SRC);
-  AudioHub.LOST = new Audio(AudioHub.LOST_SRC);
-  AudioHub.GAMEOVER = new Audio(AudioHub.GAMEOVER_SRC);
-  AudioHub.COINS_COMPLETE = new Audio(AudioHub.COINS_COMPLETE_SRC);
-
-  AudioHub.allMobileSounds = [
-    AudioHub.MENU_AUDIO,
-    AudioHub.GAMEAUDIO,
-    AudioHub.SLEEP,
-    AudioHub.WALK,
-    AudioHub.JUMP,
-    AudioHub.HURT,
-    AudioHub.DEAD,
-    AudioHub.THROW,
-    AudioHub.SPLASH,
-    AudioHub.COINS,
-    AudioHub.BOTTLES,
-    AudioHub.CHICKEN,
-    AudioHub.ENDBOSS,
-    AudioHub.ENDBOSS_ATTACK,
-    AudioHub.ENDBOSS_SOUND,
-    AudioHub.WIN,
-    AudioHub.LOST,
-    AudioHub.GAMEOVER,
-    AudioHub.COINS_COMPLETE,
+  const audioKeys = [
+    ["MENU_AUDIO", "MENU_AUDIO_SRC"],
+    ["GAMEAUDIO", "GAMEAUDIO_SRC"],
+    ["SLEEP", "SLEEP_SRC"],
+    ["WALK", "WALK_SRC"],
+    ["JUMP", "JUMP_SRC"],
+    ["HURT", "HURT_SRC"],
+    ["DEAD", "DEAD_SRC"],
+    ["THROW", "THROW_SRC"],
+    ["SPLASH", "SPLASH_SRC"],
+    ["COINS", "COINS_SRC"],
+    ["BOTTLES", "BOTTLES_SRC"],
+    ["CHICKEN", "CHICKEN_SRC"],
+    ["ENDBOSS", "ENDBOSS_SRC"],
+    ["ENDBOSS_ATTACK", "ENDBOSS_ATTACK_SRC"],
+    ["ENDBOSS_SOUND", "ENDBOSS_SOUND_SRC"],
+    ["WIN", "WIN_SRC"],
+    ["LOST", "LOST_SRC"],
+    ["GAMEOVER", "GAMEOVER_SRC"],
+    ["COINS_COMPLETE", "COINS_COMPLETE_SRC"],
   ];
 
-  // TODO: Auslagern!
-  // NEU: Desktop-Sounds-Array ebenfalls aktualisieren!
-  AudioHub.allSounds = [
-    AudioHub.MENU_AUDIO,
-    AudioHub.GAMEAUDIO,
-    AudioHub.SLEEP,
-    AudioHub.WALK,
-    AudioHub.JUMP,
-    AudioHub.HURT,
-    AudioHub.DEAD,
-    AudioHub.THROW,
-    AudioHub.SPLASH,
-    AudioHub.COINS,
-    AudioHub.BOTTLES,
-    AudioHub.CHICKEN,
-    AudioHub.ENDBOSS,
-    AudioHub.ENDBOSS_ATTACK,
-    AudioHub.ENDBOSS_SOUND,
-    AudioHub.WIN,
-    AudioHub.LOST,
-    AudioHub.GAMEOVER,
-    AudioHub.COINS_COMPLETE,
-  ];
+  audioKeys.forEach(([key, srcKey]) => {
+    AudioHub[key] = new Audio(AudioHub[srcKey]);
+  });
+
+  AudioHub.allMobileSounds = audioKeys.map(([key]) => AudioHub[key]);
+  AudioHub.allSounds = audioKeys.map(([key]) => AudioHub[key]);
 }
 
+/**
+ * Resets all Audio objects in AudioHub to null.
+ * Used when leaving the game or restarting.
+ */
 function resetAudioObjects() {
   AudioHub.MENU_AUDIO = null;
   AudioHub.GAMEAUDIO = null;
@@ -878,7 +848,6 @@ function restartAnimationLoop() {
   }
 }
 
-// NEU:
 /**
  * Synchronizes the mute state with all audio objects (Desktop & Mobile)
  */
